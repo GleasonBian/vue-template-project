@@ -44,7 +44,7 @@ module.exports = {
   //调整 webpack 配置 https://cli.vuejs.org/zh/guide/webpack.html#%E7%AE%80%E5%8D%95%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F
   configureWebpack: config => {
     // 入口文件
-    config.entry = "./src/view/index/main.js";
+    config.entry = "./src/main.js";
     // 生产 & 测试环境
     let pluginsPro = [
       new CompressionPlugin({
@@ -95,14 +95,14 @@ module.exports = {
     // 读到这里 如果 还有 不理解 请往下进行
     proxy: {
       "/dev": {
-        target: process.env.VUE_APP_PROXY,
+        target: process.env.VUE_APP_URL, // 代理请求的地址 => https://api.apiopen.top/
         changeOrigin: true,
         pathRewrite: {
           "^/dev": ""
         }
       },
       "/api": {
-        target: process.env.VUE_APP_PROXY,
+        target: process.env.VUE_APP_URL,
         changeOrigin: true,
         pathRewrite: {
           "^/api": ""
