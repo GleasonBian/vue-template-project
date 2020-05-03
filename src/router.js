@@ -65,6 +65,16 @@ const router = new Router({
             menu: '090302'
           },
         },
+        {
+          path: 'departmentList',
+          component: resolve => require(['@/components/departmentList'], resolve),
+          meta: {
+            crumbs: ['平台', '部门管理'],
+            title: '部门管理',
+            index: 0,
+            menu: '090302'
+          },
+        },
       ]
     }
   ]

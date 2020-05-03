@@ -16,6 +16,13 @@ import fetch from "../public/fetch.js";
  */
 
 
+ //获取公司列表
+ export const getCompList = data => fetch("corp", data, "get");
+ //新增部门 saveAddDept
+ export const saveAddDept = data => fetch("dept", data, "post");
+ //获取部门列表
+ export const getDeptList = data => fetch("dept", data, "get");
+
 /**
  * 获取最新 消息
  */
