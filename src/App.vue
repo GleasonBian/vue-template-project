@@ -1,62 +1,138 @@
 <template>
-  <div id="app">
-    <el-container style="height: 500px; border: 1px solid #eee">
-  <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-    <el-menu :default-openeds="['1', '3']">
-      <el-submenu index="1">
-        <template slot="title"><i class="el-icon-message"></i>导航一</template>
-        <el-menu-item-group>
-          <el-menu-item index="1-1">选项1</el-menu-item>
-          <el-menu-item index="1-2">选项2</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group>
-          <el-menu-item index="1-3">选项3</el-menu-item>
-        </el-menu-item-group>
-      </el-submenu>
-    </el-menu>
-  </el-aside>
-  
-  <el-container>
-    <el-header style="text-align: right; font-size: 12px">
-      <!-- <el-dropdown>
-        <i class="el-icon-setting" style="margin-right: 15px"></i>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>查看</el-dropdown-item>
-          <el-dropdown-item>新增</el-dropdown-item>
-          <el-dropdown-item>删除</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <span>王小虎</span> -->
-    </el-header>
-    
-    <el-main>
-      <router-view />
-    </el-main>
-  </el-container>
-    </el-container>
-  
-    
+  <div class="manage_page fillcontain">
+    <el-row style="height: 100%;">
+      <el-col :span="3" style="min-height: 100%; background-color: #272B2E;">
+        <el-menu
+          :default-active="defaultActive"
+          background-color="#272B2E"
+          text-color="#ffffff"
+          active-text-color="#FFD04B"
+          :unique-opened="true"
+          :collapse-transition="true"
+          router
+        >
+          <el-menu-item index="/middleground">
+            <i class="el-icon-menu"></i>首页
+          </el-menu-item>
+          <el-submenu index="2" popper-class="submenu-userManger">
+            <template slot="title">
+              <i class="iconfont i-user-manger"></i>用户管理
+            </template>
+            <el-menu-item index="/internalUser">内部User</el-menu-item>
+            <el-menu-item index="/buyersUser">买家用户</el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-col>
+      <el-col :span="21" style="height: 100%;overflow: auto;">
+        <transition>
+          <router-view></router-view>
+        </transition>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<script>
+import { getUserPermission, getPageElement } from "@/getData";
+export default {
+  name: "middleground",
+  components: {},
+  data() {
+    return {
+      transitionName: "",
+      mtemListA: [],
+      /*************************************************** */
+      active: "0-0",
+      menuList: [],
+      mtemList: [],
+      isCollapse: false,
+      /*************************************************** */
+    };
+  },
+  watch: {
+    //使用watch 监听$router的变化
+  },
+  created() {
+    // this.getUserPermission();
+    // this.getPageElement();
+  },
+  methods: {
+    async getUserPermission() {
+      const res = await getUserPermission({
+        systemCode: "wxsupplier"
+      });
+      if (res.result) {
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          console.log("1111", this.uniq(res.data));
+          this.addMenuIndex(res.data);
+        }
+      }
+    }
+  },
+  computed: {
+    defaultActive: function() {
+      return this.$route.path;
+    }
+  }
+};
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="less" scoped>
+@import "./style/mixin";
+
+.elmenu {
+  background: #324057;
+}
+
+.i-total-statistics,
+.i-stores-baseis,
+.i-supply-center {
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 24px;
   text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
+  font-size: 18px;
+  margin-left: 5px;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.i-user-manger {
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 24px;
+  text-align: center;
+  font-size: 16px;
+  margin-left: 5px;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.i-order-center {
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 24px;
+  text-align: center;
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.i-stores-manger {
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 24px;
+  text-align: center;
+  font-size: 21px;
+  margin-left: 5px;
+}
+
+.el-submenu {
+  width: 100%;
+}
+
+.el-submenu .el-menu-item {
+  min-width: 100%;
+}
+
+// 激活 子菜单 背景色
+.el-menu-item.is-active {
+  background-color: rgb(0, 0, 0) !important;
 }
 </style>
