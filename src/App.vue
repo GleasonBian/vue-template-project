@@ -1,138 +1,107 @@
 <template>
-  <div class="manage_page fillcontain">
-    <el-row style="height: 100%;">
-      <el-col :span="3" style="min-height: 100%; background-color: #272B2E;">
-        <el-menu
-          :default-active="defaultActive"
-          background-color="#272B2E"
-          text-color="#ffffff"
-          active-text-color="#FFD04B"
-          :unique-opened="true"
-          :collapse-transition="true"
-          router
-        >
-          <el-menu-item index="/middleground">
-            <i class="el-icon-menu"></i>首页
-          </el-menu-item>
-          <el-submenu index="2" popper-class="submenu-userManger">
-            <template slot="title">
-              <i class="iconfont i-user-manger"></i>用户管理
-            </template>
-            <el-menu-item index="/internalUser">内部User</el-menu-item>
-            <el-menu-item index="/buyersUser">买家用户</el-menu-item>
-          </el-submenu>
-        </el-menu>
-      </el-col>
-      <el-col :span="21" style="height: 100%;overflow: auto;">
-        <transition>
-          <router-view></router-view>
-        </transition>
-      </el-col>
-    </el-row>
+  <div id="app" class="fillcontain">
+    <router-view v-if="isRouterAlive"></router-view>
   </div>
 </template>
 
 <script>
-import { getUserPermission, getPageElement } from "@/getData";
 export default {
-  name: "middleground",
-  components: {},
-  data() {
+  name: "App",
+  provide() {
     return {
-      transitionName: "",
-      mtemListA: [],
-      /*************************************************** */
-      active: "0-0",
-      menuList: [],
-      mtemList: [],
-      isCollapse: false,
-      /*************************************************** */
+      reload: this.reload
     };
   },
-  watch: {
-    //使用watch 监听$router的变化
+  data() {
+    return {
+      isRouterAlive: true
+    };
   },
   created() {
-    // this.getUserPermission();
-    // this.getPageElement();
+    this.$root.TimeTranArrayObject = function(arrayObject) {
+      arrayObject.map(item => {
+        let orderTime = new Date(item.createTime);
+        item.createTime =
+          orderTime.toLocaleDateString().replace(/\//g, "-") +
+          " " +
+          orderTime.toTimeString().substr(0, 8);
+      });
+      return arrayObject;
+    };
+    this.$root.createTime = function(createTime) {
+      let orderTime = new Date(createTime);
+      createTime =
+        orderTime.toLocaleDateString().replace(/\//g, "-") +
+        " " +
+        orderTime.toTimeString().substr(0, 8);
+      return createTime;
+    };
   },
   methods: {
-    async getUserPermission() {
-      const res = await getUserPermission({
-        systemCode: "wxsupplier"
+    reload() {
+      this.isRouterAlive = false;
+      this.$nextTick(function() {
+        this.isRouterAlive = true;
       });
-      if (res.result) {
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          console.log("1111", this.uniq(res.data));
-          this.addMenuIndex(res.data);
-        }
-      }
-    }
-  },
-  computed: {
-    defaultActive: function() {
-      return this.$route.path;
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="less" scoped>
-@import "./style/mixin";
+<style lang="less">
+@import "./style/common";
 
-.elmenu {
-  background: #324057;
+@font-face {
+  font-family: "iconfont";
+  /* project id 868569 */
+  src: url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.eot");
+  src: url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.eot?#iefix")
+      format("embedded-opentype"),
+    url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.woff2") format("woff2"),
+    url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.woff") format("woff"),
+    url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.ttf") format("truetype"),
+    url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.svg#iconfont") format("svg");
 }
 
-.i-total-statistics,
-.i-stores-baseis,
-.i-supply-center {
-  vertical-align: middle;
-  margin-right: 5px;
-  width: 24px;
-  text-align: center;
-  font-size: 18px;
-  margin-left: 5px;
+.iconfont {
+  font-family: "iconfont" !important;
+  font-style: normal;
+  color: #cccccc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.i-user-manger {
-  vertical-align: middle;
-  margin-right: 5px;
-  width: 24px;
-  text-align: center;
-  font-size: 16px;
-  margin-left: 5px;
+/*本项目使用的图标 */
+.i-pay-amount:before {
+  content: "\e643";
 }
 
-.i-order-center {
-  vertical-align: middle;
-  margin-right: 5px;
-  width: 24px;
-  text-align: center;
-  font-size: 16px;
-  margin-left: 5px;
+.i-total-consu:before {
+  content: "\e6f1";
 }
 
-.i-stores-manger {
-  vertical-align: middle;
-  margin-right: 5px;
-  width: 24px;
-  text-align: center;
-  font-size: 21px;
-  margin-left: 5px;
+.i-total-orders:before {
+  content: "\e608";
 }
 
-.el-submenu {
-  width: 100%;
+.i-total-statistics:before {
+  content: "\e856";
 }
 
-.el-submenu .el-menu-item {
-  min-width: 100%;
+/* 菜单栏 图标 */
+.i-user-manger:before {
+  content: "\e617";
 }
-
-// 激活 子菜单 背景色
-.el-menu-item.is-active {
-  background-color: rgb(0, 0, 0) !important;
+.i-order-center:before {
+  content: "\e634";
+}
+.i-stores-manger:before {
+  content: "\e625";
+}
+.i-stores-baseis:before {
+  content: "\e6ef";
+}
+.i-supply-center:before {
+  content: "\e61f";
 }
 </style>

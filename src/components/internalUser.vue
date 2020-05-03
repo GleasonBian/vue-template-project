@@ -4,12 +4,12 @@
     <headTop></headTop>
 
     <!-- 搜索框 -->
-    <!-- <searchBox
+    <gt-search
       :ParentPage="fromPage"
       ref="searchBox"
       :searchName="searchName"
       :SelectOptions3="jobTitle"
-    ></searchBox> -->
+    ></gt-search>
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
@@ -279,11 +279,9 @@
   </div>
 </template>
 <script>
-// import searchBox from "@/components/searchBoxUse";
+import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import {
-  
-} from "@/getData";
+import {} from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "internalUser",
@@ -354,9 +352,7 @@ export default {
           function: "viewOReditorUserInfo",
           text: "查看/编辑",
           type: "text",
-          show: this.$Utils.getPageElement(
-            this.$Consts.PERMISSION.viewOReditorUserInfo.code
-          )
+          show: true
         },
         {
           function: "changeUserStatus",
@@ -417,15 +413,9 @@ export default {
         deptIds: [],
         checkPass: ""
       },
-      isShowSelectCompanydialog: false,
-      companyTableData: [],
-      companyName: "",
-      pageNo: 1,
+
       clickCurrentRowInfo: {},
-      saveCompanyParameter: {
-        userId: "",
-        companyId: ""
-      },
+
       rules: {
         userName: [
           {
@@ -515,7 +505,7 @@ export default {
           }
         ]
       },
-      setCompanyLoading: false,
+
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
       searchName: {
@@ -583,32 +573,25 @@ export default {
       optionWidth: 250
     };
   },
-  beforeCreate() {
-    
-  },
-  created() {
-    
-    // console.log(this.$Utils)
-
-    //  $Utils.getPageElement(this.$Consts.PERMISSION.viewOReditorUserInfo.code)
-  },
+  beforeCreate() {},
+  created() {},
   methods: {
     /*
      ** 修改 用户 状态
      */
-    // async userStatusChange() {
-    //   let data = {
-    //     userId: this.currentUserStatusId,
-    //     status: this.accountStatus
-    //   };
+    async userStatusChange() {
+      let data = {
+        userId: this.currentUserStatusId,
+        status: this.accountStatus
+      };
 
-    //   this.userStatusDialogVisible = false;
-    //   const res = await updateUserStatus(data);
-    //   if (res.result) {
-    //     this.$message.success(res.message);
-    //     this.$refs.searchBox.internalUser(this.limit, this.offset);
-    //   } else this.$message.warning(res.message);
-    // },
+      this.userStatusDialogVisible = false;
+      const res = await updateUserStatus(data);
+      if (res.result) {
+        this.$message.success(res.message);
+        this.$refs.searchBox.internalUser(this.limit, this.offset);
+      } else this.$message.warning(res.message);
+    },
 
     /*
      ** 当前 选择 用户   修改用户状态预处理
@@ -670,12 +653,14 @@ export default {
       this.limit = val;
       this.$refs.searchBox.internalUser(this.limit, this.offset);
     },
+
     /*
      *关闭编辑状态
      */
     handleisShowViewUser() {
       this.isEditor = true;
     },
+
     /*
      ** 列表 分页
      */
@@ -687,6 +672,7 @@ export default {
     /*
      ** 初始化 数据 处理函数
      */
+
     internalUserHadle(val) {
       val.rows.map(item => {
         switch (item.position) {

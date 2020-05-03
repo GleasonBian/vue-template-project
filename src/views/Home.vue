@@ -1,13 +1,3 @@
-<!--
- * @Date: 2020-05-03 20:14:44
- * @LastEditTime: 2020-05-03 21:56:19
- * @Version: 7.0
- * @Author: Johnson.Wen
- * @Editor: Johnson.Wen
- * @Mobile: 13311005499
- * @Email: 13311005499@189.cn
- * @Comment: 没问题
- -->
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
@@ -19,7 +9,7 @@
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
 // 引入 接口
-import { getWangYiNews } from "@/getData.js";
+// import { getWangYiNews } from "@/getData.js";
 export default {
   name: "home",
   components: {
@@ -29,12 +19,10 @@ export default {
     this.getDataHandle();
   },
   methods: {
-    async getDataHandle() {
-      const res = await getWangYiNews();
-      console.log(res);
-    }
+    // async getDataHandle() {
+    //   const res = await getWangYiNews();
+    //   console.log(res);
+    // }
   }
 };
-
-
 </script>

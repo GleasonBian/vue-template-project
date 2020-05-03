@@ -10,79 +10,77 @@
         
         <el-dropdown-item command="singout">退出</el-dropdown-item>
       </el-dropdown-menu>
-    </el-dropdown> -->
+    </el-dropdown>-->
   </div>
 </template>
 
 <script>
-  import {
-    
-  } from '@/getData';
-  export default {
-    name: 'headTop',
-    data() {
-      return {
-        userName: JSON.parse(unescape(sessionStorage['UserData'])).userName
-      }
-    },
-    created() {},
-    computed: {
-      // ...mapState(['adminInfo']),
-    },
-    methods: {
-      // async handleCommand(command) {
-      //   this.$router.replace({
-      //     path: '/login'
-      //   })
-      //   history.pushState(null, null, document.URL);
-      //   window.addEventListener('popstate', function () {
-      //     history.pushState(null, null, document.URL);
-      //   });
-      //   if (command == 'singout') {
-      //     const response = await signout();
-      //       this.$message.success("退出登录成功!");
-      //     sessionStorage.removeItem('suppliertoken')
-      //   }
-      // }
-    }
+import {} from "@/getData";
+export default {
+  name: "headTop",
+  data() {
+    return {
+      // userName: JSON.parse(unescape(sessionStorage['UserData'])).userName
+      userName: ""
+    };
+  },
+  created() {},
+  computed: {
+    // ...mapState(['adminInfo']),
+  },
+  methods: {
+    // async handleCommand(command) {
+    //   this.$router.replace({
+    //     path: '/login'
+    //   })
+    //   history.pushState(null, null, document.URL);
+    //   window.addEventListener('popstate', function () {
+    //     history.pushState(null, null, document.URL);
+    //   });
+    //   if (command == 'singout') {
+    //     const response = await signout();
+    //       this.$message.success("退出登录成功!");
+    //     sessionStorage.removeItem('suppliertoken')
+    //   }
+    // }
   }
+};
 </script>
 
 <style lang="less">
-  @import '../style/mixin.less';
+@import "../style/mixin.less";
 
+.header_container {
+  background-color: #eff2f7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.avator {
+  width: 80px;
+  text-align: center;
+  color: #409eff;
+}
+
+.el-dropdown-menu__item {
+  text-align: center;
+}
+
+.dddddd {
+  margin-right: 50px;
+}
+
+@media screen and (min-width: 1367px) {
   .header_container {
-    background-color: #EFF2F7;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 20px;
+    height: 60px;
   }
+}
 
-
-  .avator {
-    width: 80px;
-    text-align: center;
-    color: #409EFF;
+@media screen and (max-width: 1366px) {
+  .header_container {
+    height: 40px;
   }
-
-  .el-dropdown-menu__item {
-    text-align: center;
-  }
-
-  .dddddd {
-    margin-right: 50px;
-  }
-
-  @media screen and (min-width: 1367px) {
-    .header_container{
-      height: 60px;
-    }
-  }
-
-  @media screen and (max-width: 1366px) {
-    .header_container{
-      height: 40px;
-    }
-  }
+}
 </style>
