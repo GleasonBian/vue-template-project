@@ -56,11 +56,11 @@ const router = new Router({
         //   },
         // },
         {
-          path: 'internalUser',
-          component: resolve => require(['@/components/internalUser'], resolve),
+          path: 'companyList',
+          component: resolve => require(['@/components/companyList'], resolve),
           meta: {
-            crumbs: ['用户管理', '内部User'],
-            title: '内部User',
+            crumbs: ['用户管理', '公司管理'],
+            title: '公司管理',
             index: 0,
             menu: '090302'
           },

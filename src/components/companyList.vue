@@ -510,7 +510,7 @@ export default {
       isEditor: true,
       searchName: {
         box1: {
-          name: "用户名称",
+          name: "公司名称",
           input: true,
           show: true
         },
