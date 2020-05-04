@@ -13,6 +13,10 @@ export const getCompList = data => fetch("corp", data, "get");
 export const saveAddDept = data => fetch("dept", data, "post");
 //获取部门列表
 export const getDeptList = data => fetch("dept", data, "get");
+//获取部门详情 
+export const getDeptDetail = data => fetch("dept", data, "get");
+//编辑部门详情 
+export const editDeptDetail = data => fetch("dept", data, "put");
 
 /**
  * 公司查询
