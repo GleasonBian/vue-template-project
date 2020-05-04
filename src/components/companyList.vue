@@ -276,7 +276,7 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { corperation, corpSelect } from "@/getData";
+import { corperation, corpSelect, corpDtails } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
@@ -683,9 +683,10 @@ export default {
      */
     async viewOReditorCorp(index, row) {
       console.log(index, row);
-      // const response = await viewOReditor({
-      //   userPhone: row.userName
-      // });
+      const response = await corpDtails({
+        id: row.guid
+      });
+      console.log(response);
       // if (response.result) {
       //   response.data.deptIds === null ? (response.data.deptIds = []) : "";
       //   response.data.sex = Number(response.data.sex);

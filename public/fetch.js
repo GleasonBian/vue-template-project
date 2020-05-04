@@ -21,15 +21,16 @@ export default async (url = "", data = {}, type = "POST") => {
    */
   if (type == "GET") {
     //请求参数 拼接字符串
-    let dataStr = "";
-    Object.keys(data).forEach(key => {
-      dataStr += key + "=" + data[key] + "&";
-    });
-
-    if (dataStr !== "") {
-      dataStr = dataStr.substr(0, dataStr.lastIndexOf("&"));
-      url = url + "?" + dataStr;
-    }
+    // let dataStr = "";
+    // Object.keys(data).forEach(key => {
+    //   dataStr += key + "/" + data[key] + "&";
+    // });
+    // console.log(dataStr);
+    // if (dataStr !== "") {
+    //   dataStr = dataStr.substr(0, dataStr.lastIndexOf("&"));
+    //   url = url + "?" + dataStr;
+    // }
+    data.id ? url = url + '/' + data.id : url = url;
 
     return new Promise((resolve, reject) => {
       axios
