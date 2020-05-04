@@ -90,6 +90,12 @@
         <el-form-item label="公司编码" prop="code">
           <el-input v-model.number="form.code"></el-input>
         </el-form-item>
+        <el-form-item label="公司电话" prop="tel">
+          <el-input v-model.number="form.tel"></el-input>
+        </el-form-item>
+        <el-form-item label="公司邮箱" prop="email">
+          <el-input v-model.number="form.email"></el-input>
+        </el-form-item>
         <el-form-item label="地理位置" prop="location">
           <el-input v-model="form.location"></el-input>
         </el-form-item>
@@ -408,7 +414,9 @@ export default {
         name: "", //公司名称
         regdate: "", // 注册日期
         superior: "", // 上级标识
-        taxcode: "" // 税号
+        taxcode: "", // 税号
+        email: "", // 公司邮箱
+        tel: "" // 公司电话
       },
 
       clickCurrentRowInfo: {},
@@ -501,6 +509,20 @@ export default {
           {
             required: true,
             message: "必填 公司级别",
+            trigger: ["blur", "change"]
+          }
+        ],
+        email: [
+          {
+            required: true,
+            message: "必填 公司邮箱",
+            trigger: ["blur", "change"]
+          }
+        ],
+        tel: [
+          {
+            required: true,
+            message: "必填 公司电话",
             trigger: ["blur", "change"]
           }
         ]
