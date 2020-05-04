@@ -419,8 +419,6 @@ export default {
       console.log("232323")
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(valid);
-          console.log(this.formCurrentStatus);
           if (this.formCurrentStatus === "创建") this.CreateHandle();
           else if (this.formCurrentStatus === "更新") this.UpdateHandle();
           else if (this.formCurrentStatus === "查看") this.ExamineHandle();

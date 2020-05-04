@@ -94,3 +94,23 @@ export const equiDetails = data => fetch("equipment", data, "get");
  */
 export const equiDelete = data => fetch("equipment", data, "delete");
 
+/**
+ * 创建计划
+ */
+export const fixCreate = data => fetch("fixplan", data, "post");
+
+/**
+ * 计划列表
+ */
+export const fixSelect = data => fetch("fixplan", data, "get");
+
+/**
+ * 更新计划
+ */
+export const fixUpdate = data => fetch("fixplan", data, "put");
+
+/**
+ * 删除计划
+ */
+export const fixDelete = data => fetch("fixplan", data, "delete");
+
