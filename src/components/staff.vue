@@ -205,7 +205,7 @@ import headTop from "@/common/headTop";
 import { getCompList, saveAddDept, getDeptList, getDeptDetail, editDeptDetail, delDept } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
-  name: "internalUser",
+  name: "staff",
   data() {
     
     return {
@@ -278,28 +278,28 @@ export default {
       columns: [
         {
           id: "name",
-          label: "部门名称"
+          label: "人员名称"
         },
         {
           id: "code",
-          label: "部门编码"
+          label: "人员编码"
         },
         {
           id: "deptrank",
-          label: "部门级别"
+          label: "公司"
+        },
+        {
+          id: "deptrank",
+          label: "部门"
         },
         {
           id: "deptclass",
-          label: "部门类别"
+          label: "角色"
         },
         {
           id: "depttype",
-          label: "部门类型"
+          label: "证书类型"
         },
-        {
-          id: "regdate",
-          label: "注册时间"
-        }
       ],
       Regular: Regular, // 验证
       userStatusDialogVisible: false,
@@ -371,7 +371,13 @@ export default {
     this.getDeptList();
   },
   methods: {
-    getData: function (res) {
+    async getData(val) {
+      // console.log(val);
+      const res = await getDeptList();
+      this.deptList = res.data;
+    },
+    
+    accData: function (res) {
         // childValue就是子组件传过来的值
         this.deptList = res
         console.log(this.deptList)
@@ -405,10 +411,10 @@ export default {
         // userId: this.currentUserStatusId,
         // status: this.accountStatus
       };
-      const res = await getDeptList(data);
+      const res = await getCompList({id,data});
       if (res.data) {
         // this.$message.success(res.message);
-        this.compList=res.data
+        this.compList=res.data;
       } else this.$message.warning(res.message);
       let detail = await getDeptDetail({id,data});
       if (detail.data){
