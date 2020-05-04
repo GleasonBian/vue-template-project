@@ -48,6 +48,7 @@ export default async (url = "", data = {}, type = "POST") => {
    */
   if (type == "POST") {
     return new Promise((resolve, reject) => {
+      console.log(data)
       data = JSON.stringify(data);
       axios
         .post(url, data)

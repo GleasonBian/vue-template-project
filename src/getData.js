@@ -24,10 +24,24 @@ export const delDept = data => fetch("dept", data, "delete");
 export const getStaffList = data => fetch("staff", data, "get");
 //获取人员详情 
 export const getStaffDetail = data => fetch("staff", data, "get");
+//新增人员
+export const saveAddStaff = data => fetch("staff", data, "post");
+//编辑人员详情 
+export const editStaffDetail = data => fetch("staff", data, "put");
+//删除人员 delDept
+export const delStaff = data => fetch("staff", data, "delete");
 
 
 //获取角色列表 getRoleList
 export const getRoleList = data => fetch("role", data, "get");
+//获取角色详情 
+export const getRoleDetail = data => fetch("role", data, "get");
+//新增角色
+export const saveAddRole = data => fetch("role", data, "post");
+//编辑角色详情 
+export const editRoleDetail = data => fetch("role", data, "put");
+//删除角色 delDept
+export const delRole = data => fetch("role", data, "delete");
 
 
 /**

@@ -373,7 +373,7 @@ export default {
   methods: {
     getData: function (res) {
         // childValue就是子组件传过来的值
-        this.deptList = res
+        this.deptList = res.data;
         console.log(this.deptList)
       },
     //查看公司列表
@@ -442,6 +442,7 @@ export default {
       this.getDeptDetail(row.guid)
     },
     async delDept(index,row){
+      let that = this;
        this.$confirm('删除部门?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -449,9 +450,9 @@ export default {
         }).then(() => {
           console.log(row)
           let res = delDept({id:row.guid});
-          if (res.status==200) {
+          if (res) {
             this.$message.success('删除成功');
-            this.getDeptList()
+            that.getDeptList()
           }
         }).catch(() => {
                    
