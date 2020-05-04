@@ -20,6 +20,16 @@ export const editDeptDetail = data => fetch("dept", data, "put");
 //删除部门 delDept
 export const delDept = data => fetch("dept", data, "delete");
 
+//获取人员列表
+export const getStaffList = data => fetch("staff", data, "get");
+//获取人员详情 
+export const getStaffDetail = data => fetch("staff", data, "get");
+
+
+//获取角色列表 getRoleList
+export const getRoleList = data => fetch("role", data, "get");
+
+
 /**
  * 公司查询
  */
