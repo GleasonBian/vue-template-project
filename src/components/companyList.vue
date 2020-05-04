@@ -16,7 +16,7 @@
       <el-button
         type="primary"
         size="medium"
-        @click="getDeptTree('newUser')"
+        @click="dialogFormVisible = true"
         style="margin-left:1%"
       >新增</el-button>
       <el-button type="danger" size="medium" @click="BatchDeleteUser">删除</el-button>
@@ -68,7 +68,7 @@
 
     <!-- 新增用户 -->
     <el-dialog
-      title="新增用户"
+      title="创建公司"
       :visible.sync="dialogFormVisible"
       width="25%"
       @close="handleDialogClose('form')"
@@ -84,60 +84,55 @@
         label-width="80px"
         style="width:100%"
       >
-        <el-form-item label="登录账号" prop="userName">
-          <el-input v-model="form.userName"></el-input>
+        <el-form-item label="公司名称" prop="name">
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="用户姓名" prop="name">
-          <el-input v-model.number="form.name"></el-input>
+        <el-form-item label="公司编码" prop="code">
+          <el-input v-model.number="form.code"></el-input>
         </el-form-item>
-        <el-form-item label="用户邮箱" prop="mail">
-          <el-input v-model="form.mail"></el-input>
+        <el-form-item label="地理位置" prop="location">
+          <el-input v-model="form.location"></el-input>
         </el-form-item>
-        <el-form-item label="用户性别" prop="sex">
-          <el-select v-model="form.sex" placeholder="请选择" style="width:100%">
-            <el-option label="男" value="1"></el-option>
-            <el-option label="女" value="0"></el-option>
+        <el-form-item label="公司类别" prop="corpclass">
+          <el-input v-model="form.corpclass"></el-input>
+        </el-form-item>
+        <el-form-item label="公司类型" prop="corptype">
+          <el-input v-model="form.corptype"></el-input>
+        </el-form-item>
+        <el-form-item label="证件类型" prop="certtype">
+          <el-input v-model="form.certtype"></el-input>
+        </el-form-item>
+        <el-form-item label="机构代码" prop="certguid">
+          <el-input v-model="form.certguid"></el-input>
+        </el-form-item>
+        <el-form-item label="上级标识" prop="superior">
+          <el-input v-model="form.superior"></el-input>
+        </el-form-item>
+        <el-form-item label="公司税号" prop="taxcode">
+          <el-input v-model="form.taxcode"></el-input>
+        </el-form-item>
+        <el-form-item label="公司备注" prop="description">
+          <el-input v-model="form.description"></el-input>
+        </el-form-item>
+        <el-form-item label="公司简介" prop="briefabout">
+          <el-input v-model="form.briefabout"></el-input>
+        </el-form-item>
+        <el-form-item label="公司级别" prop="corprank">
+          <el-select v-model="form.corprank" placeholder="请选择" style="width:100%">
+            <el-option label="一级" value="1"></el-option>
+            <el-option label="二级" value="2"></el-option>
+            <el-option label="三级" value="3"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户状态" prop="state">
-          <el-select v-model="form.state" placeholder="请选择" style="width:100%">
-            <el-option label="正常" value="0"></el-option>
-            <el-option label="禁用" value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="职位名称" prop="position" :rules="[ { required: true, message: '职位 必选'}]">
-          <el-select v-model="form.position" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in jobTitle"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="入职时间" prop="entryTime">
+        <el-form-item label="注册日期" prop="regdate">
           <el-date-picker
-            v-model="form.entryTime"
+            v-model="form.regdate"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd hh:mm:ss"
             style="width:100%"
           ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="部门名称" prop="deptId">
-          <el-cascader
-            v-model="form.deptIds"
-            :options="deptIdOption"
-            :props="props"
-            style="width:100%"
-          ></el-cascader>
-        </el-form-item>
-        <el-form-item label="登录密码" prop="password">
-          <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" prop="checkPass">
-          <el-input type="password" v-model="form.checkPass" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -281,10 +276,10 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import {} from "@/getData";
+import { corperation } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
-  name: "internalUser",
+  name: "createCorperation",
   data() {
     var checkUserName = async (rule, value, callback) => {
       // 验证 登录手机号
@@ -401,106 +396,111 @@ export default {
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示对话框
       form: {
-        userName: "",
-        mail: "",
-        password: "",
-        name: "",
-        sex: "",
-        state: "",
-        position: "",
-        entryTime: "",
-        deptId: 0,
-        deptIds: [],
-        checkPass: ""
+        briefabout: "", //公司简介
+        certguid: "", //公司组织结构代码
+        certtype: "", //证件类型
+        code: "", //公司编码
+        corpclass: "", //公司类别
+        corprank: "", //公司级别
+        corptype: "", //公司类型
+        description: "", //备注
+        location: "", //地理信息
+        name: "", //公司名称
+        regdate: "", // 注册日期
+        superior: "", // 上级标识
+        taxcode: "" // 税号
       },
 
       clickCurrentRowInfo: {},
 
       rules: {
-        userName: [
-          {
-            required: true,
-            message: "登录账号 必填"
-          },
-          {
-            validator: checkUserName,
-            trigger: ["change"]
-          }
-        ],
-        mail: [
-          {
-            required: true,
-            message: "必填 邮箱"
-          },
-          {
-            validator: checkEmail,
-            trigger: ["blur", "change"]
-          }
-        ],
         name: [
           {
             required: true,
-            message: "必填 用户名称"
-          },
+            message: "公司名称 必填"
+          }
+        ],
+        code: [
           {
-            validator: checkName,
+            required: true,
+            message: "公司编码 邮箱",
             trigger: ["blur", "change"]
           }
         ],
-        sex: [
+        location: [
           {
             required: true,
-            message: "必填 性别",
+            message: "必填 地理信息",
             trigger: ["blur", "change"]
           }
         ],
-        state: [
+        corpclass: [
           {
             required: true,
-            message: "用户状态 必填",
+            message: "必填 公司类别",
             trigger: ["blur", "change"]
           }
         ],
-        password: [
+        corptype: [
           {
             required: true,
-            message: "必填 密码",
+            message: "必填 公司类型",
+            trigger: ["blur", "change"]
+          }
+        ],
+        certtype: [
+          {
+            required: true,
+            message: "必填 证件类型",
             trigger: "blur"
-          },
-          {
-            validator: validatePass,
-            trigger: ["blur", "change"]
           }
         ],
-        checkPass: [
+        certguid: [
           {
             required: true,
-            message: "必填 确认密码",
+            message: "必填 公司组织机构代码",
             trigger: "blur"
-          },
+          }
+        ],
+        superior: [
           {
-            validator: validatePass2,
+            required: true,
+            message: "必填  上级标识",
             trigger: ["blur", "change"]
           }
         ],
-        position: [
+        taxcode: [
           {
             required: true,
-            message: "必填 职位",
+            message: "必填 公司税号",
             trigger: ["blur", "change"]
           }
         ],
-        entryTime: [
+        description: [
           {
-            required: true,
-            message: "必填 入职时间",
+            required: false,
+            message: "公司备注",
             trigger: ["blur", "change"]
           }
         ],
-        deptId: [
+        briefabout: [
+          {
+            required: false,
+            message: "必填 公司简介",
+            trigger: ["blur", "change"]
+          }
+        ],
+        regdate: [
           {
             required: true,
-            message: "必填 入职时间",
+            message: "必填 注册日期",
+            trigger: ["blur", "change"]
+          }
+        ],
+        corprank: [
+          {
+            required: true,
+            message: "必填 公司级别",
             trigger: ["blur", "change"]
           }
         ]
@@ -608,16 +608,6 @@ export default {
       }
       this.currentUserStatusId = row.id;
       this.userStatusDialogVisible = true;
-    },
-
-    /*
-     ** 获取用户部门树 新增 内部用户
-     */
-    async getDeptTree(info) {
-      info == "newUser" ? (this.dialogFormVisible = true) : "";
-      const res = await getDeptTree();
-      if (res.result) this.deptIdOption = res.data;
-      else this.$message.warning(res.message);
     },
 
     /*
@@ -769,20 +759,19 @@ export default {
      */
     async submitAddUser(info) {
       let sendData = this.form;
-      sendData.deptId = sendData.deptIds[sendData.deptIds.length - 1];
-      delete sendData.checkPass;
-      sendData.entryTime = sendData.entryTime + " " + "00:00:00";
+      console.log(sendData);
 
-      // // info 如果 是 insertUser 则为 新增 否为 为 查看 和编辑 用户数据
-      let data = info === "insertUser" ? sendData : this.clickCurrentRowInfo;
-      const res = await saveAdminUser(data);
-      if (res.result) {
-        info === "insertUser"
-          ? ""
-          : this.viewOReditorUserInfo(this.clickCurrentRowInfo);
-        this.$refs.searchBox.internalUser(this.limit, this.offset);
-        this.$message.success(res.message);
-      } else this.$message.warning(res.message);
+      // info 如果 是 insertUser 则为 新增 否为 为 查看 和编辑 用户数据
+      // let data = info === "insertUser" ? sendData : this.clickCurrentRowInfo;
+      const res = await corperation(sendData);
+      console.log(res);
+      // if (res.result) {
+      //   info === "insertUser"
+      //     ? ""
+      //     : this.viewOReditorUserInfo(this.clickCurrentRowInfo);
+      //   this.$refs.searchBox.internalUser(this.limit, this.offset);
+      //   this.$message.success(res.message);
+      // } else this.$message.warning(res.message);
       this.dialogFormVisible = false;
     },
 

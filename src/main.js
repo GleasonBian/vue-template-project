@@ -8,6 +8,8 @@ import './style/common.less'
 import gtTable from '@/common/gtTable'
 import gtSearch from "@/common/gtSearch";
 Vue.use(ElementUI);
+import qs from 'qs'
+Vue.use(qs);
 
 Vue.config.productionTip = false;
 Vue.component('gt-table', gtTable)

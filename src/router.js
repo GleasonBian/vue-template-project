@@ -59,7 +59,7 @@ const router = new Router({
           path: 'companyList',
           component: resolve => require(['@/components/companyList'], resolve),
           meta: {
-            crumbs: ['用户管理', '公司管理'],
+            crumbs: ['平台', '公司管理'],
             title: '公司管理',
             index: 0,
             menu: '090302'

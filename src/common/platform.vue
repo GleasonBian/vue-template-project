@@ -16,7 +16,7 @@
           </el-menu-item>
           <el-submenu index="2" popper-class="submenu-userManger">
             <template slot="title">
-              <i class="iconfont i-user-manger"></i>用户管理
+              <i class="iconfont i-user-manger"></i>平台
             </template>
             <el-menu-item index="/platform/companyList">公司管理</el-menu-item>
             <el-menu-item index="/platform/departmentList">部门管理</el-menu-item>
