@@ -44,7 +44,7 @@
 
     <!-- 新增 查看 更新 -->
     <el-dialog
-      :title="formCurrentStatus+'设备'"
+      :title="formCurrentStatus+'加油任务'"
       :visible.sync="dialogFormVisible"
       width="25%"
       @close="DialogClose('form')"
