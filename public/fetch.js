@@ -51,7 +51,6 @@ export default async (url = "", data = {}, type = "POST") => {
       axios
         .post(url, data)
         .then(res => {
-          console.log(res);
           resolve(res);
         })
         .catch(err => {

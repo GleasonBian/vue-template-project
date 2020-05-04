@@ -4,12 +4,7 @@
     <headTop></headTop>
 
     <!-- 搜索框 -->
-    <gt-search
-      :ParentPage="fromPage"
-      ref="searchBox"
-      :searchName="searchName"
-      :SelectOptions3="jobTitle"
-    ></gt-search>
+    <gt-search :data="searchData" @handle="getData" size></gt-search>
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
@@ -282,7 +277,7 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { corperation } from "@/getData";
+import { corperation, corpSelect } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
@@ -394,7 +389,7 @@ export default {
       ],
       Regular: Regular, // 验证
       userStatusDialogVisible: false,
-      fromPage: "internalUser",
+      fromPage: "company",
       tableData: null, // 表格数据
       total: 0,
       limit: 10,
@@ -418,7 +413,55 @@ export default {
         email: "", // 公司邮箱
         tel: "" // 公司电话
       },
-
+      searchData: [
+        {
+          key: "id", // 与后端交互时的字段 必填
+          label: "搜索框1", // 搜索框名称 必填
+          placeholder: "请搜索", // 占位符 选填
+          default: "0", // 搜索框 默认值
+          options: [
+            {
+              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
+              value: "1", // 下拉选项 绑定 值
+              label: "男" // 下拉选项 绑定 名称
+            },
+            {
+              value: "0",
+              label: "女"
+            }
+          ]
+        },
+        {
+          key: "date",
+          label: "搜索框2",
+          placeholder: "",
+          default: ""
+        },
+        {
+          key: "age",
+          label: "搜索框3",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "ccc",
+          label: "搜索框4",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "asdafs",
+          label: "搜索框5",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "adgdd",
+          label: "搜索框6",
+          placeholder: "请搜索",
+          default: ""
+        }
+      ],
       clickCurrentRowInfo: {},
 
       rules: {
@@ -596,8 +639,51 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getData();
+  },
   methods: {
+    async getData(val) {
+      // console.log(val);
+      const res = await corpSelect();
+      this.tableData = res.data;
+    },
+    /*
+     ** 新增 用户 form 表单 验证
+     */
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          formName === "form"
+            ? this.submitAddUser("insertUser")
+            : this.saveEditorUser();
+        } else {
+          this.$message.error("请正确填写红框内容");
+          return false;
+        }
+      });
+    },
+
+    /*
+     ** 新增 / 编辑 内部用户
+     */
+    async submitAddUser(info) {
+      let sendData = this.form;
+      console.log(sendData);
+
+      // info 如果 是 insertUser 则为 新增 否为 为 查看 和编辑 用户数据
+      // let data = info === "insertUser" ? sendData : this.clickCurrentRowInfo;
+      const res = await corperation(sendData);
+      console.log(res.status === 200);
+      if (res.status === 200) {
+        // info === "insertUser"
+        //   ? ""
+        //   : this.viewOReditorUserInfo(this.clickCurrentRowInfo);
+        this.$refs.searchBox.internalUser(this.limit, this.offset);
+        this.$message.success("公司创建成功");
+      } else this.$message.warning("公司创建失败");
+      this.dialogFormVisible = false;
+    },
     /*
      ** 修改 用户 状态
      */
@@ -608,7 +694,7 @@ export default {
       };
 
       this.userStatusDialogVisible = false;
-      const res = await updateUserStatus(data);
+      const res = await corpSelect(data);
       if (res.result) {
         this.$message.success(res.message);
         this.$refs.searchBox.internalUser(this.limit, this.offset);
@@ -758,43 +844,6 @@ export default {
         this.isShowViewUser = true;
       } else this.$message.warning(response.data.message);
       this.getDeptTree();
-    },
-
-    /*
-     ** 新增 用户 form 表单 验证
-     */
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          formName === "form"
-            ? this.submitAddUser("insertUser")
-            : this.saveEditorUser();
-        } else {
-          this.$message.error("请正确填写红框内容");
-          return false;
-        }
-      });
-    },
-
-    /*
-     ** 新增 / 编辑 内部用户
-     */
-    async submitAddUser(info) {
-      let sendData = this.form;
-      console.log(sendData);
-
-      // info 如果 是 insertUser 则为 新增 否为 为 查看 和编辑 用户数据
-      // let data = info === "insertUser" ? sendData : this.clickCurrentRowInfo;
-      const res = await corperation(sendData);
-      console.log(res);
-      // if (res.result) {
-      //   info === "insertUser"
-      //     ? ""
-      //     : this.viewOReditorUserInfo(this.clickCurrentRowInfo);
-      //   this.$refs.searchBox.internalUser(this.limit, this.offset);
-      //   this.$message.success(res.message);
-      // } else this.$message.warning(res.message);
-      this.dialogFormVisible = false;
     },
 
     /*
