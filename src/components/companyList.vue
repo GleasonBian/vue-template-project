@@ -64,13 +64,13 @@
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="公司编码" prop="code">
-          <el-input v-model.number="form.code"></el-input>
+          <el-input  v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="公司电话" prop="tel">
-          <el-input v-model.number="form.tel"></el-input>
+          <el-input  v-model="form.tel"></el-input>
         </el-form-item>
         <el-form-item label="公司邮箱" prop="email">
-          <el-input v-model.number="form.email"></el-input>
+          <el-input  v-model="form.email"></el-input>
         </el-form-item>
         <el-form-item label="地理位置" prop="location">
           <el-input v-model="form.location"></el-input>

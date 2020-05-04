@@ -114,7 +114,7 @@
         </el-form-item>
 
         <el-form-item label="计划编码" prop="code">
-          <el-input v-model.number="form.code"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
 
       </el-form>

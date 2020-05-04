@@ -111,7 +111,7 @@
         </el-form-item>
 
         <el-form-item label="任务编码" prop="code">
-          <el-input v-model.number="form.code"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
 
         <el-form-item label="生产日期" prop="proddate">
@@ -126,11 +126,11 @@
         </el-form-item>
 
         <el-form-item label="生产厂家" prop="producer">
-          <el-input v-model.number="form.producer"></el-input>
+          <el-input  v-model="form.producer"></el-input>
         </el-form-item>
 
         <el-form-item label="描述信息" prop="descrifptio">
-          <el-input v-model.number="form.descrifptio"></el-input>
+          <el-input  v-model="form.descrifptio"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

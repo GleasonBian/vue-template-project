@@ -95,22 +95,22 @@ export const equiDetails = data => fetch("equipment", data, "get");
 export const equiDelete = data => fetch("equipment", data, "delete");
 
 /**
- * 创建计划
+ * 创建维修计划
  */
 export const fixCreate = data => fetch("fixplan", data, "post");
 
 /**
- * 计划列表
+ * 维修计划列表
  */
 export const fixSelect = data => fetch("fixplan", data, "get");
 
 /**
- * 更新计划
+ * 更新维修计划
  */
 export const fixUpdate = data => fetch("fixplan", data, "put");
 
 /**
- * 删除计划
+ * 删除维修计划
  */
 export const fixDelete = data => fetch("fixplan", data, "delete");
 
@@ -142,3 +142,28 @@ export const oilDelete = data => fetch("oilplan", data, "delete");
  * 计划列表
  */
 export const oilDetails = data => fetch("oilplan", data, "get");
+
+/**
+ * 创建维修任务
+ */
+export const fixdeCreate = data => fetch("fixdetail", data, "post");
+
+/**
+ * 维修任务列表
+ */
+export const fixdeSelect = data => fetch("fixdetail", data, "get");
+
+/**
+ * 维修任务详情
+ */
+export const fixdeDetail = data => fetch("fixdetail", data, "get");
+
+/**
+ * 更新维修任务
+ */
+export const fixdeUpdate = data => fetch("fixdetail", data, "put");
+
+/**
+ * 维修任务删除
+ */
+export const fixdeDelete = data => fetch("fixdetail", data, "delete");
