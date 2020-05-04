@@ -38,4 +38,9 @@ export const corpDtails = data => fetch("corp", data, "get");
 /**
  * 更新公司信息
  */
-export const corpUpdate = data => fetch("corp", data, "get");
+export const corpUpdate = data => fetch("corp", data, "put");
+
+/**
+ * 删除公司
+ */
+export const corpDelete = data => fetch("corp", data, "delete");

@@ -25,8 +25,9 @@
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
-        v-on:viewOReditorCorp="viewOReditorCorp"
+        v-on:viewCorp="viewCorp"
         v-on:deleteCorp="deleteCorp"
+        v-on:updatePretreatment="updatePretreatment"
         :handle="handle"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
@@ -67,7 +68,7 @@
       width="25%"
       @close="handleDialogClose('form')"
       :close-on-click-modal="false"
-      top="5vh"
+      top="0vh"
       center
     >
       <el-form
@@ -145,7 +146,13 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { corperation, corpSelect, corpDtails } from "@/getData";
+import {
+  corperation,
+  corpSelect,
+  corpDtails,
+  corpUpdate,
+  corpDelete
+} from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
@@ -207,8 +214,14 @@ export default {
       show: true,
       handle: [
         {
-          function: "viewOReditorCorp",
-          text: "查看/编辑",
+          function: "viewCorp",
+          text: "查看",
+          type: "text",
+          show: true
+        },
+        {
+          function: "updatePretreatment",
+          text: "更新",
           type: "text",
           show: true
         },
@@ -258,7 +271,7 @@ export default {
       offset: 1,
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示对话框
-      formCurrentStatus: true,
+      formCurrentStatus: "",
       form: {
         briefabout: "", //公司简介
         certguid: "", //公司组织结构代码
@@ -515,9 +528,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          formCurrentStatus === "创建"
-            ? this.submitAddUser()
-            : this.saveEditorUser("update");
+          if (this.formCurrentStatus === "创建") this.submitAddUser();
+          else if (this.formCurrentStatus === "更新") this.updateCorp();
+          else if (this.formCurrentStatus === "查看") this.viewCorp();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -532,12 +545,10 @@ export default {
       // info 如果 是 insertUser 则为 新增 否为 为 查看 和编辑 用户数据
       // let data = info === "create" ? sendData : this.clickCurrentRowInfo;
       const res = await corperation(this.form);
+      console.log(this.form);
 
       if (res.status === 200) {
-        // info === "insertUser"
-        //   ? ""
-        //   : this.viewOReditorUserInfo(this.clickCurrentRowInfo);
-        // this.$refs.searchBox.internalUser(this.limit, this.offset);
+        this.getData();
         this.$message.success("公司创建成功");
       } else this.$message.warning("公司创建失败");
       this.dialogFormVisible = false;
@@ -546,30 +557,57 @@ export default {
     /*
      ** 查看公司
      */
-    async viewOReditorCorp(index, row) {
+    async viewCorp(index, row) {
+      console.log(row);
       this.formCurrentStatus = "查看";
-      console.log(index, row);
       const response = await corpDtails({
         id: row.guid
       });
-      console.log(response);
       if (response.status === 200) {
         this.form = response.data[0];
         this.dialogFormVisible = true;
-      } else this.$message.warning(response.data.message);
-      // this.getDeptTree();
+      } else this.$message.warning("请稍后再尝试");
     },
 
     /*
      ** 更新公司
      */
+    async updateCorp(index, row) {
+      const res = await corpUpdate(this.form);
+      if (res.status === 200) {
+        this.getData();
+        this.$message.success("更新成功");
+      } else this.$message.warning("更新失败,稍后重试");
+      this.dialogFormVisible = false;
+    },
+    /*
+     ** 更新预处理
+     */
+    async updatePretreatment(index, row) {
+      this.viewCorp(index, row);
+      this.formCurrentStatus = "更新";
+    },
+
+    /*
+     ** 删除公司
+     */
     async deleteCorp(index, row) {
-      let data = {
-        userId: row.id
-      };
-      const res = await resetPassword(data);
-      if (res.result) this.$message.success(res.message);
-      else this.$message.warning(res.message);
+      console.log(row);
+      let that = this;
+      this.$confirm("删除公司?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let res = corpDelete({ id: row.guid });
+          console.log(res);
+          if (res.status === 200) {
+            this.$message.success("删除成功");
+          }
+          that.getData();
+        })
+        .catch(err => {});
     },
     /*
      ** 修改 用户 状态
