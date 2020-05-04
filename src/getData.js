@@ -17,6 +17,8 @@ export const getDeptList = data => fetch("dept", data, "get");
 export const getDeptDetail = data => fetch("dept", data, "get");
 //编辑部门详情 
 export const editDeptDetail = data => fetch("dept", data, "put");
+//删除部门 delDept
+export const delDept = data => fetch("dept", data, "delete");
 
 /**
  * 公司查询

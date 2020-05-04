@@ -73,4 +73,18 @@ export default async (url = "", data = {}, type = "POST") => {
         });
     });
   }
+  if (type == "DELETE") {
+    data.id ? url = url + '/' + data.id : url = url;
+    return new Promise((resolve, reject) => {
+      data = JSON.stringify(data.data);
+      axios
+        .put(url, data)
+        .then(res => {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
 };

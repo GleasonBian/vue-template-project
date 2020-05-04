@@ -202,7 +202,7 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { getCompList, saveAddDept, getDeptList, getDeptDetail, editDeptDetail } from "@/getData";
+import { getCompList, saveAddDept, getDeptList, getDeptDetail, editDeptDetail, delDept } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "internalUser",
@@ -453,11 +453,9 @@ export default {
           type: 'warning'
         }).then(() => {
           console.log(row)
-          this.getDeptList(row.guid)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          let res = delDept({id:row.guid});
+          if (res.result) this.$message.success('删除成功');
+          
         }).catch(() => {
                    
         });
@@ -563,7 +561,7 @@ export default {
         if (valid) {
           formName === "form"
             ? this.addDept("add")
-            : this.saveEditorUser();
+            : this.editDept();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -579,7 +577,7 @@ export default {
       
       const res = await saveAddDept(data);
       if (res.status==200) {
-        this.$refs.searchBox.deptList(this.limit, this.offset);
+        this.getData(this.limit, this.offset);
         this.$message.success(res.statusText);
       } else this.$message.warning(res.message);
       this.dialogFormVisible = false;
@@ -588,20 +586,7 @@ export default {
     /*
      ** 保存 查看/编辑 用户信息
      */
-    saveEditorUser() {
-      let info = this.clickCurrentRowInfo;
-      info.deptId = info.deptIds[info.deptIds.length - 1];
-      info.entryTime = this.$root.createTime(info.entryTime);
-      delete info.deptName;
-      delete info.entryTimeStr;
-      delete info.deptName;
-      delete info.openId;
-      delete info.roleName;
-      delete info.deptIds;
-      this.isEditor = true;
-      this.submitAddUser("updateUser");
-      this.isShowViewUser = false;
-    }
+    
   },
   components: {
     // searchBox,
