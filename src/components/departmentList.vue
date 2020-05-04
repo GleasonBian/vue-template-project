@@ -4,12 +4,8 @@
     <headTop></headTop>
 
     <!-- 搜索框 -->
-    <gt-search
-      :ParentPage="fromPage"
-      ref="searchBox"
-      :searchName="searchName"
-      :SelectOptions3="compList"
-    ></gt-search>
+    <!-- 搜索框 -->
+    <gt-search :data="searchData" @handle="getData" size></gt-search>
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
@@ -25,7 +21,7 @@
     <!-- 内部用户列表 -->
     <el-col align="middle">
       <gt-table
-        :tableData="tableData"
+        :tableData="deptList"
         style="width: 98%"
         :optionWidth="optionWidth"
         :columns="columns"
@@ -79,7 +75,6 @@
       <el-form
         :model="form"
         status-icon
-        :rules="rules"
         ref="form"
         label-width="80px"
         style="width:100%"
@@ -100,8 +95,8 @@
         <el-form-item label="部门编号" prop="code" :rules="[ { required: true, message: '部门编号 必填'}]">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
-        <el-form-item label="部门类别" prop="deptclas" :rules="[ { required: true, message: '部门类别 必填'}]">
-          <el-input v-model="form.deptclas"></el-input>
+        <el-form-item label="部门类别" prop="deptclass" :rules="[ { required: true, message: '部门类别 必填'}]">
+          <el-input v-model="form.deptclass"></el-input>
         </el-form-item>
         <el-form-item label="部门类型" prop="depttype" :rules="[ { required: true, message: '部门类型 必填'}]">
           <el-input v-model="form.depttype"></el-input>
@@ -157,6 +152,55 @@ export default {
   data() {
     
     return {
+      searchData: [
+        {
+          key: "id", // 与后端交互时的字段 必填
+          label: "搜索框1", // 搜索框名称 必填
+          placeholder: "请搜索", // 占位符 选填
+          default: "0", // 搜索框 默认值
+          options: [
+            {
+              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
+              value: "1", // 下拉选项 绑定 值
+              label: "男" // 下拉选项 绑定 名称
+            },
+            {
+              value: "0",
+              label: "女"
+            }
+          ]
+        },
+        {
+          key: "date",
+          label: "搜索框2",
+          placeholder: "",
+          default: ""
+        },
+        {
+          key: "age",
+          label: "搜索框3",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "ccc",
+          label: "搜索框4",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "asdafs",
+          label: "搜索框5",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "adgdd",
+          label: "搜索框6",
+          placeholder: "请搜索",
+          default: ""
+        }
+      ],
       rules: [],
       show: true,
       handle: [
@@ -181,37 +225,29 @@ export default {
       ],
       columns: [
         {
-          id: "userName",
-          label: "登录账号"
-        },
-        {
           id: "name",
-          label: "用户名称"
-        },
-        {
-          id: "position",
-          label: "职位名称"
-        },
-        {
-          id: "mail",
-          label: "邮箱"
-        },
-        {
-          id: "deptName",
           label: "部门名称"
         },
         {
-          id: "state",
-          label: "用户状态"
+          id: "code",
+          label: "部门编码"
         },
         {
-          id: "entryTimeStr",
-          label: "入职时间"
-        }
+          id: "deptrank",
+          label: "部门级别"
+        },
+        {
+          id: "deptclass",
+          label: "部门类别"
+        },
+        {
+          id: "depttype",
+          label: "部门类型"
+        },
       ],
       Regular: Regular, // 验证
       userStatusDialogVisible: false,
-      fromPage: "internalUser",
+      fromPage: "deptList",
       tableData: null, // 表格数据
       total: 0,
       limit: 10,
@@ -219,17 +255,7 @@ export default {
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示对话框
       form: {
-        userName: "",
-        mail: "",
-        password: "",
-        name: "",
-        sex: "",
-        state: "",
-        position: "",
-        entryTime: "",
-        deptId: 0,
-        deptIds: [],
-        checkPass: ""
+        
       },
 
       clickCurrentRowInfo: {},
@@ -276,6 +302,7 @@ export default {
         value: "id"
       },
       deptIdOption: [],
+      deptList: [],
       currentUserStatusId: "",
       accountStatus: 0,
       optionWidth: 250
@@ -284,9 +311,20 @@ export default {
   beforeCreate() {},
   created() {
     this.getCompList();
-    this.getDepartmentList();
+    this.getDeptList();
   },
   methods: {
+    async getData(val) {
+      // console.log(val);
+      const res = await getDeptList();
+      this.deptList = res.data;
+    },
+    
+    accData: function (res) {
+        // childValue就是子组件传过来的值
+        this.deptList = res
+        console.log(this.deptList)
+      },
     //查看公司列表
     async getCompList() {
       let data = {
@@ -301,15 +339,15 @@ export default {
     },
 
     //查看部门列表
-    async getDeptList() {
+     async getDeptList() {
       let data = {
         // userId: this.currentUserStatusId,
         // status: this.accountStatus
       };
       const res = await getDeptList(data);
-      if (res.result) {
+      if (res.data) {
         // this.$message.success(res.message);
-        this.compList=res.result
+        this.deptList=res.data
       } else this.$message.warning(res.message);
     },
     /*
@@ -351,9 +389,7 @@ export default {
      */
     async getDeptTree(info) {
       info == "newUser" ? (this.dialogFormVisible = true) : "";
-      const res = await getDeptTree();
-      if (res.result) this.deptIdOption = res.data;
-      else this.$message.warning(res.message);
+      this.getCompList();
     },
 
     /*
@@ -504,20 +540,12 @@ export default {
      ** 新增 / 编辑 内部用户
      */
     async addDept(info) {
-      let sendData = this.form;
-      sendData.deptId = sendData.deptIds[sendData.deptIds.length - 1];
-      delete sendData.checkPass;
-      sendData.entryTime = sendData.entryTime + " " + "00:00:00";
-
-      // // info 如果 是 insertUser 则为 新增 否为 为 查看 和编辑 用户数据
-      let data = info === "add" ? sendData : this.clickCurrentRowInfo;
+      let data = this.form;
+      
       const res = await saveAddDept(data);
-      if (res.result) {
-        info === "insertUser"
-          ? ""
-          : this.viewOReditorUserInfo(this.clickCurrentRowInfo);
-        this.$refs.searchBox.internalUser(this.limit, this.offset);
-        this.$message.success(res.message);
+      if (res.status==200) {
+        this.$refs.searchBox.deptList(this.limit, this.offset);
+        this.$message.success(res.statusText);
       } else this.$message.warning(res.message);
       this.dialogFormVisible = false;
     },
