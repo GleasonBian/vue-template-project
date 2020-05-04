@@ -70,7 +70,7 @@
     <el-dialog
       title="新增部门"
       :visible.sync="dialogFormVisible"
-      width="45%"
+      width="25%"
       @close="handleDialogClose('form')"
       :close-on-click-modal="false"
       top="5vh"
@@ -95,7 +95,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="部门名称" prop="name" :rules="[ { required: true, message: '部门名称 必填'}]">
-          <el-input v-model.number="form.name"></el-input>
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="部门编号" prop="code" :rules="[ { required: true, message: '部门编号 必填'}]">
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="部门类别" prop="deptclas" :rules="[ { required: true, message: '部门类别 必填'}]">
           <el-input v-model="form.deptclas"></el-input>
@@ -103,10 +106,24 @@
         <el-form-item label="部门类型" prop="depttype" :rules="[ { required: true, message: '部门类型 必填'}]">
           <el-input v-model="form.depttype"></el-input>
         </el-form-item>
-        <el-form-item label="部门等级" prop="deptrank" :rules="[ { required: true, message: '部门等级 必填'}]">
-          <el-input v-model="form.deptrank"></el-input>
+        <el-form-item label="部门级别" prop="deptrank" :rules="[ { required: true, message: '部门级别 必填'}]">
+          <el-select v-model="form.deptrank" placeholder="请选择" style="width:100%">
+            <el-option label="一级" value="1"></el-option>
+            <el-option label="二级" value="2"></el-option>
+            <el-option label="三级" value="3"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="部门简介" prop="briefabout" :rules="[ { required: true, message: '部门简介 必填'}]">
+        <el-form-item label="注册日期" prop="regdate" :rules="[ { required: true, message: '注册日期 必填'}]">
+          <el-date-picker
+            v-model="form.regdate"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="部门简介" prop="briefabout" :rules="[ { required: false, message: '部门简介 必填'}]">
           <el-input v-model="form.briefabout"></el-input>
         </el-form-item>
         <el-form-item label="部门位置" prop="location" :rules="[ { required: true, message: '部门位置 必填'}]">
@@ -128,135 +145,6 @@
     </el-dialog>
 
     <!-- 查看 或 编辑当前用户信息 -->
-    <el-dialog
-      title="查看/编辑"
-      :visible.sync="isShowViewUser"
-      width="25%"
-      @close="handleisShowViewUser"
-      center
-    >
-      <el-form
-        :model="clickCurrentRowInfo"
-        status-icon
-        label-width="80px"
-        style="width:100%"
-        ref="viewOReditorUserInfo"
-      >
-        <el-form-item label="登录账号" prop="userName">
-          <el-input v-model="clickCurrentRowInfo.userName" autocomplete="off" :readonly="true"></el-input>
-        </el-form-item>
-        <el-form-item
-          label="用户姓名"
-          prop="name"
-          :rules="[
-            { required: true, message: '用户姓名 为空', trigger: ['blur', 'change']},
-            { pattern: Regular.Username, message: '2到8位汉字, 字母，数字，下划线，连字符', trigger: ['blur', 'change'] }
-           ]"
-        >
-          <el-input
-            v-model.number="clickCurrentRowInfo.name"
-            autocomplete="off"
-            :disabled="isEditor"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="用户邮箱"
-          prop="mail"
-          :rules="[
-            { required: true, message: '用户邮箱 为空', trigger: ['blur', 'change']},
-            { pattern: Regular.Email, message: '邮箱格式非法', trigger: ['blur', 'change'] }
-           ]"
-        >
-          <el-input v-model="clickCurrentRowInfo.mail" autocomplete="off" :disabled="isEditor"></el-input>
-        </el-form-item>
-        <el-form-item
-          label="用户性别"
-          prop="sex"
-          :rules="[{ required: true, message: '用户性别 必选', trigger: ['blur', 'change']}]"
-        >
-          <el-select
-            v-model.number="clickCurrentRowInfo.sex"
-            placeholder="请选择"
-            style="width:100%"
-            autocomplete="off"
-            :disabled="isEditor"
-          >
-            <el-option label="男" :value="1"></el-option>
-            <el-option label="女" :value="0"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="用户状态"
-          prop="state"
-          :rules="[{ required: true, message: '用户状态 必选', trigger: ['blur', 'change']}]"
-        >
-          <el-select
-            v-model.number="clickCurrentRowInfo.state"
-            placeholder="请选择"
-            style="width:100%"
-            autocomplete="off"
-            :disabled="isEditor"
-          >
-            <el-option label="正常" :value="0"></el-option>
-            <el-option label="禁用" :value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="职位名称"
-          prop="position"
-          :rules="[ { required: true, message: '职位 必选',trigger: ['blur', 'change']}]"
-        >
-          <el-select
-            v-model="clickCurrentRowInfo.position"
-            placeholder="请选择"
-            style="width:100%"
-            autocomplete="off"
-            :disabled="isEditor"
-          >
-            <el-option
-              v-for="item in compList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="入职时间"
-          prop="entryTime"
-          :rules="[ { required: true, message: '入职时间 必选',trigger: ['blur', 'change']}]"
-        >
-          <el-date-picker
-            v-model="clickCurrentRowInfo.entryTime"
-            type="date"
-            placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
-            value-format
-            autocomplete="off"
-            :disabled="isEditor"
-            style="width:100%"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item
-          label="部门名称"
-          prop="deptIds"
-          :rules="[ { required: true, message: '部门名称 必选',trigger: ['blur', 'change']}]"
-        >
-          <el-cascader
-            v-model="clickCurrentRowInfo.deptIds"
-            :options="deptIdOption"
-            :props="props"
-            style="width:100%"
-            :disabled="isEditor"
-          ></el-cascader>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="isEditor=false" v-if="isEditor">编 辑</el-button>
-        <el-button type="primary" @click="submitForm('viewOReditorUserInfo')" v-else>保 存</el-button>
-        <!--  @click="saveEditorUser" -->
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -267,59 +155,7 @@ import { Regular } from "@/config/verification";
 export default {
   name: "internalUser",
   data() {
-    var checkUserName = async (rule, value, callback) => {
-      // 验证 登录手机号
-      if (!value) return callback(new Error("手机号码 不能为空"));
-      else if (!Regular.Phone.test(value))
-        return callback(new Error("请输入正确固话或手机号"));
-      else if (value) {
-        // 调用接口 验证唯一性
-        let res = await checkPhone({
-          phoneNo: value
-        });
-        if (res.result) callback();
-        else callback(new Error("该号码已存在,请更换号码注册"));
-      }
-    };
-    let checkName = (rule, value, callback) => {
-      // 验证 user Name
-      if (!value) return callback(new Error("用户名称 不能为空"));
-      else if (!Regular.Username.test(value))
-        callback(new Error("2到16位（汉字, 字母，数字，下划线，连字符）"));
-      else {
-        callback();
-      }
-    };
-    let checkEmail = (rule, value, callback) => {
-      // 验证 email
-      if (!value) return callback(new Error("邮箱不能为空"));
-      else if (!Regular.Email.test(value))
-        return callback(new Error("邮箱格式非法"));
-      else {
-        callback();
-      }
-    };
-    var validatePass = (rule, value, callback) => {
-      // 验证 密码
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.form.checkPass !== "") {
-          this.$refs.form.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      // 验证 确认密码
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.form.password) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
+    
     return {
       rules: [],
       show: true,
@@ -458,9 +294,9 @@ export default {
         // status: this.accountStatus
       };
       const res = await getCompList(data);
-      if (res.result) {
+      if (res.data) {
         // this.$message.success(res.message);
-        this.compList=res.result
+        this.compList=res.data;
       } else this.$message.warning(res.message);
     },
 
