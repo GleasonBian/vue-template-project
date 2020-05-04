@@ -20,6 +20,9 @@
             </template>
             <el-menu-item index="/platform/companyList">公司管理</el-menu-item>
             <el-menu-item index="/platform/departmentList">部门管理</el-menu-item>
+            <el-menu-item index="/platform/role">角色管理</el-menu-item>
+            <el-menu-item index="/platform/staff">人员管理</el-menu-item>
+            <el-menu-item index="/platform/equipment">设备管理</el-menu-item>
           </el-submenu>
         </el-menu>
       </el-col>
