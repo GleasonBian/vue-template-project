@@ -15,7 +15,7 @@
         @click="getDeptTree('newUser')"
         style="margin-left:1%"
       >新增</el-button>
-      <el-button type="danger" size="medium" @click="BatchDeleteUser">删除</el-button>
+      <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">删除</el-button> -->
     </el-col>
 
     <!-- 内部用户列表 -->
@@ -192,7 +192,7 @@
     
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="editDeptSave(deptDetail.guid)">提交</el-button>
+        <el-button type="primary" @click="submitForm('deptDetail',deptDetail.guid)">提交</el-button>
       </span>
     </el-dialog>
 
@@ -430,9 +430,6 @@ export default {
         this.deptList=res.data
       } else this.$message.warning(res.message);
     },
-    async handleDialogCloseEdit(){
-      this.handleDialogCloseEdit
-    },
 
     /*
      ** 获取用户部门树 新增 内部用户
@@ -454,8 +451,10 @@ export default {
         }).then(() => {
           console.log(row)
           let res = delDept({id:row.guid});
-          if (res.result) this.$message.success('删除成功');
-          
+          if (res.status==200) {
+            this.$message.success('删除成功');
+            this.getDeptList()
+          }
         }).catch(() => {
                    
         });
@@ -556,12 +555,12 @@ export default {
     /*
      ** 新增 用户 form 表单 验证
      */
-    submitForm(formName) {
+    submitForm(formName,id) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           formName === "form"
             ? this.addDept("add")
-            : this.editDept();
+            : this.editDeptSave(id);
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
