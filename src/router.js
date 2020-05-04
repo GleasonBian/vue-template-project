@@ -61,7 +61,7 @@ const router = new Router({
           meta: {
             crumbs: ['平台', '公司管理'],
             title: '公司管理',
-            index: 0,
+            index: 11,
             menu: '090302'
           },
         },
@@ -71,7 +71,7 @@ const router = new Router({
           meta: {
             crumbs: ['平台', '部门管理'],
             title: '部门管理',
-            index: 0,
+            index: 1,
             menu: '090302'
           },
         },
@@ -81,7 +81,7 @@ const router = new Router({
           meta: {
             crumbs: ['平台', '设备管理'],
             title: '设备管理',
-            index: 0,
+            index: 2,
             menu: '090302'
           },
         },
@@ -91,7 +91,7 @@ const router = new Router({
           meta: {
             crumbs: ['平台', '人员管理'],
             title: '人员管理',
-            index: 0,
+            index: 3,
             menu: '090302'
           },
         },
@@ -101,7 +101,53 @@ const router = new Router({
           meta: {
             crumbs: ['平台', '角色管理'],
             title: '角色管理',
-            index: 0,
+            index: 4,
+            menu: '090302'
+          },
+        },
+      ]
+    },
+    {
+      path: '/plan',
+      component: resolve => require(['@/common/platform'], resolve),
+      children: [
+        {
+          path: 'fixplan',
+          component: resolve => require(['@/components/fixplan'], resolve),
+          meta: {
+            crumbs: ['计划', '维修计划'],
+            title: '维修计划',
+            index: 5,
+            menu: '090302'
+          },
+        },
+        {
+          path: 'fixtask',
+          component: resolve => require(['@/components/fixtask'], resolve),
+          meta: {
+            crumbs: ['计划', '维修任务'],
+            title: '维修任务',
+            index: 6,
+            menu: '090302'
+          },
+        },
+        {
+          path: 'oilplan',
+          component: resolve => require(['@/components/oilplan'], resolve),
+          meta: {
+            crumbs: ['计划', '加油计划'],
+            title: '加油计划',
+            index: 7,
+            menu: '090302'
+          },
+        },
+        {
+          path: 'oiltask',
+          component: resolve => require(['@/components/oiltask'], resolve),
+          meta: {
+            crumbs: ['计划', '加油任务'],
+            title: '加油任务',
+            index: 8,
             menu: '090302'
           },
         },

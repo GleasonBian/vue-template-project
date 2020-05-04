@@ -42,25 +42,6 @@
       ></el-pagination>
     </el-col>
 
-    <!-- 选择用户状态 -->
-    <el-dialog
-      title="选择用户状态"
-      :visible.sync="userStatusDialogVisible"
-      width="18%"
-      :close-on-click-modal="false"
-      center
-    >
-      <el-col :span="24" type="flex" justify="center" align="middle">
-        <el-radio-group v-model="accountStatus">
-          <el-radio :label="0">正常</el-radio>
-          <el-radio :label="1">禁用</el-radio>
-        </el-radio-group>
-      </el-col>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="userStatusChange">确 定</el-button>
-      </span>
-    </el-dialog>
-
     <!-- 新增 查看 更新 -->
     <el-dialog
       :title="formCurrentStatus+'公司'"
@@ -262,16 +243,14 @@ export default {
           label: "地理位置"
         }
       ],
-      Regular: Regular, // 验证
-      userStatusDialogVisible: false,
-      fromPage: "company",
       tableData: null, // 表格数据
       total: 0,
       limit: 10,
       offset: 1,
       multipleSelection: [], // 用于批量 删除
-      dialogFormVisible: false, // 是否显示对话框
-      formCurrentStatus: "",
+      dialogFormVisible: false, // 是否显示 新增 删除 更新 对话框
+      formCurrentStatus: "", // 表单当前状态
+      // 创建 更新 删除 表单
       form: {
         briefabout: "", //公司简介
         certguid: "", //公司组织结构代码
@@ -290,6 +269,7 @@ export default {
         tel: "" // 公司电话
       },
       searchData: [
+        // 搜索框 数据
         {
           key: "id", // 与后端交互时的字段 必填
           label: "搜索框1", // 搜索框名称 必填
@@ -338,6 +318,8 @@ export default {
           default: ""
         }
       ],
+      Regular: Regular, // 表单校验正则
+      // 表单校验规则
       rules: {
         name: [
           {
@@ -444,71 +426,8 @@ export default {
           }
         ]
       },
-      clickCurrentRowInfo: {},
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
-      searchName: {
-        box1: {
-          name: "公司名称",
-          input: true,
-          show: true
-        },
-        box2: {
-          name: "登录账号",
-          input: true,
-          show: true
-        },
-        box3: {
-          name: "职位名称",
-          input: false,
-          show: true
-        },
-        box4: {
-          name: "",
-          input: false,
-          show: false
-        },
-        box5: {
-          name: "",
-          input: false,
-          show: false
-        },
-        box6: {
-          name: "选择日期",
-          input: false,
-          show: true
-        }
-      },
-      jobTitle: [
-        {
-          // 职位名称
-          value: "CEO",
-          label: "总经理"
-        },
-        {
-          value: "VP",
-          label: "副总"
-        },
-        {
-          value: "DIRECTOR",
-          label: "总监"
-        },
-        {
-          value: "MANAGER",
-          label: "经理"
-        },
-        {
-          value: "EMPLOYEE",
-          label: "员工"
-        }
-      ],
-      props: {
-        label: "name",
-        value: "id"
-      },
-      deptIdOption: [],
-      currentUserStatusId: "",
-      accountStatus: 0,
       optionWidth: 250
     };
   },
@@ -517,11 +436,14 @@ export default {
     this.getData();
   },
   methods: {
+    /**
+     ** 公司查询
+     */
     async getData(val) {
-      // console.log(val);
       const res = await corpSelect();
       this.tableData = res.data;
     },
+
     /*
      ** 新增 用户 form 表单 验证
      */
@@ -542,11 +464,7 @@ export default {
      ** 创建公司
      */
     async submitAddUser(info) {
-      // info 如果 是 insertUser 则为 新增 否为 为 查看 和编辑 用户数据
-      // let data = info === "create" ? sendData : this.clickCurrentRowInfo;
       const res = await corperation(this.form);
-      console.log(this.form);
-
       if (res.status === 200) {
         this.getData();
         this.$message.success("公司创建成功");
@@ -570,6 +488,14 @@ export default {
     },
 
     /*
+     ** 更新预处理
+     */
+    async updatePretreatment(index, row) {
+      this.viewCorp(index, row);
+      this.formCurrentStatus = "更新";
+    },
+
+    /*
      ** 更新公司
      */
     async updateCorp(index, row) {
@@ -579,13 +505,6 @@ export default {
         this.$message.success("更新成功");
       } else this.$message.warning("更新失败,稍后重试");
       this.dialogFormVisible = false;
-    },
-    /*
-     ** 更新预处理
-     */
-    async updatePretreatment(index, row) {
-      this.viewCorp(index, row);
-      this.formCurrentStatus = "更新";
     },
 
     /*
@@ -609,49 +528,16 @@ export default {
         })
         .catch(err => {});
     },
-    /*
-     ** 修改 用户 状态
-     */
-    async userStatusChange() {
-      let data = {
-        userId: this.currentUserStatusId,
-        status: this.accountStatus
-      };
-
-      this.userStatusDialogVisible = false;
-      const res = await corpSelect(data);
-      if (res.result) {
-        this.$message.success(res.message);
-        this.$refs.searchBox.internalUser(this.limit, this.offset);
-      } else this.$message.warning(res.message);
-    },
 
     /*
-     ** 当前 选择 用户   修改用户状态预处理
-     */
-    changeUserStatus(index, row) {
-      // 0 正常 1 禁用
-      switch (row.state) {
-        case "正常":
-          this.accountStatus = 0;
-          break;
-        case "禁用":
-          this.accountStatus = 1;
-          break;
-      }
-      this.currentUserStatusId = row.id;
-      this.userStatusDialogVisible = true;
-    },
-
-    /*
-     ** 新增用户 form 表单 重置
+     ** 创建公司 form 表单 重置
      */
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
 
     /*
-     ** 关闭 新增 内部用户 dialog
+     ** 关闭 创建公司  dialog
      */
     handleDialogClose(formName) {
       this.$refs[formName].resetFields();
@@ -681,42 +567,6 @@ export default {
     },
 
     /*
-     ** 初始化 数据 处理函数
-     */
-
-    internalUserHadle(val) {
-      val.rows.map(item => {
-        switch (item.position) {
-          case "CEO":
-            item.position = "总经理";
-            break;
-          case "VP":
-            item.position = "副总";
-            break;
-          case "DIRECTOR":
-            item.position = "总监";
-            break;
-          case "MANAGER":
-            item.position = "经理";
-            break;
-          default:
-            item.position = "员工";
-            break;
-        }
-        switch (item.state) {
-          case 0:
-            item.state = "正常";
-            break;
-          case 1:
-            item.state = "禁用";
-            break;
-        }
-      });
-      this.total = val.total;
-      this.tableData = val.rows;
-    },
-
-    /*
      ** 列表 批量删除 用户
      */
     async BatchDeleteUser() {
@@ -740,24 +590,6 @@ export default {
       let arr = [];
       for (var item of val) arr.push(item.id);
       this.multipleSelection = arr;
-    },
-
-    /*
-     ** 保存 查看/编辑 用户信息
-     */
-    saveEditorUser() {
-      let info = this.clickCurrentRowInfo;
-      info.deptId = info.deptIds[info.deptIds.length - 1];
-      info.entryTime = this.$root.createTime(info.entryTime);
-      delete info.deptName;
-      delete info.entryTimeStr;
-      delete info.deptName;
-      delete info.openId;
-      delete info.roleName;
-      delete info.deptIds;
-      this.isEditor = true;
-      this.submitAddUser("updateUser");
-      this.isShowViewUser = false;
     }
   },
   components: {
