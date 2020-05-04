@@ -23,3 +23,8 @@ export const corpSelect = data => fetch("corp", data, "get");
  * 创建公司
  */
 export const corperation = data => fetch("corp", data, "post");
+
+/**
+ * 查看公司详细信息
+ */
+export const corpDtails = data => fetch("corp", data, "post");
