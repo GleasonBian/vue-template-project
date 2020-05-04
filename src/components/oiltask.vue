@@ -44,7 +44,7 @@
 
     <!-- 新增 查看 更新 -->
     <el-dialog
-      :title="formCurrentStatus+'加油任务'"
+      :title="formCurrentStatus+'任务'"
       :visible.sync="dialogFormVisible"
       width="25%"
       @close="DialogClose('form')"
@@ -106,11 +106,11 @@
           <el-input v-model="form.class" placeholder="请选择"></el-input>
         </el-form-item>
 
-        <el-form-item label="设备名称" prop="name">
+        <el-form-item label="任务名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="设备编码" prop="code">
+        <el-form-item label="任务编码" prop="code">
           <el-input v-model.number="form.code"></el-input>
         </el-form-item>
 
@@ -181,7 +181,7 @@ export default {
       columns: [
         {
           id: "name",
-          label: "设备名称"
+          label: "任务名称"
         },
         {
           id: "proddate",
@@ -217,8 +217,8 @@ export default {
         clsrank: "", // 分类等级
         corpguid: "", // 公司标识
         deptguid: "", // 部门标识
-        code: "", // 设备编码
-        name: "", // 设备名称
+        code: "", // 任务编码
+        name: "", // 任务名称
         proddate: "", // 生产日期
         producer: "", // 生产厂家
         descrifptio: "", // 描述
@@ -333,14 +333,14 @@ export default {
         code: [
           {
             required: true,
-            message: "设备编码 必填",
+            message: "任务编码 必填",
             trigger: ["blur", "change"]
           }
         ],
         name: [
           {
             required: true,
-            message: "设备名称 必填",
+            message: "任务名称 必填",
             trigger: ["blur", "change"]
           }
         ],
@@ -447,8 +447,8 @@ export default {
       const res = await equiCreate(this.form);
       if (res.status === 200) {
         this.equiList();
-        this.$message.success("设备创建成功");
-      } else this.$message.warning("设备创建失败");
+        this.$message.success("任务创建成功");
+      } else this.$message.warning("任务创建失败");
       this.dialogFormVisible = false;
     },
 
@@ -493,7 +493,7 @@ export default {
      */
     async DeleteHandle(index, row) {
       let that = this;
-      this.$confirm("删除设备?", "提示", {
+      this.$confirm("删除任务?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

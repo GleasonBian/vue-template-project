@@ -4,7 +4,7 @@
     <headTop></headTop>
 
     <!-- 搜索框 -->
-    <gt-search :data="searchData" @handle="corpList" size></gt-search>
+    <gt-search :data="searchData" @handle="oilPlans" size></gt-search>
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
@@ -44,7 +44,7 @@
 
     <!-- 新增 查看 更新 -->
     <el-dialog
-      :title="formCurrentStatus+'设备'"
+      :title="formCurrentStatus+'计划'"
       :visible.sync="dialogFormVisible"
       width="25%"
       @close="DialogClose('form')"
@@ -71,7 +71,7 @@
           </el-select>
         </el-form-item>
         
-        <el-form-item label="所属部门" prop="deptguid">
+        <el-form-item v-if="form.corpguid" label="所属部门" prop="deptguid">
           <el-select v-model="form.deptguid"  placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in deptData" track-by="item.guid"
@@ -82,14 +82,17 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="证件号码" prop="certguid">
-          <el-input v-model="form.certguid"></el-input>
+        <el-form-item label="人员" prop="staffid">
+          <el-select v-model="form.staffid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in staffData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
         </el-form-item>
-
-        <el-form-item label="证件类型" prop="certtype">
-          <el-input v-model="form.certtype"></el-input>
-        </el-form-item>
-
+        
         <el-form-item label="分类等级" prop="clsrank">
           <el-select v-model="form.clsrank"  placeholder="请选择" style="width:100%">
             <el-option label="一级" value="一级"></el-option>
@@ -106,32 +109,14 @@
           <el-input v-model="form.class" placeholder="请选择"></el-input>
         </el-form-item>
 
-        <el-form-item label="设备名称" prop="name">
+        <el-form-item label="计划名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="设备编码" prop="code">
+        <el-form-item label="计划编码" prop="code">
           <el-input v-model.number="form.code"></el-input>
         </el-form-item>
 
-        <el-form-item label="生产日期" prop="proddate">
-          <el-date-picker
-            v-model="form.proddate"
-            type="date"
-            placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
-            style="width:100%"
-          ></el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="生产厂家" prop="producer">
-          <el-input v-model.number="form.producer"></el-input>
-        </el-form-item>
-
-        <el-form-item label="描述信息" prop="descrifptio">
-          <el-input v-model.number="form.descrifptio"></el-input>
-        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
@@ -144,19 +129,21 @@
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
 import {
+  getStaffList,
   corpSelect,
   getDeptList,
-  equiCreate,
-  equiSelect,
-  equiUpdate,
-  equiDetails,
-  equiDelete
+  oilCreate,
+  oilSelect,
+  oilUpdate,
+  oilDetails,
+  oilDelete
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
   data() {
     return {
+      staffData: [],
       show: true,
       handle: [
         {
@@ -181,15 +168,7 @@ export default {
       columns: [
         {
           id: "name",
-          label: "设备名称"
-        },
-        {
-          id: "proddate",
-          label: "生产日期"
-        },
-        {
-          id: "producer",
-          label: "生产厂家"
+          label: "计划名称"
         },
         {
           id: "clstype",
@@ -204,9 +183,13 @@ export default {
           label: "分类等级"
         },
         {
-          id: "descrifptio",
-          label: "描述信息"
-        }
+          id: "corpguid",
+          label: "所属公司"
+        },
+        {
+          id: "deptguid",
+          label: "所属部门"
+        },
       ],
       // 创建 更新 删除 表单
       form: {
@@ -217,8 +200,8 @@ export default {
         clsrank: "", // 分类等级
         corpguid: "", // 公司标识
         deptguid: "", // 部门标识
-        code: "", // 设备编码
-        name: "", // 设备名称
+        code: "", // 计划编码
+        name: "", // 计划名称
         proddate: "", // 生产日期
         producer: "", // 生产厂家
         descrifptio: "", // 描述
@@ -304,7 +287,7 @@ export default {
         ],
         class: [
           {
-            required: false,
+            required: true,
             message: "必填 分类类别",
             trigger: ["blur", "change"]
           }
@@ -330,17 +313,24 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
+        staffid: [
+          {
+            required: true,
+            message: "必填 人员标识",
+            trigger: ["blur", "change"]
+          }
+        ],
         code: [
           {
             required: true,
-            message: "设备编码 必填",
+            message: "计划编码 必填",
             trigger: ["blur", "change"]
           }
         ],
         name: [
           {
             required: true,
-            message: "设备名称 必填",
+            message: "计划名称 必填",
             trigger: ["blur", "change"]
           }
         ],
@@ -378,11 +368,20 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.staffList();
     this.corpList();
     this.deptList();
-    this.equiList();
+    this.oilPlans();
   },
-  methods: {
+  methods:{
+
+    /**
+     ** 人员列表
+     */
+    async staffList(val) {
+      const res = await getStaffList();
+      this.staffData = res.data;
+    },
 
     /**
      ** 公司列表
@@ -405,7 +404,7 @@ export default {
     /**
      ** 更换公司清空部门, 重新获取部门列表
      */
-    async resetDept(cid){
+     resetDept(cid){
       this.deptData = [];
       this.form.deptguid = null;
       this.$forceUpdate();
@@ -416,7 +415,6 @@ export default {
      ** form 表单 验证
      */
     submitForm(formName) {
-      console.log("232323")
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log(valid);
@@ -434,9 +432,8 @@ export default {
     /**
      ** 公司列表
      */
-    async equiList() {
-      const res = await equiSelect();
-      console.log('公司列表',res.data)
+    async oilPlans() {
+      const res = await oilSelect();
       this.tableData = res.data;
     },
 
@@ -444,11 +441,11 @@ export default {
      ** 创建处理
      */
     async CreateHandle(info) {
-      const res = await equiCreate(this.form);
+      const res = await oilCreate(this.form);
       if (res.status === 200) {
-        this.equiList();
-        this.$message.success("设备创建成功");
-      } else this.$message.warning("设备创建失败");
+        this.oilPlans();
+        this.$message.success("计划创建成功");
+      } else this.$message.warning("计划创建失败");
       this.dialogFormVisible = false;
     },
 
@@ -458,7 +455,7 @@ export default {
     async ExamineHandle(index, row) {
       console.log(row);
       this.formCurrentStatus = "查看";
-      const response = await equiDetails({
+      const response = await oilDetails({
         id: row.guid
       });
       if (response.status === 200) {
@@ -480,9 +477,9 @@ export default {
      ** 更新处理
      */
     async UpdateHandle(index, row) {
-      const res = await equiUpdate(this.form);
+      const res = await oilUpdate(this.form);
       if (res.status === 200) {
-        this.equiList();
+        this.oilPlans();
         this.$message.success("更新成功");
       } else this.$message.warning("更新失败,稍后重试");
       this.dialogFormVisible = false;
@@ -493,18 +490,18 @@ export default {
      */
     async DeleteHandle(index, row) {
       let that = this;
-      this.$confirm("删除设备?", "提示", {
+      this.$confirm("删除计划?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          let res = equiDelete({ id: row.guid });
+          let res = oilDelete({ id: row.guid });
           console.log(res);
           if (res.status === 200) {
             this.$message.success("删除成功");
           }
-          this.equiList();
+          this.oilPlans();
         })
         .catch(err => {});
     },
