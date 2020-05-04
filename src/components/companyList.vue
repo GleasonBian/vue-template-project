@@ -14,7 +14,7 @@
         @click="dialogFormVisible = true"
         style="margin-left:1%"
       >新增</el-button>
-      <el-button type="danger" size="medium" @click="BatchDeleteUser">删除</el-button>
+      <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
     <!-- 内部用户列表 -->
@@ -24,13 +24,12 @@
         style="width: 98%"
         :optionWidth="optionWidth"
         :columns="columns"
-        :selection="true"
-        v-on:resetPassword="resetPassword"
-        v-on:viewOReditorUserInfo="viewOReditorUserInfo"
-        v-on:changeUserStatus="changeUserStatus"
-        v-on:selection-change="handleSelectionChange"
+        :selection="false"
+        v-on:viewOReditorCorp="viewOReditorCorp"
+        v-on:deleteCorp="deleteCorp"
         :handle="handle"
       ></gt-table>
+      <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -339,52 +338,46 @@ export default {
       show: true,
       handle: [
         {
-          function: "resetPassword",
-          text: "重置密码",
-          type: "text",
-          show: true
-        },
-        {
-          function: "viewOReditorUserInfo",
+          function: "viewOReditorCorp",
           text: "查看/编辑",
           type: "text",
           show: true
         },
         {
-          function: "changeUserStatus",
-          text: "修改状态",
+          function: "deleteCorp",
+          text: "删除",
           type: "text",
           show: true
         }
       ],
       columns: [
         {
-          id: "userName",
-          label: "登录账号"
-        },
-        {
           id: "name",
-          label: "用户名称"
+          label: "公司名称"
         },
         {
-          id: "position",
-          label: "职位名称"
+          id: "corpclass",
+          label: "公司类别"
         },
         {
-          id: "mail",
-          label: "邮箱"
+          id: "corptype",
+          label: "公司类型"
         },
         {
-          id: "deptName",
-          label: "部门名称"
+          id: "corprank",
+          label: "公司级别"
         },
         {
-          id: "state",
-          label: "用户状态"
+          id: "email",
+          label: "公司邮箱"
         },
         {
-          id: "entryTimeStr",
-          label: "入职时间"
+          id: "tel",
+          label: "公司电话"
+        },
+        {
+          id: "location",
+          label: "地理位置"
         }
       ],
       Regular: Regular, // 验证
@@ -665,7 +658,7 @@ export default {
     },
 
     /*
-     ** 新增 / 编辑 内部用户
+     ** 创建公司
      */
     async submitAddUser(info) {
       let sendData = this.form;
@@ -683,6 +676,36 @@ export default {
         this.$message.success("公司创建成功");
       } else this.$message.warning("公司创建失败");
       this.dialogFormVisible = false;
+    },
+
+    /*
+     ** 查看公司
+     */
+    async viewOReditorCorp(index, row) {
+      console.log(index, row);
+      // const response = await viewOReditor({
+      //   userPhone: row.userName
+      // });
+      // if (response.result) {
+      //   response.data.deptIds === null ? (response.data.deptIds = []) : "";
+      //   response.data.sex = Number(response.data.sex);
+      //   response.data.state = Number(response.data.state);
+      //   this.clickCurrentRowInfo = response.data;
+      //   this.isShowViewUser = true;
+      // } else this.$message.warning(response.data.message);
+      // this.getDeptTree();
+    },
+
+    /*
+     ** 更新公司
+     */
+    async deleteCorp(index, row) {
+      let data = {
+        userId: row.id
+      };
+      const res = await resetPassword(data);
+      if (res.result) this.$message.success(res.message);
+      else this.$message.warning(res.message);
     },
     /*
      ** 修改 用户 状态
@@ -730,18 +753,6 @@ export default {
      */
     handleDialogClose(formName) {
       this.$refs[formName].resetFields();
-    },
-
-    /*
-     ** 内部用户 重置 密码
-     */
-    async resetPassword(index, row) {
-      let data = {
-        userId: row.id
-      };
-      const res = await resetPassword(data);
-      if (res.result) this.$message.success(res.message);
-      else this.$message.warning(res.message);
     },
 
     /*
@@ -827,23 +838,6 @@ export default {
       let arr = [];
       for (var item of val) arr.push(item.id);
       this.multipleSelection = arr;
-    },
-
-    /*
-     ** 查看/编辑用户信息
-     */
-    async viewOReditorUserInfo(index, row) {
-      const response = await viewOReditor({
-        userPhone: row.userName
-      });
-      if (response.result) {
-        response.data.deptIds === null ? (response.data.deptIds = []) : "";
-        response.data.sex = Number(response.data.sex);
-        response.data.state = Number(response.data.state);
-        this.clickCurrentRowInfo = response.data;
-        this.isShowViewUser = true;
-      } else this.$message.warning(response.data.message);
-      this.getDeptTree();
     },
 
     /*

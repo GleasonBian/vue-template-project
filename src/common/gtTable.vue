@@ -21,7 +21,7 @@
       header-align="center"
     >
       <template slot-scope="scope">
-        <div class="product-img" v-if="col.type=='img'">
+        <div class="product-img" v-if="col.type">
           <img
             v-for="(picture,index) in scope.row[col.id]"
             :src="picture.imagePath == null ? '' : 'http://file.sjgtw.com' + picture.imagePath"
@@ -30,19 +30,6 @@
             style="margin-right:5px; width:38px; height:38px"
             v-show="index <= 2"
           />
-        </div>
-        <div class="product-img" v-else-if="col.type=='filePath'">
-          <img
-            :src="scope.row.fileVO== null ? 'http://file.sjgtw.com/M00/04/38/wKgBxFp5d22EHfuBAAAAAHo6-30319.jpg' : 'http://file.sjgtw.com' + scope.row.fileVO.filePath"
-            alt="图片"
-            style="margin-right:5px; width:38px; height:38px"
-          />
-        </div>
-        <div class="product-img" v-else-if="col.type=='switch'">
-          <el-radio-group v-model="scope.row.useFlag">
-            <el-radio :label="0">是</el-radio>
-            <el-radio :label="1">否</el-radio>
-          </el-radio-group>
         </div>
         <!-- <div v-else-if="typeof(col.type) === string"></div> -->
         <div v-else>{{scope.row[col.id]}}</div>
@@ -115,26 +102,19 @@ export default {
     handleClick(fun, index, row) {
       this.$emit(fun, index, row);
     },
-
     handleSelectionChange(val) {
       this.$emit("selection-change", val);
     },
-
-    tableRowClassName() {
-      // { row, rowIndex }
-      return "success-row";
-      // if (rowIndex % 2 !== 0) {
-      // }
+    tableRowClassName({ row, rowIndex }) {
+      if (rowIndex % 2 !== 0) {
+        return "success-row";
+      }
+      return "";
     },
-
-    tableHeaderColor() {
-      // {
-      //   row,
-      //   column,
-      //   rowIndex,
-      //   columnIndex
-      // }
-      return "background-color: lightblue;color: #333333;font-weight: bold; font-size:14px;";
+    tableHeaderColor({ row, column, rowIndex, columnIndex }) {
+      if (rowIndex === 0) {
+        return "background-color: lightblue;color: #333333;font-weight: bold; font-size:14px;";
+      }
     }
   },
   /**
