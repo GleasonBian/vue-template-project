@@ -28,3 +28,8 @@ export const corperation = data => fetch("corp", data, "post");
  * 查看公司详细信息
  */
 export const corpDtails = data => fetch("corp", data, "get");
+
+/**
+ * 更新公司信息
+ */
+export const corpUpdate = data => fetch("corp", data, "get");

@@ -11,7 +11,7 @@
       <el-button
         type="primary"
         size="medium"
-        @click="dialogFormVisible = true"
+        @click="dialogFormVisible = true;formCurrentStatus = '创建'"
         style="margin-left:1%"
       >新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
@@ -60,9 +60,9 @@
       </span>
     </el-dialog>
 
-    <!-- 新增用户 -->
+    <!-- 新增 查看 更新 -->
     <el-dialog
-      title="创建公司"
+      :title="formCurrentStatus+'公司'"
       :visible.sync="dialogFormVisible"
       width="25%"
       @close="handleDialogClose('form')"
@@ -138,137 +138,6 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
         <el-button @click="resetForm('form')">重置</el-button>
-      </span>
-    </el-dialog>
-
-    <!-- 查看 或 编辑当前用户信息 -->
-    <el-dialog
-      title="查看/编辑"
-      :visible.sync="isShowViewUser"
-      width="25%"
-      @close="handleisShowViewUser"
-      center
-    >
-      <el-form
-        :model="clickCurrentRowInfo"
-        status-icon
-        label-width="80px"
-        style="width:100%"
-        ref="viewOReditorUserInfo"
-      >
-        <el-form-item label="登录账号" prop="userName">
-          <el-input v-model="clickCurrentRowInfo.userName" autocomplete="off" :readonly="true"></el-input>
-        </el-form-item>
-        <el-form-item
-          label="用户姓名"
-          prop="name"
-          :rules="[
-            { required: true, message: '用户姓名 为空', trigger: ['blur', 'change']},
-            { pattern: Regular.Username, message: '2到8位汉字, 字母，数字，下划线，连字符', trigger: ['blur', 'change'] }
-           ]"
-        >
-          <el-input
-            v-model.number="clickCurrentRowInfo.name"
-            autocomplete="off"
-            :disabled="isEditor"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          label="用户邮箱"
-          prop="mail"
-          :rules="[
-            { required: true, message: '用户邮箱 为空', trigger: ['blur', 'change']},
-            { pattern: Regular.Email, message: '邮箱格式非法', trigger: ['blur', 'change'] }
-           ]"
-        >
-          <el-input v-model="clickCurrentRowInfo.mail" autocomplete="off" :disabled="isEditor"></el-input>
-        </el-form-item>
-        <el-form-item
-          label="用户性别"
-          prop="sex"
-          :rules="[{ required: true, message: '用户性别 必选', trigger: ['blur', 'change']}]"
-        >
-          <el-select
-            v-model.number="clickCurrentRowInfo.sex"
-            placeholder="请选择"
-            style="width:100%"
-            autocomplete="off"
-            :disabled="isEditor"
-          >
-            <el-option label="男" :value="1"></el-option>
-            <el-option label="女" :value="0"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="用户状态"
-          prop="state"
-          :rules="[{ required: true, message: '用户状态 必选', trigger: ['blur', 'change']}]"
-        >
-          <el-select
-            v-model.number="clickCurrentRowInfo.state"
-            placeholder="请选择"
-            style="width:100%"
-            autocomplete="off"
-            :disabled="isEditor"
-          >
-            <el-option label="正常" :value="0"></el-option>
-            <el-option label="禁用" :value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="职位名称"
-          prop="position"
-          :rules="[ { required: true, message: '职位 必选',trigger: ['blur', 'change']}]"
-        >
-          <el-select
-            v-model="clickCurrentRowInfo.position"
-            placeholder="请选择"
-            style="width:100%"
-            autocomplete="off"
-            :disabled="isEditor"
-          >
-            <el-option
-              v-for="item in jobTitle"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="入职时间"
-          prop="entryTime"
-          :rules="[ { required: true, message: '入职时间 必选',trigger: ['blur', 'change']}]"
-        >
-          <el-date-picker
-            v-model="clickCurrentRowInfo.entryTime"
-            type="date"
-            placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
-            value-format
-            autocomplete="off"
-            :disabled="isEditor"
-            style="width:100%"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item
-          label="部门名称"
-          prop="deptIds"
-          :rules="[ { required: true, message: '部门名称 必选',trigger: ['blur', 'change']}]"
-        >
-          <el-cascader
-            v-model="clickCurrentRowInfo.deptIds"
-            :options="deptIdOption"
-            :props="props"
-            style="width:100%"
-            :disabled="isEditor"
-          ></el-cascader>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="isEditor=false" v-if="isEditor">编 辑</el-button>
-        <el-button type="primary" @click="submitForm('viewOReditorUserInfo')" v-else>保 存</el-button>
-        <!--  @click="saveEditorUser" -->
       </span>
     </el-dialog>
   </div>
@@ -389,6 +258,7 @@ export default {
       offset: 1,
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示对话框
+      formCurrentStatus: true,
       form: {
         briefabout: "", //公司简介
         certguid: "", //公司组织结构代码
@@ -455,8 +325,6 @@ export default {
           default: ""
         }
       ],
-      clickCurrentRowInfo: {},
-
       rules: {
         name: [
           {
@@ -563,7 +431,7 @@ export default {
           }
         ]
       },
-
+      clickCurrentRowInfo: {},
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
       searchName: {
@@ -647,9 +515,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          formName === "form"
-            ? this.submitAddUser("insertUser")
-            : this.saveEditorUser();
+          formCurrentStatus === "创建"
+            ? this.submitAddUser()
+            : this.saveEditorUser("update");
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -661,18 +529,15 @@ export default {
      ** 创建公司
      */
     async submitAddUser(info) {
-      let sendData = this.form;
-      console.log(sendData);
-
       // info 如果 是 insertUser 则为 新增 否为 为 查看 和编辑 用户数据
-      // let data = info === "insertUser" ? sendData : this.clickCurrentRowInfo;
-      const res = await corperation(sendData);
-      console.log(res.status === 200);
+      // let data = info === "create" ? sendData : this.clickCurrentRowInfo;
+      const res = await corperation(this.form);
+
       if (res.status === 200) {
         // info === "insertUser"
         //   ? ""
         //   : this.viewOReditorUserInfo(this.clickCurrentRowInfo);
-        this.$refs.searchBox.internalUser(this.limit, this.offset);
+        // this.$refs.searchBox.internalUser(this.limit, this.offset);
         this.$message.success("公司创建成功");
       } else this.$message.warning("公司创建失败");
       this.dialogFormVisible = false;
@@ -682,18 +547,16 @@ export default {
      ** 查看公司
      */
     async viewOReditorCorp(index, row) {
+      this.formCurrentStatus = "查看";
       console.log(index, row);
       const response = await corpDtails({
         id: row.guid
       });
       console.log(response);
-      // if (response.result) {
-      //   response.data.deptIds === null ? (response.data.deptIds = []) : "";
-      //   response.data.sex = Number(response.data.sex);
-      //   response.data.state = Number(response.data.state);
-      //   this.clickCurrentRowInfo = response.data;
-      //   this.isShowViewUser = true;
-      // } else this.$message.warning(response.data.message);
+      if (response.status === 200) {
+        this.form = response.data[0];
+        this.dialogFormVisible = true;
+      } else this.$message.warning(response.data.message);
       // this.getDeptTree();
     },
 
