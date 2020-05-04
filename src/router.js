@@ -80,7 +80,27 @@ const router = new Router({
           component: resolve => require(['@/components/equipment'], resolve),
           meta: {
             crumbs: ['平台', '设备管理'],
-            title: '部门管理',
+            title: '设备管理',
+            index: 0,
+            menu: '090302'
+          },
+        },
+        {
+          path: 'staff',
+          component: resolve => require(['@/components/staff'], resolve),
+          meta: {
+            crumbs: ['平台', '人员管理'],
+            title: '人员管理',
+            index: 0,
+            menu: '090302'
+          },
+        },
+        {
+          path: 'role',
+          component: resolve => require(['@/components/role'], resolve),
+          meta: {
+            crumbs: ['平台', '角色管理'],
+            title: '角色管理',
             index: 0,
             menu: '090302'
           },
