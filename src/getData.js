@@ -167,3 +167,27 @@ export const fixdeUpdate = data => fetch("fixdetail", data, "put");
  * 维修任务删除
  */
 export const fixdeDelete = data => fetch("fixdetail", data, "delete");
+/**
+ * 创建加油任务
+ */
+export const oildeCreate = data => fetch("oildetail", data, "post");
+
+/**
+ * 加油任务列表
+ */
+export const oildeSelect = data => fetch("oildetail", data, "get");
+
+/**
+ * 加油任务详情
+ */
+export const oildeDetail = data => fetch("oildetail", data, "get");
+
+/**
+ * 更新加油任务
+ */
+export const oildeUpdate = data => fetch("oildetail", data, "put");
+
+/**
+ * 加油任务删除
+ */
+export const oildeDelete = data => fetch("oildetail", data, "delete");

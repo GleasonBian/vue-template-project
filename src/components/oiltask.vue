@@ -44,7 +44,7 @@
 
     <!-- 新增 查看 更新 -->
     <el-dialog
-      :title="formCurrentStatus+'任务'"
+      :title="formCurrentStatus+'设备'"
       :visible.sync="dialogFormVisible"
       width="25%"
       @close="DialogClose('form')"
@@ -60,6 +60,7 @@
         label-width="80px"
         style="width:100%"
       >
+
         <el-form-item label="所属公司" prop="corpguid">
           <el-select v-model="form.corpguid"  placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
             <el-option
@@ -70,9 +71,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        
-        <el-form-item label="所属部门" prop="deptguid">
-          <el-select v-model="form.deptguid"  placeholder="请选择" style="width:100%">
+
+        <el-form-item label="计划编码" prop="code">
+          <el-input  v-model="form.code"></el-input>
+        </el-form-item>
+
+        <el-form-item label="计划标识" prop="planguid">
+          <el-select v-model="form.planguid"  placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in deptData" track-by="item.guid"
               :key="item.guid"
@@ -82,56 +87,113 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="证件号码" prop="certguid">
-          <el-input v-model="form.certguid"></el-input>
-        </el-form-item>
-
-        <el-form-item label="证件类型" prop="certtype">
-          <el-input v-model="form.certtype"></el-input>
-        </el-form-item>
-
-        <el-form-item label="分类等级" prop="clsrank">
-          <el-select v-model="form.clsrank"  placeholder="请选择" style="width:100%">
-            <el-option label="一级" value="一级"></el-option>
-            <el-option label="二级" value="二级"></el-option>
-            <el-option label="三级" value="三级"></el-option>
+        <el-form-item label="设备标识" prop="equipguid">
+          <el-select v-model="form.equipguid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
           </el-select>
-        </el-form-item>
-
-        <el-form-item label="分类类型" prop="clstype" >
-          <el-input v-model="form.clstype" placeholder="请选择"></el-input>
-        </el-form-item>
-
-        <el-form-item label="分类类别" prop="class">
-          <el-input v-model="form.class" placeholder="请选择"></el-input>
         </el-form-item>
 
         <el-form-item label="任务名称" prop="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="任务编码" prop="code">
-          <el-input v-model="form.code"></el-input>
+        <el-form-item label="维修内容" prop="content">
+          <el-input v-model="form.content"></el-input>
         </el-form-item>
 
-        <el-form-item label="生产日期" prop="proddate">
+        <el-form-item label="调度部门" prop="deptsched">
+          <el-select v-model="form.deptsched"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="接收部门" prop="deptrecv">
+          <el-select v-model="form.deptrecv"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="计划开始" prop="planstart">
           <el-date-picker
-            v-model="form.proddate"
-            type="date"
+            v-model="form.planstart"
+            type="datetime"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd hh:mm:ss"
             style="width:100%"
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="生产厂家" prop="producer">
-          <el-input  v-model="form.producer"></el-input>
+        <el-form-item label="计划结束" prop="planstop">
+          <el-date-picker
+            v-model="form.planstop"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="描述信息" prop="descrifptio">
-          <el-input  v-model="form.descrifptio"></el-input>
+        <el-form-item label="实际开始" prop="factstart">
+          <el-date-picker
+            v-model="form.factstart"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
         </el-form-item>
+
+        <el-form-item label="实际结束" prop="factstop">
+          <el-date-picker
+            v-model="form.factstop"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="开始时间" prop="recvdate">
+          <el-date-picker
+            v-model="form.recvdate"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="结束时间" prop="schedate">
+          <el-date-picker
+            v-model="form.schedate"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
+
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
@@ -146,15 +208,16 @@ import headTop from "@/common/headTop";
 import {
   corpSelect,
   getDeptList,
-  equiCreate,
+  oildeCreate,
+  oildeSelect,
+  oildeDetail,
+  oildeUpdate,
+  oildeDelete,
   equiSelect,
-  equiUpdate,
-  equiDetails,
-  equiDelete
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
-  name: "createCorperation",
+  name: "fixtask",
   data() {
     return {
       show: true,
@@ -181,7 +244,7 @@ export default {
       columns: [
         {
           id: "name",
-          label: "任务名称"
+          label: "设备名称"
         },
         {
           id: "proddate",
@@ -210,18 +273,22 @@ export default {
       ],
       // 创建 更新 删除 表单
       form: {
-        certguid: "", // 证件号码
-        certtype: "", // 证件类型
-        clstype: "", // 分类类型
-        class: "", // 分类类别
-        clsrank: "", // 分类等级
-        corpguid: "", // 公司标识
-        deptguid: "", // 部门标识
-        code: "", // 任务编码
-        name: "", // 任务名称
-        proddate: "", // 生产日期
-        producer: "", // 生产厂家
-        descrifptio: "", // 描述
+        code: "",                 // 计划编码
+        planguid: "",             // 计划标识
+        name: "",                 // 任务名称
+        equipguid: "",            // 设备标识
+        content: "",              // 维修内容
+        deptsched: "",            // 调度部门
+        deptrecv: "",             // 接收部门
+        planstart: "",            // 计划开始
+        planstop: "",             // 计划结束
+        factstart: "",            // 实际开始
+        factstop: "",             // 实际结束
+        recvdate: "",             // 开始时间
+        schedate: "",             // 结束时间
+        statuscode: 0,            // 不在页面展示 给个零
+        factdur: 0,               // 不在页面展示 给个零
+        plandur: 0,               // 不在页面展示 给个零
       },
       tableData: [], // 表格数据
       total: 0,
@@ -333,14 +400,14 @@ export default {
         code: [
           {
             required: true,
-            message: "任务编码 必填",
+            message: "设备编码 必填",
             trigger: ["blur", "change"]
           }
         ],
         name: [
           {
             required: true,
-            message: "任务名称 必填",
+            message: "设备名称 必填",
             trigger: ["blur", "change"]
           }
         ],
@@ -444,11 +511,11 @@ export default {
      ** 创建处理
      */
     async CreateHandle(info) {
-      const res = await equiCreate(this.form);
+      const res = await oildeCreate(this.form);
       if (res.status === 200) {
         this.equiList();
-        this.$message.success("任务创建成功");
-      } else this.$message.warning("任务创建失败");
+        this.$message.success("设备创建成功");
+      } else this.$message.warning("设备创建失败");
       this.dialogFormVisible = false;
     },
 
@@ -493,7 +560,7 @@ export default {
      */
     async DeleteHandle(index, row) {
       let that = this;
-      this.$confirm("删除任务?", "提示", {
+      this.$confirm("删除设备?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
