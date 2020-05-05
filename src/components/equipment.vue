@@ -99,11 +99,11 @@
         </el-form-item>
 
         <el-form-item label="分类类型" prop="clstype" >
-          <el-input v-model="form.clstype" placeholder="请选择"></el-input>
+          <el-input v-model="form.clstype" placeholder="请输入"></el-input>
         </el-form-item>
 
         <el-form-item label="分类类别" prop="class">
-          <el-input v-model="form.class" placeholder="请选择"></el-input>
+          <el-input v-model="form.class" placeholder="请输入"></el-input>
         </el-form-item>
 
         <el-form-item label="设备名称" prop="name">

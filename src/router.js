@@ -151,6 +151,17 @@ const router = new Router({
             menu: '090302'
           },
         },
+        {
+          path: 'fixexecute',
+          name: 'fixexecute',
+          component: resolve => require(['@/components/fixexecute'], resolve),
+          meta: {
+            crumbs: ['计划', '执行任务'],
+            title: '任务进行中',
+            index: 9,
+            menu: '090302'
+          },
+        },
       ]
     },
     {
