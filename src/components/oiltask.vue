@@ -8,16 +8,11 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
-      <el-button
-        type="primary"
-        size="medium"
-        @click="dialogFormVisible = true;formCurrentStatus = '创建'"
-        style="margin-left:1%"
-      >新增</el-button>
+      <el-button type="primary" size="medium"  @click="dialogFormVisible = true;formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
-    <!-- 内部用户列表 -->
+    <!-- 表格 -->
     <el-col align="middle">
       <gt-table
         :tableData="tableData"
@@ -28,6 +23,7 @@
         v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
         v-on:UpdatePreprocessing="UpdatePreprocessing"
+        v-on:IntoTask="IntoTask"
         :handle="handle"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
@@ -43,28 +39,24 @@
     </el-col>
 
     <!-- 新增 查看 更新 -->
-    <el-dialog
-      :title="formCurrentStatus+'设备'"
-      :visible.sync="dialogFormVisible"
-      width="25%"
-      @close="DialogClose('form')"
-      :close-on-click-modal="false"
-      top="0vh"
-      center
-    >
-      <el-form
-        :model="form"
-        status-icon
-        :rules="rules"
-        ref="form"
-        label-width="80px"
-        style="width:100%"
-      >
+    <el-dialog :title="formCurrentStatus+'任务'" :visible.sync="dialogFormVisible" width="30%" @close="DialogClose('form')" :close-on-click-modal="false" top="0vh" center >
+      <el-form :model="form" status-icon :rules="rules" ref="form" label-width="80px" style="width:100%" >
 
-        <el-form-item label="所属公司" prop="corpguid">
+        <el-form-item label="所属公司" prop="corpguid" v-if="formCurrentStatus==='创建'">
           <el-select v-model="form.corpguid"  placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
             <el-option
               v-for="item in corpData"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+       <el-form-item label="所属部门" prop="deptguid">
+          <el-select v-model="form.deptguid"  placeholder="请选择" @change="resetDtaff(form.deptguid)" style="width:100%">
+            <el-option
+              v-for="item in deptData" track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -79,7 +71,7 @@
         <el-form-item label="计划标识" prop="planguid">
           <el-select v-model="form.planguid"  placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in deptData" track-by="item.guid"
+              v-for="item in fixData" 
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -90,7 +82,7 @@
         <el-form-item label="设备标识" prop="equipguid">
           <el-select v-model="form.equipguid"  placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in deptData" track-by="item.guid"
+              v-for="item in equiData" track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -133,7 +125,7 @@
             v-model="form.planstart"
             type="datetime"
             placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
+            format="yyyy年MM月dd日 hh:mm:ss"
             value-format="yyyy-MM-dd hh:mm:ss"
             style="width:100%"
           ></el-date-picker>
@@ -144,7 +136,7 @@
             v-model="form.planstop"
             type="datetime"
             placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
+            format="yyyy年MM月dd日 hh:mm:ss"
             value-format="yyyy-MM-dd hh:mm:ss"
             style="width:100%"
           ></el-date-picker>
@@ -155,7 +147,7 @@
             v-model="form.factstart"
             type="datetime"
             placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
+            format="yyyy年MM月dd日 hh:mm:ss"
             value-format="yyyy-MM-dd hh:mm:ss"
             style="width:100%"
           ></el-date-picker>
@@ -166,7 +158,7 @@
             v-model="form.factstop"
             type="datetime"
             placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
+            format="yyyy年MM月dd日 hh:mm:ss"
             value-format="yyyy-MM-dd hh:mm:ss"
             style="width:100%"
           ></el-date-picker>
@@ -177,7 +169,7 @@
             v-model="form.recvdate"
             type="datetime"
             placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
+            format="yyyy年MM月dd日 hh:mm:ss"
             value-format="yyyy-MM-dd hh:mm:ss"
             style="width:100%"
           ></el-date-picker>
@@ -188,32 +180,37 @@
             v-model="form.schedate"
             type="datetime"
             placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
+            format="yyyy年MM月dd日 hh:mm:ss"
             value-format="yyyy-MM-dd hh:mm:ss"
             style="width:100%"
           ></el-date-picker>
         </el-form-item>
 
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer" class="dialog-footer" v-if="form.statuscode!=2">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
         <el-button @click="ResetForm('form')">重置</el-button>
       </span>
     </el-dialog>
+
   </div>
 </template>
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
 import {
-  corpSelect,
-  getDeptList,
-  oildeCreate,
-  oildeSelect,
-  oildeDetail,
-  oildeUpdate,
-  oildeDelete,
-  equiSelect,
+  corpSelect, // 公司
+  getDeptList, // 部门
+  getStaffList, // 人员
+  equiSelect,   // 设备列表
+  oilSelect,   // 加油计划列表
+  oildeCreate, // 加油任务创建
+  oildeSelect, // 加油任务列表
+  oildeDetail, // 加油任务详情
+  oildeUpdate, // 更新加油任务
+  oildeDelete, // 加油任务删除
+  oilTaskStart,// 加油任务开始
+  oilTaskStop  // 加油任务结束
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
@@ -239,37 +236,47 @@ export default {
           text: "删除",
           type: "text",
           show: true
+        },
+        {
+          function: "IntoTask",
+          text: "任务",
+          type: "text",
+          show: true
         }
       ],
       columns: [
         {
           id: "name",
-          label: "设备名称"
+          label: "任务名称"
         },
         {
-          id: "proddate",
-          label: "生产日期"
+          id: "planstart",
+          label: "计划开始"
         },
         {
-          id: "producer",
-          label: "生产厂家"
+          id: "planstop",
+          label: "计划结束"
         },
         {
-          id: "clstype",
-          label: "分类类型"
+          id: "factstart",
+          label: "实际开始"
         },
         {
-          id: "class",
-          label: "分类类别"
+          id: "factstop",
+          label: "实际结束"
         },
         {
-          id: "clsrank",
-          label: "分类等级"
+          id: "deptsched",
+          label: "调度部门"
         },
         {
-          id: "descrifptio",
-          label: "描述信息"
-        }
+          id: "deptrecv",
+          label: "接收部门"
+        },
+        {
+          id: "content",
+          label: "维修内容"
+        },
       ],
       // 创建 更新 删除 表单
       form: {
@@ -278,6 +285,7 @@ export default {
         name: "",                 // 任务名称
         equipguid: "",            // 设备标识
         content: "",              // 维修内容
+        deptguid: "",             // 部门标识
         deptsched: "",            // 调度部门
         deptrecv: "",             // 接收部门
         planstart: "",            // 计划开始
@@ -441,6 +449,12 @@ export default {
       corpData:[],
       // 部门列表
       deptData:[],
+      // 计划列表
+      fixData:[],
+      // 设备列表
+      equiData:[],
+      // 人员列表
+      staffData:[], 
     };
   },
   beforeCreate() {},
@@ -448,6 +462,9 @@ export default {
     this.corpList();
     this.deptList();
     this.equiList();
+    this.fixList();
+    this.detaList();
+    this.staffList();
   },
   methods: {
 
@@ -464,33 +481,68 @@ export default {
      ** 部门列表
      */
     async deptList(val) {
+      console.log(val);
       const res = await getDeptList({ deptguid: val || null });
       console.log('部门列表',res.data)
       this.deptData = res.data;
     },
 
     /**
+     ** 人员列表
+     */
+    async staffList(val) {
+      const res = await getStaffList();
+      this.staffData = res.data;
+    },
+    /**
+     ** 计划列表
+     */
+    async fixList(val) {
+      const res = await oilSelect();
+      console.log('计划列表',res.data)
+      this.fixData = res.data;
+    },
+
+    /**
+     ** 维修任务列表
+     */
+    async detaList(val) {
+      const res = await oildeSelect();
+      console.log('维修任务',res.data)
+      this.tableData = res.data;
+    },
+
+    /**
      ** 更换公司清空部门, 重新获取部门列表
      */
     async resetDept(cid){
+      console.log(cid);
       this.deptData = [];
       this.form.deptguid = null;
       this.$forceUpdate();
       this.deptList(cid)
     },
 
+    /**
+     ** 更换部门清空人员, 重新获取人员列表
+     */
+    async resetDtaff(did){
+      //先重制人员列表
+      this.staffData = [];
+      this.$forceUpdate();
+      this.staffList(did)
+    },
     /*
      ** form 表单 验证
      */
     submitForm(formName) {
-      console.log("232323")
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(valid);
-          console.log(this.formCurrentStatus);
           if (this.formCurrentStatus === "创建") this.CreateHandle();
           else if (this.formCurrentStatus === "更新") this.UpdateHandle();
           else if (this.formCurrentStatus === "查看") this.ExamineHandle();
+          else if (this.formCurrentStatus === '开始') this.oilTaskStartHandle()
+          else if (this.formCurrentStatus === '结束') this.oilTaskStopHandle()
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -498,13 +550,14 @@ export default {
       });
     },
 
+
     /**
-     ** 公司列表
+     ** 设备列表
      */
     async equiList() {
       const res = await equiSelect();
-      console.log('公司列表',res.data)
-      this.tableData = res.data;
+      console.log('设备列表',res.data)
+      this.equiData = res.data;
     },
 
     /*
@@ -513,7 +566,7 @@ export default {
     async CreateHandle(info) {
       const res = await oildeCreate(this.form);
       if (res.status === 200) {
-        this.equiList();
+        this.detaList()
         this.$message.success("设备创建成功");
       } else this.$message.warning("设备创建失败");
       this.dialogFormVisible = false;
@@ -523,15 +576,14 @@ export default {
      ** 查看处理
      */
     async ExamineHandle(index, row) {
-      console.log(row);
       this.formCurrentStatus = "查看";
-      const response = await equiDetails({
-        id: row.guid
-      });
-      if (response.status === 200) {
-        this.form = response.data;
+      // const response = await oildeDetail({
+      //   id: row.guid+'/oilplan'
+      // });
+      // if (response.status === 200) {
+        this.form = row;
         this.dialogFormVisible = true;
-      } else this.$message.warning("请稍后再尝试");
+      // } else this.$message.warning("请稍后再尝试");
     },
 
     /*
@@ -547,9 +599,9 @@ export default {
      ** 更新处理
      */
     async UpdateHandle(index, row) {
-      const res = await equiUpdate(this.form);
+      const res = await oildeUpdate(this.form);
       if (res.status === 200) {
-        this.equiList();
+        this.detaList()
         this.$message.success("更新成功");
       } else this.$message.warning("更新失败,稍后重试");
       this.dialogFormVisible = false;
@@ -558,22 +610,60 @@ export default {
     /*
      ** 删除处理
      */
-    async DeleteHandle(index, row) {
+     DeleteHandle(index, row) {
       let that = this;
-      this.$confirm("删除设备?", "提示", {
+      this.$confirm("确认删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          let res = equiDelete({ id: row.guid });
+        .then(async () => {
+          let res = await oildeDelete({ id: row.guid });
           console.log(res);
           if (res.status === 200) {
             this.$message.success("删除成功");
+          this.detaList()
           }
-          this.equiList();
         })
         .catch(err => {});
+    },
+
+    /*
+     ** 进入任务
+     */
+    IntoTask(index,row) {
+      row.statuscode===0?this.formCurrentStatus = '开始':this.formCurrentStatus = '结束'
+      this.dialogFormVisible = true;
+      let temp = JSON.parse(JSON.stringify(row))
+      this.form = temp;
+    },
+
+    /*
+     ** 提交维修开始任务
+     */
+    async oilTaskStartHandle() {
+      const res = await oilTaskStart(this.form)
+      if(res.status === 200) 
+        this.$message.success('更新成功')
+      else
+        this.$message.warning("更新失败，稍后重试")
+      // 关闭dialog
+      this.dialogFormVisible = false;
+      this.formCurrentStatus = '结束';
+    },
+
+    /*
+     ** 提交维修结束任务
+     */
+    async oilTaskStopHandle(index,row) {
+      const res = await oilTaskStop(this.form)
+      if(res.status === 200) 
+        this.$message.success('更新成功')
+      else
+        this.$message.warning("更新失败，稍后重试")
+      // 关闭dialog
+      this.dialogFormVisible = false;
+      this.formCurrentStatus = ''
     },
 
     /*

@@ -504,7 +504,7 @@ export default {
      */
     async resetDept(cid){
       this.deptData = [];
-      this.task.deptguid = null;
+      this.form.deptguid = null;
       this.$forceUpdate();
       this.deptList(cid)
     },
