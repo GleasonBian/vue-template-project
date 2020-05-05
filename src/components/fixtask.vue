@@ -265,6 +265,8 @@ import {
   fixdeDelete,  // 任务删除
   equiSelect,   // 设备列表
   fixSelect,    //维修计划列表
+  fixTaskStart,
+  fixTaskStop,
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
@@ -587,7 +589,6 @@ export default {
     async resetDept(cid){
       this.deptData = [];
       this.task.deptguid = null;
-      // this.task.corpname = cname
       this.$forceUpdate();
       this.deptList(cid)
     },

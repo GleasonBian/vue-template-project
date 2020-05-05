@@ -165,6 +165,16 @@ export const fixdeDetail = data => fetch("fixdetail", data, "get");
 export const fixdeUpdate = data => fetch("fixdetail", data, "put");
 
 /**
+ * 维修任务开始
+ */
+export const fixTaskStart = data => fetch("fixdetail/start", data, "put");
+
+/**
+ * 维修任务结束
+ */
+export const fixTaskStop = data => fetch("/fixdetail/stop", data, "put");
+
+/**
  * 维修任务删除
  */
 export const fixdeDelete = data => fetch("fixdetail", data, "delete");
