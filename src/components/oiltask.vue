@@ -43,7 +43,7 @@
       <el-form :model="form" status-icon :rules="rules" ref="form" label-width="80px" style="width:100%" >
 
         <el-form-item label="所属公司" prop="corpguid" v-if="formCurrentStatus==='创建'">
-          <el-select v-model="form.corpguid"  placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
+          <el-select v-model="form.corpguid"     placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
             <el-option
               v-for="item in corpData"
               :key="item.guid"

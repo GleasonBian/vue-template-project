@@ -61,7 +61,7 @@
         style="width:100%"
       >
         <el-form-item label="所属公司" prop="corpguid" :rules="[ { required: true, message: '公司 必选'}]">
-          <el-select v-model="form.corpguid" @change="resetDept(form.corpguid)" placeholder="请选择" style="width:100%">
+          <el-select v-model="form.corpguid"    @change="resetDept(form.corpguid)" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in compList"
               :key="item.guid"
