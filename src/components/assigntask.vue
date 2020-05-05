@@ -182,6 +182,55 @@
       </span>
     </el-dialog>
 
+    <el-dialog :title="formCurrentStatus2+'任务'" :visible.sync="dialogFormVisible2" @close="DialogClose('form2')" center>
+      <el-form :model="form2" status-icon ref="form2" label-width="80px" style="width:100%">
+        <el-form-item label="任务标识" prop="assignid" :rules="[{ required: true, message: '任务标识 必填'}]">
+          <el-select v-model="form2.assignid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in tableData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备标识" prop="equipid" :rules="[{ required: true, message: '设备标识 必填'}]">
+          <el-select v-model="form2.equipid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in equiData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="人员名称" prop="staffid" :rules="[{ required: true, message: '人员名称 必填'}]">
+          <el-select v-model="form2.staffid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in staffData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item type="number" label="剩余油量" prop="leftoil" :rules="[{ required: true, message: '剩余油量 必填'}]">
+          <el-input  v-model.number="form2.leftoil"></el-input>
+        </el-form-item>
+        <el-form-item type="number" v-if="form2.statuscode!=0" label="产出数量" prop="produceamount" :rules="[{ required: true, message: '产出数量 必填'}]">
+          <el-input  v-model.number="form2.produceamount"></el-input>
+        </el-form-item>
+        <el-form-item v-if="form2.statuscode!=0" label="单位" prop="unit" :rules="[{ required: true, message: '单位 必填'}]">
+          <el-input  v-model="form2.unit"></el-input>
+        </el-form-item>
+        
+      </el-form>
+      <span slot="footer" class="dialog-footer" v-if="form2.statuscode!=2">
+        <el-button type="primary" @click="submitForm2('form2')">提交</el-button>
+        <el-button @click="ResetForm('form2')">重置</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 <script>
@@ -267,6 +316,15 @@ export default {
           label: "内容"
         },
       ],
+      form2:{
+        assignid: '',
+        equipid: '',
+        staffid: '',
+        statuscode: 0,
+        produceamount:0,
+        unit:'',
+        leftoil: ''
+      },
       // 创建 更新 删除 表单
       form: {
         corpguid: "",             // 公司标识
@@ -293,7 +351,9 @@ export default {
       offset: 1,
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示 新增 删除 更新 对话框
+      dialogFormVisible2: false,
       formCurrentStatus: "", // 表单当前状态
+      formCurrentStatus2: "", // 表单当前状态
       searchData: [
         // 搜索框 数据
         {
@@ -456,7 +516,13 @@ export default {
     this.staffList();
   },
   methods: {
-
+    /**
+     ** 人员列表
+     */
+    async staffList(val) {
+      const res = await getStaffList();
+      this.staffData = res.data;
+    },
     /**
      ** 公司列表
      */
@@ -529,7 +595,19 @@ export default {
         }
       });
     },
-
+    submitForm2(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.formCurrentStatus2 === '开始') this.assigndeStartHandle()
+          else if (this.formCurrentStatus2 === '结束') this.assigndeStopHandle()
+          this.ResetForm(formName)
+          this.assigndeList()
+        } else {
+          this.$message.error("请正确填写红框内容");
+          return false;
+        }
+      });
+    },
 
     /**
      ** 设备列表
@@ -612,38 +690,43 @@ export default {
      ** 进入任务
      */
     IntoTask(index,row) {
-      row.statuscode===0?this.formCurrentStatus = '开始':this.formCurrentStatus = '结束'
-      this.dialogFormVisible = true;
+      row.statuscode===0?this.formCurrentStatus2 = '开始':this.formCurrentStatus2 = '结束'
+      this.dialogFormVisible2 = true;
       let obj = row;
-      this.form = obj;
+      this.$nextTick(() => { // 注意看这里
+        this.form2.assignid = obj.guid;
+        this.form2.equipid = obj.equipguid;
+        this.form2.statuscode = obj.statuscode;
+      });
+      
     },
 
     /*
      ** 提交调度开始任务
      */
     async assigndeStartHandle() {
-      const res = await assigndeStart(this.form)
+      const res = await assigndeStart(this.form2)
       if(res.status === 200) 
         this.$message.success('更新成功')
       else
         this.$message.warning("更新失败，稍后重试")
       // 关闭dialog
-      this.dialogFormVisible = false;
-      this.formCurrentStatus = '结束';
+      this.dialogFormVisible2 = false;
+      this.formCurrentStatus2 = '结束';
     },
 
     /*
      ** 提交调度结束任务
      */
     async assigndeStopHandle(index,row) {
-      const res = await assigndeStop(this.form)
+      const res = await assigndeStop(this.form2)
       if(res.status === 200) 
         this.$message.success('更新成功')
       else
         this.$message.warning("更新失败，稍后重试")
       // 关闭dialog
-      this.dialogFormVisible = false;
-      this.formCurrentStatus = ''
+      this.dialogFormVisible2 = false;
+      this.formCurrentStatus2 = ''
     },
 
     /*
