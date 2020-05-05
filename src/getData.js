@@ -244,6 +244,16 @@ export const assigndeSelect = data => fetch("assigndetail", data, "get");
 export const assigndeUpdate = data => fetch("assigndetail", data, "put");
 
 /**
+ * 更新调度任务开始
+ */
+export const assigndeStart = data => fetch("assigndetail/start", data, "put");
+
+/**
+ * 更新调度任务结束
+ */
+export const assigndeStop = data => fetch("assigndetail/stop", data, "put");
+
+/**
  * 删除调度任务
  */
 export const assigndeDelete = data => fetch("assigndetail", data, "delete");
@@ -251,4 +261,4 @@ export const assigndeDelete = data => fetch("assigndetail", data, "delete");
 /**
  * 调度任务详情
  */
-export const assigndeDetails = data => fetch("assigndetail", data, "get");
+export const assigndeDetail = data => fetch("assigndetail", data, "get");
