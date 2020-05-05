@@ -40,6 +40,12 @@
             <el-menu-item index="/assign/assignplan">调度计划</el-menu-item>
             <el-menu-item index="/assign/assigntask">调度任务</el-menu-item>
           </el-submenu>
+          <!-- <el-submenu index="5" popper-class="submenu-userManger">
+            <template slot="title">
+              <i class="iconfont i-user-manger"></i>交接班
+            </template>
+            <el-menu-item index="/charge/chargework">交接班</el-menu-item>
+          </el-submenu> -->
         </el-menu>
       </el-col>
       <el-col :span="21" style="height: 100%;overflow: auto;">

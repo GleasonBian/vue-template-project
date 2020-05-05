@@ -189,6 +189,22 @@ const router = new Router({
           },
         },
       ]
+    },
+    {
+      path: '/charge',
+      component: resolve => require(['@/common/platform'], resolve),
+      children: [
+        {
+          path: 'chargework',
+          component: resolve => require(['@/components/chargework'], resolve),
+          meta: {
+            crumbs: ['交接班', '交接班'],
+            title: '交接班',
+            index: 9,
+            menu: '090302'
+          },
+        },
+      ]
     }
   ]
 })
