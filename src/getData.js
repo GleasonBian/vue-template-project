@@ -118,28 +118,29 @@ export const fixDelete = data => fetch("fixplan", data, "delete");
  * 计划列表
  */
 export const fixDetails = data => fetch("fixplan", data, "get");
+
 /**
- * 创建计划
+ * 创建加油计划
  */
 export const oilCreate = data => fetch("oilplan", data, "post");
 
 /**
- * 计划列表
+ * 加油计划列表
  */
 export const oilSelect = data => fetch("oilplan", data, "get");
 
 /**
- * 更新计划
+ * 更新加油计划
  */
 export const oilUpdate = data => fetch("oilplan", data, "put");
 
 /**
- * 删除计划
+ * 删除加油计划
  */
 export const oilDelete = data => fetch("oilplan", data, "delete");
 
 /**
- * 计划列表
+ * 加油计划详情
  */
 export const oilDetails = data => fetch("oilplan", data, "get");
 
