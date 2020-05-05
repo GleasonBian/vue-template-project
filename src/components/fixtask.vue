@@ -8,7 +8,7 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
-      <el-button type="primary" size="medium"  @click="dialogFormVisible = true;formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
+      <el-button type="primary" size="medium"  @click="dialogFormVisible = true; ResetForm('form'); form={};formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -454,6 +454,12 @@ export default {
     this.detaList();
     this.staffList();
   },
+  // mounted(){
+  //   this.dialogFormVisible=true;
+  //   setTimeout(() => {
+  //     this.dialogFormVisible=false;
+  //   }, 0);
+  // },
   methods: {
 
     /**
