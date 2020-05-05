@@ -176,79 +176,12 @@
         </el-form-item>
 
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer" class="dialog-footer" v-if="form.statuscode!=2">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
         <el-button @click="ResetForm('form')">重置</el-button>
       </span>
     </el-dialog>
 
-
-    <el-dialog :title="taskStatus" :visible.sync="dialogTask" width="30%" @close="DialogClose('task')" :close-on-click-modal="false" top="0vh" center >
-      <el-form :model="task" status-icon :rules="rules" ref="task" label-width="80px" style="width:100%" >
-
-        <el-form-item label="分类等级" prop="clsrank">
-          <el-select v-model="task.clsrank"  placeholder="请选择" style="width:100%">
-            <el-option label="一级" value="一级"></el-option>
-            <el-option label="二级" value="二级"></el-option>
-            <el-option label="三级" value="三级"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="分类类型" prop="clstype" >
-          <el-input v-model="task.clstype" placeholder="请输入"></el-input>
-        </el-form-item>
-
-        <el-form-item label="分类类别" prop="class">
-          <el-input v-model="task.class" placeholder="请输入"></el-input>
-        </el-form-item>
-
-        <el-form-item label="所属公司" prop="corpguid">
-          <el-select v-model="task.corpguid"  placeholder="请选择" @change="resetDept(task.corpguid)" style="width:100%">
-            <el-option
-              v-for="item in corpData"
-              :key="item.guid"
-              :label="item.name"
-              :value="item.guid"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="所属部门" prop="deptguid">
-          <el-select v-model="task.deptguid"  placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in deptData" track-by="item.guid"
-              :key="item.guid"
-              :label="item.name"
-              :value="item.guid"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="人员名称" prop="staffid">
-          <el-select v-model="task.staffid"  placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in staffData" track-by="item.guid"
-              :key="item.guid"
-              :label="item.name"
-              :value="item.guid"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="任务名称" prop="name">
-          <el-input v-model="task.name"></el-input>
-        </el-form-item>
-
-        <el-form-item label="任务编码" prop="code">
-          <el-input  v-model="task.code"></el-input>
-        </el-form-item>
-
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('form')">提交</el-button>
-        <el-button @click="ResetForm('form')">重置</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -265,8 +198,8 @@ import {
   fixdeDelete,  // 任务删除
   equiSelect,   // 设备列表
   fixSelect,    //维修计划列表
-  fixTaskStart,
-  fixTaskStop,
+  fixTaskStart, // 任务开始
+  fixTaskStop,  // 任务结束
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
@@ -295,7 +228,7 @@ export default {
         },
         {
           function: "IntoTask",
-          text: "进入任务",
+          text: "任务",
           type: "text",
           show: true
         }
@@ -353,30 +286,13 @@ export default {
         factdur: 0,               // 不在页面展示 给个零
         plandur: 0,               // 不在页面展示 给个零
       },
-      // 任务开始
-      task:{
-        class: "",                // 分类类别
-        clsrank: "",              // 分类等级
-        clstype: "",              // 分类类型
-        code: "",                 // 任务编码
-        corpguid: "",             // 公司标识
-        corpname: "",             // 公司名称
-        deptguid: "",             // 部门标识
-        deptname: "",             // 部门名称
-        guid: "",                 // 任务标识
-        name: "",                 // 任务名称
-        staffid: "",              // 人员标识
-        staffname: ""             // 人员名称
-      },
       tableData: [], // 表格数据
       total: 0,
       limit: 10,
       offset: 1,
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示 新增 删除 更新 对话框
-      dialogTask:false, // 任务dialog
       formCurrentStatus: "", // 表单当前状态
-      taskStatus:"开始任务",
       searchData: [
         // 搜索框 数据
         {
@@ -599,17 +515,18 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(valid);
-          console.log(this.formCurrentStatus);
           if (this.formCurrentStatus === "创建") this.CreateHandle();
           else if (this.formCurrentStatus === "更新") this.UpdateHandle();
           else if (this.formCurrentStatus === "查看") this.ExamineHandle();
+          else if (this.formCurrentStatus === '开始') this.fixTaskStartHandle()
+          else if (this.formCurrentStatus === '结束') this.fixTaskStopHandle()
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
         }
       });
     },
+
 
     /**
      ** 设备列表
@@ -689,14 +606,40 @@ export default {
     },
 
     /*
-     ** 开始任务
+     ** 进入任务
      */
     IntoTask(index,row) {
-      console.log(row);
-      this.task.name = row.name
-      this.task.code = row.code
-      this.task.guid = row.guid
-      this.dialogTask = true;
+      row.statuscode===0?this.formCurrentStatus = '开始':this.formCurrentStatus = '结束'
+      this.dialogFormVisible = true;
+      this.form = row;
+    },
+
+    /*
+     ** 提交维修开始任务
+     */
+    async fixTaskStartHandle() {
+      const res = await fixTaskStart(this.form)
+      if(res.status === 200) 
+        this.$message.success('更新成功')
+      else
+        this.$message.warning("更新失败，稍后重试")
+      // 关闭dialog
+      this.dialogFormVisible = false;
+      this.formCurrentStatus = '结束';
+    },
+
+    /*
+     ** 提交维修结束任务
+     */
+    async fixTaskStopHandle(index,row) {
+      const res = await fixTaskStop(this.form)
+      if(res.status === 200) 
+        this.$message.success('更新成功')
+      else
+        this.$message.warning("更新失败，稍后重试")
+      // 关闭dialog
+      this.dialogFormVisible = false;
+      this.formCurrentStatus = ''
     },
 
     /*

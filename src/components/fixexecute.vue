@@ -2,284 +2,253 @@
   <div>
     <!-- 面包屑 -->
     <headTop></headTop>
-    <el-row :gutter="30">
-      <el-col :span="10">
-        <h1  style="text-align:center; padding:24px 24px">任务开始</h1>
-        <el-form :model="form" status-icon :rules="rules" ref="form" label-width="80px" style="width:100%" >
 
-          <el-form-item label="所属公司" prop="corpguid" v-if="formCurrentStatus==='创建'">
-            <el-select v-model="form.corpguid"  placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
-              <el-option
-                v-for="item in corpData"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+    <!-- 搜索框 -->
+    <gt-search :data="searchData" @handle="corpList" size></gt-search>
 
-          <el-form-item label="计划编码" prop="code">
-            <el-input  v-model="form.code"></el-input>
-          </el-form-item>
+    <!-- 列表操作按钮 -->
+    <el-col align="left" style="margin-bottom:1%">
+      <el-button type="primary" size="medium"  @click="dialogFormVisible = true;formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
+      <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
+    </el-col>
 
-          <el-form-item label="计划标识" prop="planguid">
-            <el-select v-model="form.planguid"  placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in fixData" 
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+    <!-- 表格 -->
+    <el-col align="middle">
+      <gt-table
+        :tableData="tableData"
+        style="width: 98%"
+        :optionWidth="optionWidth"
+        :columns="columns"
+        :selection="false"
+        v-on:ExamineHandle="ExamineHandle"
+        v-on:DeleteHandle="DeleteHandle"
+        v-on:UpdatePreprocessing="UpdatePreprocessing"
+        v-on:IntoTask="IntoTask"
+        :handle="handle"
+      ></gt-table>
+      <!-- v-on:selection-change="handleSelectionChange" -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="offset"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
+    </el-col>
 
-          <el-form-item label="设备标识" prop="equipguid">
-            <el-select v-model="form.equipguid"  placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in equiData" track-by="item.guid"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+    <!-- 新增 查看 更新 -->
+    <el-dialog :title="formCurrentStatus+'任务'" :visible.sync="dialogFormVisible" width="30%" @close="DialogClose('form')" :close-on-click-modal="false" top="0vh" center >
+      <el-form :model="form" status-icon :rules="rules" ref="form" label-width="80px" style="width:100%" >
 
-          <el-form-item label="任务名称" prop="name">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
+        <el-form-item label="所属公司" prop="corpguid" v-if="formCurrentStatus==='创建'">
+          <el-select v-model="form.corpguid"  placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
+            <el-option
+              v-for="item in corpData"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="维修内容" prop="content">
-            <el-input v-model="form.content"></el-input>
-          </el-form-item>
+        <el-form-item label="计划编码" prop="code">
+          <el-input  v-model="form.code"></el-input>
+        </el-form-item>
 
-          <el-form-item label="调度部门" prop="deptsched">
-            <el-select v-model="form.deptsched"  placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in deptData" track-by="item.guid"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="计划标识" prop="planguid">
+          <el-select v-model="form.planguid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in fixData" 
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="接收部门" prop="deptrecv">
-            <el-select v-model="form.deptrecv"  placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in deptData" track-by="item.guid"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="设备标识" prop="equipguid">
+          <el-select v-model="form.equipguid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in equiData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="计划开始" prop="planstart">
-            <el-date-picker
-              v-model="form.planstart"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="任务名称" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
 
-          <el-form-item label="计划结束" prop="planstop">
-            <el-date-picker
-              v-model="form.planstop"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="维修内容" prop="content">
+          <el-input v-model="form.content"></el-input>
+        </el-form-item>
 
-          <el-form-item label="实际开始" prop="factstart">
-            <el-date-picker
-              v-model="form.factstart"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="调度部门" prop="deptsched">
+          <el-select v-model="form.deptsched"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="实际结束" prop="factstop">
-            <el-date-picker
-              v-model="form.factstop"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="接收部门" prop="deptrecv">
+          <el-select v-model="form.deptrecv"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="开始时间" prop="recvdate">
-            <el-date-picker
-              v-model="form.recvdate"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="计划开始" prop="planstart">
+          <el-date-picker
+            v-model="form.planstart"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy年MM月dd日 hh:mm:ss"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
 
-          <el-form-item label="结束时间" prop="schedate">
-            <el-date-picker
-              v-model="form.schedate"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
-        </el-form>
-      </el-col>
-      <el-col :span="10">
-        <h1 style="text-align:center; padding:24px 24px">任务结束</h1>
-        <el-form :model="form" status-icon :rules="rules" ref="form" label-width="80px" style="width:100%" >
+        <el-form-item label="计划结束" prop="planstop">
+          <el-date-picker
+            v-model="form.planstop"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy年MM月dd日 hh:mm:ss"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
 
-          <el-form-item label="所属公司" prop="corpguid" v-if="formCurrentStatus==='创建'">
-            <el-select v-model="form.corpguid"  placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
-              <el-option
-                v-for="item in corpData"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="实际开始" prop="factstart">
+          <el-date-picker
+            v-model="form.factstart"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy年MM月dd日 hh:mm:ss"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
 
-          <el-form-item label="计划编码" prop="code">
-            <el-input  v-model="form.code"></el-input>
-          </el-form-item>
+        <el-form-item label="实际结束" prop="factstop">
+          <el-date-picker
+            v-model="form.factstop"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy年MM月dd日 hh:mm:ss"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
 
-          <el-form-item label="计划标识" prop="planguid">
-            <el-select v-model="form.planguid"  placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in fixData" 
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="开始时间" prop="recvdate">
+          <el-date-picker
+            v-model="form.recvdate"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy年MM月dd日 hh:mm:ss"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
 
-          <el-form-item label="设备标识" prop="equipguid">
-            <el-select v-model="form.equipguid"  placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in equiData" track-by="item.guid"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="结束时间" prop="schedate">
+          <el-date-picker
+            v-model="form.schedate"
+            type="datetime"
+            placeholder="选择日期"
+            format="yyyy年MM月dd日 hh:mm:ss"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
 
-          <el-form-item label="任务名称" prop="name">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('form')">提交</el-button>
+        <el-button @click="ResetForm('form')">重置</el-button>
+      </span>
+    </el-dialog>
 
-          <el-form-item label="维修内容" prop="content">
-            <el-input v-model="form.content"></el-input>
-          </el-form-item>
 
-          <el-form-item label="调度部门" prop="deptsched">
-            <el-select v-model="form.deptsched"  placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in deptData" track-by="item.guid"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+    <el-dialog :title="taskStatus" :visible.sync="dialogTask" width="30%" @close="DialogClose('task')" :close-on-click-modal="false" top="0vh" center >
+      <el-form :model="task" status-icon :rules="rules" ref="task" label-width="80px" style="width:100%" >
 
-          <el-form-item label="接收部门" prop="deptrecv">
-            <el-select v-model="form.deptrecv"  placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in deptData" track-by="item.guid"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="分类等级" prop="clsrank">
+          <el-select v-model="task.clsrank"  placeholder="请选择" style="width:100%">
+            <el-option label="一级" value="一级"></el-option>
+            <el-option label="二级" value="二级"></el-option>
+            <el-option label="三级" value="三级"></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="计划开始" prop="planstart">
-            <el-date-picker
-              v-model="form.planstart"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="分类类型" prop="clstype" >
+          <el-input v-model="task.clstype" placeholder="请输入"></el-input>
+        </el-form-item>
 
-          <el-form-item label="计划结束" prop="planstop">
-            <el-date-picker
-              v-model="form.planstop"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="分类类别" prop="class">
+          <el-input v-model="task.class" placeholder="请输入"></el-input>
+        </el-form-item>
 
-          <el-form-item label="实际开始" prop="factstart">
-            <el-date-picker
-              v-model="form.factstart"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="所属公司" prop="corpguid">
+          <el-select v-model="task.corpguid"  placeholder="请选择" @change="resetDept(task.corpguid)" style="width:100%">
+            <el-option
+              v-for="item in corpData"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="实际结束" prop="factstop">
-            <el-date-picker
-              v-model="form.factstop"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="所属部门" prop="deptguid">
+          <el-select v-model="task.deptguid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="开始时间" prop="recvdate">
-            <el-date-picker
-              v-model="form.recvdate"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
+        <el-form-item label="人员名称" prop="staffid">
+          <el-select v-model="task.staffid"  placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in staffData" track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
 
-          <el-form-item label="结束时间" prop="schedate">
-            <el-date-picker
-              v-model="form.schedate"
-              type="datetime"
-              placeholder="选择日期"
-              format="yyyy年MM月dd日 hh:mm:ss"
-              value-format="yyyy-MM-dd hh:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
+        <el-form-item label="任务名称" prop="name">
+          <el-input v-model="task.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="任务编码" prop="code">
+          <el-input  v-model="task.code"></el-input>
+        </el-form-item>
+
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitTask('task')">提交</el-button>
+        <el-button @click="ResetForm('form')">重置</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -288,6 +257,7 @@ import headTop from "@/common/headTop";
 import {
   corpSelect, // 公司
   getDeptList, // 部门
+  getStaffList, // 人员
   fixdeCreate, // 维修任务创建
   fixdeSelect, // 维修列表
   fixdeDetail, // 维修详情
@@ -295,10 +265,12 @@ import {
   fixdeDelete,  // 任务删除
   equiSelect,   // 设备列表
   fixSelect,    //维修计划列表
+  fixTaskStart, // 任务开始
+  fixTaskStop,  // 任务结束
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
-  name: "fixexcute",
+  name: "fixtask",
   data() {
     return {
       show: true,
@@ -381,13 +353,30 @@ export default {
         factdur: 0,               // 不在页面展示 给个零
         plandur: 0,               // 不在页面展示 给个零
       },
+      // 任务开始
+      task:{
+        class: "",                // 分类类别
+        clsrank: "",              // 分类等级
+        clstype: "",              // 分类类型
+        code: "",                 // 任务编码
+        corpguid: "",             // 公司标识
+        corpname: "",             // 公司名称
+        deptguid: "",             // 部门标识
+        deptname: "",             // 部门名称
+        guid: "",                 // 任务标识
+        name: "",                 // 任务名称
+        staffid: "",              // 人员标识
+        staffname: ""             // 人员名称
+      },
       tableData: [], // 表格数据
       total: 0,
       limit: 10,
       offset: 1,
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示 新增 删除 更新 对话框
+      dialogTask:false, // 任务dialog
       formCurrentStatus: "", // 表单当前状态
+      taskStatus:"开始任务",
       searchData: [
         // 搜索框 数据
         {
@@ -536,6 +525,8 @@ export default {
       fixData:[],
       // 设备列表
       equiData:[],
+      // 人员列表
+      staffData:[], 
     };
   },
   beforeCreate() {},
@@ -545,6 +536,7 @@ export default {
     this.equiList();
     this.fixList();
     this.detaList();
+    this.staffList();
   },
   methods: {
 
@@ -566,6 +558,13 @@ export default {
       this.deptData = res.data;
     },
 
+    /**
+     ** 人员列表
+     */
+    async staffList(val) {
+      const res = await getStaffList();
+      this.staffData = res.data;
+    },
     /**
      ** 计划列表
      */
@@ -589,7 +588,7 @@ export default {
      */
     async resetDept(cid){
       this.deptData = [];
-      this.form.deptguid = null;
+      this.task.deptguid = null;
       this.$forceUpdate();
       this.deptList(cid)
     },
@@ -605,6 +604,20 @@ export default {
           if (this.formCurrentStatus === "创建") this.CreateHandle();
           else if (this.formCurrentStatus === "更新") this.UpdateHandle();
           else if (this.formCurrentStatus === "查看") this.ExamineHandle();
+        } else {
+          this.$message.error("请正确填写红框内容");
+          return false;
+        }
+      });
+    },
+
+    /*
+     ** task 表单 验证
+     */
+    submitTask(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.taskStatus === '开始任务' ? this.fixTaskStartHandle() : this.fixTaskStopHandle()
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -690,14 +703,38 @@ export default {
     },
 
     /*
-     ** 进入任务
+     ** 开始任务
      */
-    IntoTask() {
-      let routeData = this.$router.resolve({
-        name: "detail",
-        query: {goodsId:'1111'}
-      });
-      window.open(routeData.href, '_blank');
+    IntoTask(index,row) {
+      this.task.name = row.name
+      this.task.code = row.code
+      this.task.guid = row.guid
+      this.dialogTask = true;
+
+    },
+
+    /*
+     ** 提交维修开始任务
+     */
+    async fixTaskStartHandle() {
+      const res = await fixTaskStart(this.task)
+      console.log(res);
+      if(res.status === 200) 
+        this.$message.success('更新成功')
+      else
+        this.$message.warning("更新失败，稍后重试")
+      // 关闭dialog
+      this.dialogTask = false;
+      this.handle[this.handle.length-1].text = '结束任务'
+      this.taskStatus = '结束任务'
+    },
+
+    /*
+     ** 提交维修结束任务
+     */
+    async fixTaskStopHandle(index,row) {
+      console.log('调用结束任务')
+      const res = await fixTaskStop()
     },
 
     /*
