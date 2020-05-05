@@ -19,6 +19,7 @@
     "vue": "^2.6.10",
     "vue-amap": "^0.5.10",
     "vue-router": "^3.0.3",
+    "vue-schart": "^2.0.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

@@ -11,7 +11,7 @@
           :collapse-transition="true"
           router
         >
-          <el-menu-item index="/middleground">
+          <el-menu-item index="/dashboard">
             <i class="el-icon-menu"></i>首页
           </el-menu-item>
           <el-submenu index="2" popper-class="submenu-userManger">

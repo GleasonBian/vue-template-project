@@ -56,6 +56,14 @@ const router = new Router({
         //   },
         // },
         {
+          path: '/dashboard',
+          name: 'dashboard',
+          component: resolve => require(['@/components/dashboard'], resolve),
+          meta: {
+            title: '数据统计图'
+          }
+        },
+        {
           path: 'companyList',
           component: resolve => require(['@/components/companyList'], resolve),
           meta: {
