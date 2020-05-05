@@ -476,7 +476,7 @@ export default {
     /**
      ** 更换公司清空部门, 重新获取部门列表
      */
-     resetDept(cid){
+    resetDept(cid){
       this.deptData = [];
       this.form.deptguid = null;
       this.$forceUpdate();
@@ -489,11 +489,10 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(valid);
-          console.log(this.formCurrentStatus);
           if (this.formCurrentStatus === "创建") this.CreateHandle();
           else if (this.formCurrentStatus === "更新") this.UpdateHandle();
           else if (this.formCurrentStatus === "查看") this.ExamineHandle();
+          this.assignPlans();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;

@@ -66,7 +66,7 @@
       :title="formCurrentStatus+'计划'"
       :visible.sync="dialogFormVisible"
       width="25%"
-      @close="DialogClose('form')"
+      @close="DialogClose(form8)"
       :close-on-click-modal="false"
       top="0vh"
       center
@@ -75,7 +75,7 @@
         :model="form"
         status-icon
         :rules="rules"
-        ref="form"
+        ref="form8"
         label-width="80px"
         style="width:100%"
       >
@@ -138,8 +138,8 @@
 
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('form')">提交</el-button>
-        <el-button @click="ResetForm('form')">重置</el-button>
+        <el-button type="primary" @click="submitForm(form8)">提交</el-button>
+        <el-button @click="ResetForm(form8)">重置</el-button>
       </span>
     </el-dialog>
   </div>

@@ -8,7 +8,11 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
+<<<<<<< Updated upstream
       <el-button type="primary" size="medium"  @click="dialogFormVisible = true; ResetForm('form'); form={};formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
+=======
+      <el-button type="primary" size="medium"  @click="newCreate('form')" style="margin-left:1%">新增</el-button>
+>>>>>>> Stashed changes
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -110,8 +114,7 @@
         </el-form-item>
 
         <el-form-item label="计划开始" prop="planstart">
-          <el-date-picker
-            v-model="form.planstart"
+          <el-date-picker v-model="form.planstart"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -121,8 +124,7 @@
         </el-form-item>
 
         <el-form-item label="计划结束" prop="planstop">
-          <el-date-picker
-            v-model="form.planstop"
+          <el-date-picker v-model="form.planstop"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -132,8 +134,7 @@
         </el-form-item>
 
         <el-form-item label="实际开始" prop="factstart">
-          <el-date-picker
-            v-model="form.factstart"
+          <el-date-picker v-model="form.factstart"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -143,8 +144,7 @@
         </el-form-item>
 
         <el-form-item label="实际结束" prop="factstop">
-          <el-date-picker
-            v-model="form.factstop"
+          <el-date-picker v-model="form.factstop"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -154,8 +154,7 @@
         </el-form-item>
 
         <el-form-item label="开始时间" prop="recvdate">
-          <el-date-picker
-            v-model="form.recvdate"
+          <el-date-picker v-model="form.recvdate"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -165,8 +164,7 @@
         </el-form-item>
 
         <el-form-item label="结束时间" prop="schedate">
-          <el-date-picker
-            v-model="form.schedate"
+          <el-date-picker v-model="form.schedate"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -269,6 +267,7 @@ export default {
       ],
       // 创建 更新 删除 表单
       form: {
+        corpguid: "",
         code: "",                 // 计划编码
         planguid: "",             // 计划标识
         name: "",                 // 任务名称
@@ -346,89 +345,77 @@ export default {
       Regular: Regular, // 表单校验正则
       // 表单校验规则
       rules: {
-        certguid: [
-          {
+        code: [{
             required: true,
-            message: "证件号码 必填"
-          }
-        ],
-        certtype: [
-          {
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        corpguid: [{
             required: true,
-            message: "证件类型 必填"
-          }
-        ],
-        clstype: [
-          {
-            required: true,
-            message: "必填 分类类型",
+            message: "必填",
             trigger: ["blur", "change"]
-          }
-        ],
-        class: [
-          {
-            required: false,
-            message: "必填 分类类别",
-            trigger: ["blur", "change"]
-          }
-        ],
-        clsrank: [
-          {
-            required: true,
-            message: "必填 分类等级",
-            trigger: ["blur", "change"]
-          }
-        ],
-        corpguid: [
-          {
-            required: true,
-            message: "必填 公司标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        deptguid: [
-          {
-            required: true,
-            message: "必填 部门标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        code: [
-          {
-            required: true,
-            message: "设备编码 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        name: [
-          {
-            required: true,
-            message: "设备名称 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        proddate: [
-          {
-            required: true,
-            message: "生产日期 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        producer: [
-          {
-            required: true,
-            message: "生产厂家 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        descrifptio: [
-          {
-            required: false,
-            message: "描述信息 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
+          }],
 
+        planguid: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        name: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        equipguid: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        content: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        deptsched: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        deptrecv: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        planstart: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        planstop: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        factstart: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        factstop: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        recvdate: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
+        schedate: [{
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }],
       },
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
@@ -463,11 +450,22 @@ export default {
   methods: {
 
     /**
+     ** 创建 / 新增
+     */
+    newCreate(val) {
+      console.log(val);
+      this.dialogFormVisible = true;
+      this.formCurrentStatus = '创建'
+      this.$nextTick(()=>{
+        this.$refs[val].resetFields();
+      })
+    },
+
+    /**
      ** 公司列表
      */
     async corpList(val) {
       const res = await corpSelect();
-      console.log('公司列表',res.data)
       this.corpData = res.data;
     },
 
@@ -526,13 +524,13 @@ export default {
           else if (this.formCurrentStatus === "查看") this.ExamineHandle();
           else if (this.formCurrentStatus === '开始') this.fixTaskStartHandle()
           else if (this.formCurrentStatus === '结束') this.fixTaskStopHandle()
+          this.detaList();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
         }
       });
     },
-
 
     /**
      ** 设备列表
@@ -564,7 +562,10 @@ export default {
         id: row.guid
       });
       if (response.status === 200) {
-        this.form = response.data;
+        this.$nextTick(()=>{
+          this.form = response.data;
+        })
+        
         this.dialogFormVisible = true;
       } else this.$message.warning("请稍后再尝试");
     },
@@ -617,7 +618,9 @@ export default {
     IntoTask(index,row) {
       row.statuscode===0?this.formCurrentStatus = '开始':this.formCurrentStatus = '结束'
       this.dialogFormVisible = true;
-      this.form = row;
+      this.$nextTick(()=>{
+          this.form = row;
+      })
     },
 
     /*

@@ -53,7 +53,7 @@
           </el-select>
         </el-form-item>
 
-       <el-form-item label="所属部门" prop="deptguid">
+        <el-form-item label="所属部门" prop="deptguid">
           <el-select v-model="form.deptguid"  placeholder="请选择" @change="resetDtaff(form.deptguid)" style="width:100%">
             <el-option
               v-for="item in deptData" track-by="item.guid"
@@ -64,14 +64,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="计划编码" prop="code">
-          <el-input  v-model="form.code"></el-input>
-        </el-form-item>
-
-        <el-form-item label="计划标识" prop="planguid">
-          <el-select v-model="form.planguid"  placeholder="请选择" style="width:100%">
+        <el-form-item label="加油人员" prop="staffid">
+          <el-select v-model="form.staffid"  placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in fixData" 
+              v-for="item in staffData" track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -90,18 +86,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="任务名称" prop="name">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-
-        <el-form-item label="维修内容" prop="content">
-          <el-input v-model="form.content"></el-input>
-        </el-form-item>
-
-        <el-form-item label="调度部门" prop="deptsched">
-          <el-select v-model="form.deptsched"  placeholder="请选择" style="width:100%">
+        <el-form-item label="计划标识" prop="planguid">
+          <el-select v-model="form.planguid"  placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in deptData" track-by="item.guid"
+              v-for="item in fixData" 
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -109,15 +97,8 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="接收部门" prop="deptrecv">
-          <el-select v-model="form.deptrecv"  placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in deptData" track-by="item.guid"
-              :key="item.guid"
-              :label="item.name"
-              :value="item.guid"
-            ></el-option>
-          </el-select>
+        <el-form-item label="计划编码" prop="code">
+          <el-input  v-model="form.code"></el-input>
         </el-form-item>
 
         <el-form-item label="计划开始" prop="planstart">
@@ -142,6 +123,26 @@
           ></el-date-picker>
         </el-form-item>
 
+        <el-form-item label="分类等级" prop="clsrank">
+          <el-select v-model="form.clsrank"  placeholder="请选择" style="width:100%">
+            <el-option label="一级" value="一级"></el-option>
+            <el-option label="二级" value="二级"></el-option>
+            <el-option label="三级" value="三级"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="分类类型" prop="clstype" >
+          <el-input v-model="form.clstype" placeholder="请输入"></el-input>
+        </el-form-item>
+
+        <el-form-item label="分类类别" prop="class">
+          <el-input v-model="form.class" placeholder="请输入"></el-input>
+        </el-form-item>
+
+        <el-form-item label="任务名称" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+
         <el-form-item label="实际开始" prop="factstart">
           <el-date-picker
             v-model="form.factstart"
@@ -164,26 +165,8 @@
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="开始时间" prop="recvdate">
-          <el-date-picker
-            v-model="form.recvdate"
-            type="datetime"
-            placeholder="选择日期"
-            format="yyyy年MM月dd日 hh:mm:ss"
-            value-format="yyyy-MM-dd hh:mm:ss"
-            style="width:100%"
-          ></el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="结束时间" prop="schedate">
-          <el-date-picker
-            v-model="form.schedate"
-            type="datetime"
-            placeholder="选择日期"
-            format="yyyy年MM月dd日 hh:mm:ss"
-            value-format="yyyy-MM-dd hh:mm:ss"
-            style="width:100%"
-          ></el-date-picker>
+        <el-form-item label="地理位置" prop="location">
+          <el-input v-model="form.location"></el-input>
         </el-form-item>
 
       </el-form>
@@ -266,37 +249,40 @@ export default {
           label: "实际结束"
         },
         {
-          id: "deptsched",
-          label: "调度部门"
+          id: "staffid",
+          label: "加油人员"
         },
         {
-          id: "deptrecv",
-          label: "接收部门"
+          id: "deptguid",
+          label: "加油部门"
         },
         {
-          id: "content",
-          label: "维修内容"
+          id: "location",
+          label: "地理位置"
         },
       ],
       // 创建 更新 删除 表单
       form: {
-        code: "",                 // 计划编码
-        planguid: "",             // 计划标识
-        name: "",                 // 任务名称
-        equipguid: "",            // 设备标识
-        content: "",              // 维修内容
-        deptguid: "",             // 部门标识
-        deptsched: "",            // 调度部门
-        deptrecv: "",             // 接收部门
-        planstart: "",            // 计划开始
-        planstop: "",             // 计划结束
-        factstart: "",            // 实际开始
-        factstop: "",             // 实际结束
-        recvdate: "",             // 开始时间
-        schedate: "",             // 结束时间
-        statuscode: 0,            // 不在页面展示 给个零
-        factdur: 0,               // 不在页面展示 给个零
-        plandur: 0,               // 不在页面展示 给个零
+        "corpguid": "",             // 公司标识
+        "deptguid": "",             // 部门标识
+        "staffid": "",              // 人员标识
+        "equipguid": "",            // 设备标识
+        "class": "",                // 分类类型
+        "clsrank": "",              // 分类等级
+        "clstype": "",              // 分类类别
+        "planguid": "",             // 计划标识
+        "code": "",                 // 计划编码
+        "planstart": "",            // 计划开始
+        "planstop": "",             // 计划结束
+        "name": "",                 // 任务名称
+        "factstart": "",            // 开始时间
+        "factstop": "",             // 结束时间
+        "location": "",             // 地理位置
+        "factoil": 0,
+        "planoil": 0,
+        "statuscode": 0,
+        "afteroil": 0,
+        "beforeoil": 0,
       },
       tableData: [], // 表格数据
       total: 0,
@@ -361,86 +347,120 @@ export default {
         certguid: [
           {
             required: true,
-            message: "证件号码 必填"
+            message: "必填",
+            trigger: ["blur", "change"]
           }
         ],
-        certtype: [
+        "corpguid": [
           {
             required: true,
-            message: "证件类型 必填"
+            message: "必填",
+            trigger: ["blur", "change"]
           }
-        ],
-        clstype: [
+        ], 
+        "deptguid": [
           {
             required: true,
-            message: "必填 分类类型",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        class: [
-          {
-            required: false,
-            message: "必填 分类类别",
-            trigger: ["blur", "change"]
-          }
-        ],
-        clsrank: [
+        "staffid": [
           {
             required: true,
-            message: "必填 分类等级",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        corpguid: [
+        "equipguid": [
           {
             required: true,
-            message: "必填 公司标识",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        deptguid: [
+        "class": [
           {
             required: true,
-            message: "必填 部门标识",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        code: [
+        "clsrank": [
           {
             required: true,
-            message: "设备编码 必填",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        name: [
+        "clstype": [
           {
             required: true,
-            message: "设备名称 必填",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        proddate: [
+        "planguid": [
           {
             required: true,
-            message: "生产日期 必填",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        producer: [
+        "code": [
           {
             required: true,
-            message: "生产厂家 必填",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        descrifptio: [
+        "planstart": [
           {
-            required: false,
-            message: "描述信息 必填",
+            required: true,
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-
+        "planstop": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        "name": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        "factstart": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        "factstop": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        "location": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        "factoil": 0,
+        "planoil": 0,
+        "statuscode": 0,
+        "afteroil": 0,
+        "beforeoil": 0,
       },
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
@@ -481,7 +501,6 @@ export default {
      ** 部门列表
      */
     async deptList(val) {
-      console.log(val);
       const res = await getDeptList({ deptguid: val || null });
       console.log('部门列表',res.data)
       this.deptData = res.data;
@@ -494,6 +513,7 @@ export default {
       const res = await getStaffList();
       this.staffData = res.data;
     },
+
     /**
      ** 计划列表
      */
@@ -527,11 +547,11 @@ export default {
      ** 更换部门清空人员, 重新获取人员列表
      */
     async resetDtaff(did){
-      //先重制人员列表
       this.staffData = [];
       this.$forceUpdate();
       this.staffList(did)
     },
+
     /*
      ** form 表单 验证
      */
@@ -543,13 +563,13 @@ export default {
           else if (this.formCurrentStatus === "查看") this.ExamineHandle();
           else if (this.formCurrentStatus === '开始') this.oilTaskStartHandle()
           else if (this.formCurrentStatus === '结束') this.oilTaskStopHandle()
+          this.detaList();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
         }
       });
     },
-
 
     /**
      ** 设备列表
@@ -576,20 +596,21 @@ export default {
      ** 查看处理
      */
     async ExamineHandle(index, row) {
+      console.log(index, row);
       this.formCurrentStatus = "查看";
-      // const response = await oildeDetail({
-      //   id: row.guid+'/oilplan'
-      // });
-      // if (response.status === 200) {
+      const response = await oildeDetail({
+        id: row.guid
+      });
+      if (response.status === 200) {
         this.form = row;
         this.dialogFormVisible = true;
-      // } else this.$message.warning("请稍后再尝试");
+      } else this.$message.warning("请稍后再尝试");
     },
 
     /*
      ** 更新预处理
      */
-    async UpdatePreprocessing(index, row) {
+    UpdatePreprocessing(index, row) {
       console.log(index, row)
       this.ExamineHandle(index, row);
       this.formCurrentStatus = "更新";
@@ -599,6 +620,7 @@ export default {
      ** 更新处理
      */
     async UpdateHandle(index, row) {
+      this.ExamineHandle(index, row);
       const res = await oildeUpdate(this.form);
       if (res.status === 200) {
         this.detaList()
@@ -610,7 +632,7 @@ export default {
     /*
      ** 删除处理
      */
-     DeleteHandle(index, row) {
+    DeleteHandle(index, row) {
       let that = this;
       this.$confirm("确认删除?", "提示", {
         confirmButtonText: "确定",
@@ -670,6 +692,8 @@ export default {
      ** form 表单 重置
      */
     ResetForm(formName) {
+      console.log(formName);
+      console.log(this.$refs[formName]);
       this.$refs[formName].resetFields();
     },
 
@@ -677,6 +701,7 @@ export default {
      ** 关闭 dialog
      */
     DialogClose(formName) {
+      console.log(formName);
       this.$refs[formName].resetFields();
     },
 

@@ -206,12 +206,12 @@ export const oildeDelete = data => fetch("oildetail", data, "delete");
 /**
  * 加油任务开始
  */
-export const oilTaskStart = data => fetch("fixdetail/start", data, "put");
+export const oilTaskStart = data => fetch("oildetail/start", data, "put");
 
 /**
- * 加油任务开始
+ * 加油任务结束
  */
-export const oilTaskStop = data => fetch("/fixdetail/stop", data, "put");
+export const oilTaskStop = data => fetch("oildetail/stop", data, "put");
 
 /**
  * 创建调度计划

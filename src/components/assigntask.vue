@@ -269,6 +269,7 @@ export default {
       ],
       // 创建 更新 删除 表单
       form: {
+        corpguid: "",             // 公司标识
         code: "",                 // 计划编码
         planguid: "",             // 计划标识
         name: "",                 // 任务名称
