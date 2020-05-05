@@ -8,11 +8,7 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
-<<<<<<< Updated upstream
       <el-button type="primary" size="medium"  @click="dialogFormVisible = true; ResetForm('form'); form={};formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
-=======
-      <el-button type="primary" size="medium"  @click="newCreate('form')" style="margin-left:1%">新增</el-button>
->>>>>>> Stashed changes
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
