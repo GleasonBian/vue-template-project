@@ -4,7 +4,7 @@
     <headTop></headTop>
 
     <!-- 搜索框 -->
-    <gt-search :data="searchData" @handle="oilPlans" size></gt-search>
+    <gt-search :data="searchData" @handle="assignPlans" size></gt-search>
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
@@ -66,7 +66,7 @@
       :title="formCurrentStatus+'计划'"
       :visible.sync="dialogFormVisible"
       width="25%"
-      @close="ResetForm('form')"
+      @close="DialogClose('form')"
       :close-on-click-modal="false"
       top="0vh"
       center
@@ -151,12 +151,12 @@ import {
   getStaffList,
   corpSelect,
   getDeptList,
-  oilCreate,
-  oilSelect,
-  oilUpdate,
-  oilDetails,
-  oildeSelect,
-  oilDelete
+  assignCreate,
+  assignSelect,
+  assignUpdate,
+  assignDetails,
+  assigndeSelect,
+  assignDelete
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
@@ -427,7 +427,7 @@ export default {
     this.staffList();
     this.corpList();
     this.deptList();
-    this.oilPlans();
+    this.assignPlans();
   },
   methods:{
 
@@ -436,14 +436,14 @@ export default {
      * **/
     async checkTasks(index,row){
       this.taskDial=true;
-      this.oTasks(row.guid)
+      this.assTasks(row.guid)
     },
 
     /**
      ** 任务列表
      */
-    async oTasks(id) {
-      const res = await oildeSelect({id:id+'/oilplan'});
+    async assTasks(id) {
+      const res = await assigndeSelect({id:id+'/assignplan'});
       this.t_tableData = res.data;
     },
 
@@ -504,8 +504,8 @@ export default {
     /**
      ** 公司列表
      */
-    async oilPlans() {
-      const res = await oilSelect();
+    async assignPlans() {
+      const res = await assignSelect();
       this.tableData = res.data;
     },
 
@@ -513,9 +513,9 @@ export default {
      ** 创建处理
      */
     async CreateHandle(info) {
-      const res = await oilCreate(this.form);
+      const res = await assignCreate(this.form);
       if (res.status === 200) {
-        this.oilPlans();
+        this.assignPlans();
         this.$message.success("计划创建成功");
       } else this.$message.warning("计划创建失败");
       this.dialogFormVisible = false;
@@ -527,11 +527,11 @@ export default {
     async ExamineHandle(index, row) {
       console.log(row);
       this.formCurrentStatus = "查看";
-      const response = await oilDetails({
+      const response = await assignDetails({
         id: row.guid
       });
       if (response.status === 200) {
-        this.form = response.data;
+        this.form = response.data[0];
         this.dialogFormVisible = true;
       } else this.$message.warning("请稍后再尝试");
     },
@@ -549,9 +549,9 @@ export default {
      ** 更新处理
      */
     async UpdateHandle(index, row) {
-      const res = await oilUpdate(this.form);
+      const res = await assignUpdate(this.form);
       if (res.status === 200) {
-        this.oilPlans();
+        this.assignPlans();
         this.$message.success("更新成功");
       } else this.$message.warning("更新失败,稍后重试");
       this.dialogFormVisible = false;
@@ -568,12 +568,12 @@ export default {
         type: "warning"
       })
         .then(() => {
-          let res = oilDelete({ id: row.guid });
+          let res = assignDelete({ id: row.guid });
           console.log(res);
           if (res.status === 200) {
             this.$message.success("删除成功");
           }
-          this.oilPlans();
+          this.assignPlans();
         })
         .catch(err => {});
     },
@@ -589,9 +589,7 @@ export default {
      ** 关闭 dialog
      */
     DialogClose(formName) {
-      console.log(1234)
       this.$refs[formName].resetFields();
-      console.log(this.$refs[formName])
     },
 
     /*

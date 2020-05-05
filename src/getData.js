@@ -192,3 +192,53 @@ export const oildeUpdate = data => fetch("oildetail", data, "put");
  * 加油任务删除
  */
 export const oildeDelete = data => fetch("oildetail", data, "delete");
+
+/**
+ * 创建调度计划
+ */
+export const assignCreate = data => fetch("assignment", data, "post");
+
+/**
+ * 调度计划列表
+ */
+export const assignSelect = data => fetch("assignment", data, "get");
+
+/**
+ * 更新调度计划
+ */
+export const assignUpdate = data => fetch("assignment", data, "put");
+
+/**
+ * 删除调度计划
+ */
+export const assignDelete = data => fetch("assignment", data, "delete");
+
+/**
+ * 调度计划详情
+ */
+export const assignDetails = data => fetch("assignment", data, "get");
+
+/**
+ * 创建调度任务
+ */
+export const assigndeCreate = data => fetch("assigndetail", data, "post");
+
+/**
+ * 调度任务列表
+ */
+export const assigndeSelect = data => fetch("assigndetail", data, "get");
+
+/**
+ * 更新调度任务
+ */
+export const assigndeUpdate = data => fetch("assigndetail", data, "put");
+
+/**
+ * 删除调度任务
+ */
+export const assigndeDelete = data => fetch("assigndetail", data, "delete");
+
+/**
+ * 调度任务详情
+ */
+export const assigndeDetails = data => fetch("assigndetail", data, "get");

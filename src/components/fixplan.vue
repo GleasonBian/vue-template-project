@@ -25,7 +25,7 @@
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
-        v-on:ExamineHandle="ExamineHandle"
+        v-on:checkTasks="checkTasks"
         v-on:DeleteHandle="DeleteHandle"
         v-on:UpdatePreprocessing="UpdatePreprocessing"
         :handle="handle"
@@ -41,6 +41,25 @@
         :total="total"
       ></el-pagination>
     </el-col>
+
+    <!-- check tasks -->
+    <el-dialog
+      :title="'任务列表'"
+      :visible.sync="taskDial"
+      width="75%"
+      :close-on-click-modal="false"
+      top="0vh"
+      center>
+      <div style="text-align:center">
+        <gt-table
+          :tableData="t_tableData"
+          style="width: 100%"
+          :optionWidth="optionWidth"
+          :columns="t_columns"
+          :selection="false"
+        ></gt-table>
+      </div>
+    </el-dialog>
 
     <!-- 新增 查看 更新 -->
     <el-dialog
@@ -136,6 +155,7 @@ import {
   fixSelect,
   fixUpdate,
   fixDetails,
+  fixdeSelect,
   fixDelete
 } from "@/getData";
 import { Regular } from "@/config/verification";
@@ -147,20 +167,20 @@ export default {
       show: true,
       handle: [
         {
-          function: "ExamineHandle",
-          text: "查看",
+          function: "checkTasks",
+          text: "查看任务",
           type: "text",
           show: true
         },
         {
           function: "UpdatePreprocessing",
-          text: "更新",
+          text: "更新计划",
           type: "text",
           show: true
         },
         {
           function: "DeleteHandle",
-          text: "删除",
+          text: "删除计划",
           type: "text",
           show: true
         }
@@ -191,6 +211,40 @@ export default {
           label: "所属部门"
         },
       ],
+      t_columns: [
+        {
+          id: "name",
+          label: "任务名称"
+        },
+        {
+          id: "planstart",
+          label: "计划开始"
+        },
+        {
+          id: "planstop",
+          label: "计划结束"
+        },
+        {
+          id: "factstart",
+          label: "实际开始"
+        },
+        {
+          id: "factstop",
+          label: "实际结束"
+        },
+        {
+          id: "deptsched",
+          label: "调度部门"
+        },
+        {
+          id: "deptrecv",
+          label: "接收部门"
+        },
+        {
+          id: "content",
+          label: "维修内容"
+        },
+      ],
       // 创建 更新 删除 表单
       form: {
         certguid: "", // 证件号码
@@ -207,11 +261,13 @@ export default {
         descrifptio: "", // 描述
       },
       tableData: [], // 表格数据
+      t_tableData: [], // 表格数据
       total: 0,
       limit: 10,
       offset: 1,
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示 新增 删除 更新 对话框
+      taskDial: false, //tasks dialog
       formCurrentStatus: "", // 表单当前状态
       searchData: [
         // 搜索框 数据
@@ -374,6 +430,13 @@ export default {
     this.fixPlans();
   },
   methods:{
+    /**
+     * 查看任务列表
+     * **/
+    async checkTasks(index,row){
+      this.taskDial=true;
+      this.fTasks(row.guid)
+    },
 
     /**
      ** 人员列表
@@ -430,11 +493,19 @@ export default {
     },
 
     /**
-     ** 公司列表
+     ** 计划列表
      */
     async fixPlans() {
       const res = await fixSelect();
       this.tableData = res.data;
+    },
+
+     /**
+     ** 任务列表
+     */
+    async fTasks(id) {
+      const res = await fixdeSelect({id:id+'/fixplan'});
+      this.t_tableData = res.data;
     },
 
     /*

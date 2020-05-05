@@ -33,15 +33,13 @@
             <el-menu-item index="/plan/oilplan">加油计划</el-menu-item>
             <el-menu-item index="/plan/oiltask">加油任务</el-menu-item>
           </el-submenu>
-          <!-- <el-submenu index="4" popper-class="submenu-userManger">
+          <el-submenu index="4" popper-class="submenu-userManger">
             <template slot="title">
               <i class="iconfont i-user-manger"></i>调令
             </template>
-            <el-menu-item index="/platform/companyList">维修计划</el-menu-item>
-            <el-menu-item index="/platform/departmentList">维修任务</el-menu-item>
-            <el-menu-item index="/platform/role">加油计划</el-menu-item>
-            <el-menu-item index="/platform/staff">加油任务</el-menu-item>
-          </el-submenu> -->
+            <el-menu-item index="/assign/assignplan">调度计划</el-menu-item>
+            <el-menu-item index="/assign/assigntask">调度任务</el-menu-item>
+          </el-submenu>
         </el-menu>
       </el-col>
       <el-col :span="21" style="height: 100%;overflow: auto;">
