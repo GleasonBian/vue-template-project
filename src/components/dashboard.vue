@@ -8,10 +8,8 @@
         <el-card shadow="hover" class="mgb20" style="height:30vh;">
           <div slot="header" class="clearfix">
             <span>语言详情</span>
-          </div>
-          Vue
-          <el-progress :percentage="71.3" color="#42b983"></el-progress
-          >JavaScript
+          </div>Vue
+          <el-progress :percentage="71.3" color="#42b983"></el-progress>JavaScript
           <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS
           <el-progress :percentage="13.7"></el-progress>HTML
           <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
@@ -19,10 +17,8 @@
         <el-card shadow="hover" style="height:30vh;">
           <div slot="header" class="clearfix">
             <span>语言详情</span>
-          </div>
-          Vue
-          <el-progress :percentage="71.3" color="#42b983"></el-progress
-          >JavaScript
+          </div>Vue
+          <el-progress :percentage="71.3" color="#42b983"></el-progress>JavaScript
           <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS
           <el-progress :percentage="13.7"></el-progress>HTML
           <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
@@ -73,8 +69,7 @@
               :zoom="zoom"
               :events="events"
               class="amap-demo"
-            >
-            </el-amap>
+            ></el-amap>
             <div class="toolbar">
               <button @click="add()">add marker</button>
             </div>
@@ -219,51 +214,54 @@ export default {
     }
   },
   mounted() {
-     this.allCollectHandle();
+    // this.allCollectHandle();
     this.initCharts();
   },
   methods: {
     async allCollectHandle() {
       const res = await allCollect();
       console.log(res.data);
-      // let amount = [], oil = [], time = [], xAxis=[];
+      let amount = [],
+        oil = [],
+        time = [],
+        xAxis = [];
 
-      // console.log(res.data);
-      // res.data.forEach(function (element) {
-      //     // 工作时长
-          
-      //     xAxis.push(element.equipname);
-      //     amount.push(element.totalamout)
-      //     oil.push(element.totaloil)
-      //     time.push(element.totaltime);
-      //     // one.yAxis.push(Number(element.totalamount));
-      //     // // 小时油耗
-      //     // three.xAxis.push(element.设备名称);
-      //     // three.yAxis.push(Number(element.小时油耗));
-      //     // // 加油油量
-      //     // six.xAxis.push(element.设备名称);
-      //     // six.yAxis.push(Number(element.加油油量));
-      //     // // 公里油耗
-      //     // four.xAxis.push(element.设备名称);
-      //     // four.yAxis.push(Number(element.公里油耗));
-      //     // // 累计油耗
-      //     // seven.xAxis.push(element.设备名称);
-      //     // seven.yAxis.push(Number(element.累计油耗));
-      //     // // 上月剩油
-      //     // five.xAxis.push(element.设备名称);
-      //     // five.yAxis.push(Number(element.上次剩油));
-      //     // // 本月剩油
-      //     // eight.xAxis.push(element.设备名称);
-      //     // eight.yAxis.push(parseFloat(element.本次剩油));
-      // });
-      // this.total= {
-      //   xAxis:xAxis,
-      //   yAxis: {
-      //     oil,
-      //     amount,
-      //     time
-      //   }
-      // }
+      console.log(res.data);
+      res.data.forEach(function(element) {
+        // 工作时长
+
+        xAxis.push(element.equipname);
+        amount.push(element.totalamout);
+        oil.push(element.totaloil);
+        time.push(element.totaltime);
+        // one.yAxis.push(Number(element.totalamount));
+        // // 小时油耗
+        // three.xAxis.push(element.设备名称);
+        // three.yAxis.push(Number(element.小时油耗));
+        // // 加油油量
+        // six.xAxis.push(element.设备名称);
+        // six.yAxis.push(Number(element.加油油量));
+        // // 公里油耗
+        // four.xAxis.push(element.设备名称);
+        // four.yAxis.push(Number(element.公里油耗));
+        // // 累计油耗
+        // seven.xAxis.push(element.设备名称);
+        // seven.yAxis.push(Number(element.累计油耗));
+        // // 上月剩油
+        // five.xAxis.push(element.设备名称);
+        // five.yAxis.push(Number(element.上次剩油));
+        // // 本月剩油
+        // eight.xAxis.push(element.设备名称);
+        // eight.yAxis.push(parseFloat(element.本次剩油));
+      });
+      this.total = {
+        xAxis: xAxis,
+        yAxis: {
+          oil,
+          amount,
+          time
+        }
+      };
     },
     add() {
       let o = amapManager.getMap();
@@ -273,7 +271,51 @@ export default {
 
       marker.setMap(o);
     },
-    initCharts() {
+    async initCharts() {
+      const res = await allCollect();
+      console.log(res.data);
+      let amount = [],
+        oil = [],
+        time = [],
+        xAxis = [];
+
+      console.log(res.data);
+      res.data.forEach(function(element) {
+        // 工作时长
+
+        xAxis.push(element.equipname);
+        amount.push(element.totalamout);
+        oil.push(element.totaloil);
+        time.push(element.totaltime);
+        // one.yAxis.push(Number(element.totalamount));
+        // // 小时油耗
+        // three.xAxis.push(element.设备名称);
+        // three.yAxis.push(Number(element.小时油耗));
+        // // 加油油量
+        // six.xAxis.push(element.设备名称);
+        // six.yAxis.push(Number(element.加油油量));
+        // // 公里油耗
+        // four.xAxis.push(element.设备名称);
+        // four.yAxis.push(Number(element.公里油耗));
+        // // 累计油耗
+        // seven.xAxis.push(element.设备名称);
+        // seven.yAxis.push(Number(element.累计油耗));
+        // // 上月剩油
+        // five.xAxis.push(element.设备名称);
+        // five.yAxis.push(Number(element.上次剩油));
+        // // 本月剩油
+        // eight.xAxis.push(element.设备名称);
+        // eight.yAxis.push(parseFloat(element.本次剩油));
+      });
+      this.total = {
+        xAxis: xAxis,
+        yAxis: {
+          oil,
+          amount,
+          time
+        }
+      };
+      console.log(this.total)
       let myChart = this.$echarts.init(this.$refs.chart); // 绘制图表
       myChart.setOption({
         title: {

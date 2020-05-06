@@ -372,9 +372,7 @@ export default {
   },
   methods: {
     getData: function (res) {
-        // childValue就是子组件传过来的值
-        this.deptList = res.data;
-        console.log(this.deptList)
+        this.getDeptList();
       },
     //查看公司列表
     async getCompList() {
