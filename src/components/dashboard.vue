@@ -213,7 +213,7 @@ export default {
       return this.name === "admin" ? "超级管理员" : "普通用户";
     }
   },
-  created(){
+  created() {
     this.allCollectHandle();
   },
   mounted() {
@@ -272,7 +272,7 @@ export default {
           time
         }
       };
-      console.log(this.total)
+      console.log(this.total);
       let myChart = this.$echarts.init(this.$refs.chart); // 绘制图表
       myChart.setOption({
         title: {
@@ -343,6 +343,9 @@ export default {
           }
         ]
       });
+      window.onresize = function() {
+        myChart.resize();
+      };
     },
     changeDate() {
       const now = new Date().getTime();
