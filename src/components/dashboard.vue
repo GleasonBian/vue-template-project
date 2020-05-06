@@ -96,7 +96,6 @@ export default {
   name: "dashboard",
   data() {
     return {
-      name: localStorage.getItem("ms_username"),
       todoList: [
         {
           title: "今天要修复100个bug",
@@ -196,6 +195,7 @@ export default {
           }
         ]
       },
+      total: {},
       zoom: 12,
       center: [121.59996, 31.197646],
       amapManager,
@@ -219,13 +219,51 @@ export default {
     }
   },
   mounted() {
+     this.allCollectHandle();
     this.initCharts();
-    this.allCollectHandle();
   },
   methods: {
     async allCollectHandle() {
       const res = await allCollect();
       console.log(res.data);
+      // let amount = [], oil = [], time = [], xAxis=[];
+
+      // console.log(res.data);
+      // res.data.forEach(function (element) {
+      //     // 工作时长
+          
+      //     xAxis.push(element.equipname);
+      //     amount.push(element.totalamout)
+      //     oil.push(element.totaloil)
+      //     time.push(element.totaltime);
+      //     // one.yAxis.push(Number(element.totalamount));
+      //     // // 小时油耗
+      //     // three.xAxis.push(element.设备名称);
+      //     // three.yAxis.push(Number(element.小时油耗));
+      //     // // 加油油量
+      //     // six.xAxis.push(element.设备名称);
+      //     // six.yAxis.push(Number(element.加油油量));
+      //     // // 公里油耗
+      //     // four.xAxis.push(element.设备名称);
+      //     // four.yAxis.push(Number(element.公里油耗));
+      //     // // 累计油耗
+      //     // seven.xAxis.push(element.设备名称);
+      //     // seven.yAxis.push(Number(element.累计油耗));
+      //     // // 上月剩油
+      //     // five.xAxis.push(element.设备名称);
+      //     // five.yAxis.push(Number(element.上次剩油));
+      //     // // 本月剩油
+      //     // eight.xAxis.push(element.设备名称);
+      //     // eight.yAxis.push(parseFloat(element.本次剩油));
+      // });
+      // this.total= {
+      //   xAxis:xAxis,
+      //   yAxis: {
+      //     oil,
+      //     amount,
+      //     time
+      //   }
+      // }
     },
     add() {
       let o = amapManager.getMap();
@@ -254,14 +292,6 @@ export default {
             }
           }
         },
-        toolbox: {
-          feature: {
-            // dataView: {show: true, readOnly: false},
-            // magicType: {show: true, type: ['line', 'bar']},
-            // restore: {show: true},
-            // saveAsImage: {show: true}
-          }
-        },
         legend: {
           data: ["蒸发量", "降水量", "平均温度"],
           top: "10%" //与上方的距离 可百分比% 可像素px
@@ -269,20 +299,7 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: [
-              "1月",
-              "2月",
-              "3月",
-              "4月",
-              "5月",
-              "6月",
-              "7月",
-              "8月",
-              "9月",
-              "10月",
-              "11月",
-              "12月"
-            ],
+            data: this.total.xAxis,
             axisPointer: {
               type: "shadow"
             }
@@ -312,59 +329,20 @@ export default {
         ],
         series: [
           {
-            name: "蒸发量",
+            name: "总油量",
             type: "bar",
-            data: [
-              2.0,
-              4.9,
-              7.0,
-              23.2,
-              25.6,
-              76.7,
-              135.6,
-              162.2,
-              32.6,
-              20.0,
-              6.4,
-              3.3
-            ]
+            data: this.total.yAxis.oil
           },
           {
-            name: "降水量",
+            name: "总耗时",
             type: "bar",
-            data: [
-              2.6,
-              5.9,
-              9.0,
-              26.4,
-              28.7,
-              70.7,
-              175.6,
-              182.2,
-              48.7,
-              18.8,
-              6.0,
-              2.3
-            ]
+            data: this.total.yAxis.time
           },
           {
-            name: "平均温度",
+            name: "总量",
             type: "line",
             yAxisIndex: 1,
-            data: [
-              2.0,
-              2.2,
-              3.3,
-              4.5,
-              6.3,
-              10.2,
-              20.3,
-              23.4,
-              23.0,
-              16.5,
-              12.0,
-              6.2
-            ]
+            data: this.total.yAxis.amount
           }
         ]
       });
