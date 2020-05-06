@@ -82,7 +82,7 @@ export default {
         username: this.userName,
         password: this.password
       };
-      this.$router.push("/platform");
+      this.$router.push("/dashboard");
       const res = await login(data);
       if (res.result) {
         // sessionStorage.setItem('companyId',  escape(res.data.user.companyId));
