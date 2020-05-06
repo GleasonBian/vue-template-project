@@ -8,6 +8,9 @@ import './style/common.less'
 import gtTable from '@/common/gtTable'
 import gtSearch from "@/common/gtSearch";
 import VueAMap from 'vue-amap';
+import echarts from 'echarts'
+
+Vue.prototype.$echarts = echarts;
 Vue.use(ElementUI);
 import qs from 'qs'
 Vue.use(qs);
