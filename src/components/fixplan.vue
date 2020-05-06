@@ -66,7 +66,7 @@
       :title="formCurrentStatus+'计划'"
       :visible.sync="dialogFormVisible"
       width="25%"
-      @close="DialogClose(form)"
+      @close="DialogClose('form')"
       :close-on-click-modal="false"
       top="0vh"
       center
