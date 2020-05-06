@@ -15,13 +15,7 @@
           <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
         </el-card>
         <el-card shadow="hover" style="height:30vh;">
-          <div slot="header" class="clearfix">
-            <span>语言详情</span>
-          </div>Vue
-          <el-progress :percentage="71.3" color="#42b983"></el-progress>JavaScript
-          <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS
-          <el-progress :percentage="13.7"></el-progress>HTML
-          <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
+          <div style="width:100%; height:28vh" ref="single"></div>
         </el-card>
       </el-col>
       <el-col :span="16">
@@ -191,6 +185,7 @@ export default {
         ]
       },
       total: {},
+      single: {},
       zoom: 12,
       center: [121.59996, 31.197646],
       amapManager,
@@ -199,7 +194,6 @@ export default {
           let marker = new AMap.Marker({
             position: [121.59996, 31.197646]
           });
-
           marker.setMap(o);
         }
       }
@@ -214,34 +208,12 @@ export default {
     }
   },
   created() {
-    this.allCollectHandle();
   },
   mounted() {
     this.initCharts();
+    this.singleHandle();
   },
   methods: {
-    async allCollectHandle() {
-      const res = await allCollect();
-      console.log(res.data);
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-    },
     add() {
       let o = amapManager.getMap();
       let marker = new AMap.Marker({
@@ -251,19 +223,19 @@ export default {
     },
     async initCharts() {
       const res = await allCollect();
-      console.log(res.data);
+
       let amount = [],
         oil = [],
         time = [],
         xAxis = [];
 
-      console.log(res.data);
       res.data.forEach(function(element) {
         xAxis.push(element.equipname);
         amount.push(element.totalamout);
         oil.push(element.totaloil);
         time.push(element.totaltime);
       });
+
       this.total = {
         xAxis: xAxis,
         yAxis: {
@@ -272,8 +244,8 @@ export default {
           time
         }
       };
-      console.log(this.total);
-      let myChart = this.$echarts.init(this.$refs.chart); // 绘制图表
+      
+      let myChart = this.$echarts.init(this.$refs.chart); 
       myChart.setOption({
         title: {
           text: "油耗产出总览",
@@ -347,28 +319,107 @@ export default {
         myChart.resize();
       };
     },
-    changeDate() {
-      const now = new Date().getTime();
-      this.data.forEach((item, index) => {
-        const date = new Date(now - (6 - index) * 86400000);
-        item.name = `${date.getFullYear()}/${date.getMonth() +
-          1}/${date.getDate()}`;
+    async singleHandle() {
+      const res = await singleCollect();
+
+      let amount = [],
+        oil = [],
+        time = [],
+        xAxis = [];
+
+      res.data.forEach(function(element) {
+        xAxis.push(element.equipname);
+        amount.push(element.totalamout);
+        oil.push(element.totaloil);
+        time.push(element.totaltime);
       });
-    }
-    // handleListener() {
-    //     bus.$on('collapse', this.handleBus);
-    //     // 调用renderChart方法对图表进行重新渲染
-    //     window.addEventListener('resize', this.renderChart);
-    // },
-    // handleBus(msg) {
-    //     setTimeout(() => {
-    //         this.renderChart();
-    //     }, 200);
-    // },
-    // renderChart() {
-    //     this.$refs.bar.renderChart();
-    //     this.$refs.line.renderChart();
-    // }
+
+      this.total = {
+        xAxis: xAxis,
+        yAxis: {
+          oil,
+          amount,
+          time
+        }
+      };
+      
+      let myChart = this.$echarts.init(this.$refs.single); 
+      myChart.setOption({
+        title: {
+          text: "油耗产出总览",
+          textStyle: {
+            // color: "#",
+          },
+          left: "center"
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "cross",
+            crossStyle: {
+              color: "#999"
+            }
+          }
+        },
+        legend: {
+          data: ["总油量", "总耗时", "总产出"],
+          top: "10%" //与上方的距离 可百分比% 可像素px
+        },
+        xAxis: [
+          {
+            type: "category",
+            data: this.total.xAxis,
+            axisPointer: {
+              type: "shadow"
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: "value",
+            name: "升",
+            min: 0,
+            interval: 50,
+            axisLabel: {
+              formatter: "{value} L"
+            }
+          },
+          {
+            type: "value",
+            name: "小时",
+            min: 0,
+            interval: 5,
+            axisLabel: {
+              formatter: "{value} H"
+            }
+          }
+        ],
+        series: [
+          {
+            name: "总油量",
+            type: "bar",
+            data: this.total.yAxis.oil
+          },
+          {
+            name: "总耗时",
+            type: "bar",
+            data: this.total.yAxis.time
+          },
+          {
+            name: "总产出",
+            type: "line",
+            yAxisIndex: 1,
+            data: this.total.yAxis.amount
+          }
+        ]
+      });
+      window.onresize = function() {
+        myChart.resize();
+      };
+    },
+  },
+  updated(){
+    
   }
 };
 </script>
