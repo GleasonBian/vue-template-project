@@ -72,10 +72,10 @@
         <el-form-item label="公司邮箱" prop="email">
           <el-input  v-model="form.email"></el-input>
         </el-form-item>
-        <el-form-item label="地理位置" prop="location">
+        <el-form-item label="公司地址" prop="location">
           <el-input v-model="form.location"></el-input>
         </el-form-item>
-        <el-form-item label="公司类别" prop="corpclass">
+        <el-form-item label="所属行业" prop="corpclass">
           <el-input v-model="form.corpclass"></el-input>
         </el-form-item>
         <el-form-item label="公司类型" prop="corptype">
@@ -87,9 +87,9 @@
         <el-form-item label="机构代码" prop="certguid">
           <el-input v-model="form.certguid"></el-input>
         </el-form-item>
-        <el-form-item label="上级标识" prop="superior">
+        <!-- <el-form-item label="上级标识" prop="superior">
           <el-input v-model="form.superior"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="公司税号" prop="taxcode">
           <el-input v-model="form.taxcode"></el-input>
         </el-form-item>
@@ -220,7 +220,7 @@ export default {
         },
         {
           id: "corpclass",
-          label: "公司类别"
+          label: "所属行业"
         },
         {
           id: "corptype",
@@ -256,7 +256,7 @@ export default {
         certguid: "", //公司组织结构代码
         certtype: "", //证件类型
         code: "", //公司编码
-        corpclass: "", //公司类别
+        corpclass: "", //所属行业
         corprank: "", //公司级别
         corptype: "", //公司类型
         description: "", //备注
@@ -344,7 +344,7 @@ export default {
         corpclass: [
           {
             required: true,
-            message: "必填 公司类别",
+            message: "必填 所属行业",
             trigger: ["blur", "change"]
           }
         ],
@@ -371,7 +371,7 @@ export default {
         ],
         superior: [
           {
-            required: true,
+            required: false,
             message: "必填  上级标识",
             trigger: ["blur", "change"]
           }

@@ -8,7 +8,7 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
-      <el-button type="primary" size="medium"  @click="dialogFormVisible = true; ResetForm('form'); form={};formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
+      <el-button type="primary" size="medium"  @click="dialogFormVisible = true; formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -149,7 +149,7 @@
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="开始时间" prop="recvdate">
+        <el-form-item label="接收时间" prop="recvdate">
           <el-date-picker v-model="form.recvdate"
             type="datetime"
             placeholder="选择日期"
@@ -159,7 +159,7 @@
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="结束时间" prop="schedate">
+        <el-form-item label="下发时间" prop="schedate">
           <el-date-picker v-model="form.schedate"
             type="datetime"
             placeholder="选择日期"

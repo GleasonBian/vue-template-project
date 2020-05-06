@@ -8,7 +8,7 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
-      <el-button type="primary" size="medium"  @click="dialogFormVisible = true;ResetForm('form'); form={};formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
+      <el-button type="primary" size="medium"  @click="dialogFormVisible = true; formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -153,7 +153,7 @@
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="开始时间" prop="recvdate">
+        <el-form-item label="接收时间" prop="recvdate">
           <el-date-picker
             v-model="form.recvdate"
             type="datetime"
@@ -164,7 +164,7 @@
           ></el-date-picker>
         </el-form-item>
 
-        <el-form-item label="结束时间" prop="schedate">
+        <el-form-item label="调度时间" prop="schedate">
           <el-date-picker
             v-model="form.schedate"
             type="datetime"
@@ -407,18 +407,6 @@ export default {
       Regular: Regular, // 表单校验正则
       // 表单校验规则
       rules: {
-        certguid: [
-          {
-            required: true,
-            message: "证件号码 必填"
-          }
-        ],
-        certtype: [
-          {
-            required: true,
-            message: "证件类型 必填"
-          }
-        ],
         clstype: [
           {
             required: true,
@@ -426,70 +414,104 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        class: [
-          {
-            required: false,
-            message: "必填 分类类别",
-            trigger: ["blur", "change"]
-          }
-        ],
-        clsrank: [
-          {
-            required: true,
-            message: "必填 分类等级",
-            trigger: ["blur", "change"]
-          }
-        ],
         corpguid: [
           {
             required: true,
-            message: "必填 公司标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        deptguid: [
-          {
-            required: true,
-            message: "必填 部门标识",
+            message: "必填 分类类型",
             trigger: ["blur", "change"]
           }
         ],
         code: [
           {
             required: true,
-            message: "设备编码 必填",
+            message: "必填 分类类型",
+            trigger: ["blur", "change"]
+          }
+        ],
+        planguid: [
+          {
+            required: true,
+            message: "必填 分类类型",
             trigger: ["blur", "change"]
           }
         ],
         name: [
           {
             required: true,
-            message: "设备名称 必填",
+            message: "必填 分类类型",
             trigger: ["blur", "change"]
           }
         ],
-        proddate: [
+        equipguid: [
           {
             required: true,
-            message: "生产日期 必填",
+            message: "必填 分类类型",
             trigger: ["blur", "change"]
           }
         ],
-        producer: [
+        content: [
           {
             required: true,
-            message: "生产厂家 必填",
+            message: "必填 分类类型",
             trigger: ["blur", "change"]
           }
         ],
-        descrifptio: [
+        deptsched: [
           {
-            required: false,
-            message: "描述信息 必填",
+            required: true,
+            message: "必填 分类类型",
             trigger: ["blur", "change"]
           }
         ],
-
+        deptrecv: [
+          {
+            required: true,
+            message: "必填 分类类型",
+            trigger: ["blur", "change"]
+          }
+        ],
+        planstart: [
+          {
+            required: true,
+            message: "必填 分类类型",
+            trigger: ["blur", "change"]
+          }
+        ],
+        planstop: [
+          {
+            required: true,
+            message: "必填 分类类型",
+            trigger: ["blur", "change"]
+          }
+        ],
+        factstart: [
+          {
+            required: true,
+            message: "必填 分类类型",
+            trigger: ["blur", "change"]
+          }
+        ],
+        factstop: [
+          {
+            required: true,
+            message: "必填 分类类型",
+            trigger: ["blur", "change"]
+          }
+        ],
+        recvdate: [
+          {
+            required: true,
+            message: "必填 分类类型",
+            trigger: ["blur", "change"]
+          }
+        ],
+        schedate: [
+          {
+            required: true,
+            message: "必填 分类类型",
+            trigger: ["blur", "change"]
+          }
+        ],
       },
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
