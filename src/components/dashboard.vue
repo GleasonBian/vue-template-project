@@ -213,8 +213,10 @@ export default {
       return this.name === "admin" ? "超级管理员" : "普通用户";
     }
   },
+  created(){
+    this.allCollectHandle();
+  },
   mounted() {
-    // this.allCollectHandle();
     this.initCharts();
   },
   methods: {
@@ -225,34 +227,11 @@ export default {
         oil = [],
         time = [],
         xAxis = [];
-
-      console.log(res.data);
       res.data.forEach(function(element) {
-        // 工作时长
-
         xAxis.push(element.equipname);
         amount.push(element.totalamout);
         oil.push(element.totaloil);
         time.push(element.totaltime);
-        // one.yAxis.push(Number(element.totalamount));
-        // // 小时油耗
-        // three.xAxis.push(element.设备名称);
-        // three.yAxis.push(Number(element.小时油耗));
-        // // 加油油量
-        // six.xAxis.push(element.设备名称);
-        // six.yAxis.push(Number(element.加油油量));
-        // // 公里油耗
-        // four.xAxis.push(element.设备名称);
-        // four.yAxis.push(Number(element.公里油耗));
-        // // 累计油耗
-        // seven.xAxis.push(element.设备名称);
-        // seven.yAxis.push(Number(element.累计油耗));
-        // // 上月剩油
-        // five.xAxis.push(element.设备名称);
-        // five.yAxis.push(Number(element.上次剩油));
-        // // 本月剩油
-        // eight.xAxis.push(element.设备名称);
-        // eight.yAxis.push(parseFloat(element.本次剩油));
       });
       this.total = {
         xAxis: xAxis,
@@ -268,7 +247,6 @@ export default {
       let marker = new AMap.Marker({
         position: [121.59996, 31.177646]
       });
-
       marker.setMap(o);
     },
     async initCharts() {
@@ -281,31 +259,10 @@ export default {
 
       console.log(res.data);
       res.data.forEach(function(element) {
-        // 工作时长
-
         xAxis.push(element.equipname);
         amount.push(element.totalamout);
         oil.push(element.totaloil);
         time.push(element.totaltime);
-        // one.yAxis.push(Number(element.totalamount));
-        // // 小时油耗
-        // three.xAxis.push(element.设备名称);
-        // three.yAxis.push(Number(element.小时油耗));
-        // // 加油油量
-        // six.xAxis.push(element.设备名称);
-        // six.yAxis.push(Number(element.加油油量));
-        // // 公里油耗
-        // four.xAxis.push(element.设备名称);
-        // four.yAxis.push(Number(element.公里油耗));
-        // // 累计油耗
-        // seven.xAxis.push(element.设备名称);
-        // seven.yAxis.push(Number(element.累计油耗));
-        // // 上月剩油
-        // five.xAxis.push(element.设备名称);
-        // five.yAxis.push(Number(element.上次剩油));
-        // // 本月剩油
-        // eight.xAxis.push(element.设备名称);
-        // eight.yAxis.push(parseFloat(element.本次剩油));
       });
       this.total = {
         xAxis: xAxis,
@@ -319,7 +276,7 @@ export default {
       let myChart = this.$echarts.init(this.$refs.chart); // 绘制图表
       myChart.setOption({
         title: {
-          text: "柴油油耗",
+          text: "油耗产出总览",
           textStyle: {
             // color: "#",
           },
@@ -335,7 +292,7 @@ export default {
           }
         },
         legend: {
-          data: ["蒸发量", "降水量", "平均温度"],
+          data: ["总油量", "总耗时", "总产出"],
           top: "10%" //与上方的距离 可百分比% 可像素px
         },
         xAxis: [
@@ -350,22 +307,20 @@ export default {
         yAxis: [
           {
             type: "value",
-            name: "水量",
+            name: "升",
             min: 0,
-            max: 250,
             interval: 50,
             axisLabel: {
-              formatter: "{value} ml"
+              formatter: "{value} L"
             }
           },
           {
             type: "value",
-            name: "温度",
+            name: "小时",
             min: 0,
-            max: 25,
             interval: 5,
             axisLabel: {
-              formatter: "{value} °C"
+              formatter: "{value} H"
             }
           }
         ],
@@ -381,7 +336,7 @@ export default {
             data: this.total.yAxis.time
           },
           {
-            name: "总量",
+            name: "总产出",
             type: "line",
             yAxisIndex: 1,
             data: this.total.yAxis.amount
