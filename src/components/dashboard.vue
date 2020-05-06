@@ -95,14 +95,17 @@
             </el-col>
         </el-row>
         <el-row :gutter="20">
-            <el-col :span="12">
+            <el-col :span="24">
                 <el-card shadow="hover">
-                    <!-- <schart ref="bar" class="schart" canvasId="bar" :options="options"></schart> -->
-                </el-card>
-            </el-col>
-            <el-col :span="12">
-                <el-card shadow="hover">
-                    <!-- <schart ref="line" class="schart" canvasId="line" :options="options2"></schart> -->
+                     <div class="amap-page-container">
+                        <el-amap vid="amapDemo"  :center="center" :amap-manager="amapManager" :zoom="zoom" :events="events" class="amap-demo">
+                        </el-amap>
+
+                        <div class="toolbar">
+                            <button @click="add()">add marker</button>
+                        </div>
+                    </div>
+                
                 </el-card>
             </el-col>
         </el-row>
@@ -110,6 +113,8 @@
 </template>
 
 <script>
+import VueAMap from 'vue-amap';
+let amapManager = new VueAMap.AMapManager();
 // import Schart from 'vue-schart';
 // import bus from '../common/bus';
 export default {
@@ -215,6 +220,18 @@ export default {
                         data: [74, 118, 200, 235, 90]
                     }
                 ]
+            },
+            zoom: 12,
+            center: [121.59996, 31.197646],
+            amapManager,
+            events: {
+                init(o) {
+                let marker = new AMap.Marker({
+                    position: [121.59996, 31.197646]
+                });
+
+                marker.setMap(o);
+                }
             }
         };
     },
@@ -238,6 +255,14 @@ export default {
     //     bus.$off('collapse', this.handleBus);
     // },
     methods: {
+        add() {
+          let o = amapManager.getMap();
+          let marker = new AMap.Marker({
+            position: [121.59996, 31.177646]
+          });
+
+          marker.setMap(o);
+        },
         changeDate() {
             const now = new Date().getTime();
             this.data.forEach((item, index) => {
@@ -373,4 +398,7 @@ export default {
     width: 100%;
     height: 300px;
 }
+.amap-demo {
+      height: 300px;
+    }
 </style>

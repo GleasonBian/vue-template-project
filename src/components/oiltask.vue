@@ -8,7 +8,11 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
+<<<<<<< Updated upstream
       <el-button type="primary" size="medium"  @click="dialogFormVisible = true;formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
+=======
+      <el-button type="primary" size="medium"  @click="dialogFormVisible = true; formCurrentStatus = '创建';ResetForm('form'); " style="margin-left:1%">新增</el-button>
+>>>>>>> Stashed changes
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -169,6 +173,22 @@
           <el-input v-model="form.location"></el-input>
         </el-form-item>
 
+        <el-form-item label="计划加油" prop="planoil">
+          <el-input v-model.number="form.planoil"></el-input>
+        </el-form-item>
+        
+        <el-form-item label="实际加油" prop="factoil">
+          <el-input v-model.number="form.factoil"></el-input>
+        </el-form-item>
+
+        <el-form-item label="加前油量" prop="beforeoil">
+          <el-input v-model.number="form.beforeoil"></el-input>
+        </el-form-item>
+
+        <el-form-item label="加后油量" prop="afteroil">
+          <el-input v-model.number="form.afteroil"></el-input>
+        </el-form-item>
+
       </el-form>
       <span slot="footer" class="dialog-footer" v-if="form.statuscode!=2">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
@@ -233,20 +253,20 @@ export default {
           label: "任务名称"
         },
         {
-          id: "planstart",
-          label: "计划开始"
+          id: "planoil",
+          label: "计划加油"
         },
         {
-          id: "planstop",
-          label: "计划结束"
+          id: "factoil",
+          label: "实际加油"
         },
         {
-          id: "factstart",
-          label: "实际开始"
+          id: "beforeoil",
+          label: "加前油量"
         },
         {
-          id: "factstop",
-          label: "实际结束"
+          id: "afteroil",
+          label: "加后油量"
         },
         {
           id: "staffid",
@@ -278,11 +298,11 @@ export default {
         "factstart": "",            // 开始时间
         "factstop": "",             // 结束时间
         "location": "",             // 地理位置
-        "factoil": 0,
-        "planoil": 0,
-        "statuscode": 0,
-        "afteroil": 0,
-        "beforeoil": 0,
+        "factoil": 0,               // 实际加油
+        "planoil": 0,               // 计划加油
+        "statuscode": 0,            // 
+        "afteroil": 0,              // 加后油量
+        "beforeoil": 0,             // 加前油量
       },
       tableData: [], // 表格数据
       total: 0,
@@ -456,11 +476,34 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        "factoil": 0,
-        "planoil": 0,
-        "statuscode": 0,
-        "afteroil": 0,
-        "beforeoil": 0,
+        "factoil": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        "planoil": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        "afteroil": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        "beforeoil": [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
       },
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
