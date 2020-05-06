@@ -237,16 +237,16 @@ export default {
           label: "计划开始"
         },
         {
-          id: "planstop",
-          label: "计划结束"
+          id: "plandur",
+          label: "计划用时"
         },
         {
           id: "factstart",
           label: "实际开始"
         },
         {
-          id: "factstop",
-          label: "实际结束"
+          id: "factdur",
+          label: "实际用时"
         },
         {
           id: "deptschedname",
@@ -278,8 +278,8 @@ export default {
         recvdate: "",             // 开始时间
         schedate: "",             // 结束时间
         statuscode: 0,            // 不在页面展示 给个零
-        factdur: 0,               // 不在页面展示 给个零
-        plandur: 0,               // 不在页面展示 给个零
+        plandur: 0,               // 计划用时
+        factdur: 0,               // 实际用时
       },
       tableData: [], // 表格数据
       total: 0,
