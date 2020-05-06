@@ -7,11 +7,11 @@
         </el-card>
         <el-card shadow="hover" class="mgb20" style="height:30vh;">
           <div slot="header" class="clearfix">
-            <span>语言详情</span>
-          </div>Vue
-          <el-progress :percentage="71.3" color="#42b983"></el-progress>JavaScript
-          <el-progress :percentage="24.1" color="#f1e05a"></el-progress>CSS
-          <el-progress :percentage="13.7"></el-progress>HTML
+            <span>成本统计</span>
+          </div>油耗
+          <el-progress :percentage="71.3" color="#42b983"></el-progress>设备
+          <el-progress :percentage="24.1" color="#f1e05a"></el-progress>人工
+          <el-progress :percentage="13.7"></el-progress>维护
           <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
         </el-card>
         <el-card shadow="hover" style="height:30vh;">
@@ -25,8 +25,8 @@
               <div class="grid-content grid-con-1">
                 <i class="el-icon-lx-people grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">1234</div>
-                  <div>用户访问量</div>
+                  <div class="grid-num">4辆</div>
+                  <div>越野车</div>
                 </div>
               </div>
             </el-card>
@@ -36,8 +36,8 @@
               <div class="grid-content grid-con-2">
                 <i class="el-icon-lx-notice grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">321</div>
-                  <div>系统消息</div>
+                  <div class="grid-num">7台</div>
+                  <div>火车头</div>
                 </div>
               </div>
             </el-card>
@@ -47,8 +47,8 @@
               <div class="grid-content grid-con-3">
                 <i class="el-icon-lx-goods grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">5000</div>
-                  <div>数量</div>
+                  <div class="grid-num">312人</div>
+                  <div>员工</div>
                 </div>
               </div>
             </el-card>
@@ -186,14 +186,25 @@ export default {
       },
       total: {},
       single: {},
-      zoom: 12,
-      center: [121.59996, 31.197646],
+      zoom: 10,
+      center: [112.861406,36.865578],
       amapManager,
       events: {
         init(o) {
-          let marker = new AMap.Marker({
-            position: [121.59996, 31.197646]
-          });
+          let marker = new AMap.Marker([
+            {
+            position:  [112.835406,36.868778],
+            content: '阿斯塔纳',
+          },
+            {
+            position:  [112.835406,36.869778],
+            content: '阿斯塔纳',
+          },
+            {
+            position:  [112.835406,36.863778],
+            content: '阿斯塔纳',
+          },
+          ]);
           marker.setMap(o);
         }
       }
@@ -344,75 +355,34 @@ export default {
       };
       
       let myChart = this.$echarts.init(this.$refs.single); 
-      myChart.setOption({
-        title: {
-          text: "油耗产出总览",
-          textStyle: {
-            // color: "#",
+      
+      let option = {
+          tooltip: {
+              formatter: '{c}{b}'
           },
-          left: "center"
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross",
-            crossStyle: {
-              color: "#999"
-            }
-          }
-        },
-        legend: {
-          data: ["总油量", "总耗时", "总产出"],
-          top: "10%" //与上方的距离 可百分比% 可像素px
-        },
-        xAxis: [
-          {
-            type: "category",
-            data: this.total.xAxis,
-            axisPointer: {
-              type: "shadow"
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            name: "升",
-            min: 0,
-            interval: 50,
-            axisLabel: {
-              formatter: "{value} L"
-            }
+          title: {
+            text: "车速",
+            left: "left"
           },
-          {
-            type: "value",
-            name: "小时",
-            min: 0,
-            interval: 5,
-            axisLabel: {
-              formatter: "{value} H"
-            }
-          }
-        ],
-        series: [
-          {
-            name: "总油量",
-            type: "bar",
-            data: this.total.yAxis.oil
-          },
-          {
-            name: "总耗时",
-            type: "bar",
-            data: this.total.yAxis.time
-          },
-          {
-            name: "总产出",
-            type: "line",
-            yAxisIndex: 1,
-            data: this.total.yAxis.amount
-          }
-        ]
-      });
+          series: [
+              {
+                  name: '车速',
+                  type: 'gauge',
+                  detail: {
+                    formatter: '{value}',
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                      fontWeight: 'bolder',
+                      fontSize:12,
+                    }
+                  },
+                  data: [{value: 50, name: 'km/h'}]
+              }
+          ]
+      };
+      setInterval(function () {
+          option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+          myChart.setOption(option, true);
+      },2000);
       window.onresize = function() {
         myChart.resize();
       };
