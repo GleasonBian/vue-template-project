@@ -40,6 +40,9 @@
             <el-menu-item index="/assign/assignplan">调度计划</el-menu-item>
             <el-menu-item index="/assign/assigntask">调度任务</el-menu-item>
           </el-submenu>
+          <el-menu-item index="5">
+            <i class="el-icon-menu"></i> <a href="http://114.215.194.254:89/Interface/checkDbUser" target="_bank" style="color:#fff">监控平台</a>
+          </el-menu-item>
           <!-- <el-submenu index="5" popper-class="submenu-userManger">
             <template slot="title">
               <i class="iconfont i-user-manger"></i>交接班
