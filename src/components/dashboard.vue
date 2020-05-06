@@ -62,8 +62,11 @@
               :amap-manager="amapManager"
               :zoom="zoom"
               :events="events"
+              :resizeEnable=true
               class="amap-demo"
-            ></el-amap>
+            >
+                <el-amap-marker v-for="marker in markers" :key="marker.mapName" :position="marker.position" :visible="true" :draggable="false"></el-amap-marker>
+            </el-amap>
             <div class="toolbar">
               <button @click="add()">add marker</button>
             </div>
@@ -85,109 +88,32 @@ export default {
   name: "dashboard",
   data() {
     return {
-      todoList: [
-        {
-          title: "今天要修复100个bug",
-          status: false
-        },
-        {
-          title: "今天要修复100个bug",
-          status: false
-        },
-        {
-          title: "今天要写100行代码加几个bug吧",
-          status: false
-        },
-        {
-          title: "今天要修复100个bug",
-          status: false
-        },
-        {
-          title: "今天要修复100个bug",
-          status: true
-        },
-        {
-          title: "今天要写100行代码加几个bug吧",
-          status: true
-        }
-      ],
-      data: [
-        {
-          name: "2018/09/04",
-          value: 1083
-        },
-        {
-          name: "2018/09/05",
-          value: 941
-        },
-        {
-          name: "2018/09/06",
-          value: 1139
-        },
-        {
-          name: "2018/09/07",
-          value: 816
-        },
-        {
-          name: "2018/09/08",
-          value: 327
-        },
-        {
-          name: "2018/09/09",
-          value: 228
-        },
-        {
-          name: "2018/09/10",
-          value: 1065
-        }
-      ],
-      options: {
-        type: "bar",
-        title: {
-          text: "最近一周各品类销售图"
-        },
-        xRorate: 25,
-        labels: ["周一", "周二", "周三", "周四", "周五"],
-        datasets: [
-          {
-            label: "家电",
-            data: [234, 278, 270, 190, 230]
-          },
-          {
-            label: "百货",
-            data: [164, 178, 190, 135, 160]
-          },
-          {
-            label: "食品",
-            data: [144, 198, 150, 235, 120]
-          }
-        ]
-      },
-      options2: {
-        type: "line",
-        title: {
-          text: "最近几个月各品类销售趋势图"
-        },
-        labels: ["6月", "7月", "8月", "9月", "10月"],
-        datasets: [
-          {
-            label: "家电",
-            data: [234, 278, 270, 190, 230]
-          },
-          {
-            label: "百货",
-            data: [164, 178, 150, 135, 160]
-          },
-          {
-            label: "食品",
-            data: [74, 118, 200, 235, 90]
-          }
-        ]
-      },
+    markers: [
+            {
+              position: [112.868357,36.860426]
+            },
+            {
+              position: [112.870453,36.862496]
+            },
+            {
+              position: [112.840453,36.866496]
+            },
+            {
+              position: [112.840423,36.832496]
+            },
+            {
+              position: [112.8500257,36.860406]
+            },
+            {
+              position: [112.860237,36.840376]
+            }
+          ],
+     
+      
       total: {},
       single: {},
-      zoom: 10,
-      center: [112.861406,36.865578],
+      zoom: 13,
+      center: [112.860257,36.860496],
       amapManager,
       events: {
         init(o) {
@@ -216,7 +142,7 @@ export default {
   computed: {
     role() {
       return this.name === "admin" ? "超级管理员" : "普通用户";
-    }
+    },
   },
   created() {
   },
