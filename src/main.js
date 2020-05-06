@@ -7,9 +7,11 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './style/common.less'
 import gtTable from '@/common/gtTable'
 import gtSearch from "@/common/gtSearch";
+import VueAMap from 'vue-amap';
 Vue.use(ElementUI);
 import qs from 'qs'
 Vue.use(qs);
+Vue.use(VueAMap);
 
 Vue.config.productionTip = false;
 Vue.component('gt-table', gtTable)
