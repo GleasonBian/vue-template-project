@@ -405,11 +405,6 @@ export default {
         // userId: this.currentUserStatusId,
         // status: this.accountStatus
       };
-      const res = await getDeptList(data);
-      if (res.data) {
-        // this.$message.success(res.message);
-        this.compList=res.data
-      } else this.$message.warning(res.message);
       let detail = await getDeptDetail({id,data});
       if (detail.data){
         this.deptDetail=detail.data[0]

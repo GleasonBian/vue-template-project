@@ -304,11 +304,11 @@ export default {
           label: "实际结束"
         },
         {
-          id: "deptsched",
+          id: "deptschedname",
           label: "调度部门"
         },
         {
-          id: "deptrecv",
+          id: "deptrecvname",
           label: "接收部门"
         },
         {

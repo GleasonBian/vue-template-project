@@ -203,11 +203,11 @@ export default {
           label: "分类等级"
         },
         {
-          id: "corpguid",
+          id: "corpname",
           label: "所属公司"
         },
         {
-          id: "deptguid",
+          id: "deptname",
           label: "所属部门"
         },
       ],
@@ -233,11 +233,11 @@ export default {
           label: "实际结束"
         },
         {
-          id: "deptsched",
+          id: "deptschedname",
           label: "调度部门"
         },
         {
-          id: "deptrecv",
+          id: "deptrecvname",
           label: "接收部门"
         },
         {

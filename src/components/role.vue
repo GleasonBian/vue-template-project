@@ -244,11 +244,11 @@ export default {
         },
         
         {
-          id: "corpguid",
+          id: "corpname",
           label: "公司"
         },
         {
-          id: "deptguid",
+          id: "deptname",
           label: "部门"
         },
         
@@ -359,7 +359,7 @@ export default {
       };
       this.getCompList();
       this.getDeptList();
-      let detail = await getRoleDetail({id,data});
+      let detail = await getRoleDetail({id});
       if (detail.data){
         this.roleDetail=detail.data[0]
       }

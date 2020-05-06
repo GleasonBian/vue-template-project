@@ -203,11 +203,11 @@ export default {
           label: "分类等级"
         },
         {
-          id: "corpguid",
+          id: "corpname",
           label: "所属公司"
         },
         {
-          id: "deptguid",
+          id: "deptname",
           label: "所属部门"
         },
       ],
@@ -217,32 +217,32 @@ export default {
           label: "任务名称"
         },
         {
-          id: "planstart",
-          label: "计划开始"
+          id: "planoil",
+          label: "计划加油"
         },
         {
-          id: "planstop",
-          label: "计划结束"
+          id: "factoil",
+          label: "实际加油"
         },
         {
-          id: "factstart",
-          label: "实际开始"
+          id: "beforeoil",
+          label: "加前油量"
         },
         {
-          id: "factstop",
-          label: "实际结束"
+          id: "afteroil",
+          label: "加后油量"
         },
         {
-          id: "deptsched",
-          label: "调度部门"
+          id: "staffname",
+          label: "加油人员"
         },
         {
-          id: "deptrecv",
-          label: "接收部门"
+          id: "deptname",
+          label: "加油部门"
         },
         {
-          id: "content",
-          label: "维修内容"
+          id: "location",
+          label: "地理位置"
         },
       ],
       // 创建 更新 删除 表单

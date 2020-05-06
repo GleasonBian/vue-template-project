@@ -325,11 +325,11 @@ export default {
           label: "性别"
         },
         {
-          id: "corpguid",
+          id: "corpname",
           label: "公司"
         },
         {
-          id: "deptguid",
+          id: "deptname",
           label: "部门"
         },
         {

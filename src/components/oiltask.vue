@@ -265,11 +265,11 @@ export default {
           label: "加后油量"
         },
         {
-          id: "staffid",
+          id: "staffname",
           label: "加油人员"
         },
         {
-          id: "deptguid",
+          id: "deptname",
           label: "加油部门"
         },
         {
