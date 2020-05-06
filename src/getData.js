@@ -272,3 +272,13 @@ export const assigndeDelete = data => fetch("assigndetail", data, "delete");
  * 调度任务详情
  */
 export const assigndeDetail = data => fetch("assigndetail", data, "get");
+
+/**
+ * 调度报表 - 油总核算
+ */
+export const allCollect = data => fetch("statis", data, "get");
+
+/**
+ * 调度报表 - 油单个核算
+ */
+export const singleCollect = data => fetch("statis", data, "get");
