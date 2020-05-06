@@ -11,7 +11,7 @@
       <el-button
         type="primary"
         size="medium"
-        @click="dialogFormVisible = true;formCurrentStatus = '创建'"
+        @click="dialogFormVisible=true;formCurrentStatus='创建'"
         style="margin-left:1%"
       >新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
@@ -66,7 +66,7 @@
       :title="formCurrentStatus+'计划'"
       :visible.sync="dialogFormVisible"
       width="25%"
-      @close="DialogClose(form8)"
+      @close="DialogClose(form)"
       :close-on-click-modal="false"
       top="0vh"
       center
@@ -75,7 +75,7 @@
         :model="form"
         status-icon
         :rules="rules"
-        ref="form8"
+        ref="form"
         label-width="80px"
         style="width:100%"
       >
@@ -138,8 +138,8 @@
 
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm(form8)">提交</el-button>
-        <el-button @click="ResetForm(form8)">重置</el-button>
+        <el-button type="primary" @click="submitForm('form')">提交</el-button>
+        <el-button @click="ResetForm(form)">重置</el-button>
       </span>
     </el-dialog>
   </div>
@@ -478,6 +478,7 @@ export default {
      ** form 表单 验证
      */
     submitForm(formName) {
+      console.log(formName);
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log(valid);
