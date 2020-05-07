@@ -52,15 +52,13 @@ export default {
 @import "./style/common";
 
 @font-face {
-  font-family: "iconfont";
-  /* project id 868569 */
-  src: url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.eot");
-  src: url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.eot?#iefix")
-      format("embedded-opentype"),
-    url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.woff2") format("woff2"),
-    url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.woff") format("woff"),
-    url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.ttf") format("truetype"),
-    url("//at.alicdn.com/t/font_868569_0b60n56q7j6l.svg#iconfont") format("svg");
+  font-family: 'iconfont';  /* project id 868569 */
+  src: url('//at.alicdn.com/t/font_868569_ubseh0sfa9c.eot');
+  src: url('//at.alicdn.com/t/font_868569_ubseh0sfa9c.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_868569_ubseh0sfa9c.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_868569_ubseh0sfa9c.woff') format('woff'),
+  url('//at.alicdn.com/t/font_868569_ubseh0sfa9c.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_868569_ubseh0sfa9c.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -69,11 +67,13 @@ export default {
   color: #cccccc;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 18px;
+  margin-right: 8px;
 }
 
 /*本项目使用的图标 */
 .i-pay-amount:before {
-  content: "\e643";
+  content: "\e752";
 }
 
 .i-total-consu:before {
@@ -89,19 +89,19 @@ export default {
 }
 
 /* 菜单栏 图标 */
-.i-user-manger:before {
-  content: "\e617";
+.i-menu-one:before {
+  content: "\e61e";
 }
-.i-order-center:before {
-  content: "\e634";
+.i-menu-two:before {
+  content: "\e637";
 }
-.i-stores-manger:before {
-  content: "\e625";
+.i-menu-three:before {
+  content: "\e64d";
 }
-.i-stores-baseis:before {
-  content: "\e6ef";
+.i-menu-four:before {
+  content: "\e60a";
 }
-.i-supply-center:before {
-  content: "\e61f";
+.i-menu-five:before {
+  content: "\e620";
 }
 </style>

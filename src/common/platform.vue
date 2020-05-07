@@ -12,11 +12,11 @@
           router
         >
           <el-menu-item index="/dashboard">
-            <i class="el-icon-menu"></i>首页
+            <i class="iconfont i-menu-one" ></i>首页
           </el-menu-item>
           <el-submenu index="2" popper-class="submenu-userManger">
             <template slot="title">
-              <i class="iconfont i-user-manger"></i>平台
+              <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
             </template>
             <el-menu-item index="/platform/companyList">公司管理</el-menu-item>
             <el-menu-item index="/platform/departmentList">部门管理</el-menu-item>
@@ -26,7 +26,7 @@
           </el-submenu>
           <el-submenu index="3" popper-class="submenu-userManger">
             <template slot="title">
-              <i class="iconfont i-user-manger"></i>计划
+              <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
             </template>
             <el-menu-item index="/plan/fixplan">维修计划</el-menu-item>
             <el-menu-item index="/plan/fixtask">维修任务</el-menu-item>
@@ -35,13 +35,13 @@
           </el-submenu>
           <el-submenu index="4" popper-class="submenu-userManger">
             <template slot="title">
-              <i class="iconfont i-user-manger"></i>调令
+              <i class="iconfont i-menu-four"></i>调令
             </template>
             <el-menu-item index="/assign/assignplan">调度计划</el-menu-item>
             <el-menu-item index="/assign/assigntask">调度任务</el-menu-item>
           </el-submenu>
-          <el-menu-item index="5">
-            <i class="el-icon-menu"></i> <a href="http://114.215.194.254:89/Interface/checkDbUser" target="_bank" style="color:#fff">监控平台</a>
+          <el-menu-item>
+            <i class="iconfont i-menu-five"></i> <a href="http://114.215.194.254:89/Interface/checkDbUser" target="_bank" style="color:#fff">监控平台</a>
           </el-menu-item>
           <!-- <el-submenu index="5" popper-class="submenu-userManger">
             <template slot="title">
