@@ -58,8 +58,8 @@ export default {
       let myChart = this.$echarts.init(this.$refs.chart); 
       let option = {
           title: {
-              text: '某站点用户访问来源',
-              subtext: '纯属虚构',
+              text: '维修统计',
+              // subtext: '纯属虚构',
               left: 'center'
           },
           tooltip: {
@@ -69,7 +69,7 @@ export default {
           legend: {
               orient: 'vertical',
               left: 'left',
-              data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+              data: ['计划维修', '维修中', '维修完成']
           },
           series: [
               {
@@ -78,11 +78,9 @@ export default {
                   radius: '55%',
                   center: ['50%', '60%'],
                   data: [
-                      {value: 335, name: '直接访问'},
-                      {value: 310, name: '邮件营销'},
-                      {value: 234, name: '联盟广告'},
-                      {value: 135, name: '视频广告'},
-                      {value: 1548, name: '搜索引擎'}
+                      {value: 335, name: '计划维修'},
+                      {value: 310, name: '维修中'},
+                      {value: 234, name: '维修完成'},
                   ],
                   emphasis: {
                       itemStyle: {
@@ -105,6 +103,7 @@ export default {
       
       let mapone = this.$echarts.init(this.$refs.mapone); 
       let option = {
+
           tooltip: {
               trigger: 'axis',
               axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -112,7 +111,7 @@ export default {
               }
           },
           legend: {
-              data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+              data: ['机车', '轨道车', 'SUV']
           },
           grid: {
               left: '3%',
@@ -129,7 +128,7 @@ export default {
           },
           series: [
               {
-                  name: '直接访问',
+                  name: '机车',
                   type: 'bar',
                   stack: '总量',
                   label: {
@@ -139,7 +138,7 @@ export default {
                   data: [320, 302, 301, 334, 390, 330, 320]
               },
               {
-                  name: '邮件营销',
+                  name: '轨道车',
                   type: 'bar',
                   stack: '总量',
                   label: {
@@ -149,7 +148,7 @@ export default {
                   data: [120, 132, 101, 134, 90, 230, 210]
               },
               {
-                  name: '联盟广告',
+                  name: 'SUV',
                   type: 'bar',
                   stack: '总量',
                   label: {
@@ -158,26 +157,6 @@ export default {
                   },
                   data: [220, 182, 191, 234, 290, 330, 310]
               },
-              {
-                  name: '视频广告',
-                  type: 'bar',
-                  stack: '总量',
-                  label: {
-                      show: true,
-                      position: 'insideRight'
-                  },
-                  data: [150, 212, 201, 154, 190, 330, 410]
-              },
-              {
-                  name: '搜索引擎',
-                  type: 'bar',
-                  stack: '总量',
-                  label: {
-                      show: true,
-                      position: 'insideRight'
-                  },
-                  data: [820, 832, 901, 934, 1290, 1330, 1320]
-              }
           ]
       };
 
