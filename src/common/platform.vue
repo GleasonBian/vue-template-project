@@ -16,7 +16,7 @@
           </el-menu-item>
           <el-submenu index="1" popper-class="submenu-userManger">
             <template slot="title">
-              <i class="iconfont i-user-manger"></i>统计
+              <i class="iconfont i-menu-six"></i>统计
             </template>
             <el-menu-item index="/report/fixRep">维修报表</el-menu-item>
             <el-menu-item index="/report/oilRep">加油报表</el-menu-item>

@@ -1,76 +1,26 @@
 <template>
   <div style="padding:30px 30px 0px 30px">
-    <el-row :gutter="20">
-      <el-col :span="8">
-        <el-card shadow="hover" class="mgb20" style="height:29.5vh">
-          <div style="width:100%; height:28vh" ref="chart"></div>
-        </el-card>
-        <el-card shadow="hover" class="mgb20" style="height:30vh;">
-          <div slot="header" class="clearfix">
-            <span>成本统计</span>
-          </div>油耗
-          <el-progress :percentage="71.3" color="#42b983"></el-progress>设备
-          <el-progress :percentage="24.1" color="#f1e05a"></el-progress>人工
-          <el-progress :percentage="13.7"></el-progress>维护
-          <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
-        </el-card>
-        <el-card shadow="hover" style="height:30vh;">
-          <div style="width:100%; height:28vh" ref="single"></div>
+    <el-row :gutter="20" class="el-row">
+      <el-col :span="12">
+        <el-card class="box-card">
+          <div style="width:100%; height:42vh" ref="chart"></div>
         </el-card>
       </el-col>
-      <el-col :span="16">
-        <el-row :gutter="20" class="mgb20">
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
-              <div class="grid-content grid-con-1">
-                <i class="el-icon-lx-people grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">4辆</div>
-                  <div>越野车</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
-              <div class="grid-content grid-con-2">
-                <i class="el-icon-lx-notice grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">7台</div>
-                  <div>火车头</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
-              <div class="grid-content grid-con-3">
-                <i class="el-icon-lx-goods grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">312人</div>
-                  <div>员工</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-card shadow="hover">
-          <div class="amap-page-container">
-            <el-amap
-              vid="amapDemo"
-              :center="center"
-              :amap-manager="amapManager"
-              :zoom="zoom"
-              :events="events"
-              :resizeEnable=true
-              class="amap-demo"
-            >
-                <el-amap-marker v-for="marker in markers" :key="marker.mapName" :position="marker.position" :visible="true" :draggable="false"></el-amap-marker>
-            </el-amap>
-            <div class="toolbar">
-              <button @click="add()">add marker</button>
-            </div>
-          </div>
+      <el-col :span="12">
+        <el-card class="box-card">
+          <div style="width:100%; height:42vh" ref="mapone"></div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <el-card class="box-card">
+          <div style="width:100%; height:42vh" ref="maptwo"></div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card class="box-card">
+          <div style="width:100%; height:42vh" ref="mapthree"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -78,239 +28,348 @@
 </template>
 
 <script>
-import VueAMap from "vue-amap";
-import {
-  allCollect, // 全部
-  singleCollect // 单个
-} from "@/getData";
-let amapManager = new VueAMap.AMapManager();
+
+
+
 export default {
-  name: "dashboard",
+  name: "equi",
   data() {
     return {
-    markers: [
-            {
-              position: [112.868357,36.860426]
-            },
-            {
-              position: [112.870453,36.862496]
-            },
-            {
-              position: [112.840453,36.866496]
-            },
-            {
-              position: [112.840423,36.832496]
-            },
-            {
-              position: [112.8500257,36.860406]
-            },
-            {
-              position: [112.860237,36.840376]
-            }
-          ],
-     
-      
-      total: {},
-      single: {},
-      zoom: 13,
-      center: [112.860257,36.860496],
-      amapManager,
-      events: {
-        init(o) {
-          let marker = new AMap.Marker([
-            {
-            position:  [112.835406,36.868778],
-            content: '阿斯塔纳',
-          },
-            {
-            position:  [112.835406,36.869778],
-            content: '阿斯塔纳',
-          },
-            {
-            position:  [112.835406,36.863778],
-            content: '阿斯塔纳',
-          },
-          ]);
-          marker.setMap(o);
-        }
-      }
+
     };
   },
   components: {
     // Schart
   },
   computed: {
-    role() {
-      return this.name === "admin" ? "超级管理员" : "普通用户";
-    },
+
   },
   created() {
   },
   mounted() {
     this.initCharts();
-    this.singleHandle();
+    this.mapOneHandle()
+    this.maptwoHandle()
+    this.mapmapthreeHandle()
   },
   methods: {
-    add() {
-      let o = amapManager.getMap();
-      let marker = new AMap.Marker({
-        position: [121.59996, 31.177646]
-      });
-      marker.setMap(o);
-    },
-    async initCharts() {
-      const res = await allCollect();
-
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
+    initCharts() {
       
       let myChart = this.$echarts.init(this.$refs.chart); 
-      myChart.setOption({
-        title: {
-          text: "油耗产出总览",
-          textStyle: {
-            // color: "#",
-          },
-          left: "center"
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross",
-            crossStyle: {
-              color: "#999"
-            }
-          }
-        },
-        legend: {
-          data: ["总油量", "总耗时", "总产出"],
-          top: "10%" //与上方的距离 可百分比% 可像素px
-        },
-        xAxis: [
-          {
-            type: "category",
-            data: this.total.xAxis,
-            axisPointer: {
-              type: "shadow"
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            name: "升",
-            min: 0,
-            interval: 50,
-            axisLabel: {
-              formatter: "{value} L"
-            }
-          },
-          {
-            type: "value",
-            name: "小时",
-            min: 0,
-            interval: 5,
-            axisLabel: {
-              formatter: "{value} H"
-            }
-          }
-        ],
-        series: [
-          {
-            name: "总油量",
-            type: "bar",
-            data: this.total.yAxis.oil
-          },
-          {
-            name: "总耗时",
-            type: "bar",
-            data: this.total.yAxis.time
-          },
-          {
-            name: "总产出",
-            type: "line",
-            yAxisIndex: 1,
-            data: this.total.yAxis.amount
-          }
-        ]
-      });
-      window.onresize = function() {
-        myChart.resize();
-      };
-    },
-    async singleHandle() {
-      const res = await singleCollect();
-
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-      
-      let myChart = this.$echarts.init(this.$refs.single); 
-      
       let option = {
-          tooltip: {
-              formatter: '{c}{b}'
-          },
           title: {
-            text: "车速",
-            left: "left"
+              text: '某站点用户访问来源',
+              subtext: '纯属虚构',
+              left: 'center'
+          },
+          tooltip: {
+              trigger: 'item',
+              formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+              orient: 'vertical',
+              left: 'left',
+              data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
           },
           series: [
               {
-                  name: '车速',
-                  type: 'gauge',
-                  detail: {
-                    formatter: '{value}',
-                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                      fontWeight: 'bolder',
-                      fontSize:12,
-                    }
-                  },
-                  data: [{value: 50, name: 'km/h'}]
+                  name: '访问来源',
+                  type: 'pie',
+                  radius: '55%',
+                  center: ['50%', '60%'],
+                  data: [
+                      {value: 335, name: '直接访问'},
+                      {value: 310, name: '邮件营销'},
+                      {value: 234, name: '联盟广告'},
+                      {value: 135, name: '视频广告'},
+                      {value: 1548, name: '搜索引擎'}
+                  ],
+                  emphasis: {
+                      itemStyle: {
+                          shadowBlur: 10,
+                          shadowOffsetX: 0,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      }
+                  }
               }
           ]
       };
-      setInterval(function () {
-          option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-          myChart.setOption(option, true);
-      },2000);
+
+      myChart.setOption(option);
+
       window.onresize = function() {
         myChart.resize();
+      };
+    },
+    mapOneHandle() {
+      
+      let mapone = this.$echarts.init(this.$refs.mapone); 
+      let option = {
+          tooltip: {
+              trigger: 'axis',
+              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                  type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+              }
+          },
+          legend: {
+              data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+          },
+          grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+          },
+          xAxis: {
+              type: 'value'
+          },
+          yAxis: {
+              type: 'category',
+              data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          },
+          series: [
+              {
+                  name: '直接访问',
+                  type: 'bar',
+                  stack: '总量',
+                  label: {
+                      show: true,
+                      position: 'insideRight'
+                  },
+                  data: [320, 302, 301, 334, 390, 330, 320]
+              },
+              {
+                  name: '邮件营销',
+                  type: 'bar',
+                  stack: '总量',
+                  label: {
+                      show: true,
+                      position: 'insideRight'
+                  },
+                  data: [120, 132, 101, 134, 90, 230, 210]
+              },
+              {
+                  name: '联盟广告',
+                  type: 'bar',
+                  stack: '总量',
+                  label: {
+                      show: true,
+                      position: 'insideRight'
+                  },
+                  data: [220, 182, 191, 234, 290, 330, 310]
+              },
+              {
+                  name: '视频广告',
+                  type: 'bar',
+                  stack: '总量',
+                  label: {
+                      show: true,
+                      position: 'insideRight'
+                  },
+                  data: [150, 212, 201, 154, 190, 330, 410]
+              },
+              {
+                  name: '搜索引擎',
+                  type: 'bar',
+                  stack: '总量',
+                  label: {
+                      show: true,
+                      position: 'insideRight'
+                  },
+                  data: [820, 832, 901, 934, 1290, 1330, 1320]
+              }
+          ]
+      };
+
+      mapone.setOption(option);
+
+      window.onresize = function() {
+        mapone.resize();
+      };
+    },
+    maptwoHandle() {
+      
+      let mapone = this.$echarts.init(this.$refs.maptwo); 
+      
+      var category = [];
+      var dottedBase = +new Date();
+      var lineData = [];
+      var barData = [];
+
+      for (var i = 0; i < 20; i++) {
+          var date = new Date(dottedBase += 3600 * 24 * 1000);
+          category.push([
+              date.getFullYear(),
+              date.getMonth() + 1,
+              date.getDate()
+          ].join('-'));
+          var b = Math.random() * 200;
+          var d = Math.random() * 200;
+          barData.push(b)
+          lineData.push(d + b);
+      }
+
+
+      // option
+      let option = {
+          backgroundColor: '#0f375f',
+          tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'shadow'
+              }
+          },
+          legend: {
+              data: ['line', 'bar'],
+              textStyle: {
+                  color: '#ccc'
+              }
+          },
+          xAxis: {
+              data: category,
+              axisLine: {
+                  lineStyle: {
+                      color: '#ccc'
+                  }
+              }
+          },
+          yAxis: {
+              splitLine: {show: false},
+              axisLine: {
+                  lineStyle: {
+                      color: '#ccc'
+                  }
+              }
+          },
+          series: [{
+              name: 'line',
+              type: 'line',
+              smooth: true,
+              showAllSymbol: true,
+              symbol: 'emptyCircle',
+              symbolSize: 15,
+              data: lineData
+          }, {
+              name: 'bar',
+              type: 'bar',
+              barWidth: 10,
+              itemStyle: {
+                  barBorderRadius: 5,
+                  color: new this.$echarts.graphic.LinearGradient(
+                      0, 0, 0, 1,
+                      [
+                          {offset: 0, color: '#14c8d4'},
+                          {offset: 1, color: '#43eec6'}
+                      ]
+                  )
+              },
+              data: barData
+          }, {
+              name: 'line',
+              type: 'bar',
+              barGap: '-100%',
+              barWidth: 10,
+              itemStyle: {
+                  color: new this.$echarts.graphic.LinearGradient(
+                      0, 0, 0, 1,
+                      [
+                          {offset: 0, color: 'rgba(20,200,212,0.5)'},
+                          {offset: 0.2, color: 'rgba(20,200,212,0.2)'},
+                          {offset: 1, color: 'rgba(20,200,212,0)'}
+                      ]
+                  )
+              },
+              z: -12,
+              data: lineData
+          }, {
+              name: 'dotted',
+              type: 'pictorialBar',
+              symbol: 'rect',
+              itemStyle: {
+                  color: '#0f375f'
+              },
+              symbolRepeat: true,
+              symbolSize: [12, 4],
+              symbolMargin: 1,
+              z: -10,
+              data: lineData
+          }]
+      };
+
+      mapone.setOption(option);
+
+      window.onresize = function() {
+        mapone.resize();
+      };
+    },
+    mapmapthreeHandle() {
+      
+      let mapthree = this.$echarts.init(this.$refs.mapthree); 
+      
+      var data = [[10, 16, 3, 'A'], [16, 18, 15, 'B'], [18, 26, 12, 'C'], [26, 32, 22, 'D'], [32, 56, 7, 'E'], [56, 62, 17, 'F']];
+      var colorList = ['#4f81bd', '#c0504d', '#9bbb59', '#604a7b', '#948a54', '#e46c0b'];
+
+      data = this.$echarts.util.map(data, function (item, index) {
+          return {
+              value: item,
+              itemStyle: {
+                  color: colorList[index]
+              }
+          };
+      });
+
+      function renderItem(params, api) {
+          var yValue = api.value(2);
+          var start = api.coord([api.value(0), yValue]);
+          var size = api.size([api.value(1) - api.value(0), yValue]);
+          var style = api.style();
+
+          return {
+              type: 'rect',
+              shape: {
+                  x: start[0],
+                  y: start[1],
+                  width: size[0],
+                  height: size[1]
+              },
+              style: style
+          };
+      }
+
+      let option = {
+          title: {
+              text: 'Profit',
+              left: 'center'
+          },
+          tooltip: {
+          },
+          xAxis: {
+              scale: true
+          },
+          yAxis: {
+          },
+          series: [{
+              type: 'custom',
+              renderItem: renderItem,
+              label: {
+                  show: true,
+                  position: 'top'
+              },
+              dimensions: ['from', 'to', 'profit'],
+              encode: {
+                  x: [0, 1],
+                  y: 2,
+                  tooltip: [0, 1, 2],
+                  itemName: 3
+              },
+              data: data
+          }]
+      };
+
+      mapthree.setOption(option);
+
+      window.onresize = function() {
+        mapone.resize();
       };
     },
   },
@@ -321,115 +380,11 @@ export default {
 </script>
 
 <style scoped>
-/* .el-row {
+.el-row {
     margin-bottom: 20px;
-} */
-
-.grid-content {
-  display: flex;
-  align-items: center;
-  height: 100px;
 }
 
-.grid-cont-right {
-  flex: 1;
-  text-align: center;
-  font-size: 14px;
-  color: #999;
-}
-
-.grid-num {
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.grid-con-icon {
-  font-size: 50px;
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  line-height: 100px;
-  color: #fff;
-}
-
-.grid-con-1 .grid-con-icon {
-  background: rgb(45, 140, 240);
-}
-
-.grid-con-1 .grid-num {
-  color: rgb(45, 140, 240);
-}
-
-.grid-con-2 .grid-con-icon {
-  background: rgb(100, 213, 114);
-}
-
-.grid-con-2 .grid-num {
-  color: rgb(45, 140, 240);
-}
-
-.grid-con-3 .grid-con-icon {
-  background: rgb(242, 94, 67);
-}
-
-.grid-con-3 .grid-num {
-  color: rgb(242, 94, 67);
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #ccc;
-  margin-bottom: 20px;
-}
-
-.user-avator {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-}
-
-.user-info-cont {
-  padding-left: 50px;
-  flex: 1;
-  font-size: 14px;
-  color: #999;
-}
-
-.user-info-cont div:first-child {
-  font-size: 30px;
-  color: #222;
-}
-
-.user-info-list {
-  font-size: 14px;
-  color: #999;
-  line-height: 25px;
-}
-
-.user-info-list span {
-  margin-left: 70px;
-}
-
-.mgb20 {
-  margin-bottom: 20px;
-}
-
-.todo-item {
-  font-size: 14px;
-}
-
-.todo-item-del {
-  text-decoration: line-through;
-  color: #999;
-}
-
-.schart {
-  width: 100%;
-  height: 300px;
-}
-.amap-demo {
-  height: 75vh;
+.box-card{
+  height: 45.7vh;
 }
 </style>
