@@ -249,11 +249,11 @@ export default {
           label: "实际用时"
         },
         {
-          id: "deptschedname",
+          id: "deptnamesched",
           label: "调度部门"
         },
         {
-          id: "deptrecvname",
+          id: "deptrecvrecv",
           label: "接收部门"
         },
         {
