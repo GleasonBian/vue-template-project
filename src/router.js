@@ -188,16 +188,36 @@ const router = new Router({
       ]
     },
     {
-      path: '/charge',
+      path: '/report',
       component: resolve => require(['@/common/platform'], resolve),
       children: [
         {
-          path: 'chargework',
-          component: resolve => require(['@/components/chargework'], resolve),
+          path: 'fixRep',
+          component: resolve => require(['@/components/fixRep'], resolve),
           meta: {
-            crumbs: ['交接班', '交接班'],
-            title: '交接班',
+            crumbs: ['统计', '维修报表'],
+            title: '维修报表',
             index: 9,
+            menu: '090302'
+          },
+        },
+        {
+          path: 'oilRep',
+          component: resolve => require(['@/components/oilRep'], resolve),
+          meta: {
+            crumbs: ['统计', '加油报表'],
+            title: '加油报表',
+            index: 10,
+            menu: '090302'
+          },
+        },
+        {
+          path: 'assignRep',
+          component: resolve => require(['@/components/assignRep'], resolve),
+          meta: {
+            crumbs: ['统计', '调度报表'],
+            title: '调度报表',
+            index: 11,
             menu: '090302'
           },
         },

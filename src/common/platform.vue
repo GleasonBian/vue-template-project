@@ -14,6 +14,14 @@
           <el-menu-item index="/dashboard">
             <i class="iconfont i-menu-one" ></i>首页
           </el-menu-item>
+          <el-submenu index="1" popper-class="submenu-userManger">
+            <template slot="title">
+              <i class="iconfont i-user-manger"></i>统计
+            </template>
+            <el-menu-item index="/report/fixRep">维修报表</el-menu-item>
+            <el-menu-item index="/report/oilRep">加油报表</el-menu-item>
+            <el-menu-item index="/report/assignRep">调度报表</el-menu-item>
+          </el-submenu>
           <el-submenu index="2" popper-class="submenu-userManger">
             <template slot="title">
               <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
@@ -61,7 +69,7 @@
 </template>
 
 <script>
-import { getUserPermission, getPageElement } from "@/getData";
+// import { getUserPermission, getPageElement } from "@/getData";
 export default {
   name: "platform",
   components: {},
@@ -143,17 +151,17 @@ export default {
     // this.getPageElement();
   },
   methods: {
-    async getUserPermission() {
-      const res = await getUserPermission({
-        systemCode: "wxsupplier"
-      });
-      if (res.result) {
-        if (Array.isArray(res.data) && res.data.length > 0) {
-          console.log("1111", this.uniq(res.data));
-          this.addMenuIndex(res.data);
-        }
-      }
-    }
+    // async getUserPermission() {
+    //   const res = await getUserPermission({
+    //     systemCode: "wxsupplier"
+    //   });
+    //   if (res.result) {
+    //     if (Array.isArray(res.data) && res.data.length > 0) {
+    //       console.log("1111", this.uniq(res.data));
+    //       this.addMenuIndex(res.data);
+    //     }
+    //   }
+    // }
   },
   computed: {
     defaultActive: function() {
