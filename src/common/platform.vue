@@ -19,7 +19,7 @@
               <i class="iconfont i-menu-six"></i>统计
             </template>
             <el-menu-item index="/report/fixRep">维修报表</el-menu-item>
-            <el-menu-item index="/report/oilRep">加油报表</el-menu-item>
+            <!-- <el-menu-item index="/report/oilRep">加油报表</el-menu-item> -->
             <el-menu-item index="/report/assignRep">调度报表</el-menu-item>
           </el-submenu>
           <el-submenu index="2" popper-class="submenu-userManger">
