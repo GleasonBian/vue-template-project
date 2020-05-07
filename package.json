@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "serve-dev": "vue-cli-service serve --mode development",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode production",
     "build-dev": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint"
   },
@@ -21,7 +21,6 @@
     "vue": "^2.6.10",
     "vue-amap": "^0.5.10",
     "vue-router": "^3.0.3",
-    "vue-schart": "^2.0.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

@@ -2,7 +2,7 @@
   <el-main class="login-box">
     <div class="login-container">
       <img src="../assets/sjgtw.png" alt="世界高铁网logo" class="sjgtw-logo" />
-      <div class="systemName">{{'小程序运营中台'}}</div>
+      <div class="systemName">{{'设备管理系统'}}</div>
       <div class="input-box">
         <el-row class="login-row">
           <el-col :span="24">
