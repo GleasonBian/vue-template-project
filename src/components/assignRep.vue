@@ -1,7 +1,7 @@
 <template>
   <div style="padding:30px 30px 0px 30px">
     <el-row :gutter="20">
-      <el-col :span="10">
+      <el-col :span="12">
         <el-card shadow="hover" class="mgb20" style="height:45vh">
           <div style="width:100%; height:45vh" ref="single"></div>
         </el-card>
@@ -10,7 +10,7 @@
           <div style="width:100%; height:45vh" ref="level"></div>
         </el-card>
       </el-col>
-      <el-col :span="14">
+      <el-col :span="12">
         <el-row class="mgb20">
           <el-card shadow="hover" style="height:45vh;">
             <div style="width:100%; height:45vh" ref="prod"></div>
