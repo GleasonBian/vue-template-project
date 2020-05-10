@@ -88,7 +88,6 @@ export default {
       console.log(res.data);
       if (res.data.code === 200) {
         this.$message.success("登录成功");
-        sessionStorage["Authorization"];
         sessionStorage.setItem("Authorization", res.data.Data);
         this.$router.push("/dashboard");
       } else this.$message.warning("账号或密码错误");

@@ -344,8 +344,8 @@ export default {
           let data = reader.result;
           data = eval("(" + data + ")");
           console.log(data);
-          this.center = data.longitude;
-          this.center = data.latitude;
+          this.center = [data.longitude, data.latitude];
+          this.markers[0].position = [data.longitude, data.latitude];
         };
 
         reader.readAsText(event.data);
