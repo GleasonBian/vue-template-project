@@ -308,6 +308,21 @@ export default {
           console.log("解析->", data);
           this.center = [data.longitude, data.latitude];
           this.markers[0].position = [data.longitude, data.latitude];
+          /* 
+            altitude: 12.345                                  // 海拔高度
+            curmiles: 12                                      // 当前里程
+            curoilconsume: 5.3                                // 当前油耗
+            curoilpos: 9.3                                    // 当前油位
+            direction: 12                                     // 行驶方向
+            gpstime: "2020-05-10 16:30:30"                    // gps 时间
+            guid: "e7d52b53-2307-4b09-aec8-f61d6cea6cf5"      // guid
+            latitude: 36.840376                               // 纬度
+            longitude: 112.860237                             // 经度
+            name: "机车一号"                                   // 机车名称
+            servertime: "2020-05-10 16:30:30"                 // 服务器时间
+            speed: 60                                         // 速度
+            totalmiles: 138                                   // 总里程
+          */
         };
 
         reader.readAsText(event.data);
