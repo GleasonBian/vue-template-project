@@ -1,157 +1,53 @@
-import Vue from 'vue'
-import App from './App'
-import router from './router'
-import axios from 'axios'
-
-/** 
- * 富文本 编辑器
-*/
-import VueQuillEditor from 'vue-quill-editor'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
-
-/**
- * 引入 element UI
- */
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
-Vue.use(VueQuillEditor)
-
-
-/** 
- * 引入 VueX
-*/
-import store from './store'
-
-/* *
- * import VueAxios from 'vue-axios'
- * Vue.use(VueAxios, axios);
- * var qs = require('qs');
- * Vue.prototype.qs = qs;
- */
-
- import VueAxios from 'vue-axios'
- Vue.use(VueAxios, axios);
- var qs = require('qs');
- Vue.prototype.qs = qs;
-
-var qs = require('qs');
-Vue.prototype.qs = qs;
- /**
-  * 事件中心
-  */
-import VueBus from 'vue-bus';
-Vue.use(VueBus);
-
-Vue.config.productionTip = false
-
-/**
- * 公共组件
- */
-import pagination from '@/common/pagination'
-import dialog from '@/common/dialog'
-import gtform from '@/common/gtform'
-import editor from '@/common/editor'
-import brand from '@/common/brand'
-import newTag from '@/common/newTag'
-import gtTable from '@/common/gtTable'
-import gtTabTree from '@/common/gtTabTree'
-import gtCascaderClass from '@/common/gtCascaderClass'
-import gtCascader from '@/common/gtCascader'
-import gtAutocomplete from '@/common/gtautocomplete'
-import gtSingleImg from '@/common/gtSingleImg'
-import gtMultiImg from '@/common/gtMultiImg'
-import gtFile from '@/common/gtFile'
-Vue.component('gt-pagination', pagination)
-Vue.component('gt-form', gtform)
-Vue.component('gt-dialog', dialog)
-Vue.component('gt-editor', editor)
-Vue.component('gt-brand', brand);
-Vue.component('gt-newTag', newTag);
-Vue.component('gt-table', gtTable);
-Vue.component('gt-cascader-class', gtCascaderClass);
-Vue.component('gt-cascader', gtCascader);
-Vue.component('gt-autocomplete', gtAutocomplete);
-Vue.component('gt-singleImg', gtSingleImg);
-Vue.component('gt-multiImg', gtMultiImg);
-Vue.component('gt-file', gtFile);
-
-
 /*
- ** 全局加载动画 开关
+ * @Description: 
+ * @Author: gleason
+ * @Github: https://github.com/GleasonBian
+ * @Date: 2020-05-10 12:18:23
+ * @LastEditors: OBKoro1
+ * @LastEditTime: 2020-05-10 13:51:38
  */
-
-let loading = null;
-
-/*
- ** 添加请求拦截器
- */
-axios.interceptors.request.use(function (config) {
-  // 在发送请求之前做些什么
-  loading = Vue.prototype.$loading({
-    lock: true,
-    text: '客官请稍后....',
-    spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.7)'
-  })
-
-  if (sessionStorage.getItem("suppliertoken") === null) {
-    router.replace({
-      path: '/'
-    });
+var reader = {
+  readAs: function (type, blob, cb) {
+    var r = new FileReader();
+    r.onloadend = function () {
+      if (typeof (cb) === 'function') {
+        cb.call(r, r.result);
+      }
+    }
+    try {
+      r['readAs' + type](blob);
+    } catch (e) { }
   }
-
-  if (sessionStorage['suppliertoken'] === undefined)
-    router.replace({
-      path: '/'
-    });
-  else
-    config.headers.common['supplierToken'] = sessionStorage['suppliertoken'];
-
-  return config;
-}, function (error) {
-  loading.close()
-  // 对请求错误做些什么
-  return Promise.reject(error);
-});
-
-/*
- ** 添加响应拦截器
- */
-axios.interceptors.response.use(function (response) {
-  if ('suppliertoken' in response.headers)
-    sessionStorage['suppliertoken'] = response.headers.suppliertoken;
-
-  if (response.data.errorCode === 401) {
-    Vue.prototype.$message.error(response.data.message);
-    router.replace({
-      path: '/'
-    })
-  }
-
-  if (sessionStorage.getItem("suppliertoken") === null) {
-    router.replace({
-      path: '/'
-    });
-  }
-
-  loading.close()
-
-  return response;
-}, function (error) {
-  loading.close()
-  if (error.response.status >= 404) {
-    Vue.prototype.$message.error('服务异常,稍后重试 !');
-  }
-  return Promise.reject(error);
-});
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
+}
+function parseBlob(blob) {
+  var shortVar, intVar, stringVar;
+  reader.readAs('ArrayBuffer', blob.slice(0, 2), function (arr) {
+    shortVar = (new Int16Array(arr))[0];
+    console.log(shortVar);
+  });
+  reader.readAs('ArrayBuffer', blob.slice(2, 6), function (arr) {
+    intVar = (new Int32Array(arr))[0];
+    console.log(intVar);
+  });
+  reader.readAs('Text', blob.slice(6, blob.size, 'text/plain;charset=UTF-8'), function (result) {
+    stringVar = result;
+    console.log(stringVar);
+  });
+}
+var buffer = new ArrayBuffer(6);//建立6个字节的缓冲，前两个字节是short，后四个是int
+var bufferView = new Int16Array(buffer); //建立16位的视图,那么视图的长度应该是3
+bufferView[0] = 32767;
+bufferView[1] = 0;
+bufferView[2] = 1;
+//现在buffer中的内容由低位到高位应该是 
+//11111111 11111110 00000000 00000000 100000000 00000000
+var blob = new Blob([bufferView, "words words 文本文本文本文本"]);
+//构造这个blob类型
+//测试一下parseBlob函数是否正确
+parseBlob(blob);
+//32767
+//65536
+//words words 文本文本文本文本
+//第一个short是32767
+//第二个int，前16位为0，第17位为1，所以结果是65536
+//第三个字符串，和我们构造blob的时候一样

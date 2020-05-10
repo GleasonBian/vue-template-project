@@ -327,7 +327,7 @@ export default {
     },
     initWebSocket() {
       //初始化weosocket
-      const wsuri = "wss://echo.websocket.org";
+      const wsuri = "ws://192.168.3.210:8090/ws/leffss";
       // 建立连接
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.websocketonmessage;
@@ -335,9 +335,19 @@ export default {
       this.websock.onerror = this.websocketonerror;
       this.websock.onclose = this.websocketclose;
     },
-    websocketonmessage(e) {
+    websocketonmessage(event) {
       //数据接收
-      console.log("onmessage:", e.data);
+      if (event.data instanceof Blob) {
+        let reader = new FileReader();
+
+        reader.onload = () => {
+          console.log("Result: " + reader.result);
+        };
+
+        reader.readAsText(event.data);
+      } else {
+        console.log("Result: " + event.data);
+      }
     },
     websocketonopen() {
       //连接建立之后执行send方法发送数据
