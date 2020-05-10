@@ -97,22 +97,22 @@ export default {
       markers: [
         {
           position: [112.868357, 36.860426]
-        },
-        {
-          position: [112.870453, 36.862496]
-        },
-        {
-          position: [112.840453, 36.866496]
-        },
-        {
-          position: [112.840423, 36.832496]
-        },
-        {
-          position: [112.8500257, 36.860406]
-        },
-        {
-          position: [112.860237, 36.840376]
         }
+        // {
+        //   position: [112.870453, 36.862496]
+        // },
+        // {
+        //   position: [112.840453, 36.866496]
+        // },
+        // {
+        //   position: [112.840423, 36.832496]
+        // },
+        // {
+        //   position: [112.8500257, 36.860406]
+        // },
+        // {
+        //   position: [112.860237, 36.840376]
+        // }
       ],
 
       total: {},
@@ -344,6 +344,8 @@ export default {
           let data = reader.result;
           data = eval("(" + data + ")");
           console.log(data);
+          this.center = data.longitude;
+          this.center = data.latitude;
         };
 
         reader.readAsText(event.data);
