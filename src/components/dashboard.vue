@@ -61,7 +61,6 @@
               :center="center"
               :amap-manager="amapManager"
               :zoom="zoom"
-              :events="events"
               :resizeEnable="true"
               class="amap-demo"
             >
@@ -98,21 +97,6 @@ export default {
         {
           position: [112.868357, 36.860426]
         }
-        // {
-        //   position: [112.870453, 36.862496]
-        // },
-        // {
-        //   position: [112.840453, 36.866496]
-        // },
-        // {
-        //   position: [112.840423, 36.832496]
-        // },
-        // {
-        //   position: [112.8500257, 36.860406]
-        // },
-        // {
-        //   position: [112.860237, 36.840376]
-        // }
       ],
 
       total: {},
@@ -120,25 +104,6 @@ export default {
       zoom: 13,
       center: [112.860257, 36.860496],
       amapManager,
-      events: {
-        init(o) {
-          let marker = new AMap.Marker([
-            {
-              position: [112.835406, 36.868778],
-              content: "阿斯塔纳"
-            },
-            {
-              position: [112.835406, 36.869778],
-              content: "阿斯塔纳"
-            },
-            {
-              position: [112.835406, 36.863778],
-              content: "阿斯塔纳"
-            }
-          ]);
-          marker.setMap(o);
-        }
-      },
       path: "wss://echo.websocket.org",
       websock: null
     };
@@ -146,11 +111,7 @@ export default {
   components: {
     // Schart
   },
-  computed: {
-    role() {
-      return this.name === "admin" ? "超级管理员" : "普通用户";
-    }
-  },
+  computed: {},
   created() {
     this.initWebSocket();
   },
@@ -341,9 +302,10 @@ export default {
         let reader = new FileReader();
 
         reader.onload = () => {
+          if (reader.result == "Hello WebSockets!") return;
           let data = reader.result;
           data = eval("(" + data + ")");
-          console.log(data);
+          console.log("解析->", data);
           this.center = [data.longitude, data.latitude];
           this.markers[0].position = [data.longitude, data.latitude];
         };
