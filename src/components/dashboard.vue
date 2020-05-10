@@ -98,13 +98,11 @@ export default {
           position: [112.868357, 36.860426]
         }
       ],
-
-      total: {},
-      single: {},
       zoom: 13,
       center: [112.860257, 36.860496],
       amapManager,
-      path: "wss://echo.websocket.org",
+      total: {},
+      single: {},
       websock: null
     };
   },
