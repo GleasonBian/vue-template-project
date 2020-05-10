@@ -62,10 +62,16 @@
               :amap-manager="amapManager"
               :zoom="zoom"
               :events="events"
-              :resizeEnable=true
+              :resizeEnable="true"
               class="amap-demo"
             >
-                <el-amap-marker v-for="marker in markers" :key="marker.mapName" :position="marker.position" :visible="true" :draggable="false"></el-amap-marker>
+              <el-amap-marker
+                v-for="marker in markers"
+                :key="marker.mapName"
+                :position="marker.position"
+                :visible="true"
+                :draggable="false"
+              ></el-amap-marker>
             </el-amap>
             <div class="toolbar">
               <button @click="add()">add marker</button>
@@ -88,52 +94,53 @@ export default {
   name: "dashboard",
   data() {
     return {
-    markers: [
-            {
-              position: [112.868357,36.860426]
-            },
-            {
-              position: [112.870453,36.862496]
-            },
-            {
-              position: [112.840453,36.866496]
-            },
-            {
-              position: [112.840423,36.832496]
-            },
-            {
-              position: [112.8500257,36.860406]
-            },
-            {
-              position: [112.860237,36.840376]
-            }
-          ],
-     
-      
+      markers: [
+        {
+          position: [112.868357, 36.860426]
+        },
+        {
+          position: [112.870453, 36.862496]
+        },
+        {
+          position: [112.840453, 36.866496]
+        },
+        {
+          position: [112.840423, 36.832496]
+        },
+        {
+          position: [112.8500257, 36.860406]
+        },
+        {
+          position: [112.860237, 36.840376]
+        }
+      ],
+
       total: {},
       single: {},
       zoom: 13,
-      center: [112.860257,36.860496],
+      center: [112.860257, 36.860496],
       amapManager,
       events: {
         init(o) {
           let marker = new AMap.Marker([
             {
-            position:  [112.835406,36.868778],
-            content: '阿斯塔纳',
-          },
+              position: [112.835406, 36.868778],
+              content: "阿斯塔纳"
+            },
             {
-            position:  [112.835406,36.869778],
-            content: '阿斯塔纳',
-          },
+              position: [112.835406, 36.869778],
+              content: "阿斯塔纳"
+            },
             {
-            position:  [112.835406,36.863778],
-            content: '阿斯塔纳',
-          },
+              position: [112.835406, 36.863778],
+              content: "阿斯塔纳"
+            }
           ]);
           marker.setMap(o);
         }
-      }
+      },
+      path: "wss://echo.websocket.org",
+      websock: null
     };
   },
   components: {
@@ -142,9 +149,13 @@ export default {
   computed: {
     role() {
       return this.name === "admin" ? "超级管理员" : "普通用户";
-    },
+    }
   },
   created() {
+    this.initWebSocket();
+  },
+  destroyed() {
+    this.websock.close(); //离开路由之后断开websocket连接
   },
   mounted() {
     this.initCharts();
@@ -181,8 +192,8 @@ export default {
           time
         }
       };
-      
-      let myChart = this.$echarts.init(this.$refs.chart); 
+
+      let myChart = this.$echarts.init(this.$refs.chart);
       myChart.setOption({
         title: {
           text: "油耗产出总览",
@@ -279,44 +290,73 @@ export default {
           time
         }
       };
-      
-      let myChart = this.$echarts.init(this.$refs.single); 
-      
+
+      let myChart = this.$echarts.init(this.$refs.single);
+
       let option = {
-          tooltip: {
-              formatter: '{c}{b}'
-          },
-          title: {
-            text: "车速",
-            left: "left"
-          },
-          series: [
-              {
-                  name: '车速',
-                  type: 'gauge',
-                  detail: {
-                    formatter: '{value}',
-                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                      fontWeight: 'bolder',
-                      fontSize:12,
-                    }
-                  },
-                  data: [{value: 50, name: 'km/h'}]
+        tooltip: {
+          formatter: "{c}{b}"
+        },
+        title: {
+          text: "车速",
+          left: "left"
+        },
+        series: [
+          {
+            name: "车速",
+            type: "gauge",
+            detail: {
+              formatter: "{value}",
+              textStyle: {
+                // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                fontWeight: "bolder",
+                fontSize: 12
               }
-          ]
+            },
+            data: [{ value: 50, name: "km/h" }]
+          }
+        ]
       };
-      setInterval(function () {
-          option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-          myChart.setOption(option, true);
-      },2000);
+      setInterval(function() {
+        option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+        myChart.setOption(option, true);
+      }, 2000);
       window.onresize = function() {
         myChart.resize();
       };
     },
+    initWebSocket() {
+      //初始化weosocket
+      const wsuri = "wss://echo.websocket.org";
+      // 建立连接
+      this.websock = new WebSocket(wsuri);
+      this.websock.onmessage = this.websocketonmessage;
+      this.websock.onopen = this.websocketonopen;
+      this.websock.onerror = this.websocketonerror;
+      this.websock.onclose = this.websocketclose;
+    },
+    websocketonmessage(e) {
+      //数据接收
+      console.log("onmessage:", e.data);
+    },
+    websocketonopen() {
+      //连接建立之后执行send方法发送数据
+      this.websocketsend("Hello WebSockets!");
+    },
+    websocketsend(Data) {
+      //数据发送
+      this.websock.send(Data);
+    },
+    websocketonerror() {
+      //连接建立失败重连
+      this.initWebSocket();
+    },
+    websocketclose(e) {
+      //关闭
+      console.log("断开连接", e);
+    }
   },
-  updated(){
-    
-  }
+  updated() {}
 };
 </script>
 

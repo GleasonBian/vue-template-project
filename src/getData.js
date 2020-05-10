@@ -282,3 +282,8 @@ export const allCollect = data => fetch("statis", data, "get");
  * 调度报表 - 油单个核算
  */
 export const singleCollect = data => fetch("statis", data, "get");
+
+/**
+ * 登录
+ */
+export const login = data => fetch("login", data, "post");

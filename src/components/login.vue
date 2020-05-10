@@ -8,7 +8,7 @@
           <el-col :span="24">
             <el-input
               id="name"
-              v-model="userName"
+              v-model="userid"
               placeholder="请输入帐号"
               class="el-input"
               @keyup.enter.native="check"
@@ -51,11 +51,11 @@
   </el-main>
 </template>
 <script>
-// import { login } from "@/getData";
+import { login } from "@/getData";
 export default {
   data() {
     return {
-      userName: "",
+      userid: "",
       password: ""
     };
   },
@@ -79,16 +79,19 @@ export default {
         return;
       }
       let data = {
-        username: this.userName,
+        userid: this.userid,
         password: this.password
       };
-      this.$message.success('登录成功')
-      this.$router.push("/dashboard");
-      // const res = await login(data);
-      // if (res.result) {
-        // sessionStorage.setItem('companyId',  escape(res.data.user.companyId));
-        // this.$router.push('/middleground');
-      // } else this.$message.warning(res.message);
+      console.log(data);
+
+      const res = await login(data);
+      console.log(res.data);
+      if (res.data.code === 200) {
+        this.$message.success("登录成功");
+        sessionStorage["Authorization"];
+        sessionStorage.setItem("Authorization", res.data.Data);
+        this.$router.push("/dashboard");
+      } else this.$message.warning("账号或密码错误");
     }
   }
 };
