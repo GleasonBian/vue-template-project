@@ -341,12 +341,14 @@ export default {
         let reader = new FileReader();
 
         reader.onload = () => {
-          console.log("Result: " + reader.result);
+          let data = reader.result;
+          data = eval("(" + data + ")");
+          console.log(data);
         };
 
         reader.readAsText(event.data);
       } else {
-        console.log("Result: " + event.data);
+        console.log("Result2: " + event.data);
       }
     },
     websocketonopen() {
