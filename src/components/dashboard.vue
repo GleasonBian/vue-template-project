@@ -75,18 +75,18 @@
 </template>
 
 <script>
-import VueAMap from "vue-amap";
 import {
   equiSelect, //设备列表
   allCollect, // 全部
   singleCollect // 单个
 } from "@/getData";
-let amapManager = new VueAMap.AMapManager();
 export default {
   name: "dashboard",
   data() {
     return {
       map: null,
+      path: [],
+      marks: [],
       tableData: [], //设备列表
       markers: [
         {
@@ -95,7 +95,6 @@ export default {
       ],
       zoom: 13,
       center: [112.860257, 36.860496],
-      amapManager,
       total: {},
       single: {},
       websock: null
@@ -135,169 +134,6 @@ export default {
       const res = await equiSelect();
       this.tableData = res.data;
     },
-    add() {
-      let o = amapManager.getMap();
-      let marker = new AMap.Marker({
-        position: [121.59996, 31.177646]
-      });
-      marker.setMap(o);
-    },
-    async initCharts() {
-      const res = await allCollect();
-
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-
-      let myChart = this.$echarts.init(this.$refs.chart);
-      myChart.setOption({
-        title: {
-          text: "油耗产出总览",
-          textStyle: {
-            // color: "#",
-          },
-          left: "center"
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross",
-            crossStyle: {
-              color: "#999"
-            }
-          }
-        },
-        legend: {
-          data: ["总油量", "总耗时", "总产出"],
-          top: "10%" //与上方的距离 可百分比% 可像素px
-        },
-        xAxis: [
-          {
-            type: "category",
-            data: this.total.xAxis,
-            axisPointer: {
-              type: "shadow"
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            name: "升",
-            min: 0,
-            interval: 50,
-            axisLabel: {
-              formatter: "{value} L"
-            }
-          },
-          {
-            type: "value",
-            name: "小时",
-            min: 0,
-            interval: 5,
-            axisLabel: {
-              formatter: "{value} H"
-            }
-          }
-        ],
-        series: [
-          {
-            name: "总油量",
-            type: "bar",
-            data: this.total.yAxis.oil
-          },
-          {
-            name: "总耗时",
-            type: "bar",
-            data: this.total.yAxis.time
-          },
-          {
-            name: "总产出",
-            type: "line",
-            yAxisIndex: 1,
-            data: this.total.yAxis.amount
-          }
-        ]
-      });
-      window.onresize = function() {
-        myChart.resize();
-      };
-    },
-    async singleHandle() {
-      const res = await singleCollect();
-
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-
-      let myChart = this.$echarts.init(this.$refs.single);
-
-      let option = {
-        tooltip: {
-          formatter: "{c}{b}"
-        },
-        title: {
-          text: "车速",
-          left: "left"
-        },
-        series: [
-          {
-            name: "车速",
-            type: "gauge",
-            detail: {
-              formatter: "{value}",
-              textStyle: {
-                // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                fontWeight: "bolder",
-                fontSize: 12
-              }
-            },
-            data: [{ value: 50, name: "km/h" }]
-          }
-        ]
-      };
-      setInterval(function() {
-        option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-        myChart.setOption(option, true);
-      }, 2000);
-      window.onresize = function() {
-        myChart.resize();
-      };
-    },
     initWebSocket() {
       //初始化weosocket
       const wsuri = "ws://192.168.3.210:8090/ws/leffss";
@@ -312,7 +148,7 @@ export default {
       //数据接收
       if (event.data instanceof Blob) {
         let reader = new FileReader();
-
+        let that = this;
         reader.onload = () => {
           if (reader.result == "Hello WebSockets!") return;
           let data = reader.result;
