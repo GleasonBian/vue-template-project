@@ -155,46 +155,57 @@ export default {
           let data = reader.result;
           data = eval("(" + data + ")");
           console.log("解析->", data);
-          this.map.center = [data.longitude, data.latitude];
-          let obj = { position: [data.longitude, data.latitude] };
-          let mark = new AMap.Marker({
-            position: [data.longitude, data.latitude]
-          });
-          let pathParam = {
-            x: data.longitude,
-            y: data.latitude,
-            sp: data.speed,
-            ag: data.direction,
-            tm: Date.parse(data.gpstime)
-          };
-          this.marks.push(mark);
-          this.path.push(pathParam);
-          this.markers.push(obj);
-          this.map.add(this.marks);
-          let graspRoad = new AMap.GraspRoad();
-          console.log("graspRoad", graspRoad);
-          console.log("path", this.path);
-          graspRoad.driving(this.path, function(error, result) {
-            console.log("result", result);
-            console.log("err", error);
-            if (!error) {
-              var path2 = [];
-              var newPath = result.data.points;
-
-              for (var i = 0; i < newPath.length; i += 1) {
-                path2.push([newPath[i].x, newPath[i].y]);
-              }
-              var newLine = new AMap.Polyline({
-                path: path2,
-                strokeWeight: 8,
-                strokeOpacity: 0.8,
-                strokeColor: "#0091ea",
-                showDir: true
-              });
-              that.map.add(newLine);
-              that.map.setFitView();
+          //循环现有marks
+          for(var i=0;i<that.marks.length;i++){
+            console.log('i',i)
+            console.log(this.marks[i].guid)
+            if(this.marks[i].guid==data.guid){
+              this.marks[i].position=[data.longitude, data.latitude]; //更新position信息
+              return;
             }
-          });
+            if(i==this.marks.length-1 && this.marks[i].guid!=data.guid){//新增点
+              let mark = new AMap.Marker({
+                guid: data.guid,
+                position: [data.longitude, data.latitude]
+              });
+              this.marks.push(mark)
+            }
+          }
+          this.map.add(this.marks); //画点
+
+
+         
+          // let pathParam = {
+          //   x: data.longitude,
+          //   y: data.latitude,
+          //   sp: data.speed,
+          //   ag: data.direction,
+          //   tm: Date.parse(data.gpstime)
+          // };
+          // this.path.push(pathParam);
+          // let graspRoad = new AMap.GraspRoad(); //行驶轨迹
+          // console.log("graspRoad", graspRoad);
+          // graspRoad.driving(this.path, function(error, result) {//行驶轨迹
+          //   console.log("result", result);
+          //   console.log("err", error);
+          //   if (!error) {
+          //     var path2 = [];
+          //     var newPath = result.data.points;
+
+          //     for (var i = 0; i < newPath.length; i += 1) {
+          //       path2.push([newPath[i].x, newPath[i].y]);
+          //     }
+          //     var newLine = new AMap.Polyline({
+          //       path: path2,
+          //       strokeWeight: 8,
+          //       strokeOpacity: 0.8,
+          //       strokeColor: "#0091ea",
+          //       showDir: true
+          //     });
+          //     that.map.add(newLine);
+          //     that.map.setFitView();
+          //   }
+          // });
           /* 
             altitude: 12.345                                  // 海拔高度
             curmiles: 12                                      // 当前里程
