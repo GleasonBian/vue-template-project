@@ -1,56 +1,82 @@
 <template>
   <div class="amap-page-container">
-    <el-amap
-      vid="amapDemo"
-      :center="center"
-      :amap-manager="amapManager"
-      :zoom="zoom"
-      :resizeEnable="true"
-      class="amap-demo"
-    >
-      <el-amap-marker
-        v-for="marker in markers"
-        :key="marker.mapName"
-        :position="marker.position"
-        :visible="true"
-        :draggable="false"
-      ></el-amap-marker>
-    </el-amap>
-    <div class="card">
-      <el-card class="box-card">
-        <div class="clearfix">
-          <span>卡片名称</span>
+    <el-row :gutter="20">
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-table :data="tableData">
+            <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
+            <el-table-column prop="name" label="车辆名称" width="80" align="center"></el-table-column>
+            <el-table-column prop="name" label="车牌号码" width="100" align="center"></el-table-column>
+            <el-table-column label="车辆状态" width="80" align="center">
+              <template slot-scope="scope">
+                <div class="carStatus">
+                  <div class="active" :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"></div>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
-        <div class="card_content">
-          122,2323
-          <span style="font-size:14px; font-weight:none">台</span>
+      </el-col>
+      <el-col :span="20">
+        <div class="grid-content bg-purple">
+          <div class="map" id="track-map">
+
+          </div>
+          <!-- <el-amap
+            vid="amapDemo"
+            :center="center"
+            :amap-manager="amapManager"
+            :zoom="zoom"
+            :resizeEnable="true"
+            class="amap-demo"
+          >
+            <el-amap-marker
+              v-for="marker in markers"
+              :key="marker.mapName"
+              :position="marker.position"
+              :visible="true"
+              :draggable="false"
+            ></el-amap-marker>
+          </el-amap> -->
+          <div class="card">
+            <el-card class="box-card">
+              <div class="clearfix">
+                <span>卡片名称</span>
+              </div>
+              <div class="card_content">
+                122,2323
+                <span style="font-size:14px; font-weight:none">台</span>
+              </div>
+            </el-card>
+            <el-card class="box-card">
+              <div class="clearfix">
+                <span>卡片名称</span>
+              </div>
+              <div class="card_content">
+                122,2323
+                <span style="font-size:14px; font-weight:none">台</span>
+              </div>
+            </el-card>
+            <el-card class="box-card">
+              <div class="clearfix">
+                <span>卡片名称</span>
+              </div>
+              <div class="card_content">
+                122,2323
+                <span style="font-size:14px; font-weight:none">台</span>
+              </div>
+            </el-card>
+          </div>
         </div>
-      </el-card>
-      <el-card class="box-card">
-        <div class="clearfix">
-          <span>卡片名称</span>
-        </div>
-        <div class="card_content">
-          122,2323
-          <span style="font-size:14px; font-weight:none">台</span>
-        </div>
-      </el-card>
-      <el-card class="box-card">
-        <div class="clearfix">
-          <span>卡片名称</span>
-        </div>
-        <div class="card_content">
-          122,2323
-          <span style="font-size:14px; font-weight:none">台</span>
-        </div>
-      </el-card>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 import VueAMap from "vue-amap";
 import {
+  equiSelect, //设备列表
   allCollect, // 全部
   singleCollect // 单个
 } from "@/getData";
@@ -59,6 +85,8 @@ export default {
   name: "dashboard",
   data() {
     return {
+      map: null,
+      tableData: [], //设备列表
       markers: [
         {
           position: [112.868357, 36.860426]
@@ -75,16 +103,39 @@ export default {
   components: {},
   computed: {},
   created() {
-    this.initWebSocket();
+    
   },
   destroyed() {
     this.websock.close(); //离开路由之后断开websocket连接
   },
   mounted() {
-    // this.initCharts();
-    // this.singleHandle();
+    this.equiList();
+    this.initMap();
+    this.singleHandle();
   },
   methods: {
+    initMap(){
+      let that = this
+      this.map = new AMap.Map('track-map', {
+          zoom:14,//级别
+          center: [112.860257, 36.860496],//中心点坐标
+          resizeEnable: true,
+      });
+      
+      // 插件
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale','AMap.GraspRoad'], function () {
+        that.map.addControl(new AMap.ToolBar())
+        that.map.addControl(new AMap.Scale())
+        that.map.addControl(new AMap.GraspRoad())
+      })
+      console.log('map')
+      console.log(AMap)
+    },
+    async equiList() {
+      //设备列表
+      const res = await equiSelect();
+      this.tableData = res.data;
+    },
     add() {
       let o = amapManager.getMap();
       let marker = new AMap.Marker({
@@ -269,7 +320,9 @@ export default {
           data = eval("(" + data + ")");
           console.log("解析->", data);
           this.center = [data.longitude, data.latitude];
-          this.markers[0].position = [data.longitude, data.latitude];
+          let obj={position: [data.longitude, data.latitude]}
+          this.markers.push(obj)
+          this.map.markers(this.markers)
           /* 
             altitude: 12.345                                  // 海拔高度
             curmiles: 12                                      // 当前里程
@@ -313,10 +366,41 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+@red:#ff0000;
+@green:#66cc66;
+@gray:#cccccc;
+.carStatus{
+  text-align: center;
+  div{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 50%;
+  }
+  .active{
+    background: @green;
+  }
+  .fix{
+    background: @red;
+  }
+  .stop{
+    background: @gray;
+  }
+}
+.carList {
+  width: 30%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
 .amap-page-container {
   width: 100%;
   height: 100%;
+}
+.map{
+  height: 90vh;
 }
 .amap-demo {
   height: 93vh;
