@@ -1,14 +1,19 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <headTop></headTop>
+    <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
     <gt-search :data="searchData" @handle="corpList" size></gt-search>
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
-      <el-button type="primary" size="medium"  @click="dialogFormVisible = true; formCurrentStatus = '创建'" style="margin-left:1%">新增</el-button>
+      <el-button
+        type="primary"
+        size="medium"
+        @click="dialogFormVisible = true; formCurrentStatus = '创建'"
+        style="margin-left:1%"
+      >新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -39,11 +44,30 @@
     </el-col>
 
     <!-- 新增 查看 更新 -->
-    <el-dialog :title="formCurrentStatus+'任务'" :visible.sync="dialogFormVisible" width="30%" @close="DialogClose('form')" :close-on-click-modal="false" top="0vh" center >
-      <el-form :model="form" status-icon :rules="rules" ref="form" label-width="80px" style="width:100%" >
-
+    <el-dialog
+      :title="formCurrentStatus+'任务'"
+      :visible.sync="dialogFormVisible"
+      width="30%"
+      @close="DialogClose('form')"
+      :close-on-click-modal="false"
+      top="0vh"
+      center
+    >
+      <el-form
+        :model="form"
+        status-icon
+        :rules="rules"
+        ref="form"
+        label-width="80px"
+        style="width:100%"
+      >
         <el-form-item label="所属公司" prop="corpguid" v-if="formCurrentStatus==='创建'">
-          <el-select v-model="form.corpguid"     placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
+          <el-select
+            v-model="form.corpguid"
+            placeholder="请选择"
+            @change="resetDept(form.corpguid)"
+            style="width:100%"
+          >
             <el-option
               v-for="item in corpData"
               :key="item.guid"
@@ -54,13 +78,13 @@
         </el-form-item>
 
         <el-form-item label="计划编码" prop="code">
-          <el-input  v-model="form.code"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
 
         <el-form-item label="计划标识" prop="planguid">
-          <el-select v-model="form.planguid"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.planguid" placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in fixData" 
+              v-for="item in fixData"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -69,9 +93,10 @@
         </el-form-item>
 
         <el-form-item label="设备标识" prop="equipguid">
-          <el-select v-model="form.equipguid"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.equipguid" placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in equiData" track-by="item.guid"
+              v-for="item in equiData"
+              track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -88,9 +113,10 @@
         </el-form-item>
 
         <el-form-item label="调度部门" prop="deptsched">
-          <el-select v-model="form.deptsched"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.deptsched" placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in deptData" track-by="item.guid"
+              v-for="item in deptData"
+              track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -99,9 +125,10 @@
         </el-form-item>
 
         <el-form-item label="接收部门" prop="deptrecv">
-          <el-select v-model="form.deptrecv"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.deptrecv" placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in deptData" track-by="item.guid"
+              v-for="item in deptData"
+              track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -110,7 +137,8 @@
         </el-form-item>
 
         <el-form-item label="计划开始" prop="planstart">
-          <el-date-picker v-model="form.planstart"
+          <el-date-picker
+            v-model="form.planstart"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -120,7 +148,8 @@
         </el-form-item>
 
         <el-form-item label="计划结束" prop="planstop">
-          <el-date-picker v-model="form.planstop"
+          <el-date-picker
+            v-model="form.planstop"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -130,7 +159,8 @@
         </el-form-item>
 
         <el-form-item label="实际开始" prop="factstart">
-          <el-date-picker v-model="form.factstart"
+          <el-date-picker
+            v-model="form.factstart"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -140,7 +170,8 @@
         </el-form-item>
 
         <el-form-item label="实际结束" prop="factstop">
-          <el-date-picker v-model="form.factstop"
+          <el-date-picker
+            v-model="form.factstop"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -150,7 +181,8 @@
         </el-form-item>
 
         <el-form-item label="接收时间" prop="recvdate">
-          <el-date-picker v-model="form.recvdate"
+          <el-date-picker
+            v-model="form.recvdate"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -160,7 +192,8 @@
         </el-form-item>
 
         <el-form-item label="下发时间" prop="schedate">
-          <el-date-picker v-model="form.schedate"
+          <el-date-picker
+            v-model="form.schedate"
             type="datetime"
             placeholder="选择日期"
             format="yyyy年MM月dd日 hh:mm:ss"
@@ -168,14 +201,12 @@
             style="width:100%"
           ></el-date-picker>
         </el-form-item>
-
       </el-form>
       <span slot="footer" class="dialog-footer" v-if="form.statuscode!=2">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
         <el-button @click="ResetForm('form')">重置</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 <script>
@@ -188,12 +219,12 @@ import {
   fixdeCreate, // 维修任务创建
   fixdeSelect, // 维修列表
   fixdeDetail, // 维修详情
-  fixdeUpdate,  // 任务更新
-  fixdeDelete,  // 任务删除
-  equiSelect,   // 设备列表
-  fixSelect,    //维修计划列表
+  fixdeUpdate, // 任务更新
+  fixdeDelete, // 任务删除
+  equiSelect, // 设备列表
+  fixSelect, //维修计划列表
   fixTaskStart, // 任务开始
-  fixTaskStop,  // 任务结束
+  fixTaskStop // 任务结束
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
@@ -259,27 +290,27 @@ export default {
         {
           id: "content",
           label: "维修内容"
-        },
+        }
       ],
       // 创建 更新 删除 表单
       form: {
         corpguid: "",
-        code: "",                 // 计划编码
-        planguid: "",             // 计划标识
-        name: "",                 // 任务名称
-        equipguid: "",            // 设备标识
-        content: "",              // 维修内容
-        deptsched: "",            // 调度部门
-        deptrecv: "",             // 接收部门
-        planstart: "",            // 计划开始
-        planstop: "",             // 计划结束
-        factstart: "",            // 实际开始
-        factstop: "",             // 实际结束
-        recvdate: "",             // 开始时间
-        schedate: "",             // 结束时间
-        statuscode: 0,            // 不在页面展示 给个零
-        plandur: 0,               // 计划用时
-        factdur: 0,               // 实际用时
+        code: "", // 计划编码
+        planguid: "", // 计划标识
+        name: "", // 任务名称
+        equipguid: "", // 设备标识
+        content: "", // 维修内容
+        deptsched: "", // 调度部门
+        deptrecv: "", // 接收部门
+        planstart: "", // 计划开始
+        planstop: "", // 计划结束
+        factstart: "", // 实际开始
+        factstop: "", // 实际结束
+        recvdate: "", // 开始时间
+        schedate: "", // 结束时间
+        statuscode: 0, // 不在页面展示 给个零
+        plandur: 0, // 计划用时
+        factdur: 0 // 实际用时
       },
       tableData: [], // 表格数据
       total: 0,
@@ -341,91 +372,119 @@ export default {
       Regular: Regular, // 表单校验正则
       // 表单校验规则
       rules: {
-        code: [{
+        code: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        corpguid: [{
+          }
+        ],
+        corpguid: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
+          }
+        ],
 
-        planguid: [{
+        planguid: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        name: [{
+          }
+        ],
+        name: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        equipguid: [{
+          }
+        ],
+        equipguid: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        content: [{
+          }
+        ],
+        content: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        deptsched: [{
+          }
+        ],
+        deptsched: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        deptrecv: [{
+          }
+        ],
+        deptrecv: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        planstart: [{
+          }
+        ],
+        planstart: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        planstop: [{
+          }
+        ],
+        planstop: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        factstart: [{
+          }
+        ],
+        factstart: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        factstop: [{
+          }
+        ],
+        factstop: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        recvdate: [{
+          }
+        ],
+        recvdate: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
-        schedate: [{
+          }
+        ],
+        schedate: [
+          {
             required: true,
             message: "必填",
             trigger: ["blur", "change"]
-          }],
+          }
+        ]
       },
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
       optionWidth: 250,
       // 公司列表
-      corpData:[],
+      corpData: [],
       // 部门列表
-      deptData:[],
+      deptData: [],
       // 计划列表
-      fixData:[],
+      fixData: [],
       // 设备列表
-      equiData:[],
+      equiData: [],
       // 人员列表
-      staffData:[], 
+      staffData: []
     };
   },
   beforeCreate() {},
@@ -444,17 +503,16 @@ export default {
   //   }, 0);
   // },
   methods: {
-
     /**
      ** 创建 / 新增
      */
     newCreate(val) {
       console.log(val);
       this.dialogFormVisible = true;
-      this.formCurrentStatus = '创建'
-      this.$nextTick(()=>{
+      this.formCurrentStatus = "创建";
+      this.$nextTick(() => {
         this.$refs[val].resetFields();
-      })
+      });
     },
 
     /**
@@ -470,7 +528,7 @@ export default {
      */
     async deptList(val) {
       const res = await getDeptList({ deptguid: val || null });
-      console.log('部门列表',res.data)
+      console.log("部门列表", res.data);
       this.deptData = res.data;
     },
 
@@ -486,7 +544,7 @@ export default {
      */
     async fixList(val) {
       const res = await fixSelect();
-      console.log('计划列表',res.data)
+      console.log("计划列表", res.data);
       this.fixData = res.data;
     },
 
@@ -495,18 +553,18 @@ export default {
      */
     async detaList(val) {
       const res = await fixdeSelect();
-      console.log('维修任务',res.data)
+      console.log("维修任务", res.data);
       this.tableData = res.data;
     },
 
     /**
      ** 更换公司清空部门, 重新获取部门列表
      */
-    async resetDept(cid){
+    async resetDept(cid) {
       this.deptData = [];
       this.form.deptguid = null;
       this.$forceUpdate();
-      this.deptList(cid)
+      this.deptList(cid);
     },
 
     /*
@@ -518,8 +576,8 @@ export default {
           if (this.formCurrentStatus === "创建") this.CreateHandle();
           else if (this.formCurrentStatus === "更新") this.UpdateHandle();
           else if (this.formCurrentStatus === "查看") this.ExamineHandle();
-          else if (this.formCurrentStatus === '开始') this.fixTaskStartHandle()
-          else if (this.formCurrentStatus === '结束') this.fixTaskStopHandle()
+          else if (this.formCurrentStatus === "开始") this.fixTaskStartHandle();
+          else if (this.formCurrentStatus === "结束") this.fixTaskStopHandle();
           this.detaList();
         } else {
           this.$message.error("请正确填写红框内容");
@@ -533,7 +591,7 @@ export default {
      */
     async equiList() {
       const res = await equiSelect();
-      console.log('设备列表',res.data)
+      console.log("设备列表", res.data);
       this.equiData = res.data;
     },
 
@@ -543,7 +601,7 @@ export default {
     async CreateHandle(info) {
       const res = await fixdeCreate(this.form);
       if (res.status === 200) {
-        this.detaList()
+        this.detaList();
         this.$message.success("设备创建成功");
       } else this.$message.warning("设备创建失败");
       this.dialogFormVisible = false;
@@ -558,10 +616,10 @@ export default {
         id: row.guid
       });
       if (response.status === 200) {
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.form = response.data;
-        })
-        
+        });
+
         this.dialogFormVisible = true;
       } else this.$message.warning("请稍后再尝试");
     },
@@ -570,7 +628,7 @@ export default {
      ** 更新预处理
      */
     async UpdatePreprocessing(index, row) {
-      console.log(index, row)
+      console.log(index, row);
       this.ExamineHandle(index, row);
       this.formCurrentStatus = "更新";
     },
@@ -581,7 +639,7 @@ export default {
     async UpdateHandle(index, row) {
       const res = await fixdeUpdate(this.form);
       if (res.status === 200) {
-        this.detaList()
+        this.detaList();
         this.$message.success("更新成功");
       } else this.$message.warning("更新失败,稍后重试");
       this.dialogFormVisible = false;
@@ -603,7 +661,7 @@ export default {
           if (res.status === 200) {
             this.$message.success("删除成功");
           }
-          this.detaList()
+          this.detaList();
         })
         .catch(err => {});
     },
@@ -611,40 +669,38 @@ export default {
     /*
      ** 进入任务
      */
-    IntoTask(index,row) {
-      row.statuscode===0?this.formCurrentStatus = '开始':this.formCurrentStatus = '结束'
+    IntoTask(index, row) {
+      row.statuscode === 0
+        ? (this.formCurrentStatus = "开始")
+        : (this.formCurrentStatus = "结束");
       this.dialogFormVisible = true;
-      this.$nextTick(()=>{
-          this.form = row;
-      })
+      this.$nextTick(() => {
+        this.form = row;
+      });
     },
 
     /*
      ** 提交维修开始任务
      */
     async fixTaskStartHandle() {
-      const res = await fixTaskStart(this.form)
-      if(res.status === 200) 
-        this.$message.success('更新成功')
-      else
-        this.$message.warning("更新失败，稍后重试")
+      const res = await fixTaskStart(this.form);
+      if (res.status === 200) this.$message.success("更新成功");
+      else this.$message.warning("更新失败，稍后重试");
       // 关闭dialog
       this.dialogFormVisible = false;
-      this.formCurrentStatus = '结束';
+      this.formCurrentStatus = "结束";
     },
 
     /*
      ** 提交维修结束任务
      */
-    async fixTaskStopHandle(index,row) {
-      const res = await fixTaskStop(this.form)
-      if(res.status === 200) 
-        this.$message.success('更新成功')
-      else
-        this.$message.warning("更新失败，稍后重试")
+    async fixTaskStopHandle(index, row) {
+      const res = await fixTaskStop(this.form);
+      if (res.status === 200) this.$message.success("更新成功");
+      else this.$message.warning("更新失败，稍后重试");
       // 关闭dialog
       this.dialogFormVisible = false;
-      this.formCurrentStatus = ''
+      this.formCurrentStatus = "";
     },
 
     /*

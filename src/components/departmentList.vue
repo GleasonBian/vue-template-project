@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <headTop></headTop>
+    <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
     <!-- 搜索框 -->
@@ -53,13 +53,7 @@
       top="5vh"
       center
     >
-      <el-form
-        :model="form"
-        status-icon
-        ref="form"
-        label-width="80px"
-        style="width:100%"
-      >
+      <el-form :model="form" status-icon ref="form" label-width="80px" style="width:100%">
         <el-form-item label="所属公司" prop="corp_guid" :rules="[ { required: true, message: '公司 必选'}]">
           <el-select v-model="form.corp_guid" placeholder="请选择" style="width:100%">
             <el-option
@@ -76,13 +70,25 @@
         <el-form-item label="部门编号" prop="code" :rules="[ { required: true, message: '部门编号 必填'}]">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
-        <el-form-item label="部门类别" prop="deptclass" :rules="[ { required: true, message: '部门类别 必填'}]">
+        <el-form-item
+          label="部门类别"
+          prop="deptclass"
+          :rules="[ { required: true, message: '部门类别 必填'}]"
+        >
           <el-input v-model="form.deptclass"></el-input>
         </el-form-item>
-        <el-form-item label="部门类型" prop="depttype" :rules="[ { required: true, message: '部门类型 必填'}]">
+        <el-form-item
+          label="部门类型"
+          prop="depttype"
+          :rules="[ { required: true, message: '部门类型 必填'}]"
+        >
           <el-input v-model="form.depttype"></el-input>
         </el-form-item>
-        <el-form-item label="部门级别" prop="deptrank" :rules="[ { required: true, message: '部门级别 必填'}]">
+        <el-form-item
+          label="部门级别"
+          prop="deptrank"
+          :rules="[ { required: true, message: '部门级别 必填'}]"
+        >
           <el-select v-model="form.deptrank" placeholder="请选择" style="width:100%">
             <el-option label="一级" value="1"></el-option>
             <el-option label="二级" value="2"></el-option>
@@ -99,20 +105,30 @@
             style="width:100%"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="部门简介" prop="briefabout" :rules="[ { required: false, message: '部门简介 必填'}]">
+        <el-form-item
+          label="部门简介"
+          prop="briefabout"
+          :rules="[ { required: false, message: '部门简介 必填'}]"
+        >
           <el-input v-model="form.briefabout"></el-input>
         </el-form-item>
-        <el-form-item label="部门位置" prop="location" :rules="[ { required: true, message: '部门位置 必填'}]">
+        <el-form-item
+          label="部门位置"
+          prop="location"
+          :rules="[ { required: true, message: '部门位置 必填'}]"
+        >
           <el-input v-model="form.location"></el-input>
         </el-form-item>
-        <el-form-item label="上级标识" prop="superior" :rules="[ { required: true, message: '上级标识 必填'}]">
+        <el-form-item
+          label="上级标识"
+          prop="superior"
+          :rules="[ { required: true, message: '上级标识 必填'}]"
+        >
           <el-input v-model="form.superior"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="description">
           <el-input v-model="form.description"></el-input>
         </el-form-item>
-
-    
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
@@ -153,13 +169,25 @@
         <el-form-item label="部门编号" prop="code" :rules="[ { required: true, message: '部门编号 必填'}]">
           <el-input v-model="deptDetail.code"></el-input>
         </el-form-item>
-        <el-form-item label="部门类别" prop="deptclass" :rules="[ { required: true, message: '部门类别 必填'}]">
+        <el-form-item
+          label="部门类别"
+          prop="deptclass"
+          :rules="[ { required: true, message: '部门类别 必填'}]"
+        >
           <el-input v-model="deptDetail.deptclass"></el-input>
         </el-form-item>
-        <el-form-item label="部门类型" prop="depttype" :rules="[ { required: true, message: '部门类型 必填'}]">
+        <el-form-item
+          label="部门类型"
+          prop="depttype"
+          :rules="[ { required: true, message: '部门类型 必填'}]"
+        >
           <el-input v-model="deptDetail.depttype"></el-input>
         </el-form-item>
-        <el-form-item label="部门级别" prop="deptrank" :rules="[ { required: true, message: '部门级别 必填'}]">
+        <el-form-item
+          label="部门级别"
+          prop="deptrank"
+          :rules="[ { required: true, message: '部门级别 必填'}]"
+        >
           <el-select v-model="deptDetail.deptrank" placeholder="请选择" style="width:100%">
             <el-option label="一级" value="1"></el-option>
             <el-option label="二级" value="2"></el-option>
@@ -176,20 +204,30 @@
             style="width:100%"
           ></el-date-picker>
         </el-form-item>
-        <el-form-item label="部门简介" prop="briefabout" :rules="[ { required: false, message: '部门简介 必填'}]">
+        <el-form-item
+          label="部门简介"
+          prop="briefabout"
+          :rules="[ { required: false, message: '部门简介 必填'}]"
+        >
           <el-input v-model="deptDetail.briefabout"></el-input>
         </el-form-item>
-        <el-form-item label="部门位置" prop="location" :rules="[ { required: true, message: '部门位置 必填'}]">
+        <el-form-item
+          label="部门位置"
+          prop="location"
+          :rules="[ { required: true, message: '部门位置 必填'}]"
+        >
           <el-input v-model="deptDetail.location"></el-input>
         </el-form-item>
-        <el-form-item label="上级标识" prop="superior" :rules="[ { required: true, message: '上级标识 必填'}]">
+        <el-form-item
+          label="上级标识"
+          prop="superior"
+          :rules="[ { required: true, message: '上级标识 必填'}]"
+        >
           <el-input v-model="deptDetail.superior"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="description">
           <el-input v-model="deptDetail.description"></el-input>
         </el-form-item>
-
-    
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('deptDetail',deptDetail.guid)">提交</el-button>
@@ -202,12 +240,18 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { getCompList, saveAddDept, getDeptList, getDeptDetail, editDeptDetail, delDept } from "@/getData";
+import {
+  getCompList,
+  saveAddDept,
+  getDeptList,
+  getDeptDetail,
+  editDeptDetail,
+  delDept
+} from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "internalUser",
   data() {
-    
     return {
       deptDetail: {},
       searchData: [
@@ -311,13 +355,9 @@ export default {
       multipleSelection: [], // 用于批量 删除
       dialogFormVisible: false, // 是否显示对话框
       dialogEditFormVisible: false, //编辑部门模态
-      form: {
-        
-      },
+      form: {},
 
       clickCurrentRowInfo: {},
-
-      
 
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
@@ -371,9 +411,9 @@ export default {
     this.getDeptList();
   },
   methods: {
-    getData: function (res) {
-        this.getDeptList();
-      },
+    getData: function(res) {
+      this.getDeptList();
+    },
     //查看公司列表
     async getCompList() {
       let data = {
@@ -383,34 +423,34 @@ export default {
       const res = await getCompList(data);
       if (res.data) {
         // this.$message.success(res.message);
-        this.compList=res.data;
+        this.compList = res.data;
       } else this.$message.warning(res.message);
     },
-    async editDeptSave(guid){
+    async editDeptSave(guid) {
       let data = this.deptDetail;
-      
-      let saveRes = await editDeptDetail({data});
-      console.log(saveRes)
-      if (saveRes.data){
-        this.dialogEditFormVisible=false;
+
+      let saveRes = await editDeptDetail({ data });
+      console.log(saveRes);
+      if (saveRes.data) {
+        this.dialogEditFormVisible = false;
         this.$message.success(saveRes.statusText);
-        this.getDeptList()
+        this.getDeptList();
       }
     },
-    async getDeptDetail(guid){
+    async getDeptDetail(guid) {
       let id = guid;
       let data = {
         // userId: this.currentUserStatusId,
         // status: this.accountStatus
       };
-      let detail = await getDeptDetail({id,data});
-      if (detail.data){
-        this.deptDetail=detail.data[0]
+      let detail = await getDeptDetail({ id, data });
+      if (detail.data) {
+        this.deptDetail = detail.data[0];
       }
     },
 
     //查看部门列表
-     async getDeptList() {
+    async getDeptList() {
       let data = {
         // userId: this.currentUserStatusId,
         // status: this.accountStatus
@@ -418,7 +458,7 @@ export default {
       const res = await getDeptList(data);
       if (res.data) {
         // this.$message.success(res.message);
-        this.deptList=res.data
+        this.deptList = res.data;
       } else this.$message.warning(res.message);
     },
 
@@ -429,28 +469,27 @@ export default {
       info == "newUser" ? (this.dialogFormVisible = true) : "";
       this.getCompList();
     },
-    async editDept(index,row){
+    async editDept(index, row) {
       this.dialogEditFormVisible = true;
-      console.log(row)
-      this.getDeptDetail(row.guid)
+      console.log(row);
+      this.getDeptDetail(row.guid);
     },
-    async delDept(index,row){
+    async delDept(index, row) {
       let that = this;
-       this.$confirm('删除部门?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          console.log(row)
-          let res = delDept({id:row.guid});
+      this.$confirm("删除部门?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          console.log(row);
+          let res = delDept({ id: row.guid });
           if (res) {
-            this.$message.success('删除成功');
-            that.getDeptList()
+            this.$message.success("删除成功");
+            that.getDeptList();
           }
-        }).catch(() => {
-                   
-        });
-      
+        })
+        .catch(() => {});
     },
     /*
      ** 新增用户 form 表单 重置
@@ -547,12 +586,10 @@ export default {
     /*
      ** 新增 用户 form 表单 验证
      */
-    submitForm(formName,id) {
+    submitForm(formName, id) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          formName === "form"
-            ? this.addDept("add")
-            : this.editDeptSave(id);
+          formName === "form" ? this.addDept("add") : this.editDeptSave(id);
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -565,19 +602,18 @@ export default {
      */
     async addDept(info) {
       let data = this.form;
-      
+
       const res = await saveAddDept(data);
-      if (res.status==200) {
+      if (res.status == 200) {
         this.getData(this.limit, this.offset);
         this.$message.success(res.statusText);
       } else this.$message.warning(res.message);
       this.dialogFormVisible = false;
-    },
+    }
 
     /*
      ** 保存 查看/编辑 用户信息
      */
-    
   },
   components: {
     // searchBox,

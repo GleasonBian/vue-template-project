@@ -1,84 +1,50 @@
 <template>
-  <div style="padding:30px 30px 0px 30px">
-    <el-row :gutter="20">
-      <el-col :span="8">
-        <el-card shadow="hover" class="mgb20" style="height:29.5vh">
-          <div style="width:100%; height:28vh" ref="chart"></div>
-        </el-card>
-        <el-card shadow="hover" class="mgb20" style="height:30vh;">
-          <div slot="header" class="clearfix">
-            <span>成本统计</span>
-          </div>油耗
-          <el-progress :percentage="71.3" color="#42b983"></el-progress>设备
-          <el-progress :percentage="24.1" color="#f1e05a"></el-progress>人工
-          <el-progress :percentage="13.7"></el-progress>维护
-          <el-progress :percentage="5.9" color="#f56c6c"></el-progress>
-        </el-card>
-        <el-card shadow="hover" style="height:30vh;">
-          <div style="width:100%; height:28vh" ref="single"></div>
-        </el-card>
-      </el-col>
-      <el-col :span="16">
-        <el-row :gutter="20" class="mgb20">
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
-              <div class="grid-content grid-con-1">
-                <i class="el-icon-lx-people grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">4辆</div>
-                  <div>越野车</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
-              <div class="grid-content grid-con-2">
-                <i class="el-icon-lx-notice grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">7台</div>
-                  <div>火车头</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
-              <div class="grid-content grid-con-3">
-                <i class="el-icon-lx-goods grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">312人</div>
-                  <div>员工</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-card shadow="hover">
-          <div class="amap-page-container">
-            <el-amap
-              vid="amapDemo"
-              :center="center"
-              :amap-manager="amapManager"
-              :zoom="zoom"
-              :resizeEnable="true"
-              class="amap-demo"
-            >
-              <el-amap-marker
-                v-for="marker in markers"
-                :key="marker.mapName"
-                :position="marker.position"
-                :visible="true"
-                :draggable="false"
-              ></el-amap-marker>
-            </el-amap>
-            <div class="toolbar">
-              <button @click="add()">add marker</button>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
+  <div class="amap-page-container">
+    <el-amap
+      vid="amapDemo"
+      :center="center"
+      :amap-manager="amapManager"
+      :zoom="zoom"
+      :resizeEnable="true"
+      class="amap-demo"
+    >
+      <el-amap-marker
+        v-for="marker in markers"
+        :key="marker.mapName"
+        :position="marker.position"
+        :visible="true"
+        :draggable="false"
+      ></el-amap-marker>
+    </el-amap>
+    <div class="card">
+      <el-card class="box-card">
+        <div class="clearfix">
+          <span>卡片名称</span>
+        </div>
+        <div class="card_content">
+          122,2323
+          <span style="font-size:14px; font-weight:none">台</span>
+        </div>
+      </el-card>
+      <el-card class="box-card">
+        <div class="clearfix">
+          <span>卡片名称</span>
+        </div>
+        <div class="card_content">
+          122,2323
+          <span style="font-size:14px; font-weight:none">台</span>
+        </div>
+      </el-card>
+      <el-card class="box-card">
+        <div class="clearfix">
+          <span>卡片名称</span>
+        </div>
+        <div class="card_content">
+          122,2323
+          <span style="font-size:14px; font-weight:none">台</span>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
@@ -106,9 +72,7 @@ export default {
       websock: null
     };
   },
-  components: {
-    // Schart
-  },
+  components: {},
   computed: {},
   created() {
     this.initWebSocket();
@@ -117,8 +81,8 @@ export default {
     this.websock.close(); //离开路由之后断开websocket连接
   },
   mounted() {
-    this.initCharts();
-    this.singleHandle();
+    // this.initCharts();
+    // this.singleHandle();
   },
   methods: {
     add() {
@@ -350,115 +314,40 @@ export default {
 </script>
 
 <style scoped>
-/* .el-row {
-    margin-bottom: 20px;
-} */
-
-.grid-content {
-  display: flex;
-  align-items: center;
-  height: 100px;
-}
-
-.grid-cont-right {
-  flex: 1;
-  text-align: center;
-  font-size: 14px;
-  color: #999;
-}
-
-.grid-num {
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.grid-con-icon {
-  font-size: 50px;
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  line-height: 100px;
-  color: #fff;
-}
-
-.grid-con-1 .grid-con-icon {
-  background: rgb(45, 140, 240);
-}
-
-.grid-con-1 .grid-num {
-  color: rgb(45, 140, 240);
-}
-
-.grid-con-2 .grid-con-icon {
-  background: rgb(100, 213, 114);
-}
-
-.grid-con-2 .grid-num {
-  color: rgb(45, 140, 240);
-}
-
-.grid-con-3 .grid-con-icon {
-  background: rgb(242, 94, 67);
-}
-
-.grid-con-3 .grid-num {
-  color: rgb(242, 94, 67);
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #ccc;
-  margin-bottom: 20px;
-}
-
-.user-avator {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-}
-
-.user-info-cont {
-  padding-left: 50px;
-  flex: 1;
-  font-size: 14px;
-  color: #999;
-}
-
-.user-info-cont div:first-child {
-  font-size: 30px;
-  color: #222;
-}
-
-.user-info-list {
-  font-size: 14px;
-  color: #999;
-  line-height: 25px;
-}
-
-.user-info-list span {
-  margin-left: 70px;
-}
-
-.mgb20 {
-  margin-bottom: 20px;
-}
-
-.todo-item {
-  font-size: 14px;
-}
-
-.todo-item-del {
-  text-decoration: line-through;
-  color: #999;
-}
-
-.schart {
+.amap-page-container {
   width: 100%;
-  height: 300px;
+  height: 100%;
 }
 .amap-demo {
-  height: 75vh;
+  height: 93vh;
+}
+.card {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index: 100;
+}
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix {
+  border-bottom: 1px solid #00000054;
+}
+.clearfix:after {
+  clear: both;
+}
+.card_content {
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.box-card {
+  width: 300px;
+  margin-bottom: 20px;
 }
 </style>

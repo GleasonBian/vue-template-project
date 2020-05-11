@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <headTop></headTop>
+    <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
     <gt-search :data="searchData" @handle="oilPlans" size></gt-search>
@@ -49,7 +49,8 @@
       width="75%"
       :close-on-click-modal="false"
       top="0vh"
-      center>
+      center
+    >
       <div style="text-align:center">
         <gt-table
           :tableData="t_tableData"
@@ -80,7 +81,12 @@
         style="width:100%"
       >
         <el-form-item label="所属公司" prop="corpguid">
-          <el-select v-model="form.corpguid"     placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
+          <el-select
+            v-model="form.corpguid"
+            placeholder="请选择"
+            @change="resetDept(form.corpguid)"
+            style="width:100%"
+          >
             <el-option
               v-for="item in corpData"
               :key="item.guid"
@@ -89,11 +95,12 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        
+
         <el-form-item v-if="form.corpguid" label="所属部门" prop="deptguid">
-          <el-select v-model="form.deptguid"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in deptData" track-by="item.guid"
+              v-for="item in deptData"
+              track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -102,25 +109,26 @@
         </el-form-item>
 
         <el-form-item label="人员" prop="staffid">
-          <el-select v-model="form.staffid"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.staffid" placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in staffData" track-by="item.guid"
+              v-for="item in staffData"
+              track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
             ></el-option>
           </el-select>
         </el-form-item>
-        
+
         <el-form-item label="分类等级" prop="clsrank">
-          <el-select v-model="form.clsrank"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.clsrank" placeholder="请选择" style="width:100%">
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="分类类型" prop="clstype" >
+        <el-form-item label="分类类型" prop="clstype">
           <el-input v-model="form.clstype" placeholder="请选择"></el-input>
         </el-form-item>
 
@@ -135,7 +143,6 @@
         <el-form-item label="计划编码" prop="code">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
-
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
@@ -209,7 +216,7 @@ export default {
         {
           id: "deptname",
           label: "所属部门"
-        },
+        }
       ],
       t_columns: [
         {
@@ -243,7 +250,7 @@ export default {
         {
           id: "location",
           label: "地理位置"
-        },
+        }
       ],
       // 创建 更新 删除 表单
       form: {
@@ -258,7 +265,7 @@ export default {
         name: "", // 计划名称
         proddate: "", // 生产日期
         producer: "", // 生产厂家
-        descrifptio: "", // 描述
+        descrifptio: "" // 描述
       },
       tableData: [], // 表格数据
       t_tableData: [], // 表格数据
@@ -410,16 +417,15 @@ export default {
             message: "描述信息 必填",
             trigger: ["blur", "change"]
           }
-        ],
-
+        ]
       },
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
       optionWidth: 250,
       // 公司列表
-      corpData:[],
+      corpData: [],
       // 部门列表
-      deptData:[],
+      deptData: []
     };
   },
   beforeCreate() {},
@@ -429,21 +435,20 @@ export default {
     this.deptList();
     this.oilPlans();
   },
-  methods:{
-
+  methods: {
     /**
      * 查看任务列表
      * **/
-    async checkTasks(index,row){
-      this.taskDial=true;
-      this.oTasks(row.guid)
+    async checkTasks(index, row) {
+      this.taskDial = true;
+      this.oTasks(row.guid);
     },
 
     /**
      ** 任务列表
      */
     async oTasks(id) {
-      const res = await oildeSelect({id:id+'/oilplan'});
+      const res = await oildeSelect({ id: id + "/oilplan" });
       this.t_tableData = res.data;
     },
 
@@ -460,7 +465,7 @@ export default {
      */
     async corpList(val) {
       const res = await corpSelect();
-      console.log('公司列表',res.data)
+      console.log("公司列表", res.data);
       this.corpData = res.data;
     },
 
@@ -469,18 +474,18 @@ export default {
      */
     async deptList(val) {
       const res = await getDeptList({ deptguid: val || null });
-      console.log('部门列表',res.data)
+      console.log("部门列表", res.data);
       this.deptData = res.data;
     },
 
     /**
      ** 更换公司清空部门, 重新获取部门列表
      */
-     resetDept(cid){
+    resetDept(cid) {
       this.deptData = [];
       this.form.deptguid = null;
       this.$forceUpdate();
-      this.deptList(cid)
+      this.deptList(cid);
     },
 
     /*
@@ -540,7 +545,7 @@ export default {
      ** 更新预处理
      */
     async UpdatePreprocessing(index, row) {
-      console.log(index, row)
+      console.log(index, row);
       this.ExamineHandle(index, row);
       this.formCurrentStatus = "更新";
     },
@@ -589,9 +594,9 @@ export default {
      ** 关闭 dialog
      */
     DialogClose(formName) {
-      console.log(1234)
+      console.log(1234);
       this.$refs[formName].resetFields();
-      console.log(this.$refs[formName])
+      console.log(this.$refs[formName]);
     },
 
     /*

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <headTop></headTop>
+    <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
     <gt-search :data="searchData" @handle="getData" size></gt-search>
@@ -64,13 +64,13 @@
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="公司编码" prop="code">
-          <el-input  v-model="form.code"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item label="公司电话" prop="tel">
-          <el-input  v-model="form.tel"></el-input>
+          <el-input v-model="form.tel"></el-input>
         </el-form-item>
         <el-form-item label="公司邮箱" prop="email">
-          <el-input  v-model="form.email"></el-input>
+          <el-input v-model="form.email"></el-input>
         </el-form-item>
         <el-form-item label="公司地址" prop="location">
           <el-input v-model="form.location"></el-input>
@@ -89,7 +89,7 @@
         </el-form-item>
         <!-- <el-form-item label="上级标识" prop="superior">
           <el-input v-model="form.superior"></el-input>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="公司税号" prop="taxcode">
           <el-input v-model="form.taxcode"></el-input>
         </el-form-item>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <headTop></headTop>
+    <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
     <!-- 搜索框 -->
@@ -53,15 +53,14 @@
       top="5vh"
       center
     >
-      <el-form
-        :model="form"
-        status-icon
-        ref="form"
-        label-width="80px"
-        style="width:100%"
-      >
+      <el-form :model="form" status-icon ref="form" label-width="80px" style="width:100%">
         <el-form-item label="所属公司" prop="corpguid" :rules="[ { required: true, message: '公司 必选'}]">
-          <el-select v-model="form.corpguid"    @change="resetDept(form.corpguid)" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.corpguid"
+            @change="resetDept(form.corpguid)"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
               v-for="item in compList"
               :key="item.guid"
@@ -70,10 +69,21 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="form.corpguid" label="所属部门" prop="deptguid" :rules="[ { required: true, message: '部门 必选'}]">
-          <el-select v-model="form.deptguid" @change="resetRole(form.deptguid)" placeholder="请选择" style="width:100%">
+        <el-form-item
+          v-if="form.corpguid"
+          label="所属部门"
+          prop="deptguid"
+          :rules="[ { required: true, message: '部门 必选'}]"
+        >
+          <el-select
+            v-model="form.deptguid"
+            @change="resetRole(form.deptguid)"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
-              v-for="item in deptList" track-by="item.guid"
+              v-for="item in deptList"
+              track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -86,7 +96,12 @@
         <el-form-item label="人员编号" prop="code" :rules="[ { required: true, message: '人员编号 必填'}]">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
-        <el-form-item v-if="form.deptguid" label="角色" prop="roleguid" :rules="[ { required: false, message: '角色 必选'}]">
+        <el-form-item
+          v-if="form.deptguid"
+          label="角色"
+          prop="roleguid"
+          :rules="[ { required: false, message: '角色 必选'}]"
+        >
           <el-select v-model="form.roleguid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in roleList"
@@ -105,14 +120,18 @@
               :value="item.guid"
             ></el-option>
           </el-select>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="性别" prop="gender" :rules="[ { required: true, message: '性别 必填'}]">
           <el-select v-model="form.gender" placeholder="请选择" style="width:100%">
             <el-option label="男" value="男"></el-option>
             <el-option label="女" value="女"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="证件类型" prop="certtype" :rules="[ { required: true, message: '证件类型 必填'}]">
+        <el-form-item
+          label="证件类型"
+          prop="certtype"
+          :rules="[ { required: true, message: '证件类型 必填'}]"
+        >
           <el-select v-model="form.certtype" placeholder="请选择" style="width:100%">
             <el-option label="身份证" value="身份证"></el-option>
             <el-option label="军官证" value="军官证"></el-option>
@@ -124,10 +143,7 @@
         </el-form-item>
         <!-- <el-form-item label="上级标识" prop="superior" :rules="[ { required: true, message: '上级标识 必填'}]">
           <el-input v-model="form.superior"></el-input>
-        </el-form-item> -->
-        
-
-    
+        </el-form-item>-->
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
@@ -153,7 +169,12 @@
         style="width:100%"
       >
         <el-form-item label="所属公司" prop="corpguid" :rules="[ { required: true, message: '公司 必选'}]">
-          <el-select v-model="staffDetail.corpguid" @change="resetDept2(staffDetail.corpguid)" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="staffDetail.corpguid"
+            @change="resetDept2(staffDetail.corpguid)"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
               v-for="item in compList"
               :key="item.guid"
@@ -162,10 +183,21 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-if="staffDetail.corpguid" label="所属部门" prop="deptguid" :rules="[ { required: true, message: '部门 必选'}]">
-          <el-select v-model="staffDetail.deptguid" @change="resetRole2(staffDetail.deptguid)" placeholder="请选择" style="width:100%">
+        <el-form-item
+          v-if="staffDetail.corpguid"
+          label="所属部门"
+          prop="deptguid"
+          :rules="[ { required: true, message: '部门 必选'}]"
+        >
+          <el-select
+            v-model="staffDetail.deptguid"
+            @change="resetRole2(staffDetail.deptguid)"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
-              v-for="item in deptList" track-by="item.guid"
+              v-for="item in deptList"
+              track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -178,7 +210,12 @@
         <el-form-item label="人员编号" prop="code" :rules="[ { required: true, message: '人员编号 必填'}]">
           <el-input v-model="staffDetail.code"></el-input>
         </el-form-item>
-        <el-form-item v-if="staffDetail.deptguid" label="角色" prop="roleguid" :rules="[ { required: false, message: '角色 必选'}]">
+        <el-form-item
+          v-if="staffDetail.deptguid"
+          label="角色"
+          prop="roleguid"
+          :rules="[ { required: false, message: '角色 必选'}]"
+        >
           <el-select v-model="staffDetail.roleguid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in roleList"
@@ -197,14 +234,18 @@
               :value="item.guid"
             ></el-option>
           </el-select>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="性别" prop="gender" :rules="[ { required: true, message: '性别 必填'}]">
           <el-select v-model="staffDetail.gender" placeholder="请选择" style="width:100%">
             <el-option label="男" value="男"></el-option>
             <el-option label="女" value="女"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="证件类型" prop="certtype" :rules="[ { required: true, message: '证件类型 必填'}]">
+        <el-form-item
+          label="证件类型"
+          prop="certtype"
+          :rules="[ { required: true, message: '证件类型 必填'}]"
+        >
           <el-select v-model="staffDetail.certtype" placeholder="请选择" style="width:100%">
             <el-option label="身份证" value="身份证"></el-option>
             <el-option label="军官证" value="军官证"></el-option>
@@ -216,9 +257,7 @@
         </el-form-item>
         <!-- <el-form-item label="上级标识" prop="superior" :rules="[ { required: true, message: '上级标识 必填'}]">
           <el-input v-model="staffDetail.superior"></el-input>
-        </el-form-item> -->
-
-    
+        </el-form-item>-->
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm('staffDetail',staffDetail.guid)">提交</el-button>
@@ -231,18 +270,26 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { getStaffList, getRoleList, getCompList, saveAddStaff, getDeptList, getStaffDetail, editStaffDetail, delStaff } from "@/getData";
+import {
+  getStaffList,
+  getRoleList,
+  getCompList,
+  saveAddStaff,
+  getDeptList,
+  getStaffDetail,
+  editStaffDetail,
+  delStaff
+} from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "staff",
   data() {
-    
     return {
       staffDetail: {
-        corpguid: '',
-        deptguid: '',
-        certtype: '',
-        roleguid: ''
+        corpguid: "",
+        deptguid: "",
+        certtype: "",
+        roleguid: ""
       },
       roleList: [],
       staffList: [],
@@ -343,7 +390,7 @@ export default {
         {
           id: "certguid",
           label: "证件号"
-        },
+        }
       ],
       Regular: Regular, // 验证
       userStatusDialogVisible: false,
@@ -356,9 +403,9 @@ export default {
       dialogFormVisible: false, // 是否显示对话框
       dialogEditFormVisible: false, //编辑部门模态
       form: {
-        deptguid: '',
-        certtype: '',
-        roleguid: ''
+        deptguid: "",
+        certtype: "",
+        roleguid: ""
       },
       clickCurrentRowInfo: {},
       isShowViewUser: false, // 是否显示 查看用户 dialog
@@ -381,35 +428,35 @@ export default {
     this.getData();
   },
   methods: {
-    async resetDept(cid){
+    async resetDept(cid) {
       //先重制部门列表
       this.deptList = [];
       this.form.deptguid = null;
       this.$forceUpdate();
-      this.getDeptList(cid)
+      this.getDeptList(cid);
     },
     //resetRole
-    async resetRole(did){
+    async resetRole(did) {
       //先重制人员列表
       this.roleList = [];
       this.form.roleguid = null;
       this.$forceUpdate();
-      this.getRole(did)
+      this.getRole(did);
     },
-    async resetDept2(cid){
+    async resetDept2(cid) {
       //先重制部门列表
       this.deptList = [];
       this.staffDetail.deptguid = null;
       this.$forceUpdate();
-      this.getDeptList(cid)
+      this.getDeptList(cid);
     },
     //resetRole
-    async resetRole2(did){
+    async resetRole2(did) {
       //先重制人员列表
       this.roleList = [];
       this.staffDetail.roleguid = null;
       this.$forceUpdate();
-      this.getRole(did)
+      this.getRole(did);
     },
     async getData(val) {
       // console.log(val);
@@ -424,9 +471,9 @@ export default {
         // status: this.accountStatus
       };
       const res = await getRoleList(data);
-      if (res.status==200) {
+      if (res.status == 200) {
         // this.$message.success(res.message);
-        this.roleList=res.data;
+        this.roleList = res.data;
       } else this.$message.warning(res.statusText);
     },
     //查看公司列表
@@ -436,23 +483,23 @@ export default {
         // status: this.accountStatus
       };
       const res = await getCompList(data);
-      if (res.status==200) {
+      if (res.status == 200) {
         // this.$message.success(res.message);
-        this.compList=res.data;
+        this.compList = res.data;
       } else this.$message.warning(res.statusText);
     },
-    async editStaffSave(guid){
+    async editStaffSave(guid) {
       let data = this.staffDetail;
-      
-      let saveRes = await editStaffDetail({data});
-      console.log(saveRes)
-      if (saveRes.data){
-        this.dialogEditFormVisible=false;
+
+      let saveRes = await editStaffDetail({ data });
+      console.log(saveRes);
+      if (saveRes.data) {
+        this.dialogEditFormVisible = false;
         this.$message.success(saveRes.statusText);
-        this.getData()
+        this.getData();
       }
     },
-    async getStaffDetail(guid){
+    async getStaffDetail(guid) {
       let id = guid;
       let data = {
         // userId: this.currentUserStatusId,
@@ -460,14 +507,14 @@ export default {
       };
       this.getCompList();
       this.getDeptList();
-      let detail = await getStaffDetail({id,data});
-      if (detail.data){
-        this.staffDetail=detail.data
+      let detail = await getStaffDetail({ id, data });
+      if (detail.data) {
+        this.staffDetail = detail.data;
       }
     },
 
     //查看对应部门列表
-     async getDeptList(cid) {
+    async getDeptList(cid) {
       let data = {
         corpguid: cid || null
         // userId: this.currentUserStatusId,
@@ -476,7 +523,7 @@ export default {
       const res = await getDeptList(data);
       if (res.data) {
         // this.$message.success(res.message);
-        this.deptList=[...res.data]
+        this.deptList = [...res.data];
       } else this.$message.warning(res.message);
     },
 
@@ -488,29 +535,27 @@ export default {
       this.getCompList();
       this.getRole();
     },
-    async editStaff(index,row){
+    async editStaff(index, row) {
       this.dialogEditFormVisible = true;
-      console.log(row)
-      this.getStaffDetail(row.guid)
+      console.log(row);
+      this.getStaffDetail(row.guid);
     },
-    async delStaff(index,row){
-      let that=this;
-       this.$confirm('删除人员?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          console.log(row)
-          let res = delStaff({id:row.guid});
+    async delStaff(index, row) {
+      let that = this;
+      this.$confirm("删除人员?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          console.log(row);
+          let res = delStaff({ id: row.guid });
           if (res) {
-            this.$message.success('删除成功');
-            that.getData()
+            this.$message.success("删除成功");
+            that.getData();
           }
-          
-        }).catch(() => {
-                   
-        });
-      
+        })
+        .catch(() => {});
     },
     /*
      ** 新增用户 form 表单 重置
@@ -525,8 +570,6 @@ export default {
     handleDialogClose(formName) {
       this.$refs[formName].resetFields();
     },
-
-    
 
     /*
      ** 列表 分页
@@ -577,17 +620,13 @@ export default {
       this.multipleSelection = arr;
     },
 
-    
-
     /*
      ** 新增 用户 form 表单 验证
      */
-    submitForm(formName,id) {
+    submitForm(formName, id) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          formName === "form"
-            ? this.addStaff("add")
-            : this.editStaffSave(id);
+          formName === "form" ? this.addStaff("add") : this.editStaffSave(id);
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -600,19 +639,18 @@ export default {
      */
     async addStaff(info) {
       let data = this.form;
-      
+
       const res = await saveAddStaff(data);
-      if (res.status==200) {
+      if (res.status == 200) {
         this.getData(this.limit, this.offset);
         this.$message.success(res.statusText);
       } else this.$message.warning(res.statusText);
       this.dialogFormVisible = false;
-    },
+    }
 
     /*
      ** 保存 查看/编辑 用户信息
      */
-    
   },
   components: {
     // searchBox,

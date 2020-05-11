@@ -1,69 +1,73 @@
 <template>
   <div class="manage_page fillcontain">
-    <el-row style="height: 100%;">
-      <el-col :span="3" style="min-height: 100%; background-color: #272B2E;">
-        <el-menu
-          :default-active="defaultActive"
-          background-color="#272B2E"
-          text-color="#ffffff"
-          active-text-color="#FFD04B"
-          :unique-opened="true"
-          :collapse-transition="true"
-          router
-        >
-          <el-menu-item index="/dashboard">
-            <i class="iconfont i-menu-one" ></i>首页
-          </el-menu-item>
-          <el-submenu index="1" popper-class="submenu-userManger">
-            <template slot="title">
-              <i class="iconfont i-menu-six"></i>统计
-            </template>
-            <el-menu-item index="/report/fixRep">维修报表</el-menu-item>
-            <!-- <el-menu-item index="/report/oilRep">加油报表</el-menu-item> -->
-            <el-menu-item index="/report/assignRep">调度报表</el-menu-item>
-          </el-submenu>
-          <el-submenu index="2" popper-class="submenu-userManger">
-            <template slot="title">
-              <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
-            </template>
-            <el-menu-item index="/platform/companyList">公司管理</el-menu-item>
-            <el-menu-item index="/platform/departmentList">部门管理</el-menu-item>
-            <el-menu-item index="/platform/role">角色管理</el-menu-item>
-            <el-menu-item index="/platform/staff">人员管理</el-menu-item>
-            <el-menu-item index="/platform/equipment">设备管理</el-menu-item>
-          </el-submenu>
-          <el-submenu index="3" popper-class="submenu-userManger">
-            <template slot="title">
-              <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
-            </template>
-            <el-menu-item index="/plan/fixplan">维修计划</el-menu-item>
-            <el-menu-item index="/plan/fixtask">维修任务</el-menu-item>
-            <el-menu-item index="/plan/oilplan">加油计划</el-menu-item>
-            <el-menu-item index="/plan/oiltask">加油任务</el-menu-item>
-          </el-submenu>
-          <el-submenu index="4" popper-class="submenu-userManger">
-            <template slot="title">
-              <i class="iconfont i-menu-four"></i>调令
-            </template>
-            <el-menu-item index="/assign/assignplan">调度计划</el-menu-item>
-            <el-menu-item index="/assign/assigntask">调度任务</el-menu-item>
-          </el-submenu>
-          <el-menu-item>
-            <i class="iconfont i-menu-five"></i> <a href="http://114.215.194.254:89/Interface/checkDbUser" target="_bank" style="color:#fff">监控平台</a>
-          </el-menu-item>
-          <!-- <el-submenu index="5" popper-class="submenu-userManger">
+    <el-row class="menu-row-style">
+      <el-menu
+        :default-active="defaultActive"
+        background-color="#272B2E"
+        text-color="#ffffff"
+        active-text-color="#FFD04B"
+        :unique-opened="true"
+        :collapse-transition="true"
+        router
+        mode="horizontal"
+      >
+        <el-menu-item index="/dashboard">
+          <i class="iconfont i-menu-one"></i>首页
+        </el-menu-item>
+        <el-submenu index="1" popper-class="submenu-userManger">
+          <template slot="title">
+            <i class="iconfont i-menu-six"></i>统计
+          </template>
+          <el-menu-item index="/report/fixRep" class="myClass">维修报表</el-menu-item>
+          <el-menu-item index="/report/oilRep">加油报表</el-menu-item>
+          <el-menu-item index="/report/assignRep">调度报表</el-menu-item>
+        </el-submenu>
+        <el-submenu index="2" popper-class="submenu-userManger">
+          <template slot="title">
+            <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
+          </template>
+          <el-menu-item index="/platform/companyList" class="myClass">公司管理</el-menu-item>
+          <el-menu-item index="/platform/departmentList">部门管理</el-menu-item>
+          <el-menu-item index="/platform/role">角色管理</el-menu-item>
+          <el-menu-item index="/platform/staff">人员管理</el-menu-item>
+          <el-menu-item index="/platform/equipment">设备管理</el-menu-item>
+        </el-submenu>
+        <el-submenu index="3" popper-class="submenu-userManger">
+          <template slot="title">
+            <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
+          </template>
+          <el-menu-item index="/plan/fixplan">维修计划</el-menu-item>
+          <el-menu-item index="/plan/fixtask">维修任务</el-menu-item>
+          <el-menu-item index="/plan/oilplan">加油计划</el-menu-item>
+          <el-menu-item index="/plan/oiltask">加油任务</el-menu-item>
+        </el-submenu>
+        <el-submenu index="4" popper-class="submenu-userManger">
+          <template slot="title">
+            <i class="iconfont i-menu-four"></i>调令
+          </template>
+          <el-menu-item index="/assign/assignplan">调度计划</el-menu-item>
+          <el-menu-item index="/assign/assigntask">调度任务</el-menu-item>
+        </el-submenu>
+        <!-- <el-menu-item>
+          <i class="iconfont i-menu-five"></i>
+          <a
+            href="http://114.215.194.254:89/Interface/checkDbUser"
+            target="_bank"
+            style="color:#fff"
+          >监控平台</a>
+        </el-menu-item>-->
+        <!-- <el-submenu index="5" popper-class="submenu-userManger">
             <template slot="title">
               <i class="iconfont i-user-manger"></i>交接班
             </template>
             <el-menu-item index="/charge/chargework">交接班</el-menu-item>
-          </el-submenu> -->
-        </el-menu>
-      </el-col>
-      <el-col :span="21" style="height: 100%;overflow: auto;">
-        <transition>
-          <router-view></router-view>
-        </transition>
-      </el-col>
+        </el-submenu>-->
+      </el-menu>
+    </el-row>
+    <el-row>
+      <transition>
+        <router-view></router-view>
+      </transition>
     </el-row>
   </div>
 </template>
@@ -81,66 +85,8 @@ export default {
       active: "0-0",
       menuList: [],
       mtemList: [],
-      isCollapse: false,
+      isCollapse: false
       /*************************************************** */
-      menuLeftBar: [
-        {
-          name: "数据总览",
-          title: "数据总览",
-          index: 0,
-          code: "0901",
-          children: []
-        },
-        {
-          name: "用户管理",
-          title: "用户管理",
-          index: 1,
-          code: "0903",
-          children: []
-        },
-        {
-          name: "订单中心",
-          title: "订单中心",
-          index: 2,
-          code: "0902",
-          children: []
-        },
-        {
-          name: "商家管理",
-          title: "商家管理",
-          index: 3,
-          code: "0908",
-          children: []
-        },
-        {
-          name: "商品中心",
-          title: "商品中心",
-          index: 4,
-          code: "0904",
-          children: []
-        },
-        {
-          name: "商家基础",
-          title: "商家基础",
-          index: 5,
-          code: "0905",
-          children: []
-        },
-        {
-          name: "物资中心",
-          title: "物资中心",
-          index: 6,
-          code: "0906",
-          children: []
-        },
-        {
-          name: "统计报表",
-          title: "统计报表",
-          index: 7,
-          code: "0907",
-          children: []
-        }
-      ]
     };
   },
   watch: {
@@ -215,16 +161,29 @@ export default {
   margin-left: 5px;
 }
 
-.el-submenu {
-  width: 100%;
-}
+// .el-submenu {
+//   width: 100%;
+// }
 
-.el-submenu .el-menu-item {
-  min-width: 100%;
-}
+// .el-submenu .el-menu-item {
+//   min-width: 100%;
+// }
 
 // 激活 子菜单 背景色
 .el-menu-item.is-active {
   background-color: rgb(0, 0, 0) !important;
+}
+
+// .menu-row-style {
+//   position: absolute;
+//   top: 0px;
+//   left: 0px;
+//   z-index: 100;
+//   width: 100%;
+// }
+</style>
+<style>
+.myClass >>> .el-menu--popup {
+  min-width: 100vw;
 }
 </style>

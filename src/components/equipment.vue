@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <headTop></headTop>
+    <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
     <gt-search :data="searchData" @handle="corpList" size></gt-search>
@@ -61,7 +61,12 @@
         style="width:100%"
       >
         <el-form-item label="所属公司" prop="corpguid">
-          <el-select v-model="form.corpguid"     placeholder="请选择" @change="resetDept(form.corpguid)" style="width:100%">
+          <el-select
+            v-model="form.corpguid"
+            placeholder="请选择"
+            @change="resetDept(form.corpguid)"
+            style="width:100%"
+          >
             <el-option
               v-for="item in corpData"
               :key="item.guid"
@@ -70,11 +75,12 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        
+
         <el-form-item label="所属部门" prop="deptguid">
-          <el-select v-model="form.deptguid"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in deptData" track-by="item.guid"
+              v-for="item in deptData"
+              track-by="item.guid"
               :key="item.guid"
               :label="item.name"
               :value="item.guid"
@@ -91,14 +97,14 @@
         </el-form-item>
 
         <el-form-item label="分类等级" prop="clsrank">
-          <el-select v-model="form.clsrank"  placeholder="请选择" style="width:100%">
+          <el-select v-model="form.clsrank" placeholder="请选择" style="width:100%">
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="分类类型" prop="clstype" >
+        <el-form-item label="分类类型" prop="clstype">
           <el-input v-model="form.clstype" placeholder="请输入"></el-input>
         </el-form-item>
 
@@ -111,7 +117,7 @@
         </el-form-item>
 
         <el-form-item label="设备编码" prop="code">
-          <el-input  v-model="form.code"></el-input>
+          <el-input v-model="form.code"></el-input>
         </el-form-item>
 
         <el-form-item label="生产日期" prop="proddate">
@@ -126,11 +132,11 @@
         </el-form-item>
 
         <el-form-item label="生产厂家" prop="producer">
-          <el-input  v-model="form.producer"></el-input>
+          <el-input v-model="form.producer"></el-input>
         </el-form-item>
 
         <el-form-item label="描述信息" prop="descrifptio">
-          <el-input  v-model="form.descrifptio"></el-input>
+          <el-input v-model="form.descrifptio"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -221,7 +227,7 @@ export default {
         name: "", // 设备名称
         proddate: "", // 生产日期
         producer: "", // 生产厂家
-        descrifptio: "", // 描述
+        descrifptio: "" // 描述
       },
       tableData: [], // 表格数据
       total: 0,
@@ -364,16 +370,15 @@ export default {
             message: "描述信息 必填",
             trigger: ["blur", "change"]
           }
-        ],
-
+        ]
       },
       isShowViewUser: false, // 是否显示 查看用户 dialog
       isEditor: true,
       optionWidth: 250,
       // 公司列表
-      corpData:[],
+      corpData: [],
       // 部门列表
-      deptData:[],
+      deptData: []
     };
   },
   beforeCreate() {},
@@ -383,13 +388,12 @@ export default {
     this.equiList();
   },
   methods: {
-
     /**
      ** 公司列表
      */
     async corpList(val) {
       const res = await corpSelect();
-      console.log('公司列表',res.data)
+      console.log("公司列表", res.data);
       this.corpData = res.data;
     },
 
@@ -398,25 +402,25 @@ export default {
      */
     async deptList(val) {
       const res = await getDeptList({ deptguid: val || null });
-      console.log('部门列表',res.data)
+      console.log("部门列表", res.data);
       this.deptData = res.data;
     },
 
     /**
      ** 更换公司清空部门, 重新获取部门列表
      */
-    async resetDept(cid){
+    async resetDept(cid) {
       this.deptData = [];
       this.form.deptguid = null;
       this.$forceUpdate();
-      this.deptList(cid)
+      this.deptList(cid);
     },
 
     /*
      ** form 表单 验证
      */
     submitForm(formName) {
-      console.log("232323")
+      console.log("232323");
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.formCurrentStatus === "创建") this.CreateHandle();
@@ -434,7 +438,7 @@ export default {
      */
     async equiList() {
       const res = await equiSelect();
-      console.log('公司列表',res.data)
+      console.log("公司列表", res.data);
       this.tableData = res.data;
     },
 
@@ -469,7 +473,7 @@ export default {
      ** 更新预处理
      */
     async UpdatePreprocessing(index, row) {
-      console.log(index, row)
+      console.log(index, row);
       this.ExamineHandle(index, row);
       this.formCurrentStatus = "更新";
     },
