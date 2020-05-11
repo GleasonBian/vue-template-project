@@ -173,17 +173,4 @@ export default {
 .el-menu-item.is-active {
   background-color: rgb(0, 0, 0) !important;
 }
-
-// .menu-row-style {
-//   position: absolute;
-//   top: 0px;
-//   left: 0px;
-//   z-index: 100;
-//   width: 100%;
-// }
-</style>
-<style>
-.myClass >>> .el-menu--popup {
-  min-width: 100vw;
-}
 </style>

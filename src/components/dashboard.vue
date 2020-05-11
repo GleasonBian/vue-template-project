@@ -272,7 +272,7 @@ export default {
           this.markers[0].position = [data.longitude, data.latitude];
           /* 
             altitude: 12.345                                  // 海拔高度
-            curmiles: 12                                      // 当前里程
+            curmiles: 12                                      // 当前里程 = 今日里程
             curoilconsume: 5.3                                // 当前油耗
             curoilpos: 9.3                                    // 当前油位
             direction: 12                                     // 行驶方向

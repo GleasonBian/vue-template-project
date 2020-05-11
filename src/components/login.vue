@@ -1,7 +1,7 @@
 <template>
   <el-main class="login-box">
     <div class="login-container">
-      <img src="../assets/sjgtw.png" alt="世界高铁网logo" class="sjgtw-logo" />
+      <!-- <img src="../assets/sjgtw.png" alt="世界高铁网logo" class="sjgtw-logo" />
       <div class="systemName">{{'设备管理系统'}}</div>
       <div class="input-box">
         <el-row class="login-row">
@@ -45,7 +45,36 @@
             >登录</el-button>
           </el-col>
         </el-row>
+      </div>-->
+      <div class="login_box">
+        <div class="user_name">
+          <input
+            id="name"
+            v-model="userid"
+            placeholder="请输入帐号"
+            class="name_input"
+            @keyup.enter.native="check"
+          />
+        </div>
+        <div class="user_pass">
+          <input
+            id="password"
+            v-model="password"
+            type="password"
+            placeholder="请输入密码"
+            @keyup.enter.native="check"
+            class="pass_input"
+          />
+        </div>
+        <el-button
+          id="login"
+          @click="check"
+          style="width:100%"
+          type="primary"
+          class="login_button"
+        >登录</el-button>
       </div>
+
       <div class="version">{{version}}</div>
     </div>
   </el-main>
@@ -83,9 +112,7 @@ export default {
         password: this.password
       };
       console.log(data);
-
       const res = await login(data);
-      console.log(res.data);
       if (res.data.code === 200) {
         this.$message.success("登录成功");
         sessionStorage.setItem("Authorization", res.data.Data);
@@ -99,7 +126,7 @@ export default {
 .login-box {
   width: 100vw;
   height: 100vh;
-  background-image: url(../assets/loginBG.png);
+  background-image: url(../assets/loginBG.gif);
   background-size: 100vw 100vh;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -107,12 +134,12 @@ export default {
 
 .login-container {
   box-sizing: border-box;
-  width: 420px;
-  height: 630px;
-  background: #ffffff;
+  width: 448px;
+  height: 525px;
+  background: url(../assets/login_box.png);
   position: absolute;
   right: 200px;
-  top: 100px;
+  top: 25%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -182,5 +209,49 @@ export default {
     width: 144px;
     height: 50px;
   }
+}
+
+.user_name {
+  width: 379px;
+  height: 65px;
+
+  padding-left: 85px;
+}
+.name_input {
+  width: 303px;
+  height: 65px;
+  font-size: 20px;
+  padding-left: 20px;
+  background: none;
+  color: #ffffff;
+}
+.user_pass {
+  width: 379px;
+  height: 65px;
+  margin-top: 25px;
+  padding-left: 85px;
+}
+.pass_input {
+  width: 303px;
+  height: 65px;
+  font-size: 20px;
+  padding-left: 20px;
+  background: none;
+  color: #ffffff;
+}
+.login_button {
+  margin-top: 47px;
+  width: 375px !important;
+  height: 65px;
+  margin-left: 33px;
+}
+.login_box {
+  margin-top: 186px;
+  width: 100%;
+}
+input:-internal-autofill-previewed,
+input:-internal-autofill-selected {
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 5000s ease-in-out 0s !important;
 }
 </style>
