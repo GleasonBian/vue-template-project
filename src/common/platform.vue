@@ -14,46 +14,83 @@
         <el-menu-item index="/dashboard">
           <i class="iconfont i-menu-one"></i>首页
         </el-menu-item>
-        <el-submenu index="5" popper-class="submenu-userManger">
-          <template slot="title">
-            <i class="iconfont i-menu-six"></i>实时监测
-          </template>
-          <el-menu-item index="/monitor/oil">油耗监测</el-menu-item>
-          <el-menu-item index="/monitor/warn">告警监测</el-menu-item>
-        </el-submenu>
-        <el-submenu index="1" popper-class="submenu-userManger">
+        <el-submenu
+          index="1"
+          popper-class="submenu-userManger"
+          @mouseover.native="on_mouse(1)"
+          @mouseout.native="out_mouse(1)"
+        >
           <template slot="title">
             <i class="iconfont i-menu-six"></i>统计
           </template>
-          <el-menu-item index="/report/fixRep" class="myClass">维修报表</el-menu-item>
-          <el-menu-item index="/report/oilRep">加油报表</el-menu-item>
-          <el-menu-item index="/report/assignRep">调度报表</el-menu-item>
+          <el-menu-item
+            style="width:100vw;padding-left:50px"
+            @mouseover.native="on_mouse(1)"
+            @mouseout.native="out_mouse(1)"
+          >
+            <el-menu-item index="/report/fixRep" class="myClass" style="float:left">维修报表</el-menu-item>
+            <el-menu-item index="/report/oilRep" style="float:left">加油报表</el-menu-item>
+            <el-menu-item index="/report/assignRep" style="float:left">调度报表</el-menu-item>
+          </el-menu-item>
         </el-submenu>
-        <el-submenu index="2" popper-class="submenu-userManger">
+        <el-submenu
+          index="2"
+          popper-class="submenu-userManger"
+          @mouseover.native="on_mouse(2)"
+          @mouseout.native="out_mouse(1)"
+        >
           <template slot="title">
             <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
           </template>
-          <el-menu-item index="/platform/companyList" class="myClass">公司管理</el-menu-item>
-          <el-menu-item index="/platform/departmentList">部门管理</el-menu-item>
-          <el-menu-item index="/platform/role">角色管理</el-menu-item>
-          <el-menu-item index="/platform/staff">人员管理</el-menu-item>
-          <el-menu-item index="/platform/equipment">设备管理</el-menu-item>
+          <el-menu-item
+            style="width:100vw;padding-left:95px"
+            @mouseover.native="on_mouse(2)"
+            @mouseout.native="out_mouse(1)"
+          >
+            <el-menu-item index="/platform/companyList" class="myClass" style="float:left">公司管理</el-menu-item>
+            <el-menu-item index="/platform/departmentList" style="float:left">部门管理</el-menu-item>
+            <el-menu-item index="/platform/role" style="float:left">角色管理</el-menu-item>
+            <el-menu-item index="/platform/staff" style="float:left">人员管理</el-menu-item>
+            <el-menu-item index="/platform/equipment" style="float:left">设备管理</el-menu-item>
+          </el-menu-item>
         </el-submenu>
-        <el-submenu index="3" popper-class="submenu-userManger">
+        <el-submenu
+          index="3"
+          popper-class="submenu-userManger"
+          @mouseover.native="on_mouse(3)"
+          @mouseout.native="out_mouse(1)"
+        >
           <template slot="title">
             <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
           </template>
-          <el-menu-item index="/plan/fixplan">维修计划</el-menu-item>
-          <el-menu-item index="/plan/fixtask">维修任务</el-menu-item>
-          <el-menu-item index="/plan/oilplan">加油计划</el-menu-item>
-          <el-menu-item index="/plan/oiltask">加油任务</el-menu-item>
+          <el-menu-item
+            style="width:100vw;padding-left:252px"
+            @mouseover.native="on_mouse(3)"
+            @mouseout.native="out_mouse(1)"
+          >
+            <el-menu-item index="/plan/fixplan" style="float:left;">维修计划</el-menu-item>
+            <el-menu-item index="/plan/fixtask" style="float:left">维修任务</el-menu-item>
+            <el-menu-item index="/plan/oilplan" style="float:left">加油计划</el-menu-item>
+            <el-menu-item index="/plan/oiltask" style="float:left">加油任务</el-menu-item>
+          </el-menu-item>
         </el-submenu>
-        <el-submenu index="4" popper-class="submenu-userManger">
+        <el-submenu
+          index="4"
+          popper-class="submenu-userManger"
+          @mouseover.native="on_mouse(4)"
+          @mouseout.native="out_mouse(1)"
+        >
           <template slot="title">
             <i class="iconfont i-menu-four"></i>调令
           </template>
-          <el-menu-item index="/assign/assignplan">调度计划</el-menu-item>
-          <el-menu-item index="/assign/assigntask">调度任务</el-menu-item>
+          <el-menu-item
+            style="width:100vw;padding-left:450px"
+            @mouseover.native="on_mouse(4)"
+            @mouseout.native="out_mouse(1)"
+          >
+            <el-menu-item index="/assign/assignplan" style="float:left;">调度计划</el-menu-item>
+            <el-menu-item index="/assign/assigntask" style="float:left">调度任务</el-menu-item>
+          </el-menu-item>
         </el-submenu>
         <!-- <el-menu-item>
           <i class="iconfont i-menu-five"></i>
@@ -71,6 +108,7 @@
         </el-submenu>-->
       </el-menu>
     </el-row>
+    <div class="kailong" v-if="flags1" id="trangles" :style="{marginLeft:tranLeft}"></div>
     <el-row>
       <transition>
         <router-view></router-view>
@@ -92,8 +130,10 @@ export default {
       active: "0-0",
       menuList: [],
       mtemList: [],
-      isCollapse: false
+      isCollapse: false,
       /*************************************************** */
+      flags1: false,
+      tranLeft: 0
     };
   },
   watch: {
@@ -104,6 +144,27 @@ export default {
     // this.getPageElement();
   },
   methods: {
+    on_mouse(e) {
+      // this.flags1 = false;
+      switch (e) {
+        case 1:
+          this.tranLeft = "150px";
+          break;
+        case 2:
+          this.tranLeft = "270px";
+          break;
+        case 3:
+          this.tranLeft = "390px";
+          break;
+        case 4:
+          this.tranLeft = "510px";
+          break;
+      }
+      this.flags1 = true;
+    },
+    out_mouse(e) {
+      this.flags1 = false;
+    }
     // async getUserPermission() {
     //   const res = await getUserPermission({
     //     systemCode: "wxsupplier"
@@ -179,5 +240,27 @@ export default {
 // 激活 子菜单 背景色
 .el-menu-item.is-active {
   background-color: rgb(0, 0, 0) !important;
+}
+
+// .menu-row-style {
+//   position: absolute;
+//   top: 0px;
+//   left: 0px;
+//   z-index: 100;
+//   width: 100%;
+// }
+.kailong {
+  position: absolute;
+  z-index: 99999;
+  width: 0;
+  height: 0;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  border-bottom: 5px solid #272b2e;
+}
+</style>
+<style>
+.myClass >>> .el-menu--popup {
+  min-width: 100vw;
 }
 </style>
