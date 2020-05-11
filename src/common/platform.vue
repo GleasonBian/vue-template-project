@@ -15,6 +15,24 @@
           <i class="iconfont i-menu-one"></i>首页
         </el-menu-item>
         <el-submenu
+          index="5"
+          popper-class="submenu-userManger"
+          @mouseover.native="on_mouse(1)"
+          @mouseout.native="out_mouse(1)"
+        >
+          <template slot="title">
+            <i class="iconfont i-menu-six"></i>实时监测
+          </template>
+          <el-menu-item
+            style="width:100vw;padding-left:50px"
+            @mouseover.native="on_mouse(5)"
+            @mouseout.native="out_mouse(5)"
+          >
+            <el-menu-item index="/monitor/oil" class="myClass" style="float:left">油耗监测</el-menu-item>
+            <el-menu-item index="/monitor/warn" style="float:left">告警监测</el-menu-item>
+          </el-menu-item>
+        </el-submenu>
+        <el-submenu
           index="1"
           popper-class="submenu-userManger"
           @mouseover.native="on_mouse(1)"

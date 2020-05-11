@@ -1,51 +1,6 @@
 <template>
   <el-main class="login-box">
     <div class="login-container">
-      <!-- <img src="../assets/sjgtw.png" alt="世界高铁网logo" class="sjgtw-logo" />
-      <div class="systemName">{{'设备管理系统'}}</div>
-      <div class="input-box">
-        <el-row class="login-row">
-          <el-col :span="24">
-            <el-input
-              id="name"
-              v-model="userid"
-              placeholder="请输入帐号"
-              class="el-input"
-              @keyup.enter.native="check"
-            >
-              <template slot="prepend">
-                <img src="../assets/avator.png" height="30px" class="login-image" />
-              </template>
-            </el-input>
-          </el-col>
-        </el-row>
-        <el-row class="login-row">
-          <el-col :span="24">
-            <el-input
-              id="password"
-              v-model="password"
-              type="password"
-              placeholder="请输入密码"
-              @keyup.enter.native="check"
-            >
-              <template slot="prepend">
-                <img src="../assets/password.png" height="30px" class="login-image" />
-              </template>
-            </el-input>
-          </el-col>
-        </el-row>
-        <el-row class="login-row">
-          <el-col :span="24">
-            <el-button
-              id="login"
-              @click="check"
-              style="width:100%"
-              type="primary"
-              class="login-button"
-            >登录</el-button>
-          </el-col>
-        </el-row>
-      </div>-->
       <div class="login_box">
         <div class="user_name">
           <input

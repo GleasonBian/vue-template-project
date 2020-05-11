@@ -156,25 +156,23 @@ export default {
           data = eval("(" + data + ")");
           console.log("解析->", data);
           //循环现有marks
-          for(var i=0;i<that.marks.length;i++){
-            console.log('i',i)
-            console.log(this.marks[i].guid)
-            if(this.marks[i].guid==data.guid){
-              this.marks[i].position=[data.longitude, data.latitude]; //更新position信息
-              return;
-            }
-            if(i==this.marks.length-1 && this.marks[i].guid!=data.guid){//新增点
-              let mark = new AMap.Marker({
-                guid: data.guid,
-                position: [data.longitude, data.latitude]
-              });
-              this.marks.push(mark)
-            }
+          for (var i = 0; i < that.marks.length; i++) {
+            console.log("i", i);
+            // console.log(this.marks[i].guid)
+            // if(this.marks[i].guid==data.guid){
+            //   this.marks[i].position=[data.longitude, data.latitude]; //更新position信息
+            //   return;
+            // }
+            // if(i==this.marks.length-1 && this.marks[i].guid!=data.guid){//新增点
+            //   let mark = new AMap.Marker({
+            //     guid: data.guid,
+            //     position: [data.longitude, data.latitude]
+            //   });
+            //   this.marks.push(mark)
+            // }
           }
           this.map.add(this.marks); //画点
 
-
-         
           // let pathParam = {
           //   x: data.longitude,
           //   y: data.latitude,
