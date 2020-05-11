@@ -75,6 +75,7 @@
 </template>
 
 <script>
+var infoWindow = new AMap.InfoWindow({ offset: new AMap.Pixel(0, -30) });
 import {
   equiSelect, //设备列表
   allCollect, // 全部
@@ -87,6 +88,7 @@ export default {
       map: null,
       path: [],
       marks: [],
+      points: [],
       tableData: [], //设备列表
       markers: [
         {
@@ -130,6 +132,10 @@ export default {
       console.log("map");
       console.log(AMap);
     },
+    markerClick(mark) {
+      infoWindow.setContent(mark.content);
+      infoWindow.open(this.map, mark.getPosition());
+    },
     async equiList() {
       //设备列表
       const res = await equiSelect();
@@ -156,25 +162,50 @@ export default {
           data = eval("(" + data + ")");
           console.log("解析->", data);
           //循环现有marks
-          for(var i=0;i<that.marks.length;i++){
-            console.log('i',i)
-            console.log(this.marks[i].guid)
-            if(this.marks[i].guid==data.guid){
-              this.marks[i].position=[data.longitude, data.latitude]; //更新position信息
-              return;
+          if (that.marks.length) {
+            for (var i = 0; i < that.marks.length; i++) {
+              // console.log("i", that.marks.length);
+              // console.log(this.marks[i].guid == data.guid);
+              if (this.marks[i].guid == data.guid) {
+                this.marks[i].position = [data.longitude, data.latitude]; //更新position信息
+                break;
+              }
+              if (
+                i == this.marks.length - 1 &&
+                this.marks[i].guid != data.guid
+              ) {
+                //新增点
+                let mark = {
+                  guid: data.guid,
+                  position: [data.longitude, data.latitude]
+                };
+                this.marks.push(mark);
+              }
             }
-            if(i==this.marks.length-1 && this.marks[i].guid!=data.guid){//新增点
-              let mark = new AMap.Marker({
-                guid: data.guid,
-                position: [data.longitude, data.latitude]
-              });
-              this.marks.push(mark)
-            }
+          } else {
+            let mark = {
+              guid: data.guid,
+              position: [data.longitude, data.latitude]
+            };
+            this.marks.push(mark);
           }
-          this.map.add(this.marks); //画点
+          console.log(this.marks);
+          this.points = [];
+          for (var j = 0; j < this.marks.length; j++) {
+            //实例化所有点标记
+            let point = new AMap.Marker(this.marks[j]);
+            point.content = "guid : " + this.marks[j].guid;
+            point.on("click", function(e) {
+              infoWindow.setContent(e.target.content);
+              infoWindow.open(that.map, e.target.getPosition());
+            });
+            // point.on("click", this.markerClick(point));
+            point.emit("click", { target: point });
+            this.points.push(point);
+          }
 
-
-         
+          this.map.add(this.points); //画点
+          that.map.setFitView();
           // let pathParam = {
           //   x: data.longitude,
           //   y: data.latitude,
