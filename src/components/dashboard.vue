@@ -10,7 +10,10 @@
             <el-table-column label="车辆状态" width="80" align="center">
               <template slot-scope="scope">
                 <div class="carStatus">
-                  <div class="active" :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"></div>
+                  <div
+                    class="active"
+                    :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"
+                  ></div>
                 </div>
               </template>
             </el-table-column>
@@ -19,9 +22,7 @@
       </el-col>
       <el-col :span="20">
         <div class="grid-content bg-purple">
-          <div class="map" id="track-map">
-
-          </div>
+          <div class="map" id="track-map"></div>
           <!-- <el-amap
             vid="amapDemo"
             :center="center"
@@ -37,7 +38,7 @@
               :visible="true"
               :draggable="false"
             ></el-amap-marker>
-          </el-amap> -->
+          </el-amap>-->
           <div class="card">
             <el-card class="box-card">
               <div class="clearfix">
@@ -74,18 +75,18 @@
 </template>
 
 <script>
-import VueAMap from "vue-amap";
 import {
   equiSelect, //设备列表
   allCollect, // 全部
   singleCollect // 单个
 } from "@/getData";
-let amapManager = new VueAMap.AMapManager();
 export default {
   name: "dashboard",
   data() {
     return {
       map: null,
+      path: [],
+      marks: [],
       tableData: [], //设备列表
       markers: [
         {
@@ -94,7 +95,6 @@ export default {
       ],
       zoom: 13,
       center: [112.860257, 36.860496],
-      amapManager,
       total: {},
       single: {},
       websock: null
@@ -102,202 +102,38 @@ export default {
   },
   components: {},
   computed: {},
-  created() {
-    
-  },
+  created() {},
   destroyed() {
     this.websock.close(); //离开路由之后断开websocket连接
   },
   mounted() {
     this.equiList();
     this.initMap();
-    this.singleHandle();
+    // this.singleHandle();
   },
   methods: {
-    initMap(){
-      let that = this
-      this.map = new AMap.Map('track-map', {
-          zoom:14,//级别
-          center: [112.860257, 36.860496],//中心点坐标
-          resizeEnable: true,
+    initMap() {
+      let that = this;
+      this.map = new AMap.Map("track-map", {
+        zoom: 20, //级别
+        center: [112.860257, 36.860496], //中心点坐标
+        resizeEnable: true
       });
-      
+
       // 插件
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale','AMap.GraspRoad'], function () {
-        that.map.addControl(new AMap.ToolBar())
-        that.map.addControl(new AMap.Scale())
-        that.map.addControl(new AMap.GraspRoad())
-      })
-      console.log('map')
-      console.log(AMap)
+      AMap.plugin(["AMap.ToolBar", "AMap.Scale", "AMap.GraspRoad"], function() {
+        that.map.addControl(new AMap.ToolBar());
+        that.map.addControl(new AMap.Scale());
+        that.map.addControl(new AMap.GraspRoad());
+      });
+      this.initWebSocket();
+      console.log("map");
+      console.log(AMap);
     },
     async equiList() {
       //设备列表
       const res = await equiSelect();
       this.tableData = res.data;
-    },
-    add() {
-      let o = amapManager.getMap();
-      let marker = new AMap.Marker({
-        position: [121.59996, 31.177646]
-      });
-      marker.setMap(o);
-    },
-    async initCharts() {
-      const res = await allCollect();
-
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-
-      let myChart = this.$echarts.init(this.$refs.chart);
-      myChart.setOption({
-        title: {
-          text: "油耗产出总览",
-          textStyle: {
-            // color: "#",
-          },
-          left: "center"
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross",
-            crossStyle: {
-              color: "#999"
-            }
-          }
-        },
-        legend: {
-          data: ["总油量", "总耗时", "总产出"],
-          top: "10%" //与上方的距离 可百分比% 可像素px
-        },
-        xAxis: [
-          {
-            type: "category",
-            data: this.total.xAxis,
-            axisPointer: {
-              type: "shadow"
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            name: "升",
-            min: 0,
-            interval: 50,
-            axisLabel: {
-              formatter: "{value} L"
-            }
-          },
-          {
-            type: "value",
-            name: "小时",
-            min: 0,
-            interval: 5,
-            axisLabel: {
-              formatter: "{value} H"
-            }
-          }
-        ],
-        series: [
-          {
-            name: "总油量",
-            type: "bar",
-            data: this.total.yAxis.oil
-          },
-          {
-            name: "总耗时",
-            type: "bar",
-            data: this.total.yAxis.time
-          },
-          {
-            name: "总产出",
-            type: "line",
-            yAxisIndex: 1,
-            data: this.total.yAxis.amount
-          }
-        ]
-      });
-      window.onresize = function() {
-        myChart.resize();
-      };
-    },
-    async singleHandle() {
-      const res = await singleCollect();
-
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-
-      let myChart = this.$echarts.init(this.$refs.single);
-
-      let option = {
-        tooltip: {
-          formatter: "{c}{b}"
-        },
-        title: {
-          text: "车速",
-          left: "left"
-        },
-        series: [
-          {
-            name: "车速",
-            type: "gauge",
-            detail: {
-              formatter: "{value}",
-              textStyle: {
-                // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                fontWeight: "bolder",
-                fontSize: 12
-              }
-            },
-            data: [{ value: 50, name: "km/h" }]
-          }
-        ]
-      };
-      setInterval(function() {
-        option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-        myChart.setOption(option, true);
-      }, 2000);
-      window.onresize = function() {
-        myChart.resize();
-      };
     },
     initWebSocket() {
       //初始化weosocket
@@ -313,16 +149,52 @@ export default {
       //数据接收
       if (event.data instanceof Blob) {
         let reader = new FileReader();
-
+        let that = this;
         reader.onload = () => {
           if (reader.result == "Hello WebSockets!") return;
           let data = reader.result;
           data = eval("(" + data + ")");
           console.log("解析->", data);
-          this.center = [data.longitude, data.latitude];
-          let obj={position: [data.longitude, data.latitude]}
-          this.markers.push(obj)
-          this.map.markers(this.markers)
+          this.map.center = [data.longitude, data.latitude];
+          let obj = { position: [data.longitude, data.latitude] };
+          let mark = new AMap.Marker({
+            position: [data.longitude, data.latitude]
+          });
+          let pathParam = {
+            x: data.longitude,
+            y: data.latitude,
+            sp: data.speed,
+            ag: data.direction,
+            tm: new Date().getTime()
+          };
+          this.marks.push(mark);
+          this.path.push(pathParam);
+          this.markers.push(obj);
+
+          this.map.add(this.marks);
+          let graspRoad = new AMap.GraspRoad();
+          console.log("graspRoad", graspRoad);
+          graspRoad.driving(this.path, function(error, result) {
+            console.log("result", result);
+            console.log("err", error);
+            if (!error) {
+              var path2 = [];
+              var newPath = result.data.points;
+
+              for (var i = 0; i < newPath.length; i += 1) {
+                path2.push([newPath[i].x, newPath[i].y]);
+              }
+              var newLine = new AMap.Polyline({
+                path: path2,
+                strokeWeight: 8,
+                strokeOpacity: 0.8,
+                strokeColor: "#0091ea",
+                showDir: true
+              });
+              that.map.add(newLine);
+              that.map.setFitView();
+            }
+          });
           /* 
             altitude: 12.345                                  // 海拔高度
             curmiles: 12                                      // 当前里程
@@ -367,24 +239,24 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@red:#ff0000;
-@green:#66cc66;
-@gray:#cccccc;
-.carStatus{
+@red: #ff0000;
+@green: #66cc66;
+@gray: #cccccc;
+.carStatus {
   text-align: center;
-  div{
+  div {
     width: 20px;
     height: 20px;
     display: inline-block;
     border-radius: 50%;
   }
-  .active{
+  .active {
     background: @green;
   }
-  .fix{
+  .fix {
     background: @red;
   }
-  .stop{
+  .stop {
     background: @gray;
   }
 }
@@ -399,7 +271,7 @@ export default {
   width: 100%;
   height: 100%;
 }
-.map{
+.map {
   height: 90vh;
 }
 .amap-demo {
