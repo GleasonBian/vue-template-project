@@ -222,6 +222,32 @@ const router = new Router({
           },
         },
       ]
+    },
+    {
+      path: '/monitor',
+      component: resolve => require(['@/common/platform'], resolve),
+      children: [
+        {
+          path: 'oil',
+          component: resolve => require(['@/components/oilMonitor'], resolve),
+          meta: {
+            crumbs: ['实时监测', '油耗监测'],
+            title: '油耗监测',
+            index: 20,
+            menu: '090302'
+          },
+        },
+        {
+          path: 'warn',
+          component: resolve => require(['@/components/warnMonitor'], resolve),
+          meta: {
+            crumbs: ['实时监测', '告警监测'],
+            title: '油耗监测',
+            index: 10,
+            menu: '090302'
+          },
+        },
+      ]
     }
   ]
 })

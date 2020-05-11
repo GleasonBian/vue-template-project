@@ -287,3 +287,8 @@ export const singleCollect = data => fetch("statis", data, "get");
  * 登录
  */
 export const login = data => fetch("login", data, "post");
+
+/**
+ * 设备概览
+ */
+export const overview = data => fetch("overview", data, "get");

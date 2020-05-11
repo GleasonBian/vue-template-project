@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- 面包屑 -->
-
     <!-- 搜索框 -->
     <gt-search :data="searchData" @handle="assignPlans" size></gt-search>
 

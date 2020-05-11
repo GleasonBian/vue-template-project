@@ -20,84 +20,21 @@
           </el-table>
         </div>
       </el-col>
-      <el-col :span="20">
-        <div class="grid-content bg-purple">
-          <div class="map" id="track-map"></div>
-          <!-- <el-amap
-            vid="amapDemo"
-            :center="center"
-            :amap-manager="amapManager"
-            :zoom="zoom"
-            :resizeEnable="true"
-            class="amap-demo"
-          >
-            <el-amap-marker
-              v-for="marker in markers"
-              :key="marker.mapName"
-              :position="marker.position"
-              :visible="true"
-              :draggable="false"
-            ></el-amap-marker>
-          </el-amap>-->
-          <div class="card">
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span>卡片名称</span>
-              </div>
-              <div class="card_content">
-                122,2323
-                <span style="font-size:14px; font-weight:none">台</span>
-              </div>
-            </el-card>
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span>卡片名称</span>
-              </div>
-              <div class="card_content">
-                122,2323
-                <span style="font-size:14px; font-weight:none">台</span>
-              </div>
-            </el-card>
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span>卡片名称</span>
-              </div>
-              <div class="card_content">
-                122,2323
-                <span style="font-size:14px; font-weight:none">台</span>
-              </div>
-            </el-card>
-          </div>
-        </div>
-      </el-col>
+      <el-col :span="20"></el-col>
     </el-row>
   </div>
 </template>
 
 <script>
-import VueAMap from "vue-amap";
 import {
-  equiSelect, //设备列表
-  allCollect, // 全部
-  singleCollect // 单个
+  equiSelect //设备列表
 } from "@/getData";
-let amapManager = new VueAMap.AMapManager();
 export default {
-  name: "dashboard",
+  name: "oilMonitor",
   data() {
     return {
       map: null,
       tableData: [], //设备列表
-      markers: [
-        {
-          position: [112.868357, 36.860426]
-        }
-      ],
-      zoom: 13,
-      center: [112.860257, 36.860496],
-      amapManager,
-      total: {},
-      single: {},
       websock: null
     };
   },
@@ -109,39 +46,14 @@ export default {
   },
   mounted() {
     this.equiList();
-    this.initMap();
-    // this.singleHandle();
   },
   methods: {
-    initMap() {
-      let that = this;
-      this.map = new AMap.Map("track-map", {
-        zoom: 14, //级别
-        center: [112.860257, 36.860496], //中心点坐标
-        resizeEnable: true
-      });
-
-      // 插件
-      AMap.plugin(["AMap.ToolBar", "AMap.Scale", "AMap.GraspRoad"], function() {
-        that.map.addControl(new AMap.ToolBar());
-        that.map.addControl(new AMap.Scale());
-        that.map.addControl(new AMap.GraspRoad());
-      });
-      console.log("map");
-      console.log(AMap);
-    },
     async equiList() {
       //设备列表
       const res = await equiSelect();
       this.tableData = res.data;
     },
-    add() {
-      let o = amapManager.getMap();
-      let marker = new AMap.Marker({
-        position: [121.59996, 31.177646]
-      });
-      marker.setMap(o);
-    },
+
     async initCharts() {
       const res = await allCollect();
 
@@ -240,64 +152,7 @@ export default {
         myChart.resize();
       };
     },
-    async singleHandle() {
-      const res = await singleCollect();
 
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-
-      let myChart = this.$echarts.init(this.$refs.single);
-
-      let option = {
-        tooltip: {
-          formatter: "{c}{b}"
-        },
-        title: {
-          text: "车速",
-          left: "left"
-        },
-        series: [
-          {
-            name: "车速",
-            type: "gauge",
-            detail: {
-              formatter: "{value}",
-              textStyle: {
-                // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                fontWeight: "bolder",
-                fontSize: 12
-              }
-            },
-            data: [{ value: 50, name: "km/h" }]
-          }
-        ]
-      };
-      setInterval(function() {
-        option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-        myChart.setOption(option, true);
-      }, 2000);
-      window.onresize = function() {
-        myChart.resize();
-      };
-    },
     initWebSocket() {
       //初始化weosocket
       const wsuri = "ws://192.168.3.210:8090/ws/leffss";

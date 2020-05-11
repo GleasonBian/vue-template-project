@@ -14,6 +14,13 @@
         <el-menu-item index="/dashboard">
           <i class="iconfont i-menu-one"></i>首页
         </el-menu-item>
+        <el-submenu index="5" popper-class="submenu-userManger">
+          <template slot="title">
+            <i class="iconfont i-menu-six"></i>实时监测
+          </template>
+          <el-menu-item index="/monitor/oil">油耗监测</el-menu-item>
+          <el-menu-item index="/monitor/warn">告警监测</el-menu-item>
+        </el-submenu>
         <el-submenu index="1" popper-class="submenu-userManger">
           <template slot="title">
             <i class="iconfont i-menu-six"></i>统计
