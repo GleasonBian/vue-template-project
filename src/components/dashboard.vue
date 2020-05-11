@@ -126,6 +126,7 @@ export default {
         that.map.addControl(new AMap.Scale());
         that.map.addControl(new AMap.GraspRoad());
       });
+      this.initWebSocket();
       console.log("map");
       console.log(AMap);
     },
@@ -154,13 +155,49 @@ export default {
           let data = reader.result;
           data = eval("(" + data + ")");
           console.log("解析->", data);
-          this.center = [data.longitude, data.latitude];
+          this.map.center = [data.longitude, data.latitude];
           let obj = { position: [data.longitude, data.latitude] };
+          let mark = new AMap.Marker({
+            position: [data.longitude, data.latitude]
+          });
+          let pathParam = {
+            x: data.longitude,
+            y: data.latitude,
+            sp: data.speed,
+            ag: data.direction,
+            tm: Date.parse(data.gpstime)
+          };
+          this.marks.push(mark);
+          this.path.push(pathParam);
           this.markers.push(obj);
-          this.map.markers(this.markers);
+          this.map.add(this.marks);
+          let graspRoad = new AMap.GraspRoad();
+          console.log("graspRoad", graspRoad);
+          console.log("path", this.path);
+          graspRoad.driving(this.path, function(error, result) {
+            console.log("result", result);
+            console.log("err", error);
+            if (!error) {
+              var path2 = [];
+              var newPath = result.data.points;
+
+              for (var i = 0; i < newPath.length; i += 1) {
+                path2.push([newPath[i].x, newPath[i].y]);
+              }
+              var newLine = new AMap.Polyline({
+                path: path2,
+                strokeWeight: 8,
+                strokeOpacity: 0.8,
+                strokeColor: "#0091ea",
+                showDir: true
+              });
+              that.map.add(newLine);
+              that.map.setFitView();
+            }
+          });
           /* 
             altitude: 12.345                                  // 海拔高度
-            curmiles: 12                                      // 当前里程 = 今日里程
+            curmiles: 12                                      // 当前里程
             curoilconsume: 5.3                                // 当前油耗
             curoilpos: 9.3                                    // 当前油位
             direction: 12                                     // 行驶方向
@@ -197,7 +234,6 @@ export default {
       console.log("断开连接", e);
     }
   },
-  
   updated() {}
 };
 </script>
