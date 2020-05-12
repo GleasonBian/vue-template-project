@@ -126,12 +126,15 @@ export default {
           if (this.points[i].getExtData().id == eqid) {
             console.log("找到设备" + eqid);
             targetM=this.points[i];
-            let point = new AMap.Marker(this.points[i]);
-            this.map.click(targetM);
+            targetM.click();
+            break;
+          }
+          if(i==this.points.length-1 && this.points[i].getExtData().id != eqid){
+            this.$message.error("车辆未在线");
           }
         }
       } else {
-        this.$message.warn("车辆未在线");
+        this.$message.error("车辆未在线");
       }
     },
     initMap() {
