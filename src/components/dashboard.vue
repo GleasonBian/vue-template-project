@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <el-col :span="4">
         <div class="grid-content bg-purple">
-          <el-table :data="tableData">
+          <el-table :data="tableData" @row-click="clickMarker">
             <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
             <el-table-column prop="name" label="车辆名称" width="80" align="center"></el-table-column>
             <el-table-column prop="name" label="车牌号码" width="100" align="center"></el-table-column>
@@ -112,11 +112,28 @@ export default {
     this.websock.close(); //离开路由之后断开websocket连接
   },
   mounted() {
-    this.equiList();
     this.initMap();
+    this.equiList();
     // this.singleHandle();
   },
   methods: {
+    //点击设备列表打开地图中marker
+    clickMarker(row) {
+      let eqid = row.guid;
+      let targetM;
+      if (this.points.length) {
+        for (var i = 0; i < this.points.length; i++) {
+          if (this.points[i].getExtData().id == eqid) {
+            console.log("找到设备" + eqid);
+            targetM=this.points[i];
+            let point = new AMap.Marker(this.points[i]);
+            this.map.click(targetM);
+          }
+        }
+      } else {
+        this.$message.warn("车辆未在线");
+      }
+    },
     initMap() {
       let that = this;
       this.map = new AMap.Map("track-map", {
@@ -168,7 +185,7 @@ export default {
       var titleD = document.createElement("div");
       var closeX = document.createElement("img");
       closeX.style =
-        "position: absolute;top: 10px;right: 10px;transition-duration: 0.25s;";
+        "position: absolute;top: 10px;right: 10px;transition-duration: 0.25s;cursor:pointer;hover{box-shadow: 0px 0px 5px #000;}";
       top.className = "info-top";
       top.style =
         "position: relative;background: none repeat scroll 0 0 #f9f9f9;border-bottom: 1px solid #ccc;border-radius: 5px 5px 0 0;";
@@ -228,11 +245,15 @@ export default {
           } else {
             let mark = {
               guid: data.guid,
-              position: [data.longitude, data.latitude]
+              position: [data.longitude, data.latitude],
+              extData: {
+                id: data.guid
+              }
             };
             this.marks.push(mark);
           }
           console.log(this.marks);
+          this.map.remove(this.points);
           this.points = [];
           for (var j = 0; j < this.marks.length; j++) {
             //实例化所有点标记
@@ -291,7 +312,7 @@ export default {
               infoWindow.open(that.map, e.target.getPosition());
             });
             // point.on("click", this.markerClick(point));
-            point.emit("click", { target: point });
+            // point.emit("click", { target: point });
             this.points.push(point);
           }
 
