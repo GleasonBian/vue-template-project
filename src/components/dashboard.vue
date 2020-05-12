@@ -126,7 +126,7 @@ export default {
           if (this.points[i].getExtData().id == eqid) {
             console.log("找到设备" + eqid);
             targetM=this.points[i];
-            targetM.click();
+            targetM.emit("click", { target: targetM });
             break;
           }
           if(i==this.points.length-1 && this.points[i].getExtData().id != eqid){
@@ -306,7 +306,7 @@ export default {
               "<div style='padding:5px 10px'>速 度 ：" + data.speed + "</div>"
             );
             content.push(
-              "<div style='padding:5px 10px'>总里程：" + data.总里程 + "</div>"
+              "<div style='padding:5px 10px'>总里程：" + data.totalmiles + "</div>"
             );
             point.on("click", function(e) {
               infoWindow.setContent(
