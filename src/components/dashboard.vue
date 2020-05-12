@@ -158,17 +158,24 @@ export default {
     createInfoWindow(title, content) {
       var info = document.createElement("div");
       info.className = "custom-info input-card content-window-card";
-
+      info.style =
+        "position: relative;box-shadow: none;bottom: 0;left: 0;width: auto;padding: 0; box-shadow: 0 0 10px #888888;";
+      info.style.width = "300px";
       //可以通过下面的方式修改自定义窗体的宽高
       //info.style.width = "400px";
       // 定义顶部标题
       var top = document.createElement("div");
       var titleD = document.createElement("div");
       var closeX = document.createElement("img");
+      closeX.style =
+        "position: absolute;top: 10px;right: 10px;transition-duration: 0.25s;";
       top.className = "info-top";
+      top.style =
+        "position: relative;background: none repeat scroll 0 0 #f9f9f9;border-bottom: 1px solid #ccc;border-radius: 5px 5px 0 0;";
       titleD.innerHTML = title;
+      titleD.style = `display: inline-block;color: #333333;font-size: 14px;font-weight: bold;line-height: 31px;padding: 0 10px;`;
       closeX.src = "https://webapi.amap.com/images/close2.gif";
-      closeX.onclick = this.closeInfoWindow();
+      closeX.addEventListener("click", this.closeInfoWindow);
 
       top.appendChild(titleD);
       top.appendChild(closeX);
@@ -177,11 +184,11 @@ export default {
       // 定义中部内容
       var middle = document.createElement("div");
       middle.className = "info-middle";
+      middle.style="font-size: 12px;padding: 10px 6px;line-height: 20px;"
       middle.style.backgroundColor = "white";
       middle.innerHTML = content;
       info.appendChild(middle);
 
-     
       return info;
     },
     closeInfoWindow() {
@@ -230,15 +237,25 @@ export default {
           for (var j = 0; j < this.marks.length; j++) {
             //实例化所有点标记
             let point = new AMap.Marker(this.marks[j]);
-            point.content = "guid : " + this.marks[j].guid;
+            // point.content = "guid : " + this.marks[j].guid;
             let title = data.name;
             let content = [];
             content.push(
-              "<img src='http://tpc.googlesyndication.com/simgad/5843493769827749134'>地址：北京市朝阳区阜通东大街6号院3号楼东北8.3公里"
+              "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
             );
-            content.push("电话：010-64733333");
+            content.push("<div style='padding:5px 10px'>当前里程："+data.curmiles+"</div>");
+            content.push("<div style='padding:5px 10px'>当前油耗："+data.curoilconsume+"</div>");
+            content.push("<div style='padding:5px 10px'>当前油位："+data.curoilpos+"</div>");
+            content.push("<div style='padding:5px 10px'>行驶方向："+data.direction+"</div>");
+            content.push("<div style='padding:5px 10px'>海拔高度："+data.altitude+"</div>");
+            content.push("<div style='padding:5px 10px'>gps 时间："+data.gpstime+"</div>");
+            content.push("<div style='padding:5px 10px'>服务器时间："+data.servertime+"</div>");
+            content.push("<div style='padding:5px 10px'>速 度 ："+data.speed+"</div>");
+            content.push("<div style='padding:5px 10px'>总里程："+data.总里程+"</div>");
             point.on("click", function(e) {
-              infoWindow.setContent(that.createInfoWindow(title, content.join("<br/>")));
+              infoWindow.setContent(
+                that.createInfoWindow(title, content.join(''))
+              );
               infoWindow.open(that.map, e.target.getPosition());
             });
             // point.on("click", this.markerClick(point));
