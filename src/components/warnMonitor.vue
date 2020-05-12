@@ -1,370 +1,385 @@
 <template>
-  <div class="amap-page-container">
-    <el-row :gutter="20">
-      <el-col :span="4">
-        <div class="grid-content bg-purple">
-          <el-table :data="tableData">
-            <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-            <el-table-column prop="name" label="车辆名称" width="80" align="center"></el-table-column>
-            <el-table-column prop="name" label="车牌号码" width="100" align="center"></el-table-column>
-            <el-table-column label="车辆状态" width="80" align="center">
-              <template slot-scope="scope">
-                <div class="carStatus">
-                  <div
-                    class="active"
-                    :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"
-                  ></div>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-col>
-      <el-col :span="20">
-        <div class="grid-content bg-purple">
-          <div class="map" id="track-map"></div>
-          <!-- <el-amap
-            vid="amapDemo"
-            :center="center"
-            :amap-manager="amapManager"
-            :zoom="zoom"
-            :resizeEnable="true"
-            class="amap-demo"
-          >
-            <el-amap-marker
-              v-for="marker in markers"
-              :key="marker.mapName"
-              :position="marker.position"
-              :visible="true"
-              :draggable="false"
-            ></el-amap-marker>
-          </el-amap>-->
-          <div class="card">
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span>卡片名称</span>
-              </div>
-              <div class="card_content">
-                122,2323
-                <span style="font-size:14px; font-weight:none">台</span>
-              </div>
-            </el-card>
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span>卡片名称</span>
-              </div>
-              <div class="card_content">
-                122,2323
-                <span style="font-size:14px; font-weight:none">台</span>
-              </div>
-            </el-card>
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span>卡片名称</span>
-              </div>
-              <div class="card_content">
-                122,2323
-                <span style="font-size:14px; font-weight:none">台</span>
-              </div>
-            </el-card>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
-  </div>
+  <el-row>
+    <el-col :span="4">
+      <!-- 公司选择框 -->
+      <!-- <el-select v-model="company_name" clearable placeholder="选择公司/项目">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>-->
+      <!-- <el-button type="primary" style="margin-left:40px">查询</el-button> -->
+      <!-- 车辆状态列表 -->
+      <el-table :data="vehicleData" style="width:100%">
+        <el-table-column type="index" label="序号" align="center"></el-table-column>
+        <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
+        <el-table-column prop="name" label="车牌号码" align="center"></el-table-column>
+        <el-table-column label="车辆状态" width="80" align="center">
+          <template slot-scope="scope">
+            <div class="carStatus">
+              <div
+                class="active"
+                :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"
+              ></div>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-col>
+    <el-col align="middle" :span="20">
+      <!-- 搜索框 -->
+      <gt-search
+        :data="searchData"
+        @handle="assignPlans"
+        size
+        style="margin-bottom:24px"
+        ref="chart"
+      ></gt-search>
+      <!-- 列表 -->
+      <el-card class="box-card" style="width:98%;margin-bottom: 24px;">
+        <div style="width:100%; height:30vh" ref="mapone"></div>
+      </el-card>
+      <gt-table
+        :tableData="tableData"
+        style="width: 98%"
+        :optionWidth="optionWidth"
+        :columns="columns"
+        :selection="false"
+        v-on:checkTasks="checkTasks"
+        v-on:DeleteHandle="DeleteHandle"
+        v-on:UpdatePreprocessing="UpdatePreprocessing"
+        :handle="handle"
+      ></gt-table>
+      <!-- v-on:selection-change="handleSelectionChange" -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="offset"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
+    </el-col>
+  </el-row>
 </template>
-
 <script>
-import VueAMap from "vue-amap";
-import {
-  equiSelect, //设备列表
-  allCollect, // 全部
-  singleCollect // 单个
-} from "@/getData";
-let amapManager = new VueAMap.AMapManager();
+import { equiSelect } from "@/getData";
 export default {
-  name: "dashboard",
+  name: "oilmonitor",
   data() {
     return {
-      map: null,
-      tableData: [], //设备列表
-      markers: [
+      handle: [
         {
-          position: [112.868357, 36.860426]
+          function: "checkTasks",
+          text: "查看任务",
+          type: "text",
+          show: true
+        },
+        {
+          function: "UpdatePreprocessing",
+          text: "更新计划",
+          type: "text",
+          show: true
+        },
+        {
+          function: "DeleteHandle",
+          text: "删除计划",
+          type: "text",
+          show: true
         }
       ],
-      zoom: 13,
-      center: [112.860257, 36.860496],
-      amapManager,
-      total: {},
-      single: {},
-      websock: null
+      columns: [
+        {
+          id: "company_name",
+          label: "公司名称"
+        },
+        {
+          id: "driver_name",
+          label: "司机名称"
+        },
+        {
+          id: "alarm_time",
+          label: "告警时间"
+        },
+        {
+          id: "hand_time",
+          label: "处理时间"
+        },
+        {
+          id: "handler",
+          label: "处理人"
+        },
+        {
+          id: "hand_result",
+          label: "处理结果"
+        },
+        {
+          id: "hand_instructions",
+          label: "处理说明"
+        }
+      ],
+      tableData: [], // 表格数据
+      total: 0,
+      limit: 10,
+      offset: 1,
+      multipleSelection: [], // 用于批量 删除
+      searchData: [
+        // 搜索框 数据
+        {
+          key: "dri_name", // 与后端交互时的字段 必填
+          label: "司机名称", // 搜索框名称 必填
+          placeholder: "请输入司机名称", // 占位符 选填
+          default: "" // 搜索框 默认值
+        },
+        {
+          key: "handler",
+          label: "处理人",
+          placeholder: "请输入处理人",
+          default: ""
+        },
+        {
+          key: "warning_type", // 与后端交互时的字段 必填
+          label: "告警类型", // 搜索框名称 必填
+          placeholder: "请搜索", // 占位符 选填
+          default: "油耗告警", // 搜索框 默认值
+          options: [
+            {
+              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
+              value: "项目1", // 下拉选项 绑定 值
+              label: "油耗告警" // 下拉选项 绑定 名称
+            },
+            {
+              value: "项目2",
+              label: "超速告警"
+            },
+            {
+              value: "项目3",
+              label: "超区域告警"
+            }
+          ]
+        },
+        {
+          key: "deptname",
+          label: "部门名称",
+          placeholder: "请输入部门名称",
+          default: ""
+        },
+        {
+          key: "manage_type", // 与后端交互时的字段 必填
+          label: "管理类型", // 搜索框名称 必填
+          placeholder: "请搜索", // 占位符 选填
+          default: "公司直管", // 搜索框 默认值
+          options: [
+            {
+              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
+              value: "项目1", // 下拉选项 绑定 值
+              label: "公司直管" // 下拉选项 绑定 名称
+            },
+            {
+              value: "项目2",
+              label: "项目自管"
+            },
+            {
+              value: "项目3",
+              label: "劳务自带"
+            },
+            {
+              value: "项目4",
+              label: "专业租赁"
+            }
+          ]
+        },
+        {
+          key: "date",
+          label: "告警时间",
+          placeholder: "请选择",
+          default: ""
+        }
+      ],
+      optionWidth: 250,
+      vehicleData: [],
+      options: [
+        {
+          value: "十二局",
+          label: "十二局"
+        }
+      ], //公司选择
+      company_name: "",
+      barOptions: {}
     };
   },
-  components: {},
-  computed: {},
-  created() {},
-  destroyed() {
-    this.websock.close(); //离开路由之后断开websocket连接
+  beforeCreate() {},
+  created() {
+    this.equiList();
   },
   mounted() {
-    this.equiList();
-    this.initMap();
-    // this.singleHandle();
+    // this.initCharts();
+    this.mapOneHandle();
   },
   methods: {
-    initMap() {
-      let that = this;
-      this.map = new AMap.Map("track-map", {
-        zoom: 14, //级别
-        center: [112.860257, 36.860496], //中心点坐标
-        resizeEnable: true
-      });
-
-      // 插件
-      AMap.plugin(["AMap.ToolBar", "AMap.Scale", "AMap.GraspRoad"], function() {
-        that.map.addControl(new AMap.ToolBar());
-        that.map.addControl(new AMap.Scale());
-        that.map.addControl(new AMap.GraspRoad());
-      });
-      console.log("map");
-      console.log(AMap);
-    },
     async equiList() {
-      //设备列表
       const res = await equiSelect();
-      this.tableData = res.data;
+      this.vehicleData = res.data;
     },
-    add() {
-      let o = amapManager.getMap();
-      let marker = new AMap.Marker({
-        position: [121.59996, 31.177646]
-      });
-      marker.setMap(o);
-    },
-    async initCharts() {
-      const res = await allCollect();
 
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
-        yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-
-      let myChart = this.$echarts.init(this.$refs.chart);
-      myChart.setOption({
-        title: {
-          text: "油耗产出总览",
-          textStyle: {
-            // color: "#",
-          },
-          left: "center"
-        },
+    mapOneHandle() {
+      let mapone = this.$echarts.init(this.$refs.mapone);
+      let option = {
+        color: "#409EFF",
         tooltip: {
           trigger: "axis",
           axisPointer: {
-            type: "cross",
-            crossStyle: {
-              color: "#999"
-            }
+            // 坐标轴指示器，坐标轴触发有效
+            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
           }
         },
         legend: {
-          data: ["总油量", "总耗时", "总产出"],
-          top: "10%" //与上方的距离 可百分比% 可像素px
+          data: ["次数"]
         },
-        xAxis: [
-          {
-            type: "category",
-            data: this.total.xAxis,
-            axisPointer: {
-              type: "shadow"
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            name: "升",
-            min: 0,
-            interval: 50,
-            axisLabel: {
-              formatter: "{value} L"
-            }
-          },
-          {
-            type: "value",
-            name: "小时",
-            min: 0,
-            interval: 5,
-            axisLabel: {
-              formatter: "{value} H"
-            }
-          }
-        ],
-        series: [
-          {
-            name: "总油量",
-            type: "bar",
-            data: this.total.yAxis.oil
-          },
-          {
-            name: "总耗时",
-            type: "bar",
-            data: this.total.yAxis.time
-          },
-          {
-            name: "总产出",
-            type: "line",
-            yAxisIndex: 1,
-            data: this.total.yAxis.amount
-          }
-        ]
-      });
-      window.onresize = function() {
-        myChart.resize();
-      };
-    },
-    async singleHandle() {
-      const res = await singleCollect();
-
-      let amount = [],
-        oil = [],
-        time = [],
-        xAxis = [];
-
-      res.data.forEach(function(element) {
-        xAxis.push(element.equipname);
-        amount.push(element.totalamout);
-        oil.push(element.totaloil);
-        time.push(element.totaltime);
-      });
-
-      this.total = {
-        xAxis: xAxis,
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true
+        },
+        xAxis: {
+          type: "category",
+          data: [
+            "5-1",
+            "5-2",
+            "5-3",
+            "5-4",
+            "5-5",
+            "5-6",
+            "5-7",
+            "5-8",
+            "5-9",
+            "5-10",
+            "5-11",
+            "5-12",
+            "5-13",
+            "5-14",
+            "5-15"
+          ]
+        },
         yAxis: {
-          oil,
-          amount,
-          time
-        }
-      };
-
-      let myChart = this.$echarts.init(this.$refs.single);
-
-      let option = {
-        tooltip: {
-          formatter: "{c}{b}"
-        },
-        title: {
-          text: "车速",
-          left: "left"
+          type: "value"
         },
         series: [
           {
-            name: "车速",
-            type: "gauge",
-            detail: {
-              formatter: "{value}",
-              textStyle: {
-                // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                fontWeight: "bolder",
-                fontSize: 12
-              }
+            name: "机车",
+            type: "bar",
+            stack: "总量",
+            label: {
+              show: true,
+              position: "insideRight"
             },
-            data: [{ value: 50, name: "km/h" }]
+            data: [32, 30, 31, 33, 39, 33, 32, 27, 29, 35, 24, 12, 22, 34, 15]
           }
         ]
       };
-      setInterval(function() {
-        option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-        myChart.setOption(option, true);
-      }, 2000);
+
+      mapone.setOption(option);
+
       window.onresize = function() {
-        myChart.resize();
+        mapone.resize();
       };
     },
-    initWebSocket() {
-      //初始化weosocket
-      const wsuri = "ws://192.168.3.210:8090/ws/leffss";
-      // 建立连接
-      this.websock = new WebSocket(wsuri);
-      this.websock.onmessage = this.websocketonmessage;
-      this.websock.onopen = this.websocketonopen;
-      this.websock.onerror = this.websocketonerror;
-      this.websock.onclose = this.websocketclose;
+    /*
+     ** 查看处理
+     */
+    assignPlans() {},
+
+    /**
+     * 查看任务列表
+     * **/
+    async checkTasks(index, row) {},
+
+    /*
+     ** 查看处理
+     */
+    async ExamineHandle(index, row) {},
+
+    /*
+     ** 更新预处理
+     */
+    async UpdatePreprocessing(index, row) {},
+
+    /*
+     ** 更新处理
+     */
+    async UpdateHandle(index, row) {},
+
+    /*
+     ** 删除处理
+     */
+    async DeleteHandle(index, row) {
+      this.$confirm("删除计划?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          let res = assignDelete({ id: row.guid });
+          console.log(res);
+          if (res.status === 200) {
+            this.$message.success("删除成功");
+          }
+          this.assignPlans();
+        })
+        .catch(err => {});
     },
-    websocketonmessage(event) {
-      //数据接收
-      if (event.data instanceof Blob) {
-        let reader = new FileReader();
 
-        reader.onload = () => {
-          if (reader.result == "Hello WebSockets!") return;
-          let data = reader.result;
-          data = eval("(" + data + ")");
-          console.log("解析->", data);
-          this.center = [data.longitude, data.latitude];
-          let obj = { position: [data.longitude, data.latitude] };
-          this.markers.push(obj);
-          this.map.markers(this.markers);
-          /* 
-            altitude: 12.345                                  // 海拔高度
-            curmiles: 12                                      // 当前里程 = 今日里程
-            curoilconsume: 5.3                                // 当前油耗
-            curoilpos: 9.3                                    // 当前油位
-            direction: 12                                     // 行驶方向
-            gpstime: "2020-05-10 16:30:30"                    // gps 时间
-            guid: "e7d52b53-2307-4b09-aec8-f61d6cea6cf5"      // guid
-            latitude: 36.840376                               // 纬度
-            longitude: 112.860237                             // 经度
-            name: "机车一号"                                   // 机车名称
-            servertime: "2020-05-10 16:30:30"                 // 服务器时间
-            speed: 60                                         // 速度
-            totalmiles: 138                                   // 总里程
-          */
-        };
-
-        reader.readAsText(event.data);
-      } else {
-        console.log("Result2: " + event.data);
+    /*
+     ** 列表 批量删除 用户
+     */
+    async BatchDeleteUser() {
+      if (this.multipleSelection.length === 0) {
+        this.$message.warning("请选择删除数据!");
+        return;
       }
+      let data = {
+        ids: JSON.stringify(this.multipleSelection)
+      };
+      let res = await deleteUserByIds(data);
+      if (res.result) this.$message.success(res.message);
+      else this.$message.warning(res.message);
+      this.$refs.searchBox.internalUser(this.limit, this.offset);
     },
-    websocketonopen() {
-      //连接建立之后执行send方法发送数据
-      this.websocketsend("Hello WebSockets!");
+
+    /*
+     ** 列表 批量删除 用户  预处理
+     */
+    handleSelectionChange(val) {
+      let arr = [];
+      for (var item of val) arr.push(item.id);
+      this.multipleSelection = arr;
     },
-    websocketsend(Data) {
-      //数据发送
-      this.websock.send(Data);
+
+    /*
+     ** 分页处理
+     */
+    handleSizeChange(val) {
+      let arr = [];
+      for (var item of val) arr.push(item.id);
+      this.multipleSelection = arr;
     },
-    websocketonerror() {
-      //连接建立失败重连
-      this.initWebSocket();
-    },
-    websocketclose(e) {
-      //关闭
-      console.log("断开连接", e);
+
+    /*
+     ** 分页处理2
+     */
+    handleCurrentChange(val) {
+      let arr = [];
+      for (var item of val) arr.push(item.id);
+      this.multipleSelection = arr;
     }
   },
-  updated() {}
+  components: {}
 };
 </script>
-
 <style lang="less" scoped>
 @red: #ff0000;
 @green: #66cc66;
@@ -386,51 +401,5 @@ export default {
   .stop {
     background: @gray;
   }
-}
-.carList {
-  width: 30%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
-.amap-page-container {
-  width: 100%;
-  height: 100%;
-}
-.map {
-  height: 90vh;
-}
-.amap-demo {
-  height: 93vh;
-}
-.card {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  z-index: 100;
-}
-
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-.clearfix {
-  border-bottom: 1px solid #00000054;
-}
-.clearfix:after {
-  clear: both;
-}
-.card_content {
-  display: inline-block;
-  height: 40px;
-  line-height: 40px;
-  font-size: 20px;
-  font-weight: bold;
-}
-.box-card {
-  width: 300px;
-  margin-bottom: 20px;
 }
 </style>

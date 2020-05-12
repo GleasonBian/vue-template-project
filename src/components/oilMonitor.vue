@@ -1,10 +1,10 @@
 <template>
   <el-row>
     <el-col :span="4">
-      <el-table :data="vehicleData">
-        <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-        <el-table-column prop="name" label="车辆名称" width="80" align="center"></el-table-column>
-        <el-table-column prop="name" label="车牌号码" width="100" align="center"></el-table-column>
+      <el-table :data="vehicleData" style="width:100%">
+        <el-table-column type="index" label="序号" align="center"></el-table-column>
+        <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
+        <el-table-column prop="name" label="车牌号码" align="center"></el-table-column>
         <el-table-column label="车辆状态" width="80" align="center">
           <template slot-scope="scope">
             <div class="carStatus">
@@ -27,7 +27,7 @@
         ref="chart"
       ></gt-search>
       <!-- 列表 -->
-      <div style="width:100%; height:250px; margin-bottom:24px" ref="chart"></div>
+      <div style="width:100%; height:350px;" ref="chart"></div>
       <gt-table
         :tableData="tableData"
         style="width: 98%"
@@ -39,7 +39,6 @@
         v-on:UpdatePreprocessing="UpdatePreprocessing"
         :handle="handle"
       ></gt-table>
-      <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -81,27 +80,31 @@ export default {
       columns: [
         {
           id: "name",
-          label: "计划名称"
+          label: "车牌号码"
         },
         {
           id: "clstype",
-          label: "分类类型"
+          label: "时间"
         },
         {
           id: "class",
-          label: "分类类别"
+          label: "总里程"
         },
         {
           id: "clsrank",
-          label: "分类等级"
+          label: "油量"
         },
         {
           id: "corpname",
-          label: "所属公司"
+          label: "速度"
         },
         {
           id: "deptname",
-          label: "所属部门"
+          label: "状态"
+        },
+        {
+          id: "dept",
+          label: "位置"
         }
       ],
       tableData: [], // 表格数据
@@ -172,6 +175,9 @@ export default {
     this.initCharts();
   },
   methods: {
+    /*
+     ** 查看处理
+     */
     async equiList() {
       const res = await equiSelect();
       this.vehicleData = res.data;
@@ -334,14 +340,15 @@ export default {
         myChart.resize();
       };
     },
+
     /*
      ** 查看处理
      */
     assignPlans() {},
 
-    /**
-     * 查看任务列表
-     * **/
+    /*
+     ** 查看处理
+     */
     async checkTasks(index, row) {},
 
     /*
