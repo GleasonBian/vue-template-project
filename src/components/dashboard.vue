@@ -184,7 +184,7 @@ export default {
       // 定义中部内容
       var middle = document.createElement("div");
       middle.className = "info-middle";
-      middle.style="font-size: 12px;padding: 10px 6px;line-height: 20px;"
+      middle.style = "font-size: 12px;padding: 10px 6px;line-height: 20px;";
       middle.style.backgroundColor = "white";
       middle.innerHTML = content;
       info.appendChild(middle);
@@ -243,18 +243,50 @@ export default {
             content.push(
               "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
             );
-            content.push("<div style='padding:5px 10px'>当前里程："+data.curmiles+"</div>");
-            content.push("<div style='padding:5px 10px'>当前油耗："+data.curoilconsume+"</div>");
-            content.push("<div style='padding:5px 10px'>当前油位："+data.curoilpos+"</div>");
-            content.push("<div style='padding:5px 10px'>行驶方向："+data.direction+"</div>");
-            content.push("<div style='padding:5px 10px'>海拔高度："+data.altitude+"</div>");
-            content.push("<div style='padding:5px 10px'>gps 时间："+data.gpstime+"</div>");
-            content.push("<div style='padding:5px 10px'>服务器时间："+data.servertime+"</div>");
-            content.push("<div style='padding:5px 10px'>速 度 ："+data.speed+"</div>");
-            content.push("<div style='padding:5px 10px'>总里程："+data.总里程+"</div>");
+            content.push(
+              "<div style='padding:5px 10px'>当前里程：" +
+                data.curmiles +
+                "</div>"
+            );
+            content.push(
+              "<div style='padding:5px 10px'>当前油耗：" +
+                data.curoilconsume +
+                "</div>"
+            );
+            content.push(
+              "<div style='padding:5px 10px'>当前油位：" +
+                data.curoilpos +
+                "</div>"
+            );
+            content.push(
+              "<div style='padding:5px 10px'>行驶方向：" +
+                data.direction +
+                "</div>"
+            );
+            content.push(
+              "<div style='padding:5px 10px'>海拔高度：" +
+                data.altitude +
+                "</div>"
+            );
+            content.push(
+              "<div style='padding:5px 10px'>gps 时间：" +
+                data.gpstime +
+                "</div>"
+            );
+            content.push(
+              "<div style='padding:5px 10px'>服务器时间：" +
+                data.servertime +
+                "</div>"
+            );
+            content.push(
+              "<div style='padding:5px 10px'>速 度 ：" + data.speed + "</div>"
+            );
+            content.push(
+              "<div style='padding:5px 10px'>总里程：" + data.总里程 + "</div>"
+            );
             point.on("click", function(e) {
               infoWindow.setContent(
-                that.createInfoWindow(title, content.join(''))
+                that.createInfoWindow(title, content.join(""))
               );
               infoWindow.open(that.map, e.target.getPosition());
             });

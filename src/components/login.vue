@@ -66,7 +66,6 @@ export default {
         userid: this.userid,
         password: this.password
       };
-      console.log(data);
       const res = await login(data);
       if (res.data.code === 200) {
         this.$message.success("登录成功");
