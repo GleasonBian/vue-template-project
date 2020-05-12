@@ -23,7 +23,7 @@
       <el-col style="position:relative;overflow:hidden;" :span="18">
         <div class="grid-content bg-purple">
           <div class="map" id="track-map"></div>
-          <el-button @click="showBox" class="viewbtn">{{viewBtn}}</el-button>
+          <el-button @click="showBox" class="viewbtn" :type="showView?'info':'primary'">{{viewBtn}}</el-button>
           <!-- <el-amap
             vid="amapDemo"
             :center="center"
