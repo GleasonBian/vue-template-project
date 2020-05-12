@@ -24,9 +24,9 @@
             <i class="iconfont i-menu-six"></i>实时监测
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:50px"
-            @mouseover.native="on_mouse(5)"
-            @mouseout.native="out_mouse(5)"
+            style="width:100vw;padding-left:93px"
+            @mouseover.native="on_mouse(1)"
+            @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/monitor/oil" class="myClass" style="float:left">油耗监测</el-menu-item>
             <el-menu-item index="/monitor/warn" style="float:left">告警监测</el-menu-item>
@@ -35,15 +35,15 @@
         <el-submenu
           index="1"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(1)"
+          @mouseover.native="on_mouse(2)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-six"></i>统计
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:50px"
-            @mouseover.native="on_mouse(1)"
+            style="width:100vw;padding-left:185px"
+            @mouseover.native="on_mouse(2)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/report/fixRep" class="myClass" style="float:left">维修报表</el-menu-item>
@@ -54,15 +54,15 @@
         <el-submenu
           index="2"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(2)"
+          @mouseover.native="on_mouse(3)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:95px"
-            @mouseover.native="on_mouse(2)"
+            style="width:100vw;padding-left:235px"
+            @mouseover.native="on_mouse(3)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/platform/companyList" class="myClass" style="float:left">公司管理</el-menu-item>
@@ -75,15 +75,15 @@
         <el-submenu
           index="3"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(3)"
+          @mouseover.native="on_mouse(4)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:252px"
-            @mouseover.native="on_mouse(3)"
+            style="width:100vw;padding-left:395px"
+            @mouseover.native="on_mouse(4)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/plan/fixplan" style="float:left;">维修计划</el-menu-item>
@@ -95,15 +95,15 @@
         <el-submenu
           index="4"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(4)"
+          @mouseover.native="on_mouse(5)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-four"></i>调令
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:450px"
-            @mouseover.native="on_mouse(4)"
+            style="width:100vw;padding-left:590px"
+            @mouseover.native="on_mouse(5)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/assign/assignplan" style="float:left;">调度计划</el-menu-item>
@@ -166,16 +166,19 @@ export default {
       // this.flags1 = false;
       switch (e) {
         case 1:
-          this.tranLeft = "150px";
+          this.tranLeft = "160px";
           break;
         case 2:
-          this.tranLeft = "270px";
+          this.tranLeft = "293px";
           break;
         case 3:
-          this.tranLeft = "390px";
+          this.tranLeft = "415px";
           break;
         case 4:
-          this.tranLeft = "510px";
+          this.tranLeft = "535px";
+          break;
+        case 5:
+          this.tranLeft = "655px";
           break;
       }
       this.flags1 = true;
