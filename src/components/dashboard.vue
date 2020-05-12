@@ -255,7 +255,7 @@ export default {
     initMap() {
       let that = this;
       this.map = new AMap.Map("track-map", {
-        zoom: 14, //级别
+        zoom: 8, //级别
         center: [112.860257, 36.860496], //中心点坐标
         resizeEnable: true
       });
@@ -355,7 +355,7 @@ export default {
                 //新增点
                 let mark = {
                   guid: data.guid,
-                  position: new AMap.LngLat([data.longitude, data.latitude])
+                  position: [data.longitude, data.latitude]
                 };
                 this.marks.push(mark);
               }
