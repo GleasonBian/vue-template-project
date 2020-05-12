@@ -168,8 +168,8 @@ export default {
   name: "dashboard",
   data() {
     return {
-      viewBtn: "详细信息",
-      showView: false,
+      viewBtn: "隐藏信息",
+      showView: true,
       map: null,
       viewData: {
         alarm: {
