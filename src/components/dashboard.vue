@@ -212,7 +212,7 @@ export default {
   },
   mounted() {
     this.initMap();
-    this.equiList();
+    // this.equiList();
     this.getOverWatch();
   },
   methods: {
@@ -274,11 +274,11 @@ export default {
       infoWindow.setContent(mark.content);
       infoWindow.open(this.map, mark.getPosition());
     },
-    async equiList() {
-      //设备列表
-      const res = await equiSelect();
-      this.tableData = res.data;
-    },
+    // async equiList() {
+    //   //设备列表
+    //   const res = await equiSelect();
+    //   this.tableData = res.data;
+    // },
     initWebSocket() {
       //初始化weosocket
       const wsuri = "ws://192.168.3.210:8090/ws/leffss";
@@ -339,11 +339,27 @@ export default {
           let data = reader.result;
           data = eval("(" + data + ")");
           console.log("解析->", data);
+          //循环现有设备列表
+          if (that.tableDatad.length) {
+            for (var i = 0; i < that.tableDatad.length; i++) {
+              if (this.tableDatad[i].guid == data.guid) {
+                this.tableDatad[i] = data; //更新position信息
+                break;
+              }
+              if (
+                i == this.tableDatad.length - 1 &&
+                this.tableDatad[i].guid != data.guid
+              ) {
+                //新增点
+                this.tableDatad.push(data);
+              }
+            }
+          } else {
+            this.tableDatad.push(tableDatad);
+          }
           //循环现有marks
           if (that.marks.length) {
             for (var i = 0; i < that.marks.length; i++) {
-              // console.log("i", that.marks.length);
-              // console.log(this.marks[i].guid == data.guid);
               if (this.marks[i].guid == data.guid) {
                 this.marks[i].position = [data.longitude, data.latitude]; //更新position信息
                 break;
