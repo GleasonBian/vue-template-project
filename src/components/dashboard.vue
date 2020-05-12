@@ -1,12 +1,12 @@
 <template>
   <div class="amap-page-container">
     <el-row :gutter="20">
-      <el-col :span="4">
+      <el-col :span="6">
         <div class="grid-content bg-purple">
-          <el-table :data="tableData" @row-click="clickMarker">
-            <el-table-column type="index" width="50" label="序号" align="center"></el-table-column>
-            <el-table-column prop="name" label="车辆名称" width="80" align="center"></el-table-column>
-            <el-table-column prop="name" label="车牌号码" width="100" align="center"></el-table-column>
+          <el-table :data="tableData" @row-click="clickMarker" style="width:100%">
+            <el-table-column type="index" label="序号" align="center"></el-table-column>
+            <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
+            <el-table-column prop="name" label="车牌号码" align="center"></el-table-column>
             <el-table-column label="车辆状态" width="80" align="center">
               <template slot-scope="scope">
                 <div class="carStatus">
@@ -20,9 +20,10 @@
           </el-table>
         </div>
       </el-col>
-      <el-col :span="20">
+      <el-col style="position:relative;overflow:hidden;" :span="18">
         <div class="grid-content bg-purple">
           <div class="map" id="track-map"></div>
+          <el-button @click="showBox" class="viewbtn">{{viewBtn}}</el-button>
           <!-- <el-amap
             vid="amapDemo"
             :center="center"
@@ -39,32 +40,110 @@
               :draggable="false"
             ></el-amap-marker>
           </el-amap>-->
-          <div class="card">
+          <div class="card" :class="{'active':showView}">
             <el-card class="box-card">
               <div class="clearfix">
-                <span>卡片名称</span>
+                <span>车辆监测</span>
               </div>
               <div class="card_content">
-                122,2323
+                {{viewData.totalequips}}
                 <span style="font-size:14px; font-weight:none">台</span>
               </div>
             </el-card>
             <el-card class="box-card">
               <div class="clearfix">
-                <span>卡片名称</span>
+                <span>保养监测</span>
               </div>
               <div class="card_content">
-                122,2323
-                <span style="font-size:14px; font-weight:none">台</span>
+                <div>
+                  <span style="font-size:14px; font-weight:none">今日</span>
+                  {{viewData.maintain.cur_num}}
+                  <span
+                    style="font-size:14px; font-weight:none"
+                  >次</span>
+                </div>
+                <div
+                  class="totalNum"
+                >年度{{viewData.maintain.year_num}}次，本月{{viewData.maintain.mont_hnum}}次</div>
               </div>
             </el-card>
             <el-card class="box-card">
               <div class="clearfix">
-                <span>卡片名称</span>
+                <span>维修监测</span>
               </div>
               <div class="card_content">
-                122,2323
-                <span style="font-size:14px; font-weight:none">台</span>
+                <div>
+                  <span style="font-size:14px; font-weight:none">今日</span>
+                  {{viewData.fix.cur_num}}
+                  <span
+                    style="font-size:14px; font-weight:none"
+                  >次</span>
+                </div>
+                <div class="totalNum">年度{{viewData.fix.year_num}}次，本月{{viewData.fix.mont_hnum}}次</div>
+              </div>
+            </el-card>
+            <el-card class="box-card">
+              <div class="clearfix">
+                <span>告警监测</span>
+              </div>
+              <div class="card_content">
+                <div>
+                  <span style="font-size:14px; font-weight:none">今日</span>
+                  {{viewData.alarm.cur_num}}
+                  <span
+                    style="font-size:14px; font-weight:none"
+                  >次</span>
+                </div>
+                <div class="totalNum">年度{{viewData.alarm.year_num}}次，本月{{viewData.alarm.mont_hnum}}次</div>
+              </div>
+            </el-card>
+          </div>
+          <div class="card_bottom clear" :class="{'active':showView}">
+            <el-card class="bottom_card">
+              <div class="clearfix">
+                <span>里程监测</span>
+              </div>
+              <div class="card_content">
+                <div>
+                  <span style="font-size:14px; font-weight:none">今日</span>
+                  {{viewData.fix.cur_num}}
+                  <span
+                    style="font-size:14px; font-weight:none"
+                  >km</span>
+                </div>
+                <div class="totalNum">年度{{viewData.fix.year_num}}km，本月{{viewData.fix.mont_hnum}}km</div>
+              </div>
+            </el-card>
+            <el-card class="bottom_card">
+              <div class="clearfix">
+                <span>油耗监测</span>
+              </div>
+              <div class="card_content">
+                <div>
+                  <span style="font-size:14px; font-weight:none">今日</span>
+                  {{viewData.maintain.cur_num}}
+                  <span
+                    style="font-size:14px; font-weight:none"
+                  >升</span>
+                </div>
+                <div
+                  class="totalNum"
+                >年度{{viewData.maintain.year_num}}升，本月{{viewData.maintain.mont_hnum}}升</div>
+              </div>
+            </el-card>
+            <el-card class="bottom_card">
+              <div class="clearfix">
+                <span>作业时长</span>
+              </div>
+              <div class="card_content">
+                <div>
+                  <span style="font-size:14px; font-weight:none">今日</span>
+                  {{viewData.fix.cur_num}}
+                  <span
+                    style="font-size:14px; font-weight:none"
+                  >h</span>
+                </div>
+                <div class="totalNum">年度{{viewData.fix.year_num}}h，本月{{viewData.fix.mont_hnum}}h</div>
               </div>
             </el-card>
           </div>
@@ -82,13 +161,33 @@ var infoWindow = new AMap.InfoWindow({
 import {
   equiSelect, //设备列表
   allCollect, // 全部
-  singleCollect // 单个
+  singleCollect, // 单个
+  overview //设备概览
 } from "@/getData";
 export default {
   name: "dashboard",
   data() {
     return {
+      viewBtn: "详细信息",
+      showView: false,
       map: null,
+      viewData: {
+        alarm: {
+          cur_num: "",
+          mont_hnum: "",
+          year_hnum: ""
+        },
+        fix: {
+          cur_num: "",
+          mont_hnum: "",
+          year_hnum: ""
+        },
+        maintain: {
+          cur_num: "",
+          mont_hnum: "",
+          year_hnum: ""
+        }
+      },
       path: [],
       marks: [],
       points: [],
@@ -114,9 +213,22 @@ export default {
   mounted() {
     this.initMap();
     this.equiList();
-    // this.singleHandle();
+    this.getOverWatch();
   },
   methods: {
+    showBox() {
+      this.showView = !this.showView;
+      this.showView ? (this.viewBtn = "隐藏信息") : (this.viewBtn = "详细信息");
+    },
+    async getOverWatch() {
+      //设备列表
+      const res = await overview();
+      this.viewData = res.data;
+      console.log(
+        "-----------------------------overView----------------------------"
+      );
+      console.log(this.viewData);
+    },
     //点击设备列表打开地图中marker
     clickMarker(row) {
       let eqid = row.guid;
@@ -125,11 +237,14 @@ export default {
         for (var i = 0; i < this.points.length; i++) {
           if (this.points[i].getExtData().id == eqid) {
             console.log("找到设备" + eqid);
-            targetM=this.points[i];
+            targetM = this.points[i];
             targetM.emit("click", { target: targetM });
             break;
           }
-          if(i==this.points.length-1 && this.points[i].getExtData().id != eqid){
+          if (
+            i == this.points.length - 1 &&
+            this.points[i].getExtData().id != eqid
+          ) {
             this.$message.error("车辆未在线");
           }
         }
@@ -240,7 +355,7 @@ export default {
                 //新增点
                 let mark = {
                   guid: data.guid,
-                  position: [data.longitude, data.latitude]
+                  position: new AMap.LngLat([data.longitude, data.latitude])
                 };
                 this.marks.push(mark);
               }
@@ -306,7 +421,9 @@ export default {
               "<div style='padding:5px 10px'>速 度 ：" + data.speed + "</div>"
             );
             content.push(
-              "<div style='padding:5px 10px'>总里程：" + data.totalmiles + "</div>"
+              "<div style='padding:5px 10px'>总里程：" +
+                data.totalmiles +
+                "</div>"
             );
             point.on("click", function(e) {
               infoWindow.setContent(
@@ -429,18 +546,43 @@ export default {
   height: 100%;
 }
 .map {
-  height: 90vh;
+  height: 93vh;
 }
 .amap-demo {
   height: 93vh;
 }
 .card {
   position: absolute;
-  top: 0px;
-  right: 0px;
+  width: 20%;
+  top: 12px;
+  right: -320px;
   z-index: 100;
+  transition: all 0.2s;
 }
-
+.card.active {
+  right: 20px;
+}
+.card_bottom {
+  position: absolute;
+  width: 100%;
+  bottom: -160px;
+  left: 20px;
+  z-index: 100;
+  transition: all 0.2s;
+  .bottom_card {
+    float: left;
+    width: 20%;
+    margin-right: 15px;
+  }
+}
+.card_bottom.active {
+  bottom: 20px;
+}
+.viewbtn {
+  position: absolute;
+  top: 15px;
+  left: 90px;
+}
 .clearfix:before,
 .clearfix:after {
   display: table;
@@ -460,7 +602,7 @@ export default {
   font-weight: bold;
 }
 .box-card {
-  width: 300px;
+  width: 100%;
   margin-bottom: 20px;
 }
 .content-window-card {
@@ -533,5 +675,14 @@ span {
 .info-middle img {
   float: left;
   margin-right: 6px;
+}
+.totalNum {
+  font-size: 14px !important;
+  font-weight: normal !important;
+}
+.clear::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 </style>
