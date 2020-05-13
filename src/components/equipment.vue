@@ -211,20 +211,16 @@ export default {
       ],
       columns: [
         {
+          id: "corpname",
+          label: "所属公司"
+        },
+        {
+          id: "deptname",
+          label: "所属部门"
+        },
+        {
           id: "name",
           label: "设备名称"
-        },
-        {
-          id: "proddate",
-          label: "生产日期"
-        },
-        {
-          id: "producer",
-          label: "生产厂家"
-        },
-        {
-          id: "plateno",
-          label: "车牌号"
         },
         {
           id: "clstype",
@@ -235,13 +231,17 @@ export default {
           label: "车辆型号"
         },
         {
-          id: "clsrank",
-          label: "分类等级"
+          id: "plateno",
+          label: "车牌号"
         },
         {
-          id: "description",
-          label: "描述信息"
-        }
+          id: "oilboxheight",
+          label: "油箱高度/cm"
+        },
+        {
+          id: "oilboxvol",
+          label: "油箱容量/L"
+        },
       ],
       // 创建 更新 删除 表单
       form: {
