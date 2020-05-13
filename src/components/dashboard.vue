@@ -11,7 +11,7 @@
               <template slot-scope="scope">
                 <div class="carStatus">
                   <div
-                    class=""
+                    class
                     :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"
                   ></div>
                 </div>
@@ -232,12 +232,12 @@ export default {
     },
     //点击设备列表打开地图中marker
     clickMarker(row) {
-      this.closeInfoWindow;
+      this.closeInfoWindow();
       let eqid = row.guid;
       let targetM;
       if (this.points.length) {
         for (var i = 0; i < this.points.length; i++) {
-          if (this.points[i].getExtData().id == eqid) {
+          if (this.points[i].getExtData().guid == eqid) {
             console.log("找到设备" + eqid);
             targetM = this.points[i];
             targetM.emit("click", { target: targetM });
@@ -245,7 +245,7 @@ export default {
           }
           if (
             i == this.points.length - 1 &&
-            this.points[i].getExtData().id != eqid
+            this.points[i].getExtData().guid != eqid
           ) {
             this.$message.error("车辆未在线");
           }
@@ -331,6 +331,76 @@ export default {
     closeInfoWindow() {
       this.map.clearInfoWindow();
     },
+    handleGPS(lnglat) {
+      let lnglats = {},
+        position = [];
+
+      return position;
+    },
+    //处理信息窗体body
+    handleInfoContent(data) {
+      let title = data.name + "&nbsp;&nbsp;" + data.platenum;
+      let content = [];
+      let direction = "";
+      let t = parseInt(data.direction);
+      if (t > 27 && t <= 72) {
+        direction = "东北";
+      } else if (t > 72 && t <= 117) {
+        direction = "东";
+      } else if (t > 117 && t <= 162) {
+        direction = "东南";
+      } else if (t > 162 && t <= 207) {
+        direction = "南";
+      } else if (t > 207 && t <= 252) {
+        direction = "西南";
+      } else if (t > 252 && t <= 297) {
+        direction = "西";
+      } else if (t > 297 && t <= 342) {
+        direction = "西北";
+      } else {
+        direction = "北";
+      }
+
+      content.push(
+        "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>当前里程：" + data.curmiles + "</div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>当前油耗：" +
+          data.curoilconsume +
+          "</div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>当前油位：" + data.curoilpos + "</div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>行驶方向：" + direction + "</div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>海拔高度：" + data.altitude + "</div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>gps 时间：" + data.gpstime + "</div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>服务器时间：" +
+          data.servertime +
+          "</div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>速 度 ：" + data.speed + "</div>"
+      );
+      content.push(
+        "<div style='padding:5px 10px'>总里程：" + data.totalmiles + "</div>"
+      );
+      let obj = {
+        title,
+        content
+      };
+      return obj;
+    },
     websocketonmessage(event) {
       //数据接收
       if (event.data instanceof Blob) {
@@ -345,7 +415,7 @@ export default {
           if (that.tableData.length) {
             for (var i = 0; i < that.tableData.length; i++) {
               if (this.tableData[i].guid == data.guid) {
-                this.tableData[i] = data; //更新position信息
+                that.$set(that.tableData, i, data);
                 break;
               }
               if (
@@ -363,7 +433,31 @@ export default {
           if (that.marks.length) {
             for (var i = 0; i < that.marks.length; i++) {
               if (this.marks[i].guid == data.guid) {
-                this.marks[i].position = [data.longitude, data.latitude]; //更新position信息
+                this.marks[i].position = AMap.convertFrom(
+                  [data.longitude, data.latitude],
+                  "gps",
+                  function(status, result) {
+                    console.log("result---------", result);
+                    if (result.info === "ok") {
+                      return [result.locations[0].lng, result.locations[0].lat];
+                    }
+                  }
+                );
+                //更新position信息
+                this.marks[i].extData = data; //更新position信息
+                let point = new AMap.Marker(this.marks[i]); //更新实例化的marker
+                point.on("click", function(e) {
+                  infoWindow.setContent(
+                    that.createInfoWindow(
+                      that.handleInfoContent(that.marks[i].extData).title,
+                      that
+                        .handleInfoContent(that.marks[i].extData)
+                        .content.join("")
+                    )
+                  );
+                  infoWindow.open(that.map, e.target.getPosition());
+                });
+                this.points[i] = point;
                 break;
               }
               if (
@@ -373,101 +467,66 @@ export default {
                 //新增点
                 let mark = {
                   guid: data.guid,
-                  position: [data.longitude, data.latitude],
-              extData: {
-                id: data.guid
-              }
+                  position: AMap.convertFrom(
+                    [data.longitude, data.latitude],
+                    "gps",
+                    function(status, result) {
+                      console.log("result---------", result);
+                      if (result.info === "ok") {
+                        return [result.locations[0].lng, result.locations[0].lat];
+                      }
+                    }
+                  ),
+                  extData: data
                 };
                 this.marks.push(mark);
+                //更新实例化的marker
+                let point = new AMap.Marker(mark);
+                point.on("click", function(e) {
+                  infoWindow.setContent(
+                    that.createInfoWindow(
+                      that.handleInfoContent(mark.extData).title,
+                      that.handleInfoContent(mark.extData).content.join("")
+                    )
+                  );
+                  infoWindow.open(that.map, e.target.getPosition());
+                });
+                this.points.push(point);
               }
             }
           } else {
             let mark = {
               guid: data.guid,
-              position: [data.longitude, data.latitude],
-              extData: {
-                id: data.guid
-              }
+              position: AMap.convertFrom(
+                [data.longitude, data.latitude],
+                "gps",
+                function(status, result) {
+                  console.log("result---------", result);
+                  if (result.info === "ok") {
+                    return [result.locations[0].lng, result.locations[0].lat];
+                  }
+                }
+              ),
+              extData: data
             };
             this.marks.push(mark);
-          }
-          console.log(this.marks);
-          this.map.remove(this.points);
-          let points = [];
-          for (var j = 0; j < this.marks.length; j++) {
-            //实例化所有点标记
-            let point = new AMap.Marker(this.marks[j]);
-            // point.content = "guid : " + this.marks[j].guid;
-            let title = data.name + "&nbsp;&nbsp;" + data.platenum;
-            let content = [];
-            let direction="";
-            let t=parseInt(data.direction)
-            if(t>27 && t<=72) {direction="东北";}
-            else if(t>72 && t<=117) {direction="东";}
-            else if(t>117 && t<=162) {direction="东南";}
-            else if(t>162 && t<=207) {direction="南";}
-            else if(t>207 && t<=252) {direction="西南";}
-            else if(t>252 && t<=297) {direction="西";}
-            else if(t>297 && t<=342) {direction="西北";}
-            else {direction="北";}
-
-            content.push(
-              "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>当前里程：" +
-                data.curmiles +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>当前油耗：" +
-                data.curoilconsume +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>当前油位：" +
-                data.curoilpos +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>行驶方向：" +
-                direction +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>海拔高度：" +
-                data.altitude +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>gps 时间：" +
-                data.gpstime +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>服务器时间：" +
-                data.servertime +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>速 度 ：" + data.speed + "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>总里程：" +
-                data.totalmiles +
-                "</div>"
-            );
+            //更新实例化的marker
+            let point = new AMap.Marker(mark);
             point.on("click", function(e) {
               infoWindow.setContent(
-                that.createInfoWindow(title, content.join(""))
+                that.createInfoWindow(
+                  that.handleInfoContent(mark.extData).title,
+                  that.handleInfoContent(mark.extData).content.join("")
+                )
               );
               infoWindow.open(that.map, e.target.getPosition());
             });
-            // point.on("click", this.markerClick(point));
-            // point.emit("click", { target: point });
-            points.push(point);
+            this.points.push(point);
           }
-          this.points=points
+          console.log("marks", this.marks);
+          console.log("points", this.points);
+          // this.map.remove(this.points);
+
           this.map.add(this.points); //画点
           // that.map.setFitView();
           // let pathParam = {
