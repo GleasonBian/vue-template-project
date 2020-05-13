@@ -87,13 +87,41 @@
             ></el-option>
           </el-select>
         </el-form-item>
-
+        <!-- 
         <el-form-item label="证件号码" prop="certguid">
           <el-input v-model="form.certguid"></el-input>
         </el-form-item>
 
         <el-form-item label="证件类型" prop="certtype">
           <el-input v-model="form.certtype"></el-input>
+        </el-form-item>-->
+
+        <el-form-item label="设备名称" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="设备编码" prop="code">
+          <el-input v-model="form.code"></el-input>
+        </el-form-item>
+
+        <el-form-item label="车牌号" prop="plateno">
+          <el-input v-model="form.plateno"></el-input>
+        </el-form-item>
+
+        <el-form-item label="油箱高度" prop="oilboxheight">
+          <el-input v-model="form.oilboxheight"></el-input>
+        </el-form-item>
+
+        <el-form-item label="油箱容量" prop="oilboxvol">
+          <el-input v-model="form.oilboxvol"></el-input>
+        </el-form-item>
+
+        <el-form-item label="手机号" prop="simnumber">
+          <el-input v-model="form.simnumber"></el-input>
+        </el-form-item>
+
+        <el-form-item label="终端id" prop="terminalid">
+          <el-input v-model="form.terminalid"></el-input>
         </el-form-item>
 
         <el-form-item label="分类等级" prop="clsrank">
@@ -110,26 +138,6 @@
 
         <el-form-item label="分类类别" prop="class">
           <el-input v-model="form.class" placeholder="请输入"></el-input>
-        </el-form-item>
-
-        <el-form-item label="设备名称" prop="name">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-
-        <el-form-item label="设备编码" prop="code">
-          <el-input v-model="form.code"></el-input>
-        </el-form-item>
-
-        <el-form-item label="车牌号" prop="plateno">
-          <el-input v-model="form.plateno"></el-input>
-        </el-form-item>
-
-        <el-form-item label="手机号" prop="simnumber">
-          <el-input v-model="form.simnumber"></el-input>
-        </el-form-item>
-
-        <el-form-item label="终端id" prop="terminalid">
-          <el-input v-model="form.terminalid"></el-input>
         </el-form-item>
 
         <el-form-item label="生产日期" prop="proddate">
@@ -246,7 +254,7 @@ export default {
         description: "", // 描述
         plateno: null, //车牌号
         simnumber: null, //手机号
-        terminalid: null, //终端id
+        terminalid: null //终端id
       },
       tableData: [], // 表格数据
       total: 0,
@@ -308,18 +316,18 @@ export default {
       Regular: Regular, // 表单校验正则
       // 表单校验规则
       rules: {
-        certguid: [
-          {
-            required: true,
-            message: "证件号码 必填"
-          }
-        ],
-        certtype: [
-          {
-            required: true,
-            message: "证件类型 必填"
-          }
-        ],
+        // certguid: [
+        //   {
+        //     required: true,
+        //     message: "证件号码 必填"
+        //   }
+        // ],
+        // certtype: [
+        //   {
+        //     required: true,
+        //     message: "证件类型 必填"
+        //   }
+        // ],
         clstype: [
           {
             required: true,
@@ -387,6 +395,20 @@ export default {
           {
             required: true,
             message: "车牌号 必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        oilboxheight: [
+          {
+            required: true,
+            message: "油箱高度 必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        oilboxvol: [
+          {
+            required: true,
+            message: "油箱容量 必填",
             trigger: ["blur", "change"]
           }
         ],
