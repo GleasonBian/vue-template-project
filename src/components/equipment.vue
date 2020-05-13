@@ -104,16 +104,16 @@
           <el-input v-model="form.code"></el-input>
         </el-form-item>
 
-        <el-form-item label="车牌号" prop="plateno">
+        <el-form-item label="车辆牌号" prop="plateno">
           <el-input v-model="form.plateno"></el-input>
         </el-form-item>
 
         <el-form-item label="油箱高度" prop="oilboxheight">
-          <el-input v-model="form.oilboxheight"></el-input>
+          <el-input-number v-model.number="form.oilboxheight" :step="10"></el-input-number> cm
         </el-form-item>
 
         <el-form-item label="油箱容量" prop="oilboxvol">
-          <el-input v-model="form.oilboxvol"></el-input>
+          <el-input-number v-model.number="form.oilboxvol" :step="10"></el-input-number> L
         </el-form-item>
 
         <el-form-item label="手机号" prop="simnumber">
@@ -337,7 +337,7 @@ export default {
         ],
         class: [
           {
-            required: false,
+            required: true,
             message: "必填 车辆型号",
             trigger: ["blur", "change"]
           }
