@@ -6,12 +6,12 @@
           <el-table :data="tableData" @row-click="clickMarker" style="width:100%">
             <el-table-column type="index" label="序号" align="center"></el-table-column>
             <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
-            <el-table-column prop="name" label="车牌号码" align="center"></el-table-column>
+            <el-table-column prop="plateno" label="车牌号码" align="center"></el-table-column>
             <el-table-column label="车辆状态" width="80" align="center">
               <template slot-scope="scope">
                 <div class="carStatus">
                   <div
-                    class="active"
+                    class=""
                     :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"
                   ></div>
                 </div>
