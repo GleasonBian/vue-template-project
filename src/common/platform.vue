@@ -110,14 +110,18 @@
             <el-menu-item index="/assign/assigntask" style="float:left">调度任务</el-menu-item>
           </el-menu-item>
         </el-submenu>
-        <!-- <el-menu-item>
-          <i class="iconfont i-menu-five"></i>
-          <a
-            href="http://114.215.194.254:89/Interface/checkDbUser"
-            target="_bank"
-            style="color:#fff"
-          >监控平台</a>
-        </el-menu-item>-->
+        <el-menu-item style="float:right">
+          <i class="el-icon-user"></i>
+          <el-dropdown @command="handleCommand" class="dddddd">
+            <div class="avator" style="color:#fff">
+              {{userName}}sss
+              <i class="el-icon-caret-bottom"></i>
+            </div>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="singout">退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </el-menu-item>
         <!-- <el-submenu index="5" popper-class="submenu-userManger">
             <template slot="title">
               <i class="iconfont i-user-manger"></i>交接班
@@ -185,6 +189,20 @@ export default {
     },
     out_mouse(e) {
       this.flags1 = false;
+    },
+    async handleCommand(command) {
+      this.$router.replace({
+        path: "/login"
+      });
+      history.pushState(null, null, document.URL);
+      window.addEventListener("popstate", function() {
+        history.pushState(null, null, document.URL);
+      });
+      if (command == "singout") {
+        const response = await signout();
+        this.$message.success("退出登录成功!");
+        sessionStorage.removeItem("suppliertoken");
+      }
     }
     // async getUserPermission() {
     //   const res = await getUserPermission({
