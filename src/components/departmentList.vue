@@ -90,9 +90,9 @@
           :rules="[ { required: true, message: '部门级别 必填'}]"
         >
           <el-select v-model="form.deptrank" placeholder="请选择" style="width:100%">
-            <el-option label="一级" value="1"></el-option>
-            <el-option label="二级" value="2"></el-option>
-            <el-option label="三级" value="3"></el-option>
+            <el-option label="一级" value="一级"></el-option>
+            <el-option label="二级" value="二级"></el-option>
+            <el-option label="三级" value="三级"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="注册日期" prop="regdate" :rules="[ { required: true, message: '注册日期 必填'}]">
@@ -189,9 +189,9 @@
           :rules="[ { required: true, message: '部门级别 必填'}]"
         >
           <el-select v-model="deptDetail.deptrank" placeholder="请选择" style="width:100%">
-            <el-option label="一级" value="1"></el-option>
-            <el-option label="二级" value="2"></el-option>
-            <el-option label="三级" value="3"></el-option>
+            <el-option label="一级" value="一级"></el-option>
+            <el-option label="二级" value="二级"></el-option>
+            <el-option label="三级" value="三级"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="注册日期" prop="regdate" :rules="[ { required: true, message: '注册日期 必填'}]">
