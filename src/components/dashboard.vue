@@ -6,7 +6,7 @@
           <el-table :data="tableData" @row-click="clickMarker" style="width:100%">
             <el-table-column type="index" label="序号" align="center"></el-table-column>
             <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
-            <el-table-column prop="plateno" label="车牌号码" align="center"></el-table-column>
+            <el-table-column prop="platenum" label="车牌号码" align="center"></el-table-column>
             <el-table-column label="车辆状态" width="80" align="center">
               <template slot-scope="scope">
                 <div class="carStatus">
@@ -395,6 +395,17 @@ export default {
             // point.content = "guid : " + this.marks[j].guid;
             let title = data.name;
             let content = [];
+            let direction="";
+            let t=parseInt(data.direction)
+            if(t>27 && t<=72) {direction="东北";}
+            else if(t>72 && t<=117) {direction="东";}
+            else if(t>117 && t<=162) {direction="东南";}
+            else if(t>162 && t<=207) {direction="南";}
+            else if(t>207 && t<=252) {direction="西南";}
+            else if(t>252 && t<=297) {direction="西";}
+            else if(t>297 && t<=342) {direction="西北";}
+            else {direction="北";}
+
             content.push(
               "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
             );
@@ -415,7 +426,7 @@ export default {
             );
             content.push(
               "<div style='padding:5px 10px'>行驶方向：" +
-                data.direction +
+                direction +
                 "</div>"
             );
             content.push(
