@@ -648,8 +648,8 @@ export default {
             point.on("click", function(e) {
               infoWindow.setContent(
                 that.createInfoWindow(
-                  that.handleInfoContent(mark.extData).title,
-                  that.handleInfoContent(mark.extData).content.join("")
+                  title,
+                  content.join("")
                 )
               );
               infoWindow.open(that.map, e.target.getPosition());
