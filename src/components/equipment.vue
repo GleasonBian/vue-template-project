@@ -120,6 +120,18 @@
           <el-input v-model="form.code"></el-input>
         </el-form-item>
 
+        <el-form-item label="车牌号" prop="plateno">
+          <el-input v-model="form.plateno"></el-input>
+        </el-form-item>
+
+        <el-form-item label="手机号" prop="simnumber">
+          <el-input v-model="form.simnumber"></el-input>
+        </el-form-item>
+
+        <el-form-item label="终端id" prop="terminalid">
+          <el-input v-model="form.terminalid"></el-input>
+        </el-form-item>
+
         <el-form-item label="生产日期" prop="proddate">
           <el-date-picker
             v-model="form.proddate"
@@ -135,8 +147,8 @@
           <el-input v-model="form.producer"></el-input>
         </el-form-item>
 
-        <el-form-item label="描述信息" prop="descrifptio">
-          <el-input v-model="form.descrifptio"></el-input>
+        <el-form-item label="描述信息" prop="description">
+          <el-input v-model="form.description"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -198,6 +210,10 @@ export default {
           label: "生产厂家"
         },
         {
+          id: "plateno",
+          label: "车牌号"
+        },
+        {
           id: "clstype",
           label: "分类类型"
         },
@@ -210,7 +226,7 @@ export default {
           label: "分类等级"
         },
         {
-          id: "descrifptio",
+          id: "description",
           label: "描述信息"
         }
       ],
@@ -227,7 +243,10 @@ export default {
         name: "", // 设备名称
         proddate: "", // 生产日期
         producer: "", // 生产厂家
-        descrifptio: "" // 描述
+        description: "", // 描述
+        plateno: null, //车牌号
+        simnumber: null, //手机号
+        terminalid: null, //终端id
       },
       tableData: [], // 表格数据
       total: 0,
@@ -364,7 +383,28 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        descrifptio: [
+        plateno: [
+          {
+            required: true,
+            message: "车牌号 必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        simnumber: [
+          {
+            required: true,
+            message: "手机号 必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        terminalid: [
+          {
+            required: true,
+            message: "终端id 必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        description: [
           {
             required: false,
             message: "描述信息 必填",
