@@ -334,11 +334,10 @@ export default {
       return info;
     },
     closeInfoWindow() {
-      
       this.map.clearInfoWindow();
     },
-    closeLine(){
-      if(this.showLine==false) return
+    closeLine() {
+      if (this.showLine == false) return;
       this.showLine = false;
       this.map.remove(this.map.getAllOverlays("polyline"));
     },
@@ -448,221 +447,233 @@ export default {
             this.tableData.push(data);
           }
           //循环现有marks
-          if (that.marks.length) {
-            for (var i = 0; i < that.marks.length; i++) {
-              if (this.marks[i].guid == data.guid) {
-                // this.marks[i].position = AMap.convertFrom(
-                //     [data.longitude, data.latitude],
-                //     "gps",
-                //     function(status, result) {
-                //       console.log("result---------", result);
-                //       if (result.info === "ok") {
-                //         return [result.locations[0].lng, result.locations[0].lat];
-                //       }
-                //     }
-                //   ); //更新position信息
-                this.marks[i].position = [data.longitude, data.latitude]; //更新position信息
-                this.marks[i].extData = data; //更新position信息
-                //更新path信息
-                for (var k = 0; k < this.path.length; k++) {
-                  if (this.path[k].guid == data.guid) {
-                    this.path[k].path.push([data.longitude, data.latitude]);
-                    // this.path[k].path.push({
-                    //   x: data.longitude,
-                    //   y: data.latitude,
-                    //   sp: data.speed,
-                    //   ag: data.direction,
-                    //   tm: data.gpstime
-                    // });
-                    this.path[k].gpstime = data.gpstime;
-                    this.path[k].speed = data.speed;
-                    this.path[k].direction = data.direction;
-                    if (this.path[k].path.length == 11) {
-                      this.path[k].path.shift();
+          let pos = null;
+          AMap.convertFrom(
+            [data.longitude, data.latitude],
+            "gps",
+            (status, result) => {
+              console.log("result---------", result);
+              if (result.info === "ok") {
+                pos = [result.locations[0].lng,result.locations[0].lat];
+                console.log("pos", pos);
+                if (that.marks.length) {
+                  for (var i = 0; i < that.marks.length; i++) {
+                    if (this.marks[i].guid == data.guid) {
+                      // this.marks[i].position = AMap.convertFrom(
+                      //     [data.longitude, data.latitude],
+                      //     "gps",
+                      //     function(status, result) {
+                      //       console.log("result---------", result);
+                      //       if (result.info === "ok") {
+                      //         return [result.locations[0].lng, result.locations[0].lat];
+                      //       }
+                      //     }
+                      //   ); //更新position信息
+                      this.marks[i].position = pos; //更新position信息
+                      this.marks[i].extData = data; //更新position信息
+                      //更新path信息
+                      for (var k = 0; k < this.path.length; k++) {
+                        if (this.path[k].guid == data.guid) {
+                          this.path[k].path.push(pos);
+                          // this.path[k].path.push({
+                          //   x: data.longitude,
+                          //   y: data.latitude,
+                          //   sp: data.speed,
+                          //   ag: data.direction,
+                          //   tm: data.gpstime
+                          // });
+                          this.path[k].gpstime = data.gpstime;
+                          this.path[k].speed = data.speed;
+                          this.path[k].direction = data.direction;
+                          if (this.path[k].path.length == 11) {
+                            this.path[k].path.shift();
+                          }
+                          break;
+                        }
+                      }
+                      if (data.guid == that.lineId && that.showLine) {
+                        that.drowLine(data.guid);
+                      }
+                      break;
                     }
-                    break;
+                    if (
+                      i == this.marks.length - 1 &&
+                      this.marks[i].guid != data.guid
+                    ) {
+                      //新增点
+                      let mark = {
+                        guid: data.guid,
+                        // position: AMap.convertFrom(
+                        //   [data.longitude, data.latitude],
+                        //   "gps",
+                        //   function(status, result) {
+                        //     console.log("result---------", result);
+                        //     if (result.info === "ok") {
+                        //       return [result.locations[0].lng, result.locations[0].lat];
+                        //     }
+                        //   }
+                        // ),
+                        position: pos,
+                        extData: data
+                      };
+                      this.marks.push(mark);
+
+                      //新增点记录
+                      let markPath = {
+                        guid: data.guid,
+                        path: [],
+                        // path: [
+                        //   {
+                        //     x: data.longitude,
+                        //     y: data.latitude,
+                        //     sp: data.speed,
+                        //     ag: data.direction,
+                        //     tm: data.gpstime
+                        //   }
+                        // ],
+                        gpstime: data.gpstime,
+                        speed: data.speed,
+                        direction: data.direction
+                      };
+                      markPath.path.push(pos);
+                      this.path.push(markPath);
+                    }
                   }
+                } else {
+                  let mark = {
+                    guid: data.guid,
+                    // position: AMap.convertFrom(
+                    //       [data.longitude, data.latitude],
+                    //       "gps",
+                    //       function(status, result) {
+                    //         console.log("result---------", result);
+                    //         if (result.info === "ok") {
+                    //           return result.locations[0];
+                    //         }
+                    //       }
+                    //     ),
+                    position: pos,
+                    extData: data
+                  };
+                  this.marks.push(mark);
+                  //新增点记录
+                  let markPath = {
+                    guid: data.guid,
+                    path: [],
+                    // path: [
+                    //   {
+                    //     x: data.longitude,
+                    //     y: data.latitude,
+                    //     sp: data.speed,
+                    //     ag: data.direction,
+                    //     tm: data.gpstime
+                    //   }
+                    // ],
+                    gpstime: data.gpstime,
+                    speed: data.speed,
+                    direction: data.direction
+                  };
+                  markPath.path.push(pos);
+                  this.path.push(markPath);
                 }
-                if (data.guid == that.lineId && that.showLine) {
-                  that.drowLine(data.guid);
-                }
-                break;
-              }
-              if (
-                i == this.marks.length - 1 &&
-                this.marks[i].guid != data.guid
-              ) {
-                //新增点
-                let mark = {
-                  guid: data.guid,
-                  // position: AMap.convertFrom(
-                  //   [data.longitude, data.latitude],
-                  //   "gps",
-                  //   function(status, result) {
-                  //     console.log("result---------", result);
-                  //     if (result.info === "ok") {
-                  //       return [result.locations[0].lng, result.locations[0].lat];
-                  //     }
-                  //   }
-                  // ),
-                  position: [data.longitude, data.latitude],
-                  extData: data
-                };
-                this.marks.push(mark);
+                console.log(this.marks);
+                console.log(this.path);
+                this.map.remove(this.points);
+                this.points = [];
+                for (var j = 0; j < this.marks.length; j++) {
+                  //实例化所有点标记
+                  let point = new AMap.Marker(this.marks[j]);
+                  // point.content = "guid : " + this.marks[j].guid;
+                  let title = that.marks[j].extData.name;
+                  let content = [];
+                  let direction = "";
+                  let t = parseInt(that.marks[j].extData.direction);
+                  if (t > 27 && t <= 72) {
+                    direction = "东北";
+                  } else if (t > 72 && t <= 117) {
+                    direction = "东";
+                  } else if (t > 117 && t <= 162) {
+                    direction = "东南";
+                  } else if (t > 162 && t <= 207) {
+                    direction = "南";
+                  } else if (t > 207 && t <= 252) {
+                    direction = "西南";
+                  } else if (t > 252 && t <= 297) {
+                    direction = "西";
+                  } else if (t > 297 && t <= 342) {
+                    direction = "西北";
+                  } else {
+                    direction = "北";
+                  }
 
-                //新增点记录
-                let markPath = {
-                  guid: data.guid,
-                  path: [],
-                  // path: [
-                  //   {
-                  //     x: data.longitude,
-                  //     y: data.latitude,
-                  //     sp: data.speed,
-                  //     ag: data.direction,
-                  //     tm: data.gpstime
-                  //   }
-                  // ],
-                  gpstime: data.gpstime,
-                  speed: data.speed,
-                  direction: data.direction
-                };
-                markPath.path.push([data.longitude, data.latitude]);
-                this.path.push(markPath);
+                  content.push(
+                    "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>当前里程：" +
+                      that.marks[j].extData.curmiles +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>当前油耗：" +
+                      that.marks[j].extData.curoilconsume +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>当前油位：" +
+                      that.marks[j].extData.curoilpos +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>行驶方向：" +
+                      direction +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>海拔高度：" +
+                      that.marks[j].extData.altitude +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>gps 时间：" +
+                      that.marks[j].extData.gpstime +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>服务器时间：" +
+                      that.marks[j].extData.servertime +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>速 度 ：" +
+                      that.marks[j].extData.speed +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>总里程：" +
+                      that.marks[j].extData.totalmiles +
+                      "</div>"
+                  );
+                  let data2 = that.marks[j].extData.guid;
+                  point.on("click", function(e) {
+                    infoWindow.setContent(
+                      that.createInfoWindow(title, content.join(""))
+                    );
+                    infoWindow.open(that.map, e.target.getPosition());
+                    // that.lineId=data2;
+                    // that.showLine=!that.showLine
+                  });
+                  this.points.push(point);
+                }
+                console.log("marks", this.marks);
+                console.log("points", this.points);
+                // this.map.remove(this.points);
+
+                this.map.add(this.points); //画点
               }
             }
-          } else {
-            let mark = {
-              guid: data.guid,
-              // position: AMap.convertFrom(
-              //       [data.longitude, data.latitude],
-              //       "gps",
-              //       function(status, result) {
-              //         console.log("result---------", result);
-              //         if (result.info === "ok") {
-              //           return result.locations[0];
-              //         }
-              //       }
-              //     ),
-              position: [data.longitude, data.latitude],
-              extData: data
-            };
-            this.marks.push(mark);
-            //新增点记录
-            let markPath = {
-              guid: data.guid,
-              path: [],
-              // path: [
-              //   {
-              //     x: data.longitude,
-              //     y: data.latitude,
-              //     sp: data.speed,
-              //     ag: data.direction,
-              //     tm: data.gpstime
-              //   }
-              // ],
-              gpstime: data.gpstime,
-              speed: data.speed,
-              direction: data.direction
-            };
-            markPath.path.push([data.longitude, data.latitude]);
-            this.path.push(markPath);
-          }
-          console.log(this.marks);
-          console.log(this.path);
-          this.map.remove(this.points);
-          this.points = [];
-          for (var j = 0; j < this.marks.length; j++) {
-            //实例化所有点标记
-            let point = new AMap.Marker(this.marks[j]);
-            // point.content = "guid : " + this.marks[j].guid;
-            let title = that.marks[j].extData.name;
-            let content = [];
-            let direction = "";
-            let t = parseInt(that.marks[j].extData.direction);
-            if (t > 27 && t <= 72) {
-              direction = "东北";
-            } else if (t > 72 && t <= 117) {
-              direction = "东";
-            } else if (t > 117 && t <= 162) {
-              direction = "东南";
-            } else if (t > 162 && t <= 207) {
-              direction = "南";
-            } else if (t > 207 && t <= 252) {
-              direction = "西南";
-            } else if (t > 252 && t <= 297) {
-              direction = "西";
-            } else if (t > 297 && t <= 342) {
-              direction = "西北";
-            } else {
-              direction = "北";
-            }
+          );
 
-            content.push(
-              "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>当前里程：" +
-                that.marks[j].extData.curmiles +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>当前油耗：" +
-                that.marks[j].extData.curoilconsume +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>当前油位：" +
-                that.marks[j].extData.curoilpos +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>行驶方向：" + direction + "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>海拔高度：" +
-                that.marks[j].extData.altitude +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>gps 时间：" +
-                that.marks[j].extData.gpstime +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>服务器时间：" +
-                that.marks[j].extData.servertime +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>速 度 ：" +
-                that.marks[j].extData.speed +
-                "</div>"
-            );
-            content.push(
-              "<div style='padding:5px 10px'>总里程：" +
-                that.marks[j].extData.totalmiles +
-                "</div>"
-            );
-            let data2 = that.marks[j].extData.guid;
-            point.on("click", function(e) {
-              infoWindow.setContent(
-                that.createInfoWindow(
-                  title,
-                  content.join("")
-                )
-              );
-              infoWindow.open(that.map, e.target.getPosition());
-              // that.lineId=data2;
-              // that.showLine=!that.showLine
-            });
-            this.points.push(point);
-          }
-          console.log("marks", this.marks);
-          console.log("points", this.points);
-          // this.map.remove(this.points);
-
-          this.map.add(this.points); //画点
           // that.map.setFitView();
           // let pathParam = {
           //   x: data.longitude,
