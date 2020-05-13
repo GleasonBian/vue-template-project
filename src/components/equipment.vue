@@ -133,7 +133,12 @@
         </el-form-item>
 
         <el-form-item label="车辆类型" prop="clstype">
-          <el-input v-model="form.clstype" placeholder="请输入"></el-input>
+          <el-select v-model="form.clstype" placeholder="请选择" style="width:100%">
+            <el-option label="轨道车" value="轨道车"></el-option>
+            <el-option label="东风机车" value="东风机车"></el-option>
+            <el-option label="SUV" value="SUV"></el-option>
+          </el-select>
+          <!-- <el-input v-model="form.clstype" placeholder="请输入"></el-input> -->
         </el-form-item>
 
         <el-form-item label="车辆型号" prop="class">
