@@ -11,7 +11,7 @@
               <template slot-scope="scope">
                 <div class="carStatus">
                   <div
-                    class=""
+                    class
                     :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"
                   ></div>
                 </div>
@@ -216,6 +216,14 @@ export default {
     this.getOverWatch();
   },
   methods: {
+    changePosition(position) {
+      AMap.convertFrom(position, "gps", function(status, result) {
+        if (result.info === "ok") {
+          var lnglats = result.locations; // Array.<LngLat>
+          return lnglats;
+        }
+      });
+    },
     showBox() {
       this.showView = !this.showView;
       this.showView ? (this.viewBtn = "隐藏信息") : (this.viewBtn = "详细信息");
@@ -361,7 +369,7 @@ export default {
           if (that.marks.length) {
             for (var i = 0; i < that.marks.length; i++) {
               if (this.marks[i].guid == data.guid) {
-                this.marks[i].position = [data.longitude, data.latitude]; //更新position信息
+                this.marks[i].position = that.changePosition([data.longitude, data.latitude]); //更新position信息
                 break;
               }
               if (
@@ -370,16 +378,14 @@ export default {
               ) {
                 //新增点
                 let mark = {
-                  guid: data.guid,
-                  position: [data.longitude, data.latitude]
+                  position: that.changePosition([data.longitude, data.latitude])
                 };
                 this.marks.push(mark);
               }
             }
           } else {
             let mark = {
-              guid: data.guid,
-              position: [data.longitude, data.latitude],
+              position: that.changePosition([data.longitude, data.latitude]),
               extData: {
                 id: data.guid
               }
@@ -395,16 +401,25 @@ export default {
             // point.content = "guid : " + this.marks[j].guid;
             let title = data.name;
             let content = [];
-            let direction="";
-            let t=parseInt(data.direction)
-            if(t>27 && t<=72) {direction="东北";}
-            else if(t>72 && t<=117) {direction="东";}
-            else if(t>117 && t<=162) {direction="东南";}
-            else if(t>162 && t<=207) {direction="南";}
-            else if(t>207 && t<=252) {direction="西南";}
-            else if(t>252 && t<=297) {direction="西";}
-            else if(t>297 && t<=342) {direction="西北";}
-            else {direction="北";}
+            let direction = "";
+            let t = parseInt(data.direction);
+            if (t > 27 && t <= 72) {
+              direction = "东北";
+            } else if (t > 72 && t <= 117) {
+              direction = "东";
+            } else if (t > 117 && t <= 162) {
+              direction = "东南";
+            } else if (t > 162 && t <= 207) {
+              direction = "南";
+            } else if (t > 207 && t <= 252) {
+              direction = "西南";
+            } else if (t > 252 && t <= 297) {
+              direction = "西";
+            } else if (t > 297 && t <= 342) {
+              direction = "西北";
+            } else {
+              direction = "北";
+            }
 
             content.push(
               "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
@@ -425,9 +440,7 @@ export default {
                 "</div>"
             );
             content.push(
-              "<div style='padding:5px 10px'>行驶方向：" +
-                direction +
-                "</div>"
+              "<div style='padding:5px 10px'>行驶方向：" + direction + "</div>"
             );
             content.push(
               "<div style='padding:5px 10px'>海拔高度：" +
