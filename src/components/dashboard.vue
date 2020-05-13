@@ -355,7 +355,7 @@ export default {
               }
             }
           } else {
-            this.tableData.push(tableData);
+            this.tableData.push(data);
           }
           //循环现有marks
           if (that.marks.length) {
