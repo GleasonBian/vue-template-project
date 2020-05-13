@@ -132,11 +132,11 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="分类类型" prop="clstype">
+        <el-form-item label="车辆类型" prop="clstype">
           <el-input v-model="form.clstype" placeholder="请输入"></el-input>
         </el-form-item>
 
-        <el-form-item label="分类类别" prop="class">
+        <el-form-item label="车辆型号" prop="class">
           <el-input v-model="form.class" placeholder="请输入"></el-input>
         </el-form-item>
 
@@ -223,11 +223,11 @@ export default {
         },
         {
           id: "clstype",
-          label: "分类类型"
+          label: "车辆类型"
         },
         {
           id: "class",
-          label: "分类类别"
+          label: "车辆型号"
         },
         {
           id: "clsrank",
@@ -242,8 +242,8 @@ export default {
       form: {
         certguid: "", // 证件号码
         certtype: "", // 证件类型
-        clstype: "", // 分类类型
-        class: "", // 分类类别
+        clstype: "", // 车辆类型
+        class: "", // 车辆型号
         clsrank: "", // 分类等级
         corpguid: "", // 公司标识
         deptguid: "", // 部门标识
@@ -331,14 +331,14 @@ export default {
         clstype: [
           {
             required: true,
-            message: "必填 分类类型",
+            message: "必填 车辆类型",
             trigger: ["blur", "change"]
           }
         ],
         class: [
           {
             required: false,
-            message: "必填 分类类别",
+            message: "必填 车辆型号",
             trigger: ["blur", "change"]
           }
         ],
