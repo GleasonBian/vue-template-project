@@ -100,9 +100,9 @@
           <el-input v-model="form.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="设备编码" prop="code">
+        <!-- <el-form-item label="设备编码" prop="code">
           <el-input v-model="form.code"></el-input>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="车辆牌号" prop="plateno">
           <el-input v-model="form.plateno"></el-input>
@@ -368,13 +368,13 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        code: [
-          {
-            required: true,
-            message: "设备编码 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
+        // code: [
+        //   {
+        //     required: true,
+        //     message: "设备编码 必填",
+        //     trigger: ["blur", "change"]
+        //   }
+        // ],
         name: [
           {
             required: true,
