@@ -67,7 +67,7 @@ export default {
         password: this.password
       };
       const res = await login(data);
-      if (res.data.code === 200) {
+      if (res.data.Data) {
         this.$message.success("登录成功");
         sessionStorage.setItem("Authorization", res.data.Data);
         this.$router.push("/dashboard");
