@@ -340,22 +340,22 @@ export default {
           data = eval("(" + data + ")");
           console.log("解析->", data);
           //循环现有设备列表
-          if (that.tableDatad.length) {
-            for (var i = 0; i < that.tableDatad.length; i++) {
-              if (this.tableDatad[i].guid == data.guid) {
-                this.tableDatad[i] = data; //更新position信息
+          if (that.tableData.length) {
+            for (var i = 0; i < that.tableData.length; i++) {
+              if (this.tableData[i].guid == data.guid) {
+                this.tableData[i] = data; //更新position信息
                 break;
               }
               if (
-                i == this.tableDatad.length - 1 &&
-                this.tableDatad[i].guid != data.guid
+                i == this.tableData.length - 1 &&
+                this.tableData[i].guid != data.guid
               ) {
                 //新增点
-                this.tableDatad.push(data);
+                this.tableData.push(data);
               }
             }
           } else {
-            this.tableDatad.push(tableDatad);
+            this.tableData.push(tableData);
           }
           //循环现有marks
           if (that.marks.length) {
