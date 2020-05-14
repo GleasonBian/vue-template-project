@@ -460,16 +460,6 @@ export default {
                 if (that.marks.length) {
                   for (var i = 0; i < that.marks.length; i++) {
                     if (this.marks[i].guid == data.guid) {
-                      // this.marks[i].position = AMap.convertFrom(
-                      //     [data.longitude, data.latitude],
-                      //     "gps",
-                      //     function(status, result) {
-                      //       console.log("result---------", result);
-                      //       if (result.info === "ok") {
-                      //         return [result.locations[0].lng, result.locations[0].lat];
-                      //       }
-                      //     }
-                      //   ); //更新position信息
                       this.marks[i].position = pos; //更新position信息
                       this.marks[i].angle = data.direction;
                       this.marks[i].extData = data; //更新position信息
@@ -505,20 +495,10 @@ export default {
                       //新增点
                       let mark = {
                         guid: data.guid,
-                        // position: AMap.convertFrom(
-                        //   [data.longitude, data.latitude],
-                        //   "gps",
-                        //   function(status, result) {
-                        //     console.log("result---------", result);
-                        //     if (result.info === "ok") {
-                        //       return [result.locations[0].lng, result.locations[0].lat];
-                        //     }
-                        //   }
-                        // ),
                         position: pos,
                         icon:
-                          "https://img-blog.csdnimg.cn/20200514162104672.png",
-                        offset: new AMap.Pixel(-10, -12),
+                          "https://img-blog.csdnimg.cn/20200514172516537.png",
+                        offset: new AMap.Pixel(-16, -16),
                         angle: data.direction,
                         extData: data
                       };
@@ -548,19 +528,9 @@ export default {
                 } else {
                   let mark = {
                     guid: data.guid,
-                    // position: AMap.convertFrom(
-                    //       [data.longitude, data.latitude],
-                    //       "gps",
-                    //       function(status, result) {
-                    //         console.log("result---------", result);
-                    //         if (result.info === "ok") {
-                    //           return result.locations[0];
-                    //         }
-                    //       }
-                    //     ),
                     position: pos,
-                    icon: "https://img-blog.csdnimg.cn/20200514162104672.png",
-                    offset: new AMap.Pixel(-10, -12),
+                    icon: "https://img-blog.csdnimg.cn/20200514172516537.png",
+                    offset: new AMap.Pixel(-16, -16),
                     angle: data.direction,
                     extData: data
                   };
@@ -594,7 +564,7 @@ export default {
                   //实例化所有点标记
                   let point = new AMap.Marker(this.marks[j]);
                   // point.content = "guid : " + this.marks[j].guid;
-                  let title = that.marks[j].extData.name;
+                  let title = that.marks[j].extData.name+' &nbsp;&nbsp; '+that.marks[j].extData.platenum;
                   let content = [];
                   let direction = "";
                   let t = parseInt(that.marks[j].extData.direction);
