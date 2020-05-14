@@ -96,6 +96,7 @@ axios.interceptors.response.use(function (response) {
   if (error.response.status >= 500) {
     Vue.prototype.$message.error('服务异常,稍后重试 !');
   } else if (error.response.status === 401) {
+    Vue.prototype.$message.error('登录过期，重新登录！');
     router.replace({
       path: '/login'
     })
