@@ -50,13 +50,13 @@ axios.interceptors.request.use(function (config) {
 
   if (sessionStorage.getItem("Authorization") === null) {
     router.replace({
-      path: '/login'
+      path: '/'
     });
   }
 
   if (sessionStorage['Authorization'] === undefined)
     router.replace({
-      path: '/login'
+      path: '/'
     });
   else
     config.headers.common['Authorization'] = sessionStorage['Authorization'];
@@ -74,8 +74,8 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   if ('Authorization' in response.headers)
     sessionStorage['Authorization'] = response.headers.Authorization;
-  if (error.response.status >= 404) {
-    console.log("状态401")
+
+  if (response.data.errorCode === 401) {
     Vue.prototype.$message.error(response.data.message);
     router.replace({
       path: '/login'
@@ -96,12 +96,10 @@ axios.interceptors.response.use(function (response) {
   if (error.response.status >= 500) {
     Vue.prototype.$message.error('服务异常,稍后重试 !');
   } else if (error.response.status === 401) {
-    Vue.prototype.$message.error('登录过期，重新登录！');
     router.replace({
       path: '/login'
-    })
-  } else {
-    Vue.prototype.$message.warning('请求错误！请重新登录');
+    });
+    Vue.prototype.$message.error('登录超时,请重新登录!');
   }
   return Promise.reject(error);
 });
