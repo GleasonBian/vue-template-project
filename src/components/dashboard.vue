@@ -454,7 +454,7 @@ export default {
             (status, result) => {
               console.log("result---------", result);
               if (result.info === "ok") {
-                pos = [result.locations[0].lng,result.locations[0].lat];
+                pos = [result.locations[0].lng, result.locations[0].lat];
                 console.log("pos", pos);
                 if (that.marks.length) {
                   for (var i = 0; i < that.marks.length; i++) {
