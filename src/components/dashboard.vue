@@ -3,8 +3,8 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="grid-content bg-purple">
-          <el-table :data="tableData" @row-click="clickMarker" style="width:100%">
-            <el-table-column type="index" label="序号" align="center"></el-table-column>
+          <el-table :data="tableData" @row-click="clickMarker" style="width:100%;font-size:12px">
+            <el-table-column width="70" type="index" label="序号" align="center"></el-table-column>
             <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
             <el-table-column prop="platenum" label="车牌号码" align="center"></el-table-column>
             <el-table-column label="车辆状态" width="80" align="center">
@@ -243,6 +243,7 @@ export default {
         for (var i = 0; i < this.points.length; i++) {
           if (this.points[i].getExtData().guid == eqid) {
             console.log("找到设备" + eqid);
+             this.map.setZoomAndCenter(14, [116.205467, 39.907761]);
             targetM = this.points[i];
 
             this.drowLine(eqid);
@@ -281,11 +282,6 @@ export default {
       infoWindow.setContent(mark.content);
       infoWindow.open(this.map, mark.getPosition());
     },
-    // async equiList() {
-    //   //设备列表
-    //   const res = await equiSelect();
-    //   this.tableData = res.data;
-    // },
     initWebSocket() {
       //初始化weosocket
       console.log("socket:", process.env.VUE_APP_SOCKET);
@@ -564,7 +560,10 @@ export default {
                   //实例化所有点标记
                   let point = new AMap.Marker(this.marks[j]);
                   // point.content = "guid : " + this.marks[j].guid;
-                  let title = that.marks[j].extData.name+' &nbsp;&nbsp; '+that.marks[j].extData.platenum;
+                  let title =
+                    that.marks[j].extData.name +
+                    " &nbsp;&nbsp; " +
+                    that.marks[j].extData.platenum;
                   let content = [];
                   let direction = "";
                   let t = parseInt(that.marks[j].extData.direction);
@@ -600,20 +599,23 @@ export default {
                   }
 
                   content.push(
-                    "<div style='padding:5px 10px'>当前里程：" +
+                    "<div style='padding:5px 10px'>今日里程：" +
                       that.marks[j].extData.curmiles +
+                      "km" +
                       "</div>"
                   );
                   content.push(
-                    "<div style='padding:5px 10px'>当前油耗：" +
+                    "<div style='padding:5px 10px'>瞬时油耗：" +
                       parseFloat(that.marks[j].extData.curoilconsume).toFixed(
                         2
                       ) +
+                      "L" +
                       "</div>"
                   );
                   content.push(
                     "<div style='padding:5px 10px'>当前油位：" +
                       that.marks[j].extData.curoilpos +
+                      "cm" +
                       "</div>"
                   );
                   content.push(
@@ -624,6 +626,7 @@ export default {
                   content.push(
                     "<div style='padding:5px 10px'>海拔高度：" +
                       that.marks[j].extData.altitude +
+                      "m" +
                       "</div>"
                   );
                   content.push(
@@ -639,11 +642,13 @@ export default {
                   content.push(
                     "<div style='padding:5px 10px'>速 度 ：" +
                       that.marks[j].extData.speed +
+                      "km/h" +
                       "</div>"
                   );
                   content.push(
                     "<div style='padding:5px 10px'>总里程：" +
                       that.marks[j].extData.totalmiles +
+                      "km" +
                       "</div>"
                   );
                   let data2 = that.marks[j].extData.guid;
@@ -716,8 +721,8 @@ export default {
 .carStatus {
   text-align: center;
   div {
-    width: 20px;
-    height: 20px;
+    width: 14px;
+    height: 14px;
     display: inline-block;
     border-radius: 50%;
   }
