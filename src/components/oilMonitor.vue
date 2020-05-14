@@ -45,7 +45,6 @@
 </template>
 <script>
 import { equiSelect, oilView } from "@/getData";
-console.log(equiSelect, oilView);
 export default {
   name: "oilmonitor",
   data() {
