@@ -1,10 +1,10 @@
 <template>
   <el-row>
     <el-col :span="4">
-      <el-table :data="vehicleData" @row-click="clickRow" style="width:100%">
+      <el-table :data="vehicleData" @row-click="clickRow" style="width:100%" size="mini">
         <el-table-column type="index" label="序号" align="center"></el-table-column>
         <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
-        <el-table-column prop="plateno" label="车牌号码" align="center"></el-table-column>
+        <el-table-column prop="plateno" label="车牌号码" align="center" width="120"></el-table-column>
         <el-table-column label="车辆状态" width="80" align="center">
           <template slot-scope="scope">
             <div class="carStatus">
@@ -420,8 +420,8 @@ export default {
 .carStatus {
   text-align: center;
   div {
-    width: 20px;
-    height: 20px;
+    width: 14px;
+    height: 14px;
     display: inline-block;
     border-radius: 50%;
   }
