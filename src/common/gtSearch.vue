@@ -20,8 +20,8 @@
           v-else-if="item.key === 'date'"
           v-model="search[item.key]"
           type="daterange"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd mm:ss"
+          format="yyyy年MM月dd日"
+          value-format="yyyy-MM-ddmm:ss"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -66,8 +66,8 @@
           v-else-if="item.key === 'date'"
           v-model="search[item.key]"
           type="daterange"
-          format="yyyy 年 MM 月 dd 日"
-          value-format="yyyy-MM-dd mm:ss"
+          format="yyyy年MM月dd日"
+          value-format="yyyy-MM-ddmm:ss"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -139,8 +139,8 @@ export default {
       this.$emit("handle", this.search);
     },
     dateChange(val) {
-      this.search.startTime = val[0];
-      this.search.endTime = val[1];
+      this.search.start = val[0];
+      this.search.end = val[1];
     }
   },
   /**

@@ -292,3 +292,14 @@ export const login = data => fetch("login", data, "post");
  * 设备概览
  */
 export const overview = data => fetch("overview", data, "get");
+
+/**
+ * 油耗监测
+ */
+export const oilView = data => fetch("equip", data, "get");
+
+/**
+ * 报警监测 id 传 报警id
+ */
+export const alarm = data => fetch("alarm", data, "get");
+
