@@ -494,7 +494,7 @@ export default {
                         position: pos,
                         icon:
                           "https://img-blog.csdnimg.cn/20200514172516537.png",
-                        offset: new AMap.Pixel(-10, -10),
+                        offset: new AMap.Pixel(-10, -16),
                         angle: data.direction,
                         extData: data
                       };
@@ -526,7 +526,7 @@ export default {
                     guid: data.guid,
                     position: pos,
                     icon: "https://img-blog.csdnimg.cn/20200514172516537.png",
-                    offset: new AMap.Pixel(-10, -10),
+                    offset: new AMap.Pixel(-10, -16),
                     angle: data.direction,
                     extData: data
                   };
