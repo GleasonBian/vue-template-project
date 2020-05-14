@@ -32,7 +32,7 @@
             <el-menu-item index="/monitor/warn" style="float:left">告警监测</el-menu-item>
           </el-menu-item>
         </el-submenu>
-        <el-submenu
+        <!-- <el-submenu
           index="1"
           popper-class="submenu-userManger"
           @mouseover.native="on_mouse(2)"
@@ -50,40 +50,20 @@
             <el-menu-item index="/report/oilRep" style="float:left">加油报表</el-menu-item>
             <el-menu-item index="/report/assignRep" style="float:left">调度报表</el-menu-item>
           </el-menu-item>
-        </el-submenu>
-        <el-submenu
-          index="2"
-          popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(3)"
-          @mouseout.native="out_mouse(1)"
-        >
-          <template slot="title">
-            <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
-          </template>
-          <el-menu-item
-            style="width:100vw;padding-left:235px"
-            @mouseover.native="on_mouse(3)"
-            @mouseout.native="out_mouse(1)"
-          >
-            <el-menu-item index="/platform/companyList" class="myClass" style="float:left">公司管理</el-menu-item>
-            <el-menu-item index="/platform/departmentList" style="float:left">部门管理</el-menu-item>
-            <el-menu-item index="/platform/role" style="float:left">角色管理</el-menu-item>
-            <el-menu-item index="/platform/staff" style="float:left">人员管理</el-menu-item>
-            <el-menu-item index="/platform/equipment" style="float:left">设备管理</el-menu-item>
-          </el-menu-item>
-        </el-submenu>
+        </el-submenu>-->
+
         <el-submenu
           index="3"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(4)"
+          @mouseover.native="on_mouse(2)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:395px"
-            @mouseover.native="on_mouse(4)"
+            style="width:100vw;padding-left:150px"
+            @mouseover.native="on_mouse(2)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/plan/fixplan" style="float:left;">维修计划</el-menu-item>
@@ -95,19 +75,40 @@
         <el-submenu
           index="4"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(5)"
+          @mouseover.native="on_mouse(3)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-four"></i>调令
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:590px"
-            @mouseover.native="on_mouse(5)"
+            style="width:100vw;padding-left:348px"
+            @mouseover.native="on_mouse(3)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/assign/assignplan" style="float:left;">调度计划</el-menu-item>
             <el-menu-item index="/assign/assigntask" style="float:left">调度任务</el-menu-item>
+          </el-menu-item>
+        </el-submenu>
+        <el-submenu
+          index="2"
+          popper-class="submenu-userManger"
+          @mouseover.native="on_mouse(4)"
+          @mouseout.native="out_mouse(1)"
+        >
+          <template slot="title">
+            <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
+          </template>
+          <el-menu-item
+            style="width:100vw;padding-left:355px"
+            @mouseover.native="on_mouse(4)"
+            @mouseout.native="out_mouse(1)"
+          >
+            <el-menu-item index="/platform/companyList" class="myClass" style="float:left">公司管理</el-menu-item>
+            <el-menu-item index="/platform/departmentList" style="float:left">部门管理</el-menu-item>
+            <el-menu-item index="/platform/role" style="float:left">角色管理</el-menu-item>
+            <el-menu-item index="/platform/staff" style="float:left">人员管理</el-menu-item>
+            <el-menu-item index="/platform/equipment" style="float:left">设备管理</el-menu-item>
           </el-menu-item>
         </el-submenu>
         <el-menu-item style="float:right">

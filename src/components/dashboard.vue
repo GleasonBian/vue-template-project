@@ -3,11 +3,11 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="grid-content bg-purple">
-          <el-table :data="tableData" @row-click="clickMarker" style="width:100%;font-size:12px">
-            <el-table-column width="70" type="index" label="序号" align="center"></el-table-column>
+          <el-table :data="tableData" @row-click="clickMarker" style="width:100%;" size="mini">
+            <el-table-column type="index" label="序号" align="center"></el-table-column>
             <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
             <el-table-column prop="platenum" label="车牌号码" align="center"></el-table-column>
-            <el-table-column label="车辆状态" width="80" align="center">
+            <el-table-column label="车辆状态" align="center">
               <template slot-scope="scope">
                 <div class="carStatus">
                   <div
@@ -243,7 +243,7 @@ export default {
         for (var i = 0; i < this.points.length; i++) {
           if (this.points[i].getExtData().guid == eqid) {
             console.log("找到设备" + eqid);
-             this.map.setZoomAndCenter(14, [116.205467, 39.907761]);
+             this.map.setZoomAndCenter(16, this.marks[i].position);
             targetM = this.points[i];
 
             this.drowLine(eqid);
@@ -494,7 +494,7 @@ export default {
                         position: pos,
                         icon:
                           "https://img-blog.csdnimg.cn/20200514172516537.png",
-                        offset: new AMap.Pixel(-16, -16),
+                        offset: new AMap.Pixel(-10, -10),
                         angle: data.direction,
                         extData: data
                       };
@@ -526,7 +526,7 @@ export default {
                     guid: data.guid,
                     position: pos,
                     icon: "https://img-blog.csdnimg.cn/20200514172516537.png",
-                    offset: new AMap.Pixel(-16, -16),
+                    offset: new AMap.Pixel(-10, -10),
                     angle: data.direction,
                     extData: data
                   };
@@ -721,8 +721,8 @@ export default {
 .carStatus {
   text-align: center;
   div {
-    width: 14px;
-    height: 14px;
+    width: 6px;
+    height: 6px;
     display: inline-block;
     border-radius: 50%;
   }
