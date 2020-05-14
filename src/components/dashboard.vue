@@ -288,7 +288,8 @@ export default {
     // },
     initWebSocket() {
       //初始化weosocket
-      const wsuri = "ws://119.254.7.117:8090/ws/leffss";
+      console.log("socket:", process.env.VUE_APP_SOCKET);
+      const wsuri = process.env.VUE_APP_SOCKET;
       // 建立连接
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.websocketonmessage;
@@ -454,7 +455,7 @@ export default {
             (status, result) => {
               console.log("result---------", result);
               if (result.info === "ok") {
-                pos = [result.locations[0].lng,result.locations[0].lat];
+                pos = [result.locations[0].lng, result.locations[0].lat];
                 console.log("pos", pos);
                 if (that.marks.length) {
                   for (var i = 0; i < that.marks.length; i++) {
