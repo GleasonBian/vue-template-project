@@ -28,10 +28,6 @@
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
-        v-on:checkTasks="checkTasks"
-        v-on:DeleteHandle="DeleteHandle"
-        v-on:UpdatePreprocessing="UpdatePreprocessing"
-        :handle="handle"
       ></gt-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -42,12 +38,14 @@
         background
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
+        style="margin:20px"
       ></el-pagination>
     </el-col>
   </el-row>
 </template>
 <script>
 import { equiSelect, oilView } from "@/getData";
+console.log(equiSelect, oilView);
 export default {
   name: "oilmonitor",
   data() {
@@ -108,10 +106,6 @@ export default {
         {
           id: "speed",
           label: "速度"
-        },
-        {
-          id: "dept",
-          label: "位置"
         }
       ],
       tableData: [], // 表格数据
@@ -169,12 +163,13 @@ export default {
       vehicleData: []
     };
   },
-  beforeCreate() {},
   created() {
     this.equiList();
   },
-  mounted() {},
   methods: {
+    /*
+     ** 搜索处理
+     */
     searchHandle(row) {
       if (row.time !== "") {
         row = JSON.parse(JSON.stringify(row));
@@ -196,12 +191,10 @@ export default {
             row.end = this.timeForMat(7)[1];
             break;
         }
-        console.log(row);
-        this.oilViewHandle(row);
-      } else {
-        this.oilViewHandle(row);
       }
+      this.oilViewHandle(row);
     },
+
     /*
      ** 设备列表
      */
@@ -219,18 +212,16 @@ export default {
      ** 油耗监测数据
      */
     async oilViewHandle(param) {
-      console.log(param);
       if (param.guid === "") {
         this.$message.warning("请选择设备");
         return;
       }
-      // equip/ff5a5bee-b1d1-4fde-93d5-59a7a6eba9b6/oilcs?start=2020-05-14 00:00&end=2020-05-14 00:00
       let canshu = "";
       if (param instanceof Object) {
-        if ("start" in param && "end" in param)
+        if ("start" in param && "end" in param) {
           canshu =
             param.guid + "/oilcs?start=" + param.start + "&end=" + param.end;
-        else canshu = param.guid + "/oilcs";
+        } else canshu = param.guid + "/oilcs";
       } else {
         canshu = param + "/oilcs";
       }
@@ -271,6 +262,10 @@ export default {
       this.oilViewHandle(row.guid);
       // this.searchData[0].options
     },
+
+    /*
+     ** 初始化 echert
+     */
     initCharts(gpstime, curmiles, curoilconsume, speed, totaloilconsume) {
       let colors = ["#5793f3", "#d14a61", "#675bba"];
       let myChart = this.$echarts.init(this.$refs.chart);
@@ -362,81 +357,23 @@ export default {
       };
     },
 
-    /*
-     ** 查看处理
-     */
-    async checkTasks(index, row) {},
-
-    /*
-     ** 查看处理
-     */
-    async ExamineHandle(index, row) {},
-
-    /*
-     ** 更新预处理
-     */
-    async UpdatePreprocessing(index, row) {},
-
-    /*
-     ** 更新处理
-     */
-    async UpdateHandle(index, row) {},
-
-    /*
-     ** 删除处理
-     */
-    async DeleteHandle(index, row) {
-      this.$confirm("删除计划?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          let res = assignDelete({ id: row.guid });
-          console.log(res);
-          if (res.status === 200) {
-            this.$message.success("删除成功");
-          }
-          this.searchHandle();
-        })
-        .catch(err => {});
-    },
-
-    /*
-     ** 列表 批量删除 用户
-     */
-    async BatchDeleteUser() {
-      if (this.multipleSelection.length === 0) {
-        this.$message.warning("请选择删除数据!");
-        return;
-      }
-      let data = {
-        ids: JSON.stringify(this.multipleSelection)
-      };
-      let res = await deleteUserByIds(data);
-      if (res.result) this.$message.success(res.message);
-      else this.$message.warning(res.message);
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
-    },
-
-    /*
-     ** 列表 批量删除 用户  预处理
-     */
-    handleSelectionChange(val) {
-      let arr = [];
-      for (var item of val) arr.push(item.id);
-      this.multipleSelection = arr;
-    },
-
     /**
      * 分页
      */
     handleSizeChange(val) {
       this.pagesize = val;
     },
+
+    /**
+     * 分页
+     */
     handleCurrentChange(val) {
       this.currentPage = val;
     },
+
+    /**
+     * 日期处理
+     */
     timeForMat(count) {
       // 拼接时间
       const time1 = new Date();
@@ -473,8 +410,7 @@ export default {
       const timer2 = Y2 + "-" + M2 + "-" + D2 + "00:00:00"; // 之前的7天或者30天
       return [timer2, timer1];
     }
-  },
-  components: {}
+  }
 };
 </script>
 <style lang="less" scoped>

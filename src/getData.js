@@ -294,6 +294,11 @@ export const login = data => fetch("login", data, "post");
 export const overview = data => fetch("overview", data, "get");
 
 /**
+ * 预警监测
+ */
+export const oilView = data => fetch("equip", data, "get");
+
+/**
  * 油耗监测
  */
 export const equip = data => fetch("equip", data, "get");
