@@ -114,7 +114,7 @@
           <i class="el-icon-user"></i>
           <el-dropdown @command="handleCommand" class="dddddd">
             <div class="avator" style="color:#fff">
-              {{userName}}sss
+              {{username}}
               <i class="el-icon-caret-bottom"></i>
             </div>
             <el-dropdown-menu slot="dropdown">
@@ -155,7 +155,8 @@ export default {
       isCollapse: false,
       /*************************************************** */
       flags1: false,
-      tranLeft: 0
+      tranLeft: 0,
+      username: sessionStorage.getItem("username")
     };
   },
   watch: {
