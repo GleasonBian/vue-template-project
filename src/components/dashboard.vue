@@ -25,22 +25,6 @@
           <div class="map" id="track-map"></div>
           <el-button @click="showBox" class="viewbtn" :type="showView?'info':'primary'">{{viewBtn}}</el-button>
           <el-button @click="closeLine" class="viewline" type="info">清空轨迹</el-button>
-          <!-- <el-amap
-            vid="amapDemo"
-            :center="center"
-            :amap-manager="amapManager"
-            :zoom="zoom"
-            :resizeEnable="true"
-            class="amap-demo"
-          >
-            <el-amap-marker
-              v-for="marker in markers"
-              :key="marker.mapName"
-              :position="marker.position"
-              :visible="true"
-              :draggable="false"
-            ></el-amap-marker>
-          </el-amap>-->
           <div class="card" :class="{'active':showView}">
             <el-card class="box-card">
               <div class="clearfix">
@@ -107,12 +91,14 @@
               <div class="card_content">
                 <div>
                   <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.fix.cur_num}}
+                  {{viewData.travel.cur_num}}
                   <span
                     style="font-size:14px; font-weight:none"
                   >km</span>
                 </div>
-                <div class="totalNum">年度{{viewData.fix.year_num}}km，本月{{viewData.fix.mont_hnum}}km</div>
+                <div
+                  class="totalNum"
+                >年度{{viewData.travel.year_num}}km，本月{{viewData.travel.mont_hnum}}km</div>
               </div>
             </el-card>
             <el-card class="bottom_card">
@@ -122,14 +108,12 @@
               <div class="card_content">
                 <div>
                   <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.maintain.cur_num}}
+                  {{viewData.oil.cur_num}}
                   <span
                     style="font-size:14px; font-weight:none"
                   >升</span>
                 </div>
-                <div
-                  class="totalNum"
-                >年度{{viewData.maintain.year_num}}升，本月{{viewData.maintain.mont_hnum}}升</div>
+                <div class="totalNum">年度{{viewData.oil.year_num}}升，本月{{viewData.oil.mont_hnum}}升</div>
               </div>
             </el-card>
             <el-card class="bottom_card">
@@ -139,12 +123,14 @@
               <div class="card_content">
                 <div>
                   <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.fix.cur_num}}
+                  {{viewData.assignment.cur_num}}
                   <span
                     style="font-size:14px; font-weight:none"
                   >h</span>
                 </div>
-                <div class="totalNum">年度{{viewData.fix.year_num}}h，本月{{viewData.fix.mont_hnum}}h</div>
+                <div
+                  class="totalNum"
+                >年度{{viewData.assignment.year_num}}h，本月{{viewData.assignment.mont_hnum}}h</div>
               </div>
             </el-card>
           </div>
@@ -175,6 +161,21 @@ export default {
       map: null,
       viewData: {
         alarm: {
+          cur_num: "",
+          mont_hnum: "",
+          year_hnum: ""
+        },
+        oil: {
+          cur_num: "",
+          mont_hnum: "",
+          year_hnum: ""
+        },
+        assignment: {
+          cur_num: "",
+          mont_hnum: "",
+          year_hnum: ""
+        },
+        travel: {
           cur_num: "",
           mont_hnum: "",
           year_hnum: ""
@@ -243,7 +244,6 @@ export default {
           if (this.points[i].getExtData().guid == eqid) {
             console.log("找到设备" + eqid);
             targetM = this.points[i];
-            // targetM.emit("click", { target: targetM });
 
             this.drowLine(eqid);
             break;
@@ -606,10 +606,20 @@ export default {
                   } else {
                     direction = "北";
                   }
+                  if (that.marks[j].extData.classtype == "SUV") {
+                    content.push(
+                      "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201816499.png'></div>"
+                    );
+                  } else if (that.marks[j].extData.classtype == "轨道车") {
+                    content.push(
+                      "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201716290.png'></div>"
+                    );
+                  } else if (that.marks[j].extData.classtype == "东风机车") {
+                    content.push(
+                      "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201800164.png'></div>"
+                    );
+                  }
 
-                  content.push(
-                    "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='http://tpc.googlesyndication.com/simgad/5843493769827749134'></div>"
-                  );
                   content.push(
                     "<div style='padding:5px 10px'>当前里程：" +
                       that.marks[j].extData.curmiles +
@@ -675,38 +685,6 @@ export default {
             }
           );
 
-          // that.map.setFitView();
-          // let pathParam = {
-          //   x: data.longitude,
-          //   y: data.latitude,
-          //   sp: data.speed,
-          //   ag: data.direction,
-          //   tm: Date.parse(data.gpstime)
-          // };
-          // this.path.push(pathParam);
-          // let graspRoad = new AMap.GraspRoad(); //行驶轨迹
-          // console.log("graspRoad", graspRoad);
-          // graspRoad.driving(this.path, function(error, result) {//行驶轨迹
-          //   console.log("result", result);
-          //   console.log("err", error);
-          //   if (!error) {
-          //     var path2 = [];
-          //     var newPath = result.data.points;
-
-          //     for (var i = 0; i < newPath.length; i += 1) {
-          //       path2.push([newPath[i].x, newPath[i].y]);
-          //     }
-          //     var newLine = new AMap.Polyline({
-          //       path: path2,
-          //       strokeWeight: 8,
-          //       strokeOpacity: 0.8,
-          //       strokeColor: "#0091ea",
-          //       showDir: true
-          //     });
-          //     that.map.add(newLine);
-          //     that.map.setFitView();
-          //   }
-          // });
           /* 
             altitude: 12.345                                  // 海拔高度
             curmiles: 12                                      // 当前里程
