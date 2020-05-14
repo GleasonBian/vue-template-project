@@ -263,7 +263,7 @@ export default {
       let that = this;
       this.map = new AMap.Map("track-map", {
         zoom: 8, //级别
-        center: [112.860257, 36.860496], //中心点坐标
+        center: [112.866504, 36.860657], //中心点坐标
         resizeEnable: true
       });
 
@@ -471,6 +471,7 @@ export default {
                       //     }
                       //   ); //更新position信息
                       this.marks[i].position = pos; //更新position信息
+                      this.marks[i].angle = data.direction;
                       this.marks[i].extData = data; //更新position信息
                       //更新path信息
                       for (var k = 0; k < this.path.length; k++) {
@@ -486,7 +487,7 @@ export default {
                           this.path[k].gpstime = data.gpstime;
                           this.path[k].speed = data.speed;
                           this.path[k].direction = data.direction;
-                          if (this.path[k].path.length == 11) {
+                          if (this.path[k].path.length == 101) {
                             this.path[k].path.shift();
                           }
                           break;
@@ -515,6 +516,10 @@ export default {
                         //   }
                         // ),
                         position: pos,
+                        icon:
+                          "https://img-blog.csdnimg.cn/20200514162104672.png",
+                        offset: new AMap.Pixel(-10, -12),
+                        angle: data.direction,
                         extData: data
                       };
                       this.marks.push(mark);
@@ -554,8 +559,12 @@ export default {
                     //       }
                     //     ),
                     position: pos,
+                    icon: "https://img-blog.csdnimg.cn/20200514162104672.png",
+                    offset: new AMap.Pixel(-10, -12),
+                    angle: data.direction,
                     extData: data
                   };
+
                   this.marks.push(mark);
                   //新增点记录
                   let markPath = {
@@ -627,7 +636,9 @@ export default {
                   );
                   content.push(
                     "<div style='padding:5px 10px'>当前油耗：" +
-                      that.marks[j].extData.curoilconsume +
+                      parseFloat(that.marks[j].extData.curoilconsume).toFixed(
+                        2
+                      ) +
                       "</div>"
                   );
                   content.push(
