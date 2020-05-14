@@ -406,9 +406,9 @@ export default {
         // lineCap: "round",
         // zIndex: 50,
         path: n_path, //设置线覆盖物路径
-        strokeColor: "#3366FF", //线颜色
+        strokeColor: "#34a034", //线颜色
         strokeOpacity: 1, //线透明度
-        strokeWeight: 5, //线宽
+        strokeWeight: 8, //线宽
         strokeStyle: "solid", //线样式
         showDir: true,
         strokeDasharray: [10, 5] //补充线样式
