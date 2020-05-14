@@ -420,8 +420,8 @@ export default {
 .carStatus {
   text-align: center;
   div {
-    width: 14px;
-    height: 14px;
+    width: 6px;
+    height: 6px;
     display: inline-block;
     border-radius: 50%;
   }
