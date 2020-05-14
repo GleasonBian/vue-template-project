@@ -166,6 +166,9 @@ export default {
   created() {
     this.equiList();
   },
+  mounted() {
+    this.initCharts();
+  },
   methods: {
     /*
      ** 搜索处理
@@ -266,7 +269,13 @@ export default {
     /*
      ** 初始化 echert
      */
-    initCharts(gpstime, curmiles, curoilconsume, speed, totaloilconsume) {
+    initCharts(
+      gpstime = [],
+      curmiles = [],
+      curoilconsume = [],
+      speed = [],
+      totaloilconsume = []
+    ) {
       let colors = ["#5793f3", "#d14a61", "#675bba"];
       let myChart = this.$echarts.init(this.$refs.chart);
       let option = {
