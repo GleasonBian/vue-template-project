@@ -296,7 +296,7 @@ export const overview = data => fetch("overview", data, "get");
 /**
  * 油耗监测
  */
-export const oilView = data => fetch("equip", data, "get");
+export const equip = data => fetch("equip", data, "get");
 
 /**
  * 报警监测 id 传 报警id

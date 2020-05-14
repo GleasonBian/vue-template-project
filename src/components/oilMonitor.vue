@@ -19,11 +19,11 @@
     </el-col>
     <el-col align="middle" :span="20">
       <!-- 搜索框 -->
-      <gt-search :data="searchData" @handle="oilViewHandle" size style="margin-bottom:24px;"></gt-search>
+      <gt-search :data="searchData" @handle="searchHandle" size style="margin-bottom:24px;"></gt-search>
       <!-- 列表 -->
       <div style="width:100%; height:350px;" ref="chart"></div>
       <gt-table
-        :tableData="tableData"
+        :tableData="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
         style="width: 98%"
         :optionWidth="optionWidth"
         :columns="columns"
@@ -36,9 +36,10 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="offset"
+        :current-page="currentPage"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="10"
+        background
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
@@ -114,9 +115,9 @@ export default {
         }
       ],
       tableData: [], // 表格数据
+      pagesize: 10,
       total: 0,
-      limit: 10,
-      offset: 1,
+      currentPage: 1,
       multipleSelection: [], // 用于批量 删除
       searchData: [
         // 搜索框 数据
@@ -148,12 +149,12 @@ export default {
               label: "昨天"
             },
             {
-              value: "近7天",
-              label: "近7天"
+              value: "近3天",
+              label: "近3天"
             },
             {
-              value: "近30天",
-              label: "近30天"
+              value: "近7天",
+              label: "近7天"
             }
           ]
         },
@@ -174,6 +175,33 @@ export default {
   },
   mounted() {},
   methods: {
+    searchHandle(row) {
+      if (row.time !== "") {
+        row = JSON.parse(JSON.stringify(row));
+        switch (row.time) {
+          case "今天":
+            row.start = this.timeForMat(0)[0];
+            row.end = this.timeForMat(0)[1];
+            break;
+          case "昨天":
+            row.start = this.timeForMat(1)[0];
+            row.end = this.timeForMat(1)[1];
+            break;
+          case "近3天":
+            row.start = this.timeForMat(3)[0];
+            row.end = this.timeForMat(3)[1];
+            break;
+          case "近7天":
+            row.start = this.timeForMat(7)[0];
+            row.end = this.timeForMat(7)[1];
+            break;
+        }
+        console.log(row);
+        this.oilViewHandle(row);
+      } else {
+        this.oilViewHandle(row);
+      }
+    },
     /*
      ** 设备列表
      */
@@ -208,19 +236,23 @@ export default {
       }
       const res = await oilView({ id: canshu });
       if (res.status === 200) {
-        this.tableData = res.data;
         let gpstime = [], // 时间
           curmiles = [], // 里程
           curoilconsume = [], // 油耗
           speed = [], //速度
           totaloilconsume = []; // 总油耗
+        this.total = res.data.length;
         for (var i in res.data) {
+          res.data[i].oilleft = res.data[i].oilleft.toFixed(2);
+          res.data[i].curoilconsume = res.data[i].curoilconsume.toFixed(2);
+          res.data[i].totaloilconsume = res.data[i].totaloilconsume.toFixed(2);
           gpstime.push(res.data[i].gpstime);
           curmiles.push(res.data[i].curmiles);
-          curoilconsume.push(res.data[i].curoilconsume.toFixed(2));
+          curoilconsume.push(res.data[i].curoilconsume);
           speed.push(res.data[i].speed);
-          totaloilconsume.push(res.data[i].totaloilconsume.toFixed(2));
+          totaloilconsume.push(res.data[i].totaloilconsume);
         }
+        this.tableData = res.data;
         this.initCharts(
           gpstime,
           curmiles,
@@ -235,6 +267,7 @@ export default {
      ** 单机行处理
      */
     async clickRow(row) {
+      console.log(row);
       this.oilViewHandle(row.guid);
       // this.searchData[0].options
     },
@@ -395,20 +428,50 @@ export default {
       this.multipleSelection = arr;
     },
 
-    /*
-     ** 分页处理
+    /**
+     * 分页
      */
     handleSizeChange(val) {
-      console.log("handleSizeChange:", val);
-      let arr = [];
+      this.pagesize = val;
     },
-
-    /*
-     ** 分页处理2
-     */
     handleCurrentChange(val) {
-      console.log(val);
-      let arr = [];
+      this.currentPage = val;
+    },
+    timeForMat(count) {
+      // 拼接时间
+      const time1 = new Date();
+      const time2 = new Date();
+      if (count === 1) {
+        time1.setTime(time1.getTime() - 24 * 60 * 60 * 1000);
+      } else {
+        if (count >= 0) {
+          time1.setTime(time1.getTime());
+        } else {
+          if (count === -2) {
+            time1.setTime(time1.getTime() + 24 * 60 * 60 * 1000 * 2);
+          } else {
+            time1.setTime(time1.getTime() + 24 * 60 * 60 * 1000);
+          }
+        }
+      }
+
+      const Y1 = time1.getFullYear();
+      const M1 =
+        time1.getMonth() + 1 > 9
+          ? time1.getMonth() + 1
+          : "0" + (time1.getMonth() + 1);
+      const D1 = time1.getDate() > 9 ? time1.getDate() : "0" + time1.getDate();
+      const timer1 = Y1 + "-" + M1 + "-" + D1 + "23:59:59"; // 当前时间
+
+      time2.setTime(time2.getTime() - 24 * 60 * 60 * 1000 * count);
+      const Y2 = time2.getFullYear();
+      const M2 =
+        time2.getMonth() + 1 > 9
+          ? time2.getMonth() + 1
+          : "0" + (time2.getMonth() + 1);
+      const D2 = time2.getDate() > 9 ? time2.getDate() : "0" + time2.getDate();
+      const timer2 = Y2 + "-" + M2 + "-" + D2 + "00:00:00"; // 之前的7天或者30天
+      return [timer2, timer1];
     }
   },
   components: {}
