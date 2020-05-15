@@ -6,13 +6,13 @@
         @row-click="clickRow"
         highlight-current-row
         size="mini"
-        style="width:300px"
+        style="min-width:300px"
         ref="singleTable"
         border
       >
-        <el-table-column type="index"></el-table-column>
+        <el-table-column type="index" label="序号"></el-table-column>
         <el-table-column prop="name" label="名称" width="90"></el-table-column>
-        <el-table-column prop="plateno" label="号码" width="90"></el-table-column>
+        <el-table-column prop="plateno" label="号码" width="120"></el-table-column>
         <el-table-column label="状态" align="left">
           <template slot-scope="scope">
             <div class="carStatus">
