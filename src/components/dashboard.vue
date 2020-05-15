@@ -122,18 +122,18 @@
                 <div>
                   <span class="card_minor">今日</span>
                   <span class="card_main">{{viewData.travel.cur_num}}</span>
-                  <span class="card_minor">KM</span>
+                  <span class="card_minor">公里</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <span class="card_col_main">{{viewData.travel.mont_hnum}}</span>
-                    <span class="card_minor">KM</span>
+                    <span class="card_minor">公里</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <span class="card_col_main">{{viewData.travel.year_num}}</span>
-                    <span class="card_minor">KM</span>
+                    <span class="card_minor">公里</span>
                   </div>
                 </div>
               </div>
@@ -147,18 +147,18 @@
                 <div>
                   <span class="card_minor">今日</span>
                   <span class="card_main" style="color:#f0c70b">{{viewData.oil.cur_num}}</span>
-                  <span class="card_minor">L</span>
+                  <span class="card_minor">升</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <span class="card_col_main">{{viewData.oil.mont_hnum}}</span>
-                    <span class="card_minor">L</span>
+                    <span class="card_minor">升</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <span class="card_col_main">{{viewData.oil.year_num}}</span>
-                    <span class="card_minor">L</span>
+                    <span class="card_minor">升</span>
                   </div>
                 </div>
               </div>
@@ -172,18 +172,18 @@
                 <div>
                   <span class="card_minor">今日</span>
                   <span class="card_main">{{viewData.assignment.cur_num}}</span>
-                  <span class="card_minor">L</span>
+                  <span class="card_minor">小时</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <span class="card_col_main">{{viewData.assignment.mont_hnum}}</span>
-                    <span class="card_minor">L</span>
+                    <span class="card_minor">小时</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <span class="card_col_main">{{viewData.assignment.year_num}}</span>
-                    <span class="card_minor">L</span>
+                    <span class="card_minor">小时</span>
                   </div>
                 </div>
               </div>
@@ -650,14 +650,9 @@ export default {
                   }
 
                   content.push(
-                    "<div style='padding:5px 10px'>行驶方向：" +
-                      direction +
-                      "</div>"
-                  );
-                  content.push(
-                    "<div style='padding:5px 10px'>当前速度：" +
-                      that.marks[j].extData.speed +
-                      "km/h" +
+                    "<div style='padding:5px 10px'>今日里程：" +
+                      that.marks[j].extData.curmiles +
+                      "km" +
                       "</div>"
                   );
                   content.push(
@@ -675,15 +670,8 @@ export default {
                       "</div>"
                   );
                   content.push(
-                    "<div style='padding:5px 10px'>今日里程：" +
-                      that.marks[j].extData.curmiles +
-                      "km" +
-                      "</div>"
-                  );
-                  content.push(
-                    "<div style='padding:5px 10px'>总里程：" +
-                      that.marks[j].extData.totalmiles +
-                      "km" +
+                    "<div style='padding:5px 10px'>行驶方向：" +
+                      direction +
                       "</div>"
                   );
                   content.push(
@@ -700,6 +688,18 @@ export default {
                   content.push(
                     "<div style='padding:5px 10px'>服务器时间：" +
                       that.marks[j].extData.servertime +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>速 度 ：" +
+                      that.marks[j].extData.speed +
+                      "km/h" +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>总里程：" +
+                      that.marks[j].extData.totalmiles +
+                      "km" +
                       "</div>"
                   );
                   let data2 = that.marks[j].extData.guid;
