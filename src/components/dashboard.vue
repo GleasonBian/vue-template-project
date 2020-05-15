@@ -818,7 +818,7 @@ export default {
   .card_bottom {
     position: absolute;
     width: 100%;
-    bottom: -160px;
+    bottom: -30%;
     left: 20px;
     z-index: 100;
     transition: all 0.2s;
