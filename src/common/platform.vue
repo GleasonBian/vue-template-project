@@ -17,15 +17,15 @@
         <el-submenu
           index="5"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(1)"
+          @mouseover.native="on_mouse(1,$event)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-six"></i>实时监测
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:93px"
-            @mouseover.native="on_mouse(1)"
+            :style="{paddingLeft:childTitleLeft1,width:childTitleWidth} "
+            @mouseover.native="on_mouse_child(1,$event)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/monitor/oil" class="myClass" style="float:left">油耗监测</el-menu-item>
@@ -55,15 +55,15 @@
         <el-submenu
           index="3"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(2)"
+          @mouseover.native="on_mouse(2,$event)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:150px"
-            @mouseover.native="on_mouse(2)"
+            :style="{paddingLeft:childTitleLeft2,width:childTitleWidth} "
+            @mouseover.native="on_mouse_child(2,$event)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/plan/fixplan" style="float:left;">维修计划</el-menu-item>
@@ -75,15 +75,15 @@
         <el-submenu
           index="4"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(3)"
+          @mouseover.native="on_mouse(3,$event)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
-            <i class="iconfont i-menu-four"></i>调令
+            <i class="iconfont i-menu-four" style="font-size:20px"></i>调令
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:348px"
-            @mouseover.native="on_mouse(3)"
+            :style="{paddingLeft:childTitleLeft3,width:childTitleWidth} "
+            @mouseover.native="on_mouse_child(3,$event)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/assign/assignplan" style="float:left;">调度计划</el-menu-item>
@@ -93,15 +93,15 @@
         <el-submenu
           index="2"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(4)"
+          @mouseover.native="on_mouse(4,$event)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
           </template>
           <el-menu-item
-            style="width:100vw;padding-left:355px"
-            @mouseover.native="on_mouse(4)"
+            :style="{paddingLeft:childTitleLeft4,width:childTitleWidth} "
+            @mouseover.native="on_mouse_child(4,$event)"
             @mouseout.native="out_mouse(1)"
           >
             <el-menu-item index="/platform/companyList" class="myClass" style="float:left">公司管理</el-menu-item>
@@ -157,6 +157,11 @@ export default {
       /*************************************************** */
       flags1: false,
       tranLeft: 0,
+      childTitleWidth: "100vw",
+      childTitleLeft1: "100px",
+      childTitleLeft2: "100px",
+      childTitleLeft3: "100px",
+      childTitleLeft4: "100px",
       username: sessionStorage.getItem("username")
     };
   },
@@ -168,25 +173,39 @@ export default {
     // this.getPageElement();
   },
   methods: {
-    on_mouse(e) {
+    on_mouse(num, e) {
       // this.flags1 = false;
-      switch (e) {
+      let parentEle = e.currentTarget.parentElement;
+      let childLis = parentEle.childNodes;
+      let leftDis = 0;
+      for (var i = 0; i < num; i++) {
+        leftDis = leftDis + childLis[i].offsetWidth;
+      }
+      let leftDistance = childLis[num].offsetWidth / 2 + leftDis;
+      this.tranLeft = leftDistance + "px";
+      this.flags1 = true;
+      let distanceSum = 0;
+      var subTitleLength = 60;
+      switch (num) {
         case 1:
-          this.tranLeft = "160px";
+          distanceSum = leftDistance - subTitleLength * 1;
+          this.childTitleLeft1 = distanceSum + "px";
           break;
         case 2:
-          this.tranLeft = "293px";
+          distanceSum = leftDistance - subTitleLength * 2 - 15;
+          this.childTitleLeft2 = distanceSum + "px";
           break;
         case 3:
-          this.tranLeft = "415px";
+          distanceSum = leftDistance - subTitleLength * 1;
+          this.childTitleLeft3 = distanceSum + "px";
           break;
         case 4:
-          this.tranLeft = "535px";
-          break;
-        case 5:
-          this.tranLeft = "655px";
+          distanceSum = leftDistance - subTitleLength * 2.5 - 25;
+          this.childTitleLeft4 = distanceSum + "px";
           break;
       }
+    },
+    on_mouse_child(num, e) {
       this.flags1 = true;
     },
     out_mouse(e) {
