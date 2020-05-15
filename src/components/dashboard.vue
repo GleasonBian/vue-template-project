@@ -229,9 +229,6 @@ export default {
       //设备列表
       const res = await overview();
       this.viewData = res.data;
-      console.log(
-        "-----------------------------overView----------------------------"
-      );
       console.log(this.viewData);
     },
     //点击设备列表打开地图中marker
@@ -243,7 +240,7 @@ export default {
         for (var i = 0; i < this.points.length; i++) {
           if (this.points[i].getExtData().guid == eqid) {
             console.log("找到设备" + eqid);
-             this.map.setZoomAndCenter(16, this.marks[i].position);
+            this.map.setZoomAndCenter(16, this.marks[i].position);
             targetM = this.points[i];
 
             this.drowLine(eqid);
@@ -284,7 +281,6 @@ export default {
     },
     initWebSocket() {
       //初始化weosocket
-      console.log("socket:", process.env.VUE_APP_SOCKET);
       const wsuri = process.env.VUE_APP_SOCKET;
       // 建立连接
       this.websock = new WebSocket(wsuri);
