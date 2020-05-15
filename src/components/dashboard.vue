@@ -3,7 +3,14 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="grid-content bg-purple">
-          <el-table :data="tableData" @row-click="clickMarker" style="width:100%;" size="mini">
+          <el-table
+            :data="tableData"
+            @row-click="clickMarker"
+            ref="singleATable"
+            highlight-current-row
+            style="width:100%;"
+            size="mini"
+          >
             <el-table-column type="index" label="序号" align="center"></el-table-column>
             <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
             <el-table-column prop="platenum" label="车牌号码" align="center"></el-table-column>
@@ -288,6 +295,7 @@ export default {
     },
     //点击设备列表打开地图中marker
     clickMarker(row) {
+      this.$refs.singleATable.setCurrentRow(row);
       this.closeInfoWindow();
       let eqid = row.guid;
       let targetM;

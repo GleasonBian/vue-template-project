@@ -10,10 +10,10 @@
         ref="singleTable"
         border
       >
-        <el-table-column type="index" label="序号"></el-table-column>
-        <el-table-column prop="name" label="名称" width="90"></el-table-column>
-        <el-table-column prop="plateno" label="号码" width="120"></el-table-column>
-        <el-table-column label="状态" align="left">
+        <el-table-column type="index" label="序号" align="center"></el-table-column>
+        <el-table-column prop="name" label="名称" width="90" align="center"></el-table-column>
+        <el-table-column prop="plateno" label="号码" width="120" align="center"></el-table-column>
+        <el-table-column label="状态">
           <template slot-scope="scope">
             <div class="carStatus">
               <div
