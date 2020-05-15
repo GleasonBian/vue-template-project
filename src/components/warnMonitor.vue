@@ -1,21 +1,10 @@
 <template>
   <el-row>
     <el-col :span="4">
-      <!-- 公司选择框 -->
-      <!-- <el-select v-model="company_name" clearable placeholder="选择公司/项目">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>-->
-      <!-- <el-button type="primary" style="margin-left:40px">查询</el-button> -->
-      <!-- 车辆状态列表 -->
-      <el-table :data="vehicleData" style="width:100%">
+      <el-table :data="vehicleData" @row-click="clickRow" style="width:100%">
         <el-table-column type="index" label="序号" align="center"></el-table-column>
         <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
-        <el-table-column prop="name" label="车牌号码" align="center"></el-table-column>
+        <el-table-column prop="plateno" label="车牌号码" align="center"></el-table-column>
         <el-table-column label="车辆状态" width="80" align="center">
           <template slot-scope="scope">
             <div class="carStatus">
@@ -30,17 +19,9 @@
     </el-col>
     <el-col align="middle" :span="20">
       <!-- 搜索框 -->
-      <gt-search
-        :data="searchData"
-        @handle="assignPlans"
-        size
-        style="margin-bottom:24px"
-        ref="chart"
-      ></gt-search>
+      <gt-search :data="searchData" @handle="oilViewHandle" size style="margin-bottom:24px;"></gt-search>
       <!-- 列表 -->
-      <el-card class="box-card" style="width:98%;margin-bottom: 24px;">
-        <div style="width:100%; height:30vh" ref="mapone"></div>
-      </el-card>
+      <div style="width:100%; height:350px;float:left" ref="chart"></div>
       <gt-table
         :tableData="tableData"
         style="width: 98%"
@@ -52,7 +33,6 @@
         v-on:UpdatePreprocessing="UpdatePreprocessing"
         :handle="handle"
       ></gt-table>
-      <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -66,58 +46,70 @@
   </el-row>
 </template>
 <script>
-import { equiSelect } from "@/getData";
+import { equiSelect, oilView, alarm } from "@/getData";
 export default {
   name: "oilmonitor",
   data() {
     return {
       handle: [
-        {
-          function: "checkTasks",
-          text: "查看任务",
-          type: "text",
-          show: true
-        },
-        {
-          function: "UpdatePreprocessing",
-          text: "更新计划",
-          type: "text",
-          show: true
-        },
-        {
-          function: "DeleteHandle",
-          text: "删除计划",
-          type: "text",
-          show: true
-        }
+        // {
+        //   function: "checkTasks",
+        //   text: "查看任务",
+        //   type: "text",
+        //   show: true
+        // },
+        // {
+        //   function: "UpdatePreprocessing",
+        //   text: "更新计划",
+        //   type: "text",
+        //   show: true
+        // },
+        // {
+        //   function: "DeleteHandle",
+        //   text: "删除计划",
+        //   type: "text",
+        //   show: true
+        // }
       ],
       columns: [
         {
-          id: "company_name",
-          label: "公司名称"
+          id: "name",
+          label: "车辆名称"
         },
         {
-          id: "driver_name",
-          label: "司机名称"
+          id: "duty_name",
+          label: "责任人"
         },
         {
-          id: "alarm_time",
+          id: "class_type",
+          label: "告警类型"
+        },
+        {
+          id: "alarm_name",
+          label: "告警内容"
+        },
+        {
+          id: "class_rank",
+          label: "告警等级"
+        },
+        {
+          id: "occur_time",
           label: "告警时间"
         },
         {
-          id: "hand_time",
+          id: "handle_time",
           label: "处理时间"
         },
         {
-          id: "handler",
+          id: "handle_name",
           label: "处理人"
         },
         {
-          id: "hand_result",
+          id: "handle_result",
           label: "处理结果"
         },
         {
-          id: "hand_instructions",
+          id: "remark",
           label: "处理说明"
         }
       ],
@@ -129,115 +121,245 @@ export default {
       searchData: [
         // 搜索框 数据
         {
-          key: "dri_name", // 与后端交互时的字段 必填
-          label: "司机名称", // 搜索框名称 必填
-          placeholder: "请输入司机名称", // 占位符 选填
-          default: "" // 搜索框 默认值
-        },
-        {
-          key: "handler",
-          label: "处理人",
-          placeholder: "请输入处理人",
-          default: ""
-        },
-        {
-          key: "warning_type", // 与后端交互时的字段 必填
-          label: "告警类型", // 搜索框名称 必填
-          placeholder: "请搜索", // 占位符 选填
-          default: "油耗告警", // 搜索框 默认值
+          key: "guid", // 与后端交互时的字段 必填
+          label: "车牌号", // 搜索框名称 必填
+          placeholder: "请选择", // 占位符 选填
+          default: "", // 搜索框 默认值
           options: [
             {
-              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
               value: "项目1", // 下拉选项 绑定 值
-              label: "油耗告警" // 下拉选项 绑定 名称
-            },
-            {
-              value: "项目2",
-              label: "超速告警"
-            },
-            {
-              value: "项目3",
-              label: "超区域告警"
+              label: "项目1" // 下拉选项 绑定 名称
             }
           ]
         },
         {
-          key: "deptname",
-          label: "部门名称",
-          placeholder: "请输入部门名称",
-          default: ""
-        },
-        {
-          key: "manage_type", // 与后端交互时的字段 必填
-          label: "管理类型", // 搜索框名称 必填
-          placeholder: "请搜索", // 占位符 选填
-          default: "公司直管", // 搜索框 默认值
+          key: "type",
+          label: "告警类型",
+          placeholder: "选择告警类型",
+          default: "",
           options: [
             {
               // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
-              value: "项目1", // 下拉选项 绑定 值
-              label: "公司直管" // 下拉选项 绑定 名称
+              value: "1", // 下拉选项 绑定 值
+              label: "超速告警" // 下拉选项 绑定 名称
             },
             {
-              value: "项目2",
-              label: "项目自管"
-            },
-            {
-              value: "项目3",
-              label: "劳务自带"
-            },
-            {
-              value: "项目4",
-              label: "专业租赁"
+              value: "2",
+              label: "油耗告警"
             }
           ]
         },
         {
           key: "date",
-          label: "告警时间",
+          label: "选择时间",
           placeholder: "请选择",
           default: ""
         }
       ],
       optionWidth: 250,
-      vehicleData: [],
-      options: [
-        {
-          value: "十二局",
-          label: "十二局"
-        }
-      ], //公司选择
-      company_name: "",
-      barOptions: {}
+      vehicleData: []
     };
   },
   beforeCreate() {},
   created() {
     this.equiList();
   },
-  mounted() {
-    // this.initCharts();
-    this.mapOneHandle();
-  },
+  mounted() {},
   methods: {
-    async equiList() {
-      const res = await equiSelect();
-      this.vehicleData = res.data;
+    /*
+     ** 获取当天日期
+     */
+    getDays() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      // var dates = date.toLocaleDateString();
+      var dates2 = year + "-" + month + "-" + day;
+      return dates2;
+    },
+    /*
+     ** 获取两个时间之间的天数数组
+     */
+    getAllDate(day1, day2) {
+      var getDate = function(str) {
+        var tempDate = new Date();
+        var list = str.split("-");
+        tempDate.setFullYear(list[0]);
+        tempDate.setMonth(list[1] - 1);
+        tempDate.setDate(list[2]);
+        return tempDate;
+      };
+      var date1 = getDate(day1);
+      var date2 = getDate(day2);
+      if (date1 > date2) {
+        var tempDate = date1;
+        date1 = date2;
+        date2 = tempDate;
+      }
+      date1.setDate(date1.getDate() + 1);
+      var dateArr = [];
+      var i = 0;
+      while (
+        !(
+          date1.getFullYear() == date2.getFullYear() &&
+          date1.getMonth() == date2.getMonth() &&
+          date1.getDate() == date2.getDate()
+        )
+      ) {
+        var dayStr = date1.getDate().toString();
+        if (dayStr.length == 1) {
+          dayStr = "0" + dayStr;
+        }
+        var monthStr =
+          date1.getMonth() + 1 < 10
+            ? "0" + (date1.getMonth() + 1)
+            : date1.getMonth() + 1;
+        dateArr[i] = date1.getFullYear() + "-" + monthStr + "-" + dayStr;
+        i++;
+        date1.setDate(date1.getDate() + 1);
+      }
+      dateArr.splice(0, 0, day1);
+      dateArr.push(day2);
+      return dateArr;
+    },
+    /*
+     ** 获取两个时间之间的天数差
+     */
+    getDaysBetween(dateString1, dateString2) {
+      var startDate = Date.parse(dateString1);
+      var endDate = Date.parse(dateString2);
+      var days = (endDate - startDate) / (1 * 24 * 60 * 60 * 1000);
+      return Math.floor(days);
     },
 
-    mapOneHandle() {
-      let mapone = this.$echarts.init(this.$refs.mapone);
-      let option = {
-        color: "#409EFF",
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+    /*
+     ** 设备列表
+     */
+    async equiList() {
+      const res = await equiSelect();
+      res.data.map(item => {
+        item.value = item.guid;
+        item.label = item.plateno;
+      });
+      this.vehicleData = res.data;
+      this.searchData[0].options = res.data;
+    },
+
+    /*
+     ** 告警监测数据
+     */
+    async oilViewHandle(param) {
+      console.log(param.start);
+      if (param.guid === "") {
+        this.$message.warning("请选择设备");
+        return;
+      }
+      // equip/ff5a5bee-b1d1-4fde-93d5-59a7a6eba9b6/oilcs?start=2020-05-14 00:00&end=2020-05-14 00:00
+      let canshu2 = "";
+      let xdays = [];
+      let startDay = this.getDays();
+      let endDay = "";
+      if (param instanceof Object) {
+        if ("start" in param && "end" in param) {
+          startDay = param.start.substr(0, 10);
+          endDay = param.end.substr(0, 10);
+          canshu2 =
+            param.guid +
+            "/alarm?start=" +
+            param.start +
+            "&end=" +
+            param.end +
+            "&type=" +
+            param.type;
+          var s = this.getAllDate(startDay, endDay);
+          console.log(s);
+          xdays.push(...s);
+        } else {
+          canshu2 = param.guid + "/alarm?type=" + param.type;
+          let dates = this.getDays();
+          xdays.push(dates);
+        }
+      } else {
+        let dates = this.getDays();
+        xdays.push(dates);
+        canshu2 = param + "/alarm?type=" + param.type;
+      }
+
+      const alermRes = await oilView({ id: canshu2 });
+
+      console.log(alermRes);
+      console.log(startDay);
+
+      if (alermRes.status === 200) {
+        let alarmSpeedNum = [];
+        let alarmOilNum = [];
+        this.tableData = alermRes.data;
+        let dataLength = alermRes.data.length;
+        let xdayArr = alermRes.data;
+        for (var k = 0; k < dataLength; k++) {
+          let diffDays = this.getDaysBetween(startDay, xdayArr[k].occur_time);
+          if (xdayArr[k].class_type == "超速报警") {
+            if (alarmSpeedNum[diffDays] == undefined) {
+              alarmSpeedNum[diffDays] = 1;
+            } else {
+              alarmSpeedNum[diffDays]++;
+            }
           }
+          if (xdayArr[k].class_type == "油耗报警") {
+            if (alarmOilNum[diffDays] == undefined) {
+              alarmOilNum[diffDays] = 1;
+            } else {
+              alarmOilNum[diffDays]++;
+            }
+          }
+        }
+        this.initCharts(xdays, alarmSpeedNum, alarmOilNum);
+      }
+    },
+
+    /*
+     ** 单机行处理
+     */
+    async clickRow(row) {
+      this.oilViewHandle(row.guid);
+      // this.searchData[0].options
+    },
+    initCharts(xdays, alarmSpeedNum, alarmOilNum) {
+      let colors = ["#5793f3", "#d14a61", "#675bba"];
+      let myChart = this.$echarts.init(this.$refs.chart);
+      let option = {
+        title: {
+          right: "50%",
+          text: "告警类型"
+        },
+        tooltip: {
+          trigger: "axis"
         },
         legend: {
-          data: ["次数"]
+          left: "0",
+          data: ["超速告警", "油耗告警"]
+        },
+        toolbox: {
+          show: true,
+          orient: "horizontal",
+          right: "50",
+          feature: {
+            mark: { show: true },
+            dataZoom: {
+              yAxisIndex: "none"
+            }, //区域缩放，区域缩放还原
+            dataView: {
+              show: true,
+              readOnly: false
+            }, //数据视图
+            magicType: {
+              show: true,
+              type: ["line", "bar"]
+            }, //切换为折线图，切换为柱状图
+            restore: { show: true }, //还原
+            saveAsImage: {} //保存为图片
+          }
         },
         grid: {
           left: "3%",
@@ -245,57 +367,73 @@ export default {
           bottom: "3%",
           containLabel: true
         },
+        dataZoom: [
+          {
+            type: "",
+            show: true,
+            xAxisIndex: [0],
+            top: 30,
+            start: 10,
+            end: 90 //初始化滚动条
+          }
+        ],
         xAxis: {
           type: "category",
-          data: [
-            "5-1",
-            "5-2",
-            "5-3",
-            "5-4",
-            "5-5",
-            "5-6",
-            "5-7",
-            "5-8",
-            "5-9",
-            "5-10",
-            "5-11",
-            "5-12",
-            "5-13",
-            "5-14",
-            "5-15"
-          ]
+          axisTick: { show: false },
+          boundaryGap: false,
+          data: xdays
         },
         yAxis: {
           type: "value"
         },
         series: [
           {
-            name: "机车",
+            name: "超速告警",
             type: "bar",
-            stack: "总量",
+            stack: "超速告警计数",
+            data: alarmSpeedNum,
             label: {
-              show: true,
-              position: "insideRight"
-            },
-            data: [32, 30, 31, 33, 39, 33, 32, 27, 29, 35, 24, 12, 22, 34, 15]
+              show: true, // 开启显示
+              rotate: 0, // 旋转0度
+              position: "top", // 在上方显示
+              distance: 10, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。
+              verticalAlign: "middle",
+              textStyle: {
+                // 数值样式
+                color: "black",
+                fontSize: 16
+              }
+            }
+          },
+          {
+            name: "油耗告警",
+            type: "bar",
+            stack: "油耗告警计数",
+            data: alarmOilNum,
+            label: {
+              show: true, // 开启显示
+              rotate: 0, // 旋转0度
+              position: "top", // 在上方显示
+              distance: 10, // 距离图形元素的距离。当 position 为字符描述值（如 'top'、'insideRight'）时候有效。
+              verticalAlign: "middle",
+              textStyle: {
+                // 数值样式
+                color: "black",
+                fontSize: 16
+              }
+            }
           }
         ]
       };
-
-      mapone.setOption(option);
-
+      myChart.setOption(option);
       window.onresize = function() {
-        mapone.resize();
+        myChart.resize();
       };
     },
+
     /*
      ** 查看处理
      */
-    assignPlans() {},
-
-    /**
-     * 查看任务列表
-     * **/
     async checkTasks(index, row) {},
 
     /*
@@ -328,7 +466,7 @@ export default {
           if (res.status === 200) {
             this.$message.success("删除成功");
           }
-          this.assignPlans();
+          this.searchHandle();
         })
         .catch(err => {});
     },
@@ -363,18 +501,16 @@ export default {
      ** 分页处理
      */
     handleSizeChange(val) {
+      console.log("handleSizeChange:", val);
       let arr = [];
-      for (var item of val) arr.push(item.id);
-      this.multipleSelection = arr;
     },
 
     /*
      ** 分页处理2
      */
     handleCurrentChange(val) {
+      console.log(val);
       let arr = [];
-      for (var item of val) arr.push(item.id);
-      this.multipleSelection = arr;
     }
   },
   components: {}
