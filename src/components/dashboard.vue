@@ -28,109 +28,164 @@
           <div class="card" :class="{'active':showView}">
             <el-card class="box-card">
               <div class="clearfix">
-                <span>车辆监测</span>
+                <span class="card_title">车辆监测</span>
+                <div class="card_void"></div>
               </div>
-              <div class="card_content">
-                {{viewData.totalequips}}
-                <span style="font-size:14px; font-weight:none">台</span>
-              </div>
-            </el-card>
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span>保养监测</span>
-              </div>
-              <div class="card_content">
-                <div>
-                  <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.maintain.cur_num}}
-                  <span
-                    style="font-size:14px; font-weight:none"
-                  >次</span>
-                </div>
-                <div
-                  class="totalNum"
-                >年度{{viewData.maintain.year_num}}次，本月{{viewData.maintain.mont_hnum}}次</div>
+              <div>
+                <span class="card_main">{{viewData.totalequips}}</span>
+                <span class="card_minor">台</span>
               </div>
             </el-card>
             <el-card class="box-card">
               <div class="clearfix">
-                <span>维修监测</span>
+                <span class="card_title">保养监测</span>
+                <div class="card_void"></div>
               </div>
               <div class="card_content">
                 <div>
-                  <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.fix.cur_num}}
-                  <span
-                    style="font-size:14px; font-weight:none"
-                  >次</span>
+                  <span class="card_minor">今日</span>
+                  <span class="card_main">{{viewData.maintain.cur_num}}</span>
+                  <span class="card_minor">次</span>
                 </div>
-                <div class="totalNum">年度{{viewData.fix.year_num}}次，本月{{viewData.fix.mont_hnum}}次</div>
+                <div>
+                  <div class="card_row">
+                    <span class="card_minor">本月</span>
+                    <span class="card_col_main">{{viewData.maintain.mont_hnum+" "+" "}}</span>
+                    <span class="card_minor">次</span>
+                  </div>
+                  <div class="card_row">
+                    <span class="card_minor">年度</span>
+                    <span class="card_col_main">{{viewData.maintain.year_num}}</span>
+                    <span class="card_minor">次</span>
+                  </div>
+                </div>
               </div>
             </el-card>
             <el-card class="box-card">
               <div class="clearfix">
-                <span>告警监测</span>
+                <span class="card_title">维修监测</span>
+                <div class="card_void"></div>
               </div>
               <div class="card_content">
                 <div>
-                  <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.alarm.cur_num}}
-                  <span
-                    style="font-size:14px; font-weight:none"
-                  >次</span>
+                  <span class="card_minor">今日</span>
+                  <span class="card_main">{{viewData.fix.cur_num}}</span>
+                  <span class="card_minor">次</span>
                 </div>
-                <div class="totalNum">年度{{viewData.alarm.year_num}}次，本月{{viewData.alarm.mont_hnum}}次</div>
+                <div>
+                  <div class="card_row">
+                    <span class="card_minor">本月</span>
+                    <span class="card_col_main">{{viewData.fix.mont_hnum}}</span>
+                    <span class="card_minor">次</span>
+                  </div>
+                  <div class="card_row">
+                    <span class="card_minor">年度</span>
+                    <span class="card_col_main">{{viewData.fix.year_num}}</span>
+                    <span class="card_minor">次</span>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+            <el-card class="box-card">
+              <div class="clearfix">
+                <span class="card_title">告警监测</span>
+                <div class="card_void"></div>
+              </div>
+              <div class="card_content">
+                <div>
+                  <span class="card_minor">今日</span>
+                  <span class="card_main" style="color:red">{{viewData.alarm.cur_num}}</span>
+                  <span class="card_minor">次</span>
+                </div>
+                <div>
+                  <div class="card_row">
+                    <span class="card_minor">本月</span>
+                    <span class="card_col_main">{{viewData.alarm.mont_hnum}}</span>
+                    <span class="card_minor">次</span>
+                  </div>
+                  <div class="card_row">
+                    <span class="card_minor">年度</span>
+                    <span class="card_col_main">{{viewData.alarm.year_num}}</span>
+                    <span class="card_minor">次</span>
+                  </div>
+                </div>
               </div>
             </el-card>
           </div>
           <div class="card_bottom clear" :class="{'active':showView}">
             <el-card class="bottom_card">
               <div class="clearfix">
-                <span>里程监测</span>
+                <span class="card_title">里程监测</span>
+                <div class="card_void"></div>
               </div>
               <div class="card_content">
                 <div>
-                  <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.travel.cur_num}}
-                  <span
-                    style="font-size:14px; font-weight:none"
-                  >km</span>
+                  <span class="card_minor">今日</span>
+                  <span class="card_main">{{viewData.travel.cur_num}}</span>
+                  <span class="card_minor">KM</span>
                 </div>
-                <div
-                  class="totalNum"
-                >年度{{viewData.travel.year_num}}km，本月{{viewData.travel.mont_hnum}}km</div>
+                <div>
+                  <div class="card_row">
+                    <span class="card_minor">本月</span>
+                    <span class="card_col_main">{{viewData.travel.mont_hnum}}</span>
+                    <span class="card_minor">KM</span>
+                  </div>
+                  <div class="card_row">
+                    <span class="card_minor">年度</span>
+                    <span class="card_col_main">{{viewData.travel.year_num}}</span>
+                    <span class="card_minor">KM</span>
+                  </div>
+                </div>
               </div>
             </el-card>
             <el-card class="bottom_card">
               <div class="clearfix">
-                <span>油耗监测</span>
+                <span class="card_title">油耗监测</span>
+                <div class="card_void"></div>
               </div>
               <div class="card_content">
                 <div>
-                  <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.oil.cur_num}}
-                  <span
-                    style="font-size:14px; font-weight:none"
-                  >升</span>
+                  <span class="card_minor">今日</span>
+                  <span class="card_main" style="color:#f0c70b">{{viewData.oil.cur_num}}</span>
+                  <span class="card_minor">L</span>
                 </div>
-                <div class="totalNum">年度{{viewData.oil.year_num}}升，本月{{viewData.oil.mont_hnum}}升</div>
+                <div>
+                  <div class="card_row">
+                    <span class="card_minor">本月</span>
+                    <span class="card_col_main">{{viewData.oil.mont_hnum}}</span>
+                    <span class="card_minor">L</span>
+                  </div>
+                  <div class="card_row">
+                    <span class="card_minor">年度</span>
+                    <span class="card_col_main">{{viewData.oil.year_num}}</span>
+                    <span class="card_minor">L</span>
+                  </div>
+                </div>
               </div>
             </el-card>
             <el-card class="bottom_card">
               <div class="clearfix">
-                <span>作业时长</span>
+                <span class="card_title">作业时长</span>
+                <div class="card_void"></div>
               </div>
               <div class="card_content">
                 <div>
-                  <span style="font-size:14px; font-weight:none">今日</span>
-                  {{viewData.assignment.cur_num}}
-                  <span
-                    style="font-size:14px; font-weight:none"
-                  >h</span>
+                  <span class="card_minor">今日</span>
+                  <span class="card_main">{{viewData.assignment.cur_num}}</span>
+                  <span class="card_minor">L</span>
                 </div>
-                <div
-                  class="totalNum"
-                >年度{{viewData.assignment.year_num}}h，本月{{viewData.assignment.mont_hnum}}h</div>
+                <div>
+                  <div class="card_row">
+                    <span class="card_minor">本月</span>
+                    <span class="card_col_main">{{viewData.assignment.mont_hnum}}</span>
+                    <span class="card_minor">L</span>
+                  </div>
+                  <div class="card_row">
+                    <span class="card_minor">年度</span>
+                    <span class="card_col_main">{{viewData.assignment.year_num}}</span>
+                    <span class="card_minor">L</span>
+                  </div>
+                </div>
               </div>
             </el-card>
           </div>
@@ -711,6 +766,38 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.card_title {
+  color: #858585;
+  font-size: 15px;
+  letter-spacing: 2px;
+}
+.card_void {
+  width: 100%;
+  height: 5px;
+}
+.card_main {
+  color: #009247;
+  font-size: 30px;
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  font-weight: bold;
+  padding-top: 6px;
+}
+.card_minor {
+  font-size: 15px;
+  font-weight: none;
+  color: #858585;
+}
+
+.card_col_main {
+  font-size: 18px;
+  height: 30px;
+  color: black;
+}
+.card_row {
+  padding-top: 8px;
+}
 @red: #ff0000;
 @green: #66cc66;
 @gray: #cccccc;
@@ -769,7 +856,7 @@ export default {
   transition: all 0.2s;
   .bottom_card {
     float: left;
-    width: 20%;
+    width: 24%;
     margin-right: 15px;
   }
 }
@@ -798,11 +885,10 @@ export default {
   clear: both;
 }
 .card_content {
-  display: inline-block;
-  height: 40px;
-  line-height: 40px;
-  font-size: 20px;
-  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 .box-card {
   width: 100%;
@@ -879,10 +965,7 @@ span {
   float: left;
   margin-right: 6px;
 }
-.totalNum {
-  font-size: 14px !important;
-  font-weight: normal !important;
-}
+
 .clear::after {
   content: "";
   display: table;
