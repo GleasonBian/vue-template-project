@@ -1,11 +1,19 @@
 <template>
-  <el-row>
-    <el-col :span="4">
-      <el-table :data="vehicleData" @row-click="clickRow" style="width:100%" size="mini">
-        <el-table-column type="index" label="序号" align="center"></el-table-column>
-        <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
-        <el-table-column prop="plateno" label="车牌号码" align="center" width="120"></el-table-column>
-        <el-table-column label="车辆状态" width="80" align="center">
+  <el-row :gutter="10">
+    <el-col :span="5" align="center">
+      <el-table
+        :data="vehicleData"
+        @row-click="clickRow"
+        highlight-current-row
+        size="mini"
+        style="width:300px"
+        ref="singleTable"
+        border
+      >
+        <el-table-column type="index"></el-table-column>
+        <el-table-column prop="name" label="名称" width="90"></el-table-column>
+        <el-table-column prop="plateno" label="号码" width="90"></el-table-column>
+        <el-table-column label="状态" align="left">
           <template slot-scope="scope">
             <div class="carStatus">
               <div
@@ -17,7 +25,7 @@
         </el-table-column>
       </el-table>
     </el-col>
-    <el-col align="middle" :span="20">
+    <el-col align="middle" :span="19">
       <!-- 搜索框 -->
       <gt-search :data="searchData" @handle="searchHandle" size style="margin-bottom:24px;"></gt-search>
       <!-- 列表 -->
@@ -259,8 +267,8 @@ export default {
     /*
      ** 单机行处理
      */
-    async clickRow(row) {
-      console.log(row);
+    clickRow(row) {
+      this.$refs.singleTable.setCurrentRow(row);
       this.oilViewHandle(row.guid);
       // this.searchData[0].options
     },
@@ -279,49 +287,59 @@ export default {
       let myChart = this.$echarts.init(this.$refs.chart);
       let option = {
         title: {
-          text: "油耗统计"
+          text: "油耗统计",
+          left: "center"
         },
         tooltip: {
-          trigger: "axis"
+          trigger: "axis",
+          textStyle: {
+            align: "left"
+          }
         },
         legend: {
-          data: ["总油耗", "油耗", "里程", "速度"]
+          data: ["总油耗", "油耗", "里程", "速度"],
+          align: "left", //水平方向位置
+          verticalAlign: "top", //垂直方向位置
+          x: 100, //距离x轴的距离
+          y: 0 //距离Y轴的距离
         },
         toolbox: {
           show: true,
           feature: {
-            dataZoom: {
-              yAxisIndex: "none"
-            }, //区域缩放，区域缩放还原
-            dataView: {
-              readOnly: false
-            }, //数据视图
             magicType: {
-              type: ["line", "bar"]
-            }, //切换为折线图，切换为柱状图
-            restore: {}, //还原
-            saveAsImage: {} //保存为图片
+              type: ["line", "bar"],
+              show: true
+            },
+            dataZoom: {
+              show: true
+            },
+            dataView: {
+              show: true
+            },
+            restore: {
+              show: true
+            },
+            saveAsImage: {
+              show: true
+            }
           }
         },
+        calculable: true,
         grid: {
           left: "3%",
-          right: "4%",
+          right: "3%",
           bottom: "3%",
           containLabel: true
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {}
-          }
         },
         dataZoom: [
           {
             type: "slider",
             show: true,
             xAxisIndex: [0],
-            top: 20,
+            top: 30,
             start: 10,
-            end: 90 //初始化滚动条
+            end: 90,
+            height: 20 //初始化滚动条
           }
         ],
         xAxis: {
@@ -426,7 +444,7 @@ export default {
 @green: #66cc66;
 @gray: #cccccc;
 .carStatus {
-  text-align: center;
+  text-align: left;
   div {
     width: 6px;
     height: 6px;
