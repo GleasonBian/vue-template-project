@@ -12,7 +12,7 @@
         mode="horizontal"
       >
         <el-menu-item index="/dashboard">
-          <i class="iconfont i-menu-one"></i>首页
+          <i class="iconfont i-menu-one"></i>监控平台
         </el-menu-item>
         <el-submenu
           index="5"
