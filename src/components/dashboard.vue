@@ -784,6 +784,51 @@ export default {
   font-weight: bold;
   padding-top: 6px;
 }
+@media screen and (min-width: 1720px) {
+  .card_bottom {
+    position: absolute;
+    width: 100%;
+    bottom: -160px;
+    left: 20px;
+    z-index: 100;
+    transition: all 0.2s;
+    .bottom_card {
+      float: left;
+      width: 24%;
+      margin-right: 15px;
+    }
+  }
+  .card_content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+@media screen and (max-width: 1719px) {
+  .card_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: baseline;
+    div {
+      align-items: center;
+    }
+  }
+  .card_bottom {
+    position: absolute;
+    width: 100%;
+    bottom: -160px;
+    left: 20px;
+    z-index: 100;
+    transition: all 0.2s;
+    .bottom_card {
+      float: left;
+      width: 20%;
+      margin-right: 15px;
+    }
+  }
+}
 .card_minor {
   font-size: 15px;
   font-weight: none;
@@ -847,19 +892,7 @@ export default {
 .card.active {
   right: 20px;
 }
-.card_bottom {
-  position: absolute;
-  width: 100%;
-  bottom: -160px;
-  left: 20px;
-  z-index: 100;
-  transition: all 0.2s;
-  .bottom_card {
-    float: left;
-    width: 24%;
-    margin-right: 15px;
-  }
-}
+
 .card_bottom.active {
   bottom: 20px;
 }
@@ -884,12 +917,7 @@ export default {
 .clearfix:after {
   clear: both;
 }
-.card_content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
+
 .box-card {
   width: 100%;
   margin-bottom: 20px;
