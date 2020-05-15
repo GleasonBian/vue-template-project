@@ -650,9 +650,14 @@ export default {
                   }
 
                   content.push(
-                    "<div style='padding:5px 10px'>今日里程：" +
-                      that.marks[j].extData.curmiles +
-                      "km" +
+                    "<div style='padding:5px 10px'>行驶方向：" +
+                      direction +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>当前速度：" +
+                      that.marks[j].extData.speed +
+                      "km/h" +
                       "</div>"
                   );
                   content.push(
@@ -670,8 +675,15 @@ export default {
                       "</div>"
                   );
                   content.push(
-                    "<div style='padding:5px 10px'>行驶方向：" +
-                      direction +
+                    "<div style='padding:5px 10px'>今日里程：" +
+                      that.marks[j].extData.curmiles +
+                      "km" +
+                      "</div>"
+                  );
+                  content.push(
+                    "<div style='padding:5px 10px'>总里程：" +
+                      that.marks[j].extData.totalmiles +
+                      "km" +
                       "</div>"
                   );
                   content.push(
@@ -688,18 +700,6 @@ export default {
                   content.push(
                     "<div style='padding:5px 10px'>服务器时间：" +
                       that.marks[j].extData.servertime +
-                      "</div>"
-                  );
-                  content.push(
-                    "<div style='padding:5px 10px'>速 度 ：" +
-                      that.marks[j].extData.speed +
-                      "km/h" +
-                      "</div>"
-                  );
-                  content.push(
-                    "<div style='padding:5px 10px'>总里程：" +
-                      that.marks[j].extData.totalmiles +
-                      "km" +
                       "</div>"
                   );
                   let data2 = that.marks[j].extData.guid;
