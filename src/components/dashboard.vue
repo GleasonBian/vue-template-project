@@ -51,13 +51,13 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{viewData.maintain.cur_num}}</span>
+                  <span class="card_main">{{viewData.maintain.CurNum}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.maintain.mont_hnum+" "+" "}}</span>
+                    <span class="card_col_main">{{viewData.maintain.MonthNum+" "+" "}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
@@ -76,13 +76,13 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{viewData.fix.cur_num}}</span>
+                  <span class="card_main">{{viewData.fix.CurNum}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.fix.mont_hnum}}</span>
+                    <span class="card_col_main">{{viewData.fix.MonthNum}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
@@ -101,13 +101,13 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main" style="color:red">{{viewData.alarm.cur_num}}</span>
+                  <span class="card_main" style="color:red">{{viewData.alarm.CurNum}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.alarm.mont_hnum}}</span>
+                    <span class="card_col_main">{{viewData.alarm.MonthNum}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
@@ -128,13 +128,13 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{viewData.travel.cur_num}}</span>
+                  <span class="card_main">{{viewData.travel.CurNum}}</span>
                   <span class="card_minor">公里</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.travel.mont_hnum}}</span>
+                    <span class="card_col_main">{{viewData.travel.MonthNum}}</span>
                     <span class="card_minor">公里</span>
                   </div>
                   <div class="card_row">
@@ -153,13 +153,13 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main" style="color:#f0c70b">{{viewData.oil.cur_num}}</span>
+                  <span class="card_main" style="color:#f0c70b">{{viewData.oil.CurNum}}</span>
                   <span class="card_minor">升</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.oil.mont_hnum}}</span>
+                    <span class="card_col_main">{{viewData.oil.MonthNum}}</span>
                     <span class="card_minor">升</span>
                   </div>
                   <div class="card_row">
@@ -178,13 +178,13 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{viewData.assignment.cur_num}}</span>
+                  <span class="card_main">{{viewData.assignment.CurNum}}</span>
                   <span class="card_minor">小时</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.assignment.mont_hnum}}</span>
+                    <span class="card_col_main">{{viewData.assignment.MonthNum}}</span>
                     <span class="card_minor">小时</span>
                   </div>
                   <div class="card_row">
@@ -223,34 +223,34 @@ export default {
       map: null,
       viewData: {
         alarm: {
-          cur_num: "",
-          mont_hnum: "",
-          year_hnum: ""
+          CurNum: "",
+          MonthNum: "",
+          YearNum: ""
         },
         oil: {
-          cur_num: "",
-          mont_hnum: "",
-          year_hnum: ""
+          CurNum: "",
+          MonthNum: "",
+          YearNum: ""
         },
         assignment: {
-          cur_num: "",
-          mont_hnum: "",
-          year_hnum: ""
+          CurNum: "",
+          MonthNum: "",
+          YearNum: ""
         },
         travel: {
-          cur_num: "",
-          mont_hnum: "",
-          year_hnum: ""
+          CurNum: "",
+          MonthNum: "",
+          YearNum: ""
         },
         fix: {
-          cur_num: "",
-          mont_hnum: "",
-          year_hnum: ""
+          CurNum: "",
+          MonthNum: "",
+          YearNum: ""
         },
         maintain: {
-          cur_num: "",
-          mont_hnum: "",
-          year_hnum: ""
+          CurNum: "",
+          MonthNum: "",
+          YearNum: ""
         }
       },
       showLine: false,
