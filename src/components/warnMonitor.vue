@@ -1,11 +1,19 @@
 <template>
-  <el-row>
-    <el-col :span="4">
-      <el-table :data="vehicleData" @row-click="clickRow" style="width:100%">
-        <el-table-column type="index" label="序号" align="center"></el-table-column>
-        <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
-        <el-table-column prop="plateno" label="车牌号码" align="center"></el-table-column>
-        <el-table-column label="车辆状态" width="80" align="center">
+  <el-row :gutter="10">
+    <el-col :span="5" align="center">
+      <el-table
+        :data="vehicleData"
+        @row-click="clickRow"
+        highlight-current-row
+        size="mini"
+        style="min-width:300px"
+        ref="singleTable"
+        border
+      >
+        <el-table-column type="index" label="序号"></el-table-column>
+        <el-table-column prop="name" label="名称" width="90"></el-table-column>
+        <el-table-column prop="plateno" label="号码" width="120"></el-table-column>
+        <el-table-column label="状态" align="left">
           <template slot-scope="scope">
             <div class="carStatus">
               <div
@@ -17,7 +25,7 @@
         </el-table-column>
       </el-table>
     </el-col>
-    <el-col align="middle" :span="20">
+    <el-col align="middle" :span="19">
       <!-- 搜索框 -->
       <gt-search :data="searchData" @handle="oilViewHandle" size style="margin-bottom:24px;"></gt-search>
       <!-- 列表 -->
@@ -41,6 +49,7 @@
         :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
+        style="margin:20px"
       ></el-pagination>
     </el-col>
   </el-row>
@@ -337,7 +346,7 @@ export default {
           trigger: "axis"
         },
         legend: {
-          left: "0",
+          left: "20",
           data: ["超速告警", "油耗告警"]
         },
         toolbox: {
@@ -521,10 +530,10 @@ export default {
 @green: #66cc66;
 @gray: #cccccc;
 .carStatus {
-  text-align: center;
+  text-align: left;
   div {
-    width: 20px;
-    height: 20px;
+    width: 6px;
+    height: 6px;
     display: inline-block;
     border-radius: 50%;
   }

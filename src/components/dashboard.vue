@@ -291,7 +291,7 @@ export default {
       //设备列表
       const res = await overview();
       this.viewData = res.data;
-      console.log(this.viewData);
+      // console.log(this.viewData);
     },
     //点击设备列表打开地图中marker
     clickMarker(row) {
@@ -302,7 +302,7 @@ export default {
       if (this.points.length) {
         for (var i = 0; i < this.points.length; i++) {
           if (this.points[i].getExtData().guid == eqid) {
-            console.log("找到设备" + eqid);
+            // console.log("找到设备" + eqid);
             this.map.setZoomAndCenter(16, this.marks[i].position);
             targetM = this.points[i];
 
@@ -335,8 +335,8 @@ export default {
         that.map.addControl(new AMap.GraspRoad());
       });
       this.initWebSocket();
-      console.log("map");
-      console.log(AMap);
+      // console.log("map");
+      // console.log(AMap);
     },
     markerClick(mark) {
       infoWindow.setContent(mark.content);
@@ -407,14 +407,14 @@ export default {
         }
       }
 
-      console.log(nPath123);
-      console.log(this.path);
+      // console.log(nPath123);
+      // console.log(this.path);
       let n_path = [];
       for (var j = 0; j < nPath123.length; j++) {
         n_path.push(new AMap.LngLat(nPath123[j][0], nPath123[j][1]));
       }
-      console.log(nPath123.length);
-      console.log(n_path);
+      // console.log(nPath123.length);
+      // console.log(n_path);
       // let pathParam = {
       //   x: data.longitude,
       //   y: data.latitude,
@@ -508,10 +508,10 @@ export default {
             [data.longitude, data.latitude],
             "gps",
             (status, result) => {
-              console.log("result---------", result);
+              // console.log("result---------", result);
               if (result.info === "ok") {
                 pos = [result.locations[0].lng, result.locations[0].lat];
-                console.log("pos", pos);
+                // console.log("pos", pos);
                 if (that.marks.length) {
                   for (var i = 0; i < that.marks.length; i++) {
                     if (this.marks[i].guid == data.guid) {
@@ -611,8 +611,8 @@ export default {
                   markPath.path.push(pos);
                   this.path.push(markPath);
                 }
-                console.log(this.marks);
-                console.log(this.path);
+                // console.log(this.marks);
+                // console.log(this.path);
                 this.map.remove(this.points);
                 this.points = [];
                 for (var j = 0; j < this.marks.length; j++) {
@@ -721,8 +721,8 @@ export default {
                   });
                   this.points.push(point);
                 }
-                console.log("marks", this.marks);
-                console.log("points", this.points);
+                // console.log("marks", this.marks);
+                // console.log("points", this.points);
                 // this.map.remove(this.points);
 
                 this.map.add(this.points); //画点
