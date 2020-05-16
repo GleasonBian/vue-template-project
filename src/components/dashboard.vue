@@ -62,7 +62,7 @@
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.maintain.year_num}}</span>
+                    <span class="card_col_main">{{viewData.maintain.YearNum}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -87,7 +87,7 @@
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.fix.year_num}}</span>
+                    <span class="card_col_main">{{viewData.fix.YearNum}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -112,7 +112,7 @@
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.alarm.year_num}}</span>
+                    <span class="card_col_main">{{viewData.alarm.YearNum}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -139,7 +139,7 @@
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.travel.year_num}}</span>
+                    <span class="card_col_main">{{viewData.travel.YearNum}}</span>
                     <span class="card_minor">公里</span>
                   </div>
                 </div>
@@ -164,7 +164,7 @@
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.oil.year_num}}</span>
+                    <span class="card_col_main">{{viewData.oil.YearNum}}</span>
                     <span class="card_minor">升</span>
                   </div>
                 </div>
@@ -189,7 +189,7 @@
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.assignment.year_num}}</span>
+                    <span class="card_col_main">{{viewData.assignment.YearNum}}</span>
                     <span class="card_minor">小时</span>
                   </div>
                 </div>
