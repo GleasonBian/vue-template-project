@@ -79,7 +79,7 @@ export default {
       ],
       columns: [
         {
-          id: "name",
+          id: "plateno",
           label: "车牌号码"
         },
         {
