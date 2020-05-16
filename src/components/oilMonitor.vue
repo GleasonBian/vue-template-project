@@ -222,6 +222,7 @@ export default {
      ** 油耗监测数据
      */
     async oilViewHandle(param) {
+      let lnglats = [];
       if (param.guid === "") {
         this.$message.warning("请选择设备");
         return;
@@ -253,6 +254,7 @@ export default {
           speed.push(res.data[i].speed);
           totaloilconsume.push(res.data[i].totaloilconsume);
         }
+
         this.tableData = res.data;
         this.initCharts(
           gpstime,
