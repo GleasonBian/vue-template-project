@@ -113,6 +113,10 @@ export default {
         {
           id: "speed",
           label: "速度"
+        },
+        {
+          id: "location",
+          label: "位置"
         }
       ],
       tableData: [], // 表格数据

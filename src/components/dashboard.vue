@@ -710,6 +710,11 @@ export default {
                       that.marks[j].extData.servertime +
                       "</div>"
                   );
+                  content.push(
+                    "<div style='padding:5px 10px'>位置：" +
+                      that.marks[j].extData.location +
+                      "</div>"
+                  );
                   let data2 = that.marks[j].extData.guid;
                   point.on("click", function(e) {
                     infoWindow.setContent(
