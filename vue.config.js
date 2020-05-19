@@ -2,6 +2,7 @@ const path = require("path");
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
+console.log("接口地址:", process.env.VUE_APP_URL)
 /**
  *  Date: 1562573921043
  *  author: \u535e \u5218 \u8457

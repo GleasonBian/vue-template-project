@@ -11,21 +11,9 @@
             style="width:100%;"
             size="mini"
           >
-            <el-table-column
-              type="index"
-              label="序号"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="name"
-              label="车辆名称"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="platenum"
-              label="车牌号码"
-              align="center"
-            ></el-table-column>
+            <el-table-column type="index" label="序号" align="center"></el-table-column>
+            <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
+            <el-table-column prop="platenum" label="车牌号码" align="center"></el-table-column>
             <el-table-column label="车辆状态" align="center">
               <template slot-scope="scope">
                 <div class="carStatus">
@@ -182,8 +170,10 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main" style="color:#f0c70b">181</span>
-                  <!-- <span class="card_main" style="color:#f0c70b">{{parseFloat(viewData.oil.CurNum).toFixed(2)}}</span> -->
+                  <span
+                    class="card_main"
+                    style="color:#f0c70b"
+                  >{{parseFloat(viewData.oil.CurNum).toFixed(2)}}</span>
                   <span class="card_minor">升</span>
                 </div>
                 <div>
@@ -217,14 +207,16 @@
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">500</span>
-                    <!-- <span class="card_col_main">{{parseFloat(viewData.assignment.MonthNum).toFixed(2)}}</span> -->
+                    <span
+                      class="card_col_main"
+                    >{{parseFloat(viewData.assignment.MonthNum).toFixed(2)}}</span>
                     <span class="card_minor">小时</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">5630</span>
-                    <!-- <span class="card_col_main">{{parseFloat(viewData.assignment.YearNum).toFixed(2)}}</span> -->
+                    <span
+                      class="card_col_main"
+                    >{{parseFloat(viewData.assignment.YearNum).toFixed(2)}}</span>
                     <span class="card_minor">小时</span>
                   </div>
                 </div>
@@ -707,7 +699,7 @@ export default {
                   );
                   content.push(
                     "<div style='padding:5px 10px'>当前速度：" +
-                      that.marks[j].extData.speed +
+                      parseFloat(that.marks[j].extData.speed).toFixed(2) +
                       "km/h" +
                       "</div>"
                   );
@@ -721,28 +713,28 @@ export default {
                   );
                   content.push(
                     "<div style='padding:5px 10px'>当前油位：" +
-                      that.marks[j].extData.curoilpos +
+                      parseFloat(that.marks[j].extData.curoilpos).toFixed(2) +
                       "cm" +
                       "</div>"
                   );
                   content.push(
                     "<div style='padding:5px 10px'>今日里程：" +
-                      that.marks[j].extData.curmiles +
+                      parseFloat(that.marks[j].extData.curmiles).toFixed(2) +
                       "km" +
                       "</div>"
                   );
                   content.push(
                     "<div style='padding:5px 10px'>总里程：" +
-                      that.marks[j].extData.totalmiles +
+                      parseFloat(that.marks[j].extData.totalmiles).toFixed(2) +
                       "km" +
                       "</div>"
                   );
-                  content.push(
-                    "<div style='padding:5px 10px'>海拔高度：" +
-                      that.marks[j].extData.altitude +
-                      "m" +
-                      "</div>"
-                  );
+                  // content.push(
+                  //   "<div style='padding:5px 10px'>海拔高度：" +
+                  //     that.marks[j].extData.altitude +
+                  //     "m" +
+                  //     "</div>"
+                  // );
                   content.push(
                     "<div style='padding:5px 10px'>gps 时间：" +
                       that.marks[j].extData.gpstime +
