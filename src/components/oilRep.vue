@@ -8,7 +8,8 @@
         <el-card shadow="hover" class="mgb20" style="height:30vh;">
           <div slot="header" class="clearfix">
             <span>成本统计</span>
-          </div>油耗
+          </div>
+          油耗
           <el-progress :percentage="71.3" color="#42b983"></el-progress>设备
           <el-progress :percentage="24.1" color="#f1e05a"></el-progress>人工
           <el-progress :percentage="13.7"></el-progress>维护
@@ -62,10 +63,16 @@
               :amap-manager="amapManager"
               :zoom="zoom"
               :events="events"
-              :resizeEnable=true
+              :resizeEnable="true"
               class="amap-demo"
             >
-                <el-amap-marker v-for="marker in markers" :key="marker.mapName" :position="marker.position" :visible="true" :draggable="false"></el-amap-marker>
+              <el-amap-marker
+                v-for="marker in markers"
+                :key="marker.mapName"
+                :position="marker.position"
+                :visible="true"
+                :draggable="false"
+              ></el-amap-marker>
             </el-amap>
             <div class="toolbar">
               <button @click="add()">add marker</button>
@@ -88,48 +95,47 @@ export default {
   name: "dashboard",
   data() {
     return {
-    markers: [
-            {
-              position: [112.868357,36.860426]
-            },
-            {
-              position: [112.870453,36.862496]
-            },
-            {
-              position: [112.840453,36.866496]
-            },
-            {
-              position: [112.840423,36.832496]
-            },
-            {
-              position: [112.8500257,36.860406]
-            },
-            {
-              position: [112.860237,36.840376]
-            }
-          ],
-     
-      
+      markers: [
+        {
+          position: [112.868357, 36.860426]
+        },
+        {
+          position: [112.870453, 36.862496]
+        },
+        {
+          position: [112.840453, 36.866496]
+        },
+        {
+          position: [112.840423, 36.832496]
+        },
+        {
+          position: [112.8500257, 36.860406]
+        },
+        {
+          position: [112.860237, 36.840376]
+        }
+      ],
+
       total: {},
       single: {},
       zoom: 13,
-      center: [112.860257,36.860496],
+      center: [112.860257, 36.860496],
       amapManager,
       events: {
         init(o) {
           let marker = new AMap.Marker([
             {
-            position:  [112.835406,36.868778],
-            content: '阿斯塔纳',
-          },
+              position: [112.835406, 36.868778],
+              content: "阿斯塔纳"
+            },
             {
-            position:  [112.835406,36.869778],
-            content: '阿斯塔纳',
-          },
+              position: [112.835406, 36.869778],
+              content: "阿斯塔纳"
+            },
             {
-            position:  [112.835406,36.863778],
-            content: '阿斯塔纳',
-          },
+              position: [112.835406, 36.863778],
+              content: "阿斯塔纳"
+            }
           ]);
           marker.setMap(o);
         }
@@ -142,10 +148,9 @@ export default {
   computed: {
     role() {
       return this.name === "admin" ? "超级管理员" : "普通用户";
-    },
+    }
   },
-  created() {
-  },
+  created() {},
   mounted() {
     this.initCharts();
     this.singleHandle();
@@ -181,8 +186,8 @@ export default {
           time
         }
       };
-      
-      let myChart = this.$echarts.init(this.$refs.chart); 
+
+      let myChart = this.$echarts.init(this.$refs.chart);
       myChart.setOption({
         title: {
           text: "油耗产出总览",
@@ -279,44 +284,43 @@ export default {
           time
         }
       };
-      
-      let myChart = this.$echarts.init(this.$refs.single); 
-      
+
+      let myChart = this.$echarts.init(this.$refs.single);
+
       let option = {
-          tooltip: {
-              formatter: '{c}{b}'
-          },
-          title: {
-            text: "车速",
-            left: "left"
-          },
-          series: [
-              {
-                  name: '车速',
-                  type: 'gauge',
-                  detail: {
-                    formatter: '{value}',
-                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                      fontWeight: 'bolder',
-                      fontSize:12,
-                    }
-                  },
-                  data: [{value: 50, name: 'km/h'}]
+        tooltip: {
+          formatter: "{c}{b}"
+        },
+        title: {
+          text: "车速",
+          left: "left"
+        },
+        series: [
+          {
+            name: "车速",
+            type: "gauge",
+            detail: {
+              formatter: "{value}",
+              textStyle: {
+                // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                fontWeight: "bolder",
+                fontSize: 12
               }
-          ]
+            },
+            data: [{ value: 50, name: "km/h" }]
+          }
+        ]
       };
-      setInterval(function () {
-          option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-          myChart.setOption(option, true);
-      },2000);
+      setInterval(function() {
+        option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
+        myChart.setOption(option, true);
+      }, 2000);
       window.onresize = function() {
         myChart.resize();
       };
-    },
+    }
   },
-  updated(){
-    
-  }
+  updated() {}
 };
 </script>
 

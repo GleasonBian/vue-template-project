@@ -11,9 +11,13 @@
       <el-button
         type="primary"
         size="medium"
-        @click="dialogFormVisible = true;formCurrentStatus = '创建'"
+        @click="
+          dialogFormVisible = true;
+          formCurrentStatus = '创建';
+        "
         style="margin-left:1%"
-      >新增</el-button>
+        >新增</el-button
+      >
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -45,7 +49,7 @@
 
     <!-- 新增 查看 更新 -->
     <el-dialog
-      :title="formCurrentStatus+'任务'"
+      :title="formCurrentStatus + '任务'"
       :visible.sync="dialogFormVisible"
       width="30%"
       @close="DialogClose('form')"
@@ -61,7 +65,11 @@
         label-width="80px"
         style="width:100%"
       >
-        <el-form-item label="所属公司" prop="corpguid" v-if="formCurrentStatus==='创建'">
+        <el-form-item
+          label="所属公司"
+          prop="corpguid"
+          v-if="formCurrentStatus === '创建'"
+        >
           <el-select
             v-model="form.corpguid"
             placeholder="请选择"
@@ -95,7 +103,11 @@
         </el-form-item>
 
         <el-form-item label="加油人员" prop="staffid">
-          <el-select v-model="form.staffid" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.staffid"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
               v-for="item in staffData"
               track-by="item.guid"
@@ -107,7 +119,11 @@
         </el-form-item>
 
         <el-form-item label="设备标识" prop="equipguid">
-          <el-select v-model="form.equipguid" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.equipguid"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
               v-for="item in equiData"
               track-by="item.guid"
@@ -119,7 +135,11 @@
         </el-form-item>
 
         <el-form-item label="计划标识" prop="planguid">
-          <el-select v-model="form.planguid" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.planguid"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
               v-for="item in fixData"
               :key="item.guid"
@@ -156,7 +176,11 @@
         </el-form-item>
 
         <el-form-item label="分类等级" prop="clsrank">
-          <el-select v-model="form.clsrank" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.clsrank"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>
@@ -217,7 +241,7 @@
           <el-input v-model.number="form.afteroil"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer" v-if="form.statuscode!=2">
+      <span slot="footer" class="dialog-footer" v-if="form.statuscode != 2">
         <el-button type="primary" @click="submitForm('form')">提交</el-button>
         <el-button @click="ResetForm('form')">重置</el-button>
       </span>
@@ -826,5 +850,4 @@ export default {
   }
 };
 </script>
-<style>
-</style>
+<style></style>

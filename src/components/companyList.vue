@@ -11,9 +11,13 @@
       <el-button
         type="primary"
         size="medium"
-        @click="dialogFormVisible = true;formCurrentStatus = '创建'"
+        @click="
+          dialogFormVisible = true;
+          formCurrentStatus = '创建';
+        "
         style="margin-left:1%"
-      >新增</el-button>
+        >新增</el-button
+      >
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -44,7 +48,7 @@
 
     <!-- 新增 查看 更新 -->
     <el-dialog
-      :title="formCurrentStatus+'公司'"
+      :title="formCurrentStatus + '公司'"
       :visible.sync="dialogFormVisible"
       width="25%"
       @close="handleDialogClose('form')"
@@ -100,7 +104,11 @@
           <el-input v-model="form.briefabout"></el-input>
         </el-form-item>
         <el-form-item label="公司级别" prop="corprank">
-          <el-select v-model="form.corprank" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.corprank"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>
@@ -598,5 +606,4 @@ export default {
   }
 };
 </script>
-<style>
-</style>
+<style></style>

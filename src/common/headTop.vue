@@ -1,7 +1,11 @@
 <template>
   <div class="header_container">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item v-for="(item, index) in $route.meta.crumbs" :key="index">{{item}}</el-breadcrumb-item>
+      <el-breadcrumb-item
+        v-for="(item, index) in $route.meta.crumbs"
+        :key="index"
+        >{{ item }}</el-breadcrumb-item
+      >
     </el-breadcrumb>
     <!-- <el-dropdown @command="handleCommand" class="dddddd">
       

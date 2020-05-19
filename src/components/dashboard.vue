@@ -11,15 +11,31 @@
             style="width:100%;"
             size="mini"
           >
-            <el-table-column type="index" label="序号" align="center"></el-table-column>
-            <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
-            <el-table-column prop="platenum" label="车牌号码" align="center"></el-table-column>
+            <el-table-column
+              type="index"
+              label="序号"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="name"
+              label="车辆名称"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="platenum"
+              label="车牌号码"
+              align="center"
+            ></el-table-column>
             <el-table-column label="车辆状态" align="center">
               <template slot-scope="scope">
                 <div class="carStatus">
                   <div
                     class
-                    :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"
+                    :class="{
+                      active: scope.row.status == 1,
+                      fix: scope.row.status == 2,
+                      stop: scope.row.status == 3
+                    }"
                   ></div>
                 </div>
               </template>
@@ -30,16 +46,23 @@
       <el-col style="position:relative;overflow:hidden;" :span="18">
         <div class="grid-content bg-purple">
           <div class="map" id="track-map"></div>
-          <el-button @click="showBox" class="viewbtn" :type="showView?'info':'primary'">{{viewBtn}}</el-button>
-          <el-button @click="closeLine" class="viewline" type="info">清空轨迹</el-button>
-          <div class="card" :class="{'active':showView}">
+          <el-button
+            @click="showBox"
+            class="viewbtn"
+            :type="showView ? 'info' : 'primary'"
+            >{{ viewBtn }}</el-button
+          >
+          <el-button @click="closeLine" class="viewline" type="info"
+            >清空轨迹</el-button
+          >
+          <div class="card" :class="{ active: showView }">
             <el-card class="box-card">
               <div class="clearfix">
                 <span class="card_title">车辆监测</span>
                 <div class="card_void"></div>
               </div>
               <div>
-                <span class="card_main">{{viewData.totalequips}}</span>
+                <span class="card_main">{{ viewData.totalequips }}</span>
                 <span class="card_minor">台</span>
               </div>
             </el-card>
@@ -51,18 +74,22 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{viewData.maintain.CurNum}}</span>
+                  <span class="card_main">{{ viewData.maintain.CurNum }}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.maintain.MonthNum+" "+" "}}</span>
+                    <span class="card_col_main">{{
+                      viewData.maintain.MonthNum + " " + " "
+                    }}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.maintain.YearNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.maintain.YearNum
+                    }}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -76,18 +103,22 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{viewData.fix.CurNum}}</span>
+                  <span class="card_main">{{ viewData.fix.CurNum }}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.fix.MonthNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.fix.MonthNum
+                    }}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.fix.YearNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.fix.YearNum
+                    }}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -101,25 +132,31 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main" style="color:red">{{viewData.alarm.CurNum}}</span>
+                  <span class="card_main" style="color:red">{{
+                    viewData.alarm.CurNum
+                  }}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.alarm.MonthNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.alarm.MonthNum
+                    }}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.alarm.YearNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.alarm.YearNum
+                    }}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
               </div>
             </el-card>
           </div>
-          <div class="card_bottom clear" :class="{'active':showView}">
+          <div class="card_bottom clear" :class="{ active: showView }">
             <el-card class="bottom_card">
               <div class="clearfix">
                 <span class="card_title">里程监测</span>
@@ -128,18 +165,22 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{viewData.travel.CurNum}}</span>
+                  <span class="card_main">{{ viewData.travel.CurNum }}</span>
                   <span class="card_minor">公里</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.travel.MonthNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.travel.MonthNum
+                    }}</span>
                     <span class="card_minor">公里</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.travel.YearNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.travel.YearNum
+                    }}</span>
                     <span class="card_minor">公里</span>
                   </div>
                 </div>
@@ -153,18 +194,24 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main" style="color:#f0c70b">{{viewData.oil.CurNum}}</span>
+                  <span class="card_main" style="color:#f0c70b">{{
+                    viewData.oil.CurNum
+                  }}</span>
                   <span class="card_minor">升</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.oil.MonthNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.oil.MonthNum
+                    }}</span>
                     <span class="card_minor">升</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.oil.YearNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.oil.YearNum
+                    }}</span>
                     <span class="card_minor">升</span>
                   </div>
                 </div>
@@ -178,18 +225,24 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{viewData.assignment.CurNum}}</span>
+                  <span class="card_main">{{
+                    viewData.assignment.CurNum
+                  }}</span>
                   <span class="card_minor">小时</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{viewData.assignment.MonthNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.assignment.MonthNum
+                    }}</span>
                     <span class="card_minor">小时</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{viewData.assignment.YearNum}}</span>
+                    <span class="card_col_main">{{
+                      viewData.assignment.YearNum
+                    }}</span>
                     <span class="card_minor">小时</span>
                   </div>
                 </div>

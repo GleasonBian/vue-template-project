@@ -1,4 +1,3 @@
-
 // 引入 封装请求
 import fetch from "../public/fetch.js";
 /**
@@ -6,43 +5,40 @@ import fetch from "../public/fetch.js";
  * 假设: 你的项目 有100个接口 我们需要把这 100个接口进行集中管理
  */
 
-
 //获取公司列表
 export const getCompList = data => fetch("corp", data, "get");
 //新增部门 saveAddDept
 export const saveAddDept = data => fetch("dept", data, "post");
 //获取部门列表
 export const getDeptList = data => fetch("dept", data, "get");
-//获取部门详情 
+//获取部门详情
 export const getDeptDetail = data => fetch("dept", data, "get");
-//编辑部门详情 
+//编辑部门详情
 export const editDeptDetail = data => fetch("dept", data, "put");
 //删除部门 delDept
 export const delDept = data => fetch("dept", data, "delete");
 
 //获取人员列表
 export const getStaffList = data => fetch("staff", data, "get");
-//获取人员详情 
+//获取人员详情
 export const getStaffDetail = data => fetch("staff", data, "get");
 //新增人员
 export const saveAddStaff = data => fetch("staff", data, "post");
-//编辑人员详情 
+//编辑人员详情
 export const editStaffDetail = data => fetch("staff", data, "put");
 //删除人员 delDept
 export const delStaff = data => fetch("staff", data, "delete");
 
-
 //获取角色列表 getRoleList
 export const getRoleList = data => fetch("role", data, "get");
-//获取角色详情 
+//获取角色详情
 export const getRoleDetail = data => fetch("role", data, "get");
 //新增角色
 export const saveAddRole = data => fetch("role", data, "post");
-//编辑角色详情 
+//编辑角色详情
 export const editRoleDetail = data => fetch("role", data, "put");
 //删除角色 delDept
 export const delRole = data => fetch("role", data, "delete");
-
 
 /**
  * 公司列表
@@ -307,4 +303,3 @@ export const equip = data => fetch("equip", data, "get");
  * 报警监测 id 传 报警id
  */
 export const alarm = data => fetch("alarm", data, "get");
-

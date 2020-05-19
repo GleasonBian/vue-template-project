@@ -11,9 +11,13 @@
       <el-button
         type="primary"
         size="medium"
-        @click="dialogFormVisible = true;formCurrentStatus = '创建'"
+        @click="
+          dialogFormVisible = true;
+          formCurrentStatus = '创建';
+        "
         style="margin-left:1%"
-      >新增</el-button>
+        >新增</el-button
+      >
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -44,7 +48,7 @@
 
     <!-- 新增 查看 更新 -->
     <el-dialog
-      :title="formCurrentStatus+'设备'"
+      :title="formCurrentStatus + '设备'"
       :visible.sync="dialogFormVisible"
       width="25%"
       @close="DialogClose('form')"
@@ -77,7 +81,11 @@
         </el-form-item>
 
         <el-form-item label="所属部门" prop="deptguid">
-          <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.deptguid"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
               v-for="item in deptData"
               track-by="item.guid"
@@ -109,11 +117,19 @@
         </el-form-item>
 
         <el-form-item label="油箱高度" prop="oilboxheight">
-          <el-input-number v-model.number="form.oilboxheight" :step="10"></el-input-number> cm
+          <el-input-number
+            v-model.number="form.oilboxheight"
+            :step="10"
+          ></el-input-number>
+          cm
         </el-form-item>
 
         <el-form-item label="油箱容量" prop="oilboxvol">
-          <el-input-number v-model.number="form.oilboxvol" :step="10"></el-input-number> L
+          <el-input-number
+            v-model.number="form.oilboxvol"
+            :step="10"
+          ></el-input-number>
+          L
         </el-form-item>
 
         <el-form-item label="手机号" prop="simnumber">
@@ -125,7 +141,11 @@
         </el-form-item>
 
         <el-form-item label="分类等级" prop="clsrank">
-          <el-select v-model="form.clsrank" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.clsrank"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>
@@ -133,7 +153,11 @@
         </el-form-item>
 
         <el-form-item label="车辆类型" prop="clstype">
-          <el-select v-model="form.clstype" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.clstype"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option label="轨道车" value="轨道车"></el-option>
             <el-option label="东风机车" value="东风机车"></el-option>
             <el-option label="SUV" value="SUV"></el-option>
@@ -241,7 +265,7 @@ export default {
         {
           id: "oilboxvol",
           label: "油箱容量/L"
-        },
+        }
       ],
       // 创建 更新 删除 表单
       form: {
@@ -647,5 +671,4 @@ export default {
   }
 };
 </script>
-<style>
-</style>
+<style></style>

@@ -9,8 +9,19 @@
     @selection-change="handleSelectionChange"
     :header-cell-style="tableHeaderColor"
   >
-    <el-table-column type="selection" align="center" header-align="center" v-if="selection"></el-table-column>
-    <el-table-column align="center" header-align="center" type="index" label="序号" width="50"></el-table-column>
+    <el-table-column
+      type="selection"
+      align="center"
+      header-align="center"
+      v-if="selection"
+    ></el-table-column>
+    <el-table-column
+      align="center"
+      header-align="center"
+      type="index"
+      label="序号"
+      width="50"
+    ></el-table-column>
     <el-table-column
       v-for="col in columns"
       :prop="col.id"
@@ -23,8 +34,12 @@
       <template slot-scope="scope">
         <div class="product-img" v-if="col.type">
           <img
-            v-for="(picture,index) in scope.row[col.id]"
-            :src="picture.imagePath == null ? '' : 'http://file.sjgtw.com' + picture.imagePath"
+            v-for="(picture, index) in scope.row[col.id]"
+            :src="
+              picture.imagePath == null
+                ? ''
+                : 'http://file.sjgtw.com' + picture.imagePath
+            "
             alt="图片"
             :key="index"
             style="margin-right:5px; width:38px; height:38px"
@@ -32,31 +47,37 @@
           />
         </div>
         <!-- <div v-else-if="typeof(col.type) === string"></div> -->
-        <div v-else>{{scope.row[col.id]}}</div>
+        <div v-else>{{ scope.row[col.id] }}</div>
       </template>
     </el-table-column>
     <el-table-column
       label="操作"
       align="center"
       header-align="center"
-      v-if="handle.length>0"
+      v-if="handle.length > 0"
       :width="optionWidth"
     >
       <template slot-scope="scope">
-        <span v-for="(item,index) in handle" :key="index" style="margin-right:5px">
+        <span
+          v-for="(item, index) in handle"
+          :key="index"
+          style="margin-right:5px"
+        >
           <el-button
             v-if="item.show"
-            :size=" item.size ? item.size : 'mini' "
-            :type=" item.type ? item.type : 'text' "
+            :size="item.size ? item.size : 'mini'"
+            :type="item.type ? item.type : 'text'"
             @click="handleClick(item.function, scope.$index, scope.row)"
-          >{{item.text}}</el-button>
+            >{{ item.text }}</el-button
+          >
           <el-button
             v-else
-            :size=" item.size ? item.size : 'mini' "
-            :type=" item.type ? item.type : 'text' "
+            :size="item.size ? item.size : 'mini'"
+            :type="item.type ? item.type : 'text'"
             v-show="scope.row.show"
             @click="handleClick(item.function, scope.$index, scope.row)"
-          >{{item.text}}</el-button>
+            >{{ item.text }}</el-button
+          >
         </span>
       </template>
     </el-table-column>

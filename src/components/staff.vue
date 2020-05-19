@@ -14,7 +14,8 @@
         size="medium"
         @click="getDeptTree('newUser')"
         style="margin-left:1%"
-      >新增</el-button>
+        >新增</el-button
+      >
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">删除</el-button> -->
     </el-col>
 
@@ -53,8 +54,18 @@
       top="5vh"
       center
     >
-      <el-form :model="form" status-icon ref="form" label-width="80px" style="width:100%">
-        <el-form-item label="所属公司" prop="corpguid" :rules="[ { required: true, message: '公司 必选'}]">
+      <el-form
+        :model="form"
+        status-icon
+        ref="form"
+        label-width="80px"
+        style="width:100%"
+      >
+        <el-form-item
+          label="所属公司"
+          prop="corpguid"
+          :rules="[{ required: true, message: '公司 必选' }]"
+        >
           <el-select
             v-model="form.corpguid"
             @change="resetDept(form.corpguid)"
@@ -73,7 +84,7 @@
           v-if="form.corpguid"
           label="所属部门"
           prop="deptguid"
-          :rules="[ { required: true, message: '部门 必选'}]"
+          :rules="[{ required: true, message: '部门 必选' }]"
         >
           <el-select
             v-model="form.deptguid"
@@ -90,19 +101,31 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="人员名称" prop="name" :rules="[ { required: true, message: '人员名称 必填'}]">
+        <el-form-item
+          label="人员名称"
+          prop="name"
+          :rules="[{ required: true, message: '人员名称 必填' }]"
+        >
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="人员编号" prop="code" :rules="[ { required: true, message: '人员编号 必填'}]">
+        <el-form-item
+          label="人员编号"
+          prop="code"
+          :rules="[{ required: true, message: '人员编号 必填' }]"
+        >
           <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item
           v-if="form.deptguid"
           label="角色"
           prop="roleguid"
-          :rules="[ { required: false, message: '角色 必选'}]"
+          :rules="[{ required: false, message: '角色 必选' }]"
         >
-          <el-select v-model="form.roleguid" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.roleguid"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
               v-for="item in roleList"
               :key="item.guid"
@@ -121,8 +144,16 @@
             ></el-option>
           </el-select>
         </el-form-item>-->
-        <el-form-item label="性别" prop="gender" :rules="[ { required: true, message: '性别 必填'}]">
-          <el-select v-model="form.gender" placeholder="请选择" style="width:100%">
+        <el-form-item
+          label="性别"
+          prop="gender"
+          :rules="[{ required: true, message: '性别 必填' }]"
+        >
+          <el-select
+            v-model="form.gender"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option label="男" value="男"></el-option>
             <el-option label="女" value="女"></el-option>
           </el-select>
@@ -130,15 +161,23 @@
         <el-form-item
           label="证件类型"
           prop="certtype"
-          :rules="[ { required: true, message: '证件类型 必填'}]"
+          :rules="[{ required: true, message: '证件类型 必填' }]"
         >
-          <el-select v-model="form.certtype" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="form.certtype"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option label="身份证" value="身份证"></el-option>
             <el-option label="军官证" value="军官证"></el-option>
             <el-option label="护照" value="护照"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="证件号" prop="certguid" :rules="[ { required: true, message: '证件号 必填'}]">
+        <el-form-item
+          label="证件号"
+          prop="certguid"
+          :rules="[{ required: true, message: '证件号 必填' }]"
+        >
           <el-input v-model="form.certguid"></el-input>
         </el-form-item>
         <!-- <el-form-item label="上级标识" prop="superior" :rules="[ { required: true, message: '上级标识 必填'}]">
@@ -168,7 +207,11 @@
         label-width="80px"
         style="width:100%"
       >
-        <el-form-item label="所属公司" prop="corpguid" :rules="[ { required: true, message: '公司 必选'}]">
+        <el-form-item
+          label="所属公司"
+          prop="corpguid"
+          :rules="[{ required: true, message: '公司 必选' }]"
+        >
           <el-select
             v-model="staffDetail.corpguid"
             @change="resetDept2(staffDetail.corpguid)"
@@ -187,7 +230,7 @@
           v-if="staffDetail.corpguid"
           label="所属部门"
           prop="deptguid"
-          :rules="[ { required: true, message: '部门 必选'}]"
+          :rules="[{ required: true, message: '部门 必选' }]"
         >
           <el-select
             v-model="staffDetail.deptguid"
@@ -204,19 +247,31 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="人员名称" prop="name" :rules="[ { required: true, message: '人员名称 必填'}]">
+        <el-form-item
+          label="人员名称"
+          prop="name"
+          :rules="[{ required: true, message: '人员名称 必填' }]"
+        >
           <el-input v-model="staffDetail.name"></el-input>
         </el-form-item>
-        <el-form-item label="人员编号" prop="code" :rules="[ { required: true, message: '人员编号 必填'}]">
+        <el-form-item
+          label="人员编号"
+          prop="code"
+          :rules="[{ required: true, message: '人员编号 必填' }]"
+        >
           <el-input v-model="staffDetail.code"></el-input>
         </el-form-item>
         <el-form-item
           v-if="staffDetail.deptguid"
           label="角色"
           prop="roleguid"
-          :rules="[ { required: false, message: '角色 必选'}]"
+          :rules="[{ required: false, message: '角色 必选' }]"
         >
-          <el-select v-model="staffDetail.roleguid" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="staffDetail.roleguid"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option
               v-for="item in roleList"
               :key="item.guid"
@@ -235,8 +290,16 @@
             ></el-option>
           </el-select>
         </el-form-item>-->
-        <el-form-item label="性别" prop="gender" :rules="[ { required: true, message: '性别 必填'}]">
-          <el-select v-model="staffDetail.gender" placeholder="请选择" style="width:100%">
+        <el-form-item
+          label="性别"
+          prop="gender"
+          :rules="[{ required: true, message: '性别 必填' }]"
+        >
+          <el-select
+            v-model="staffDetail.gender"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option label="男" value="男"></el-option>
             <el-option label="女" value="女"></el-option>
           </el-select>
@@ -244,15 +307,23 @@
         <el-form-item
           label="证件类型"
           prop="certtype"
-          :rules="[ { required: true, message: '证件类型 必填'}]"
+          :rules="[{ required: true, message: '证件类型 必填' }]"
         >
-          <el-select v-model="staffDetail.certtype" placeholder="请选择" style="width:100%">
+          <el-select
+            v-model="staffDetail.certtype"
+            placeholder="请选择"
+            style="width:100%"
+          >
             <el-option label="身份证" value="身份证"></el-option>
             <el-option label="军官证" value="军官证"></el-option>
             <el-option label="护照" value="护照"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="证件号" prop="certguid" :rules="[ { required: true, message: '证件号 必填'}]">
+        <el-form-item
+          label="证件号"
+          prop="certguid"
+          :rules="[{ required: true, message: '证件号 必填' }]"
+        >
           <el-input v-model="staffDetail.certguid"></el-input>
         </el-form-item>
         <!-- <el-form-item label="上级标识" prop="superior" :rules="[ { required: true, message: '上级标识 必填'}]">
@@ -260,7 +331,11 @@
         </el-form-item>-->
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('staffDetail',staffDetail.guid)">提交</el-button>
+        <el-button
+          type="primary"
+          @click="submitForm('staffDetail', staffDetail.guid)"
+          >提交</el-button
+        >
       </span>
     </el-dialog>
 
@@ -658,5 +733,4 @@ export default {
   }
 };
 </script>
-<style>
-</style>
+<style></style>

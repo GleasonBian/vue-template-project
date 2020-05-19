@@ -52,13 +52,14 @@ export default {
 @import "./style/common";
 
 @font-face {
-  font-family: 'iconfont';  /* project id 868569 */
-  src: url('//at.alicdn.com/t/font_868569_ecfmeehg6wq.eot');
-  src: url('//at.alicdn.com/t/font_868569_ecfmeehg6wq.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_868569_ecfmeehg6wq.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_868569_ecfmeehg6wq.woff') format('woff'),
-  url('//at.alicdn.com/t/font_868569_ecfmeehg6wq.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_868569_ecfmeehg6wq.svg#iconfont') format('svg');
+  font-family: "iconfont"; /* project id 868569 */
+  src: url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.eot");
+  src: url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.eot?#iefix")
+      format("embedded-opentype"),
+    url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.woff2") format("woff2"),
+    url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.woff") format("woff"),
+    url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.ttf") format("truetype"),
+    url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.svg#iconfont") format("svg");
 }
 
 .iconfont {

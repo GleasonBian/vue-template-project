@@ -17,19 +17,26 @@
         <el-submenu
           index="5"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(1,$event)"
+          @mouseover.native="on_mouse(1, $event)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-six"></i>实时监测
           </template>
           <el-menu-item
-            :style="{paddingLeft:childTitleLeft1,width:childTitleWidth} "
-            @mouseover.native="on_mouse_child(1,$event)"
+            :style="{ paddingLeft: childTitleLeft1, width: childTitleWidth }"
+            @mouseover.native="on_mouse_child(1, $event)"
             @mouseout.native="out_mouse(1)"
           >
-            <el-menu-item index="/monitor/oil" class="myClass" style="float:left">油耗监测</el-menu-item>
-            <el-menu-item index="/monitor/warn" style="float:left">告警监测</el-menu-item>
+            <el-menu-item
+              index="/monitor/oil"
+              class="myClass"
+              style="float:left"
+              >油耗监测</el-menu-item
+            >
+            <el-menu-item index="/monitor/warn" style="float:left"
+              >告警监测</el-menu-item
+            >
           </el-menu-item>
         </el-submenu>
         <!-- <el-submenu
@@ -55,67 +62,92 @@
         <el-submenu
           index="3"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(2,$event)"
+          @mouseover.native="on_mouse(2, $event)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
           </template>
           <el-menu-item
-            :style="{paddingLeft:childTitleLeft2,width:childTitleWidth} "
-            @mouseover.native="on_mouse_child(2,$event)"
+            :style="{ paddingLeft: childTitleLeft2, width: childTitleWidth }"
+            @mouseover.native="on_mouse_child(2, $event)"
             @mouseout.native="out_mouse(1)"
           >
-            <el-menu-item index="/plan/fixplan" style="float:left;">维修计划</el-menu-item>
-            <el-menu-item index="/plan/fixtask" style="float:left">维修任务</el-menu-item>
-            <el-menu-item index="/plan/oilplan" style="float:left">加油计划</el-menu-item>
-            <el-menu-item index="/plan/oiltask" style="float:left">加油任务</el-menu-item>
+            <el-menu-item index="/plan/fixplan" style="float:left;"
+              >维修计划</el-menu-item
+            >
+            <el-menu-item index="/plan/fixtask" style="float:left"
+              >维修任务</el-menu-item
+            >
+            <el-menu-item index="/plan/oilplan" style="float:left"
+              >加油计划</el-menu-item
+            >
+            <el-menu-item index="/plan/oiltask" style="float:left"
+              >加油任务</el-menu-item
+            >
           </el-menu-item>
         </el-submenu>
         <el-submenu
           index="4"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(3,$event)"
+          @mouseover.native="on_mouse(3, $event)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-four" style="font-size:20px"></i>调令
           </template>
           <el-menu-item
-            :style="{paddingLeft:childTitleLeft3,width:childTitleWidth} "
-            @mouseover.native="on_mouse_child(3,$event)"
+            :style="{ paddingLeft: childTitleLeft3, width: childTitleWidth }"
+            @mouseover.native="on_mouse_child(3, $event)"
             @mouseout.native="out_mouse(1)"
           >
-            <el-menu-item index="/assign/assignplan" style="float:left;">调度计划</el-menu-item>
-            <el-menu-item index="/assign/assigntask" style="float:left">调度任务</el-menu-item>
+            <el-menu-item index="/assign/assignplan" style="float:left;"
+              >调度计划</el-menu-item
+            >
+            <el-menu-item index="/assign/assigntask" style="float:left"
+              >调度任务</el-menu-item
+            >
           </el-menu-item>
         </el-submenu>
         <el-submenu
           index="2"
           popper-class="submenu-userManger"
-          @mouseover.native="on_mouse(4,$event)"
+          @mouseover.native="on_mouse(4, $event)"
           @mouseout.native="out_mouse(1)"
         >
           <template slot="title">
             <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
           </template>
           <el-menu-item
-            :style="{paddingLeft:childTitleLeft4,width:childTitleWidth} "
-            @mouseover.native="on_mouse_child(4,$event)"
+            :style="{ paddingLeft: childTitleLeft4, width: childTitleWidth }"
+            @mouseover.native="on_mouse_child(4, $event)"
             @mouseout.native="out_mouse(1)"
           >
-            <el-menu-item index="/platform/companyList" class="myClass" style="float:left">公司管理</el-menu-item>
-            <el-menu-item index="/platform/departmentList" style="float:left">部门管理</el-menu-item>
-            <el-menu-item index="/platform/role" style="float:left">角色管理</el-menu-item>
-            <el-menu-item index="/platform/staff" style="float:left">人员管理</el-menu-item>
-            <el-menu-item index="/platform/equipment" style="float:left">设备管理</el-menu-item>
+            <el-menu-item
+              index="/platform/companyList"
+              class="myClass"
+              style="float:left"
+              >公司管理</el-menu-item
+            >
+            <el-menu-item index="/platform/departmentList" style="float:left"
+              >部门管理</el-menu-item
+            >
+            <el-menu-item index="/platform/role" style="float:left"
+              >角色管理</el-menu-item
+            >
+            <el-menu-item index="/platform/staff" style="float:left"
+              >人员管理</el-menu-item
+            >
+            <el-menu-item index="/platform/equipment" style="float:left"
+              >设备管理</el-menu-item
+            >
           </el-menu-item>
         </el-submenu>
         <el-menu-item style="float:right">
           <i class="el-icon-user"></i>
           <el-dropdown @command="handleCommand" class="dddddd">
             <div class="avator" style="color:#fff">
-              {{username}}
+              {{ username }}
               <i class="el-icon-caret-bottom"></i>
             </div>
             <el-dropdown-menu slot="dropdown">
@@ -131,7 +163,12 @@
         </el-submenu>-->
       </el-menu>
     </el-row>
-    <div class="kailong" v-if="flags1" id="trangles" :style="{marginLeft:tranLeft}"></div>
+    <div
+      class="kailong"
+      v-if="flags1"
+      id="trangles"
+      :style="{ marginLeft: tranLeft }"
+    ></div>
     <el-row>
       <transition>
         <router-view></router-view>

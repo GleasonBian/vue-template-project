@@ -1,40 +1,36 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import {
-  resolve
-} from 'path';
-
+import Vue from "vue";
+import Router from "vue-router";
+import { resolve } from "path";
 
 // login 登录
-const login = resolve => require(['@/components/login'], resolve);
+const login = resolve => require(["@/components/login"], resolve);
 
-
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
-  mode: 'hash', //history   hash
+  mode: "hash", //history   hash
   base: "/equipment/",
   routes: [
     {
-      path: '/',
-      redirect: '/login'
+      path: "/",
+      redirect: "/login"
     },
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
       component: login,
       meta: {
-        title: '中铁十二局三公司设备管理系统'
+        title: "中铁十二局三公司设备管理系统"
       }
     },
     {
-      path: '*',
-      name: '*',
-      redirect: '/login'
+      path: "*",
+      name: "*",
+      redirect: "/login"
     },
     {
-      path: '/platform',
-      component: resolve => require(['@/common/platform'], resolve),
+      path: "/platform",
+      component: resolve => require(["@/common/platform"], resolve),
       children: [
         // {
         //   path: '',
@@ -56,204 +52,205 @@ const router = new Router({
         //   },
         // },
         {
-          path: '/dashboard',
-          name: 'dashboard',
-          component: resolve => require(['@/components/dashboard'], resolve),
+          path: "/dashboard",
+          name: "dashboard",
+          component: resolve => require(["@/components/dashboard"], resolve),
           meta: {
-            title: '数据统计图'
+            title: "数据统计图"
           }
         },
         {
-          path: 'companyList',
-          component: resolve => require(['@/components/companyList'], resolve),
+          path: "companyList",
+          component: resolve => require(["@/components/companyList"], resolve),
           meta: {
-            crumbs: ['平台', '公司管理'],
-            title: '公司管理',
+            crumbs: ["平台", "公司管理"],
+            title: "公司管理",
             index: 11,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'departmentList',
-          component: resolve => require(['@/components/departmentList'], resolve),
+          path: "departmentList",
+          component: resolve =>
+            require(["@/components/departmentList"], resolve),
           meta: {
-            crumbs: ['平台', '部门管理'],
-            title: '部门管理',
+            crumbs: ["平台", "部门管理"],
+            title: "部门管理",
             index: 1,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'equipment',
-          component: resolve => require(['@/components/equipment'], resolve),
+          path: "equipment",
+          component: resolve => require(["@/components/equipment"], resolve),
           meta: {
-            crumbs: ['平台', '设备管理'],
-            title: '设备管理',
+            crumbs: ["平台", "设备管理"],
+            title: "设备管理",
             index: 2,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'staff',
-          component: resolve => require(['@/components/staff'], resolve),
+          path: "staff",
+          component: resolve => require(["@/components/staff"], resolve),
           meta: {
-            crumbs: ['平台', '人员管理'],
-            title: '人员管理',
+            crumbs: ["平台", "人员管理"],
+            title: "人员管理",
             index: 3,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'role',
-          component: resolve => require(['@/components/role'], resolve),
+          path: "role",
+          component: resolve => require(["@/components/role"], resolve),
           meta: {
-            crumbs: ['平台', '角色管理'],
-            title: '角色管理',
+            crumbs: ["平台", "角色管理"],
+            title: "角色管理",
             index: 4,
-            menu: '090302'
-          },
-        },
+            menu: "090302"
+          }
+        }
       ]
     },
     {
-      path: '/plan',
-      component: resolve => require(['@/common/platform'], resolve),
+      path: "/plan",
+      component: resolve => require(["@/common/platform"], resolve),
       children: [
         {
-          path: 'fixplan',
-          component: resolve => require(['@/components/fixplan'], resolve),
+          path: "fixplan",
+          component: resolve => require(["@/components/fixplan"], resolve),
           meta: {
-            crumbs: ['计划', '维修计划'],
-            title: '维修计划',
+            crumbs: ["计划", "维修计划"],
+            title: "维修计划",
             index: 5,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'fixtask',
-          component: resolve => require(['@/components/fixtask'], resolve),
+          path: "fixtask",
+          component: resolve => require(["@/components/fixtask"], resolve),
           meta: {
-            crumbs: ['计划', '维修任务'],
-            title: '维修任务',
+            crumbs: ["计划", "维修任务"],
+            title: "维修任务",
             index: 6,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'oilplan',
-          component: resolve => require(['@/components/oilplan'], resolve),
+          path: "oilplan",
+          component: resolve => require(["@/components/oilplan"], resolve),
           meta: {
-            crumbs: ['计划', '加油计划'],
-            title: '加油计划',
+            crumbs: ["计划", "加油计划"],
+            title: "加油计划",
             index: 7,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'oiltask',
-          component: resolve => require(['@/components/oiltask'], resolve),
+          path: "oiltask",
+          component: resolve => require(["@/components/oiltask"], resolve),
           meta: {
-            crumbs: ['计划', '加油任务'],
-            title: '加油任务',
+            crumbs: ["计划", "加油任务"],
+            title: "加油任务",
             index: 8,
-            menu: '090302'
-          },
-        },
+            menu: "090302"
+          }
+        }
       ]
     },
     {
-      path: '/assign',
-      component: resolve => require(['@/common/platform'], resolve),
+      path: "/assign",
+      component: resolve => require(["@/common/platform"], resolve),
       children: [
         {
-          path: 'assignplan',
-          component: resolve => require(['@/components/assignplan'], resolve),
+          path: "assignplan",
+          component: resolve => require(["@/components/assignplan"], resolve),
           meta: {
-            crumbs: ['计划', '调度计划'],
-            title: '调度计划',
+            crumbs: ["计划", "调度计划"],
+            title: "调度计划",
             index: 7,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'assigntask',
-          component: resolve => require(['@/components/assigntask'], resolve),
+          path: "assigntask",
+          component: resolve => require(["@/components/assigntask"], resolve),
           meta: {
-            crumbs: ['调令', '调度任务'],
-            title: '调度任务',
+            crumbs: ["调令", "调度任务"],
+            title: "调度任务",
             index: 8,
-            menu: '090302'
-          },
-        },
+            menu: "090302"
+          }
+        }
       ]
     },
     {
-      path: '/report',
-      component: resolve => require(['@/common/platform'], resolve),
+      path: "/report",
+      component: resolve => require(["@/common/platform"], resolve),
       children: [
         {
-          path: 'fixRep',
-          component: resolve => require(['@/components/fixRep'], resolve),
+          path: "fixRep",
+          component: resolve => require(["@/components/fixRep"], resolve),
           meta: {
-            crumbs: ['统计', '维修报表'],
-            title: '维修报表',
+            crumbs: ["统计", "维修报表"],
+            title: "维修报表",
             index: 9,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'oilRep',
-          component: resolve => require(['@/components/oilRep'], resolve),
+          path: "oilRep",
+          component: resolve => require(["@/components/oilRep"], resolve),
           meta: {
-            crumbs: ['统计', '加油报表'],
-            title: '加油报表',
+            crumbs: ["统计", "加油报表"],
+            title: "加油报表",
             index: 10,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'assignRep',
-          component: resolve => require(['@/components/assignRep'], resolve),
+          path: "assignRep",
+          component: resolve => require(["@/components/assignRep"], resolve),
           meta: {
-            crumbs: ['统计', '调度报表'],
-            title: '调度报表',
+            crumbs: ["统计", "调度报表"],
+            title: "调度报表",
             index: 11,
-            menu: '090302'
-          },
-        },
+            menu: "090302"
+          }
+        }
       ]
     },
     {
-      path: '/monitor',
-      component: resolve => require(['@/common/platform'], resolve),
+      path: "/monitor",
+      component: resolve => require(["@/common/platform"], resolve),
       children: [
         {
-          path: 'oil',
-          component: resolve => require(['@/components/oilMonitor'], resolve),
+          path: "oil",
+          component: resolve => require(["@/components/oilMonitor"], resolve),
           meta: {
-            crumbs: ['实时监测', '油耗监测'],
-            title: '油耗监测',
+            crumbs: ["实时监测", "油耗监测"],
+            title: "油耗监测",
             index: 20,
-            menu: '090302'
-          },
+            menu: "090302"
+          }
         },
         {
-          path: 'warn',
-          component: resolve => require(['@/components/warnMonitor'], resolve),
+          path: "warn",
+          component: resolve => require(["@/components/warnMonitor"], resolve),
           meta: {
-            crumbs: ['实时监测', '告警监测'],
-            title: '油耗监测',
+            crumbs: ["实时监测", "告警监测"],
+            title: "油耗监测",
             index: 10,
-            menu: '090302'
-          },
-        },
+            menu: "090302"
+          }
+        }
       ]
     }
   ]
-})
+});
 // 每个页面 添加title
 router.beforeEach((to, from, next) => {
   window.document.title = to.meta.title;
   next();
-})
-export default router
+});
+export default router;

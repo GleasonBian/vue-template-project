@@ -10,15 +10,33 @@
         ref="singleTable"
         border
       >
-        <el-table-column type="index" label="序号" align="center"></el-table-column>
-        <el-table-column prop="name" label="名称" width="90" align="center"></el-table-column>
-        <el-table-column prop="plateno" label="号码" width="120" align="center"></el-table-column>
+        <el-table-column
+          type="index"
+          label="序号"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="name"
+          label="名称"
+          width="90"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="plateno"
+          label="号码"
+          width="120"
+          align="center"
+        ></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
             <div class="carStatus">
               <div
                 class="active"
-                :class="{'active':scope.row.status==1,'fix':scope.row.status==2,'stop':scope.row.status==3}"
+                :class="{
+                  active: scope.row.status == 1,
+                  fix: scope.row.status == 2,
+                  stop: scope.row.status == 3
+                }"
               ></div>
             </div>
           </template>
@@ -27,11 +45,18 @@
     </el-col>
     <el-col align="middle" :span="19">
       <!-- 搜索框 -->
-      <gt-search :data="searchData" @handle="searchHandle" size style="margin-bottom:24px;"></gt-search>
+      <gt-search
+        :data="searchData"
+        @handle="searchHandle"
+        size
+        style="margin-bottom:24px;"
+      ></gt-search>
       <!-- 列表 -->
       <div style="width:100%; height:350px;" ref="chart"></div>
       <gt-table
-        :tableData="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+        :tableData="
+          tableData.slice((currentPage - 1) * pagesize, currentPage * pagesize)
+        "
         style="width: 98%"
         :optionWidth="optionWidth"
         :columns="columns"
