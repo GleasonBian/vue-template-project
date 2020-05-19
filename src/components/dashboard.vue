@@ -319,7 +319,7 @@ export default {
     },
     //点击设备列表打开地图中marker
     clickMarker(row) {
-      this.getOverWatch(row.guid);
+      // this.getOverWatch(row.guid);
       this.$refs.singleATable.setCurrentRow(row);
       this.closeInfoWindow();
       let eqid = row.guid;
