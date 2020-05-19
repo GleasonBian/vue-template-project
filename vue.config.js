@@ -23,7 +23,7 @@ module.exports = {
   assetsDir: "static",
 
   // eslint-loader 是否在保存的时候检查
-  lintOnSave: true,
+  lintOnSave: false,
 
   // 如果机器有超过1个内核，则在默认情况下为生产构建中的babel&ts使用线程加载器
   parallel: require("os").cpus().length > 1,
