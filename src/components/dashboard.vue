@@ -46,16 +46,10 @@
       <el-col style="position:relative;overflow:hidden;" :span="18">
         <div class="grid-content bg-purple">
           <div class="map" id="track-map"></div>
-          <el-button
-            @click="showBox"
-            class="viewbtn"
-            :type="showView ? 'info' : 'primary'"
-            >{{ viewBtn }}</el-button
-          >
-          <el-button @click="closeLine" class="viewline" type="info"
-            >清空轨迹</el-button
-          >
-          <div class="card" :class="{ active: showView }">
+          <el-button @click="showBox" class="viewbtn" :type="showView?'primary':'info'">{{viewBtn}}</el-button>
+          <el-button @click="closeLine" class="viewline" type="info">清空轨迹</el-button>
+          <el-button @click="getOverWatch()" class="viewTotal" type="primary">总览</el-button>
+          <div class="card" :class="{'active':showView}">
             <el-card class="box-card">
               <div class="clearfix">
                 <span class="card_title">车辆监测</span>
@@ -74,22 +68,18 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{ viewData.maintain.CurNum }}</span>
+                  <span class="card_main">{{parseInt(viewData.maintain.CurNum)}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{
-                      viewData.maintain.MonthNum + " " + " "
-                    }}</span>
+                    <span class="card_col_main">{{parseInt(viewData.maintain.MonthNum)+" "+" "}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{
-                      viewData.maintain.YearNum
-                    }}</span>
+                    <span class="card_col_main">{{parseInt(viewData.maintain.YearNum)}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -103,22 +93,18 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{ viewData.fix.CurNum }}</span>
+                  <span class="card_main">{{parseInt(viewData.fix.CurNum)}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{
-                      viewData.fix.MonthNum
-                    }}</span>
+                    <span class="card_col_main">{{parseInt(viewData.fix.MonthNum)}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{
-                      viewData.fix.YearNum
-                    }}</span>
+                    <span class="card_col_main">{{parseInt(viewData.fix.YearNum)}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -132,24 +118,18 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main" style="color:red">{{
-                    viewData.alarm.CurNum
-                  }}</span>
+                  <span class="card_main" style="color:red">{{parseInt(viewData.alarm.CurNum)}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{
-                      viewData.alarm.MonthNum
-                    }}</span>
+                    <span class="card_col_main">{{parseInt(viewData.alarm.MonthNum)}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{
-                      viewData.alarm.YearNum
-                    }}</span>
+                    <span class="card_col_main">{{parseInt(viewData.alarm.YearNum)}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -165,22 +145,18 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{ viewData.travel.CurNum }}</span>
+                  <span class="card_main">{{parseFloat(viewData.travel.CurNum).toFixed(2)}}</span>
                   <span class="card_minor">公里</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{
-                      viewData.travel.MonthNum
-                    }}</span>
+                    <span class="card_col_main">{{parseFloat(viewData.travel.MonthNum).toFixed(2)}}</span>
                     <span class="card_minor">公里</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{
-                      viewData.travel.YearNum
-                    }}</span>
+                    <span class="card_col_main">{{parseFloat(viewData.travel.YearNum).toFixed(2)}}</span>
                     <span class="card_minor">公里</span>
                   </div>
                 </div>
@@ -194,24 +170,18 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main" style="color:#f0c70b">{{
-                    viewData.oil.CurNum
-                  }}</span>
+                  <span class="card_main" style="color:#f0c70b">{{parseFloat(viewData.oil.CurNum).toFixed(2)}}</span>
                   <span class="card_minor">升</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{
-                      viewData.oil.MonthNum
-                    }}</span>
+                    <span class="card_col_main">{{parseFloat(viewData.oil.MonthNum).toFixed(2)}}</span>
                     <span class="card_minor">升</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{
-                      viewData.oil.YearNum
-                    }}</span>
+                    <span class="card_col_main">{{parseFloat(viewData.oil.YearNum).toFixed(2)}}</span>
                     <span class="card_minor">升</span>
                   </div>
                 </div>
@@ -225,24 +195,18 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <span class="card_main">{{
-                    viewData.assignment.CurNum
-                  }}</span>
+                  <span class="card_main">{{parseFloat(viewData.assignment.CurNum).toFixed(2)}}</span>
                   <span class="card_minor">小时</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{
-                      viewData.assignment.MonthNum
-                    }}</span>
+                    <span class="card_col_main">{{parseFloat(viewData.assignment.MonthNum).toFixed(2)}}</span>
                     <span class="card_minor">小时</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{
-                      viewData.assignment.YearNum
-                    }}</span>
+                    <span class="card_col_main">{{parseFloat(viewData.assignment.YearNum).toFixed(2)}}</span>
                     <span class="card_minor">小时</span>
                   </div>
                 </div>
@@ -340,14 +304,22 @@ export default {
       this.showView = !this.showView;
       this.showView ? (this.viewBtn = "隐藏信息") : (this.viewBtn = "详细信息");
     },
-    async getOverWatch() {
+    async getOverWatch(id) {
+      console.log(id);
+      let res = null;
+      if (id) {
+        res = await overview({ param: { id: id } });
+      } else {
+        res = await overview();
+      }
+      console.log(res);
       //设备列表
-      const res = await overview();
       this.viewData = res.data;
       // console.log(this.viewData);
     },
     //点击设备列表打开地图中marker
     clickMarker(row) {
+      this.getOverWatch(row.guid);
       this.$refs.singleATable.setCurrentRow(row);
       this.closeInfoWindow();
       let eqid = row.guid;
@@ -971,6 +943,11 @@ export default {
   position: absolute;
   top: 15px;
   left: 200px;
+}
+.viewTotal {
+  position: absolute;
+  top: 15px;
+  left: 320px;
 }
 .clearfix:before,
 .clearfix:after {
