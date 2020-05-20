@@ -42,6 +42,7 @@ export default {
     return {
       date: new Date(),
       guid: "",
+      formDate: "",
       vehicleData: []
     };
   },
@@ -61,6 +62,7 @@ export default {
      ** 点击日历 获取选中时间
      */
     currentHandle(data) {
+      this.formDate = data.day;
       console.log(data.day);
     },
     /*
