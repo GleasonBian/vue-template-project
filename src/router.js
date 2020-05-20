@@ -60,6 +60,17 @@ const router = new Router({
           }
         },
         {
+          path: "/track",
+          name: "track",
+          component: resolve => require(["@/components/track"], resolve),
+          meta: {
+            crumbs: ["监控平台", "历史轨迹"],
+            title: "历史轨迹",
+            index: 11,
+            menu: "090302"
+          }
+        },
+        {
           path: "companyList",
           component: resolve => require(["@/components/companyList"], resolve),
           meta: {
@@ -110,16 +121,6 @@ const router = new Router({
             menu: "090302"
           }
         },
-        {
-          path: "track",
-          component: resolve => require(["@/components/track"], resolve),
-          meta: {
-            crumbs: ["平台", "历史轨迹"],
-            title: "历史轨迹",
-            index: 5,
-            menu: "090302"
-          }
-        }
       ]
     },
     {
@@ -255,7 +256,9 @@ const router = new Router({
           }
         }
       ]
-    }
+    },
+
+
   ]
 });
 // 每个页面 添加title
