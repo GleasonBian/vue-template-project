@@ -9,12 +9,14 @@
           :value="item.guid"
         ></el-option>
       </el-select>
-      <el-calendar v-model="date" style="height: 300px">
+      <el-calendar v-model="date">
         <template slot="dateCell" slot-scope="{date, data}">
-          <p
+          <div
+            @click="currentHandle(data)"
             style="text-align:center;"
+            class="calendar_style"
             :class="data.isSelected ? 'is-selected' : ''"
-          >{{ data.day.split('-').slice(2).join('-')}} {{ data.isSelected ? '✔️' : ''}}</p>
+          >{{ data.day.split('-').slice(2).join('-')}} {{ data.isSelected ? '✔️' : ''}}</div>
         </template>
       </el-calendar>
     </el-col>
@@ -25,6 +27,10 @@
 <style>
 .is-selected {
   color: #1989fa;
+}
+.calendar_style {
+  width: 100%;
+  height: 100%;
 }
 </style>
 
@@ -41,6 +47,7 @@ export default {
   },
   created() {
     this.equiList();
+    this.historyTrackHandle();
   },
   methods: {
     /*
@@ -49,6 +56,18 @@ export default {
     async equiList() {
       const res = await equiSelect();
       this.vehicleData = res.data;
+    },
+    /*
+     ** 点击日历 获取选中时间
+     */
+    currentHandle(data) {
+      console.log(data.day);
+    },
+    /*
+     ** 历史轨迹处理
+     */
+    historyTrackHandle() {
+      console.log("id:", this.$route.params.id);
     }
   }
 };
