@@ -109,6 +109,16 @@ const router = new Router({
             index: 4,
             menu: "090302"
           }
+        },
+        {
+          path: "track",
+          component: resolve => require(["@/components/track"], resolve),
+          meta: {
+            crumbs: ["平台", "历史轨迹"],
+            title: "历史轨迹",
+            index: 5,
+            menu: "090302"
+          }
         }
       ]
     },
