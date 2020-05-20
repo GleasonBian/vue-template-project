@@ -1,5 +1,6 @@
 <template>
   <el-row :gutter="10">
+    <el-dialog title="统计信息" :visible.sync="dialogTableVisible" width="80%"></el-dialog>
     <el-col :span="5" align="center">
       <el-select
         v-model="eqid"
@@ -26,6 +27,13 @@
       </el-calendar>
     </el-col>
     <el-col :span="19" align="center">
+      <div style="position: absolute; z-index:100">
+        <!-- <el-button-group> -->
+        <el-button type="primary" icon="el-icon-s-order" @click="dialogTableVisible = true">统计</el-button>
+        <!-- <el-button type="primary" icon="el-icon-s-platform"></el-button> -->
+        <!-- </el-button-group> -->
+      </div>
+
       <div class="map" id="hismap"></div>
       <div class="input-card">
         <h4>轨迹回放控制</h4>
@@ -148,7 +156,8 @@ export default {
       formDate: "",
       guid: "",
       formDate: "",
-      vehicleData: []
+      vehicleData: [],
+      dialogTableVisible: false
     };
   },
   created() {
@@ -160,9 +169,7 @@ export default {
     this.initMap();
   },
   methods: {
-    htimeHandle(){
-
-    },
+    htimeHandle() {},
     // 地图引入
     initMap() {
       this.map = new AMap.Map("hismap", {
@@ -191,8 +198,8 @@ export default {
       this.polyline = null;
       this.passedPolyline = null;
       this.new_polyline = null;
-      this.lineArr=[];
-      this.passLineArr=[];
+      this.lineArr = [];
+      this.passLineArr = [];
       this.map.clearMap();
 
       this.hisData.map(val => {
@@ -229,8 +236,8 @@ export default {
       this.map.add(this.passedPolyline);
       //行駛過後改變顏色
       this.marker.on("moving", function(e) {
-        that.passLineArr=e.passedPath
-        that.n_passLineArr=that.lineArr.slice(that.passLineArr.length);
+        that.passLineArr = e.passedPath;
+        that.n_passLineArr = that.lineArr.slice(that.passLineArr.length);
         that.passedPolyline.setPath(that.passLineArr);
       });
 
@@ -264,7 +271,7 @@ export default {
     },
     //开始动画
     startAnimation() {
-      this.marker.moveAlong(this.lineArr,1000 );
+      this.marker.moveAlong(this.lineArr, 1000);
     },
     //加减速开始动画
     reStartAnimation(time) {
@@ -279,7 +286,7 @@ export default {
       //   // strokeStyle: "solid"  //线样式
       // });
       // this.map.add(this.new_polyline)
-      this.marker.moveAlong(this.n_passLineArr,time );
+      this.marker.moveAlong(this.n_passLineArr, time);
     },
     //暂停
     pauseAnimation() {
@@ -318,6 +325,116 @@ export default {
       }
       this.hisData = res.data;
       this.drawLine();
+    },
+
+    /*
+     ** 初始化 echert
+     */
+    initCharts(
+      gpstime = [],
+      curmiles = [],
+      curoilconsume = [],
+      speed = [],
+      totaloilconsume = []
+    ) {
+      let colors = ["#5793f3", "#d14a61", "#675bba"];
+      let myChart = this.$echarts.init(this.$refs.chart);
+      let option = {
+        title: {
+          text: "油耗统计",
+          left: "center"
+        },
+        tooltip: {
+          trigger: "axis",
+          textStyle: {
+            align: "left"
+          }
+        },
+        legend: {
+          data: ["总油耗", "油耗", "里程", "速度"],
+          align: "left", //水平方向位置
+          verticalAlign: "top", //垂直方向位置
+          x: 100, //距离x轴的距离
+          y: 0 //距离Y轴的距离
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            magicType: {
+              type: ["line", "bar"],
+              show: true
+            },
+            dataZoom: {
+              show: true
+            },
+            dataView: {
+              show: true
+            },
+            restore: {
+              show: true
+            },
+            saveAsImage: {
+              show: true
+            }
+          }
+        },
+        calculable: true,
+        grid: {
+          left: "3%",
+          right: "3%",
+          bottom: "3%",
+          containLabel: true
+        },
+        dataZoom: [
+          {
+            type: "slider",
+            show: true,
+            xAxisIndex: [0],
+            top: 30,
+            start: 10,
+            end: 90,
+            height: 20 //初始化滚动条
+          }
+        ],
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: gpstime
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            name: "总油耗",
+            type: "line",
+            stack: "总量",
+            data: totaloilconsume
+          },
+          {
+            name: "油耗",
+            type: "line",
+            stack: "总量",
+            data: curoilconsume
+          },
+          {
+            name: "里程",
+            type: "line",
+            stack: "总量",
+            data: curmiles
+          },
+          {
+            name: "速度",
+            type: "line",
+            stack: "总量",
+            data: speed
+          }
+        ]
+      };
+      myChart.setOption(option);
+      window.onresize = function() {
+        myChart.resize();
+      };
     }
   }
 };

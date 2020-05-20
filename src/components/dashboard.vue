@@ -11,10 +11,10 @@
             style="width:100%;"
             size="mini"
           >
-            <el-table-column type="index" label="序号" align="center"></el-table-column>
-            <el-table-column prop="name" label="车辆名称" align="center"></el-table-column>
+            <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
+            <el-table-column prop="name" label="车辆名称" align="center" width="95"></el-table-column>
             <el-table-column prop="platenum" label="车牌号码" align="center"></el-table-column>
-            <el-table-column label="车辆状态" align="center">
+            <el-table-column label="状态" align="center" width="50">
               <template slot-scope="scope">
                 <div class="carStatus">
                   <div
