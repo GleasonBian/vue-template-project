@@ -12,8 +12,8 @@
         mode="horizontal"
       >
         <el-menu-item>
-          <div class="block">
-            <el-avatar :size="45" :src="circleUrl"></el-avatar>
+          <div style="width:280px; text-align:center">
+            <img src="https://img-blog.csdnimg.cn/20200520140729270.png" alt style="width:90%" />
           </div>
         </el-menu-item>
         <el-menu-item index="/dashboard" style>
@@ -128,8 +128,7 @@ export default {
   components: {},
   data() {
     return {
-      circleUrl:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+      circleUrl: "$img/22.png",
       transitionName: "",
       mtemListA: [],
       /*************************************************** */

@@ -314,41 +314,73 @@ export default {
     this.getOverWatch();
   },
   methods: {
-    goHistory(id){
-      this.$router.push({path:'/track/'+id});
+    goHistory(id) {
+      this.$router.push({ path: "/track/" + id });
     },
     showBox() {
       this.showView = !this.showView;
       this.showView ? (this.viewBtn = "隐藏信息") : (this.viewBtn = "详细信息");
     },
     async getOverWatch(id) {
-      console.log(id);
+      // console.log(id);
       let res = null;
       if (id) {
         res = await overview({ param: { id: id } });
       } else {
         res = await overview();
       }
-      console.log(res);
       //设备列表
       this.viewData = res.data;
       // console.log(this.viewData);
+    },
+    removeChild() {
+      var child = document.getElementsByClassName("custom-content-marker");
+      child.removeNode = [];
+      if (child.length != undefined) {
+        var len = child.length;
+        for (var i = 0; i < len; i++) {
+          child.removeNode.push({
+            parent: child[i].parentNode,
+            inner: child[i].outerHTML,
+            next: child[i].nextSibling
+          });
+        }
+        for (var i = 0; i < len; i++) {
+          child[0].parentNode.removeChild(child[0]);
+        }
+      } else {
+        child.removeNode.push({
+          parent: child.parentNode,
+          inner: child.outerHTML,
+          next: child.nextSibling
+        });
+        child.parentNode.removeChild(child);
+      }
     },
     //点击设备列表打开地图中marker
     clickMarker(row) {
       // this.getOverWatch(row.guid);
       this.$refs.singleATable.setCurrentRow(row);
+      this.removeChild();
       this.closeInfoWindow();
       let eqid = row.guid;
       let targetM;
       if (this.points.length) {
         for (var i = 0; i < this.points.length; i++) {
           if (this.points[i].getExtData().guid == eqid) {
-            // console.log("找到设备" + eqid);
             this.map.setZoomAndCenter(16, this.marks[i].position);
             targetM = this.points[i];
-
             this.drowLine(eqid);
+
+            var marker = new AMap.Marker({
+              position: this.marks[i].position,
+              // 将 html 传给 content
+              content:
+                '<img src="https://img-blog.csdnimg.cn/20200520160316104.png" style="width:20px" class="custom-content-marker">',
+              // 以 icon 的 [center bottom] 为原点
+              offset: new AMap.Pixel(-24, -30)
+            });
+            this.map.add(marker);
             break;
           }
           if (
@@ -525,7 +557,7 @@ export default {
           if (reader.result == "Hello WebSockets!") return;
           let data = reader.result;
           data = eval("(" + data + ")");
-          console.log("解析->", data);
+          // console.log("解析->", data);
           //循环现有设备列表
           if (that.tableData.length) {
             for (var i = 0; i < that.tableData.length; i++) {
@@ -687,7 +719,7 @@ export default {
                   }
                   if (that.marks[j].extData.classtype == "SUV") {
                     content.push(
-                      "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201816499.png'></div>"
+                      `<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201816499.png'></div>`
                     );
                   } else if (that.marks[j].extData.classtype == "轨道车") {
                     content.push(
@@ -1058,5 +1090,35 @@ span {
   content: "";
   display: table;
   clear: both;
+}
+
+.custom-content-marker {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.custom-content-marker img {
+  width: 100%;
+  height: 100%;
+}
+
+.custom-content-marker .close-btn {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  width: 15px;
+  height: 15px;
+  font-size: 12px;
+  background: #ccc;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  line-height: 15px;
+  box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
+}
+
+.custom-content-marker .close-btn:hover {
+  background: #666;
 }
 </style>
