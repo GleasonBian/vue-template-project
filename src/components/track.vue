@@ -37,10 +37,10 @@
       <div class="map" id="hismap"></div>
       <div class="input-card">
         <h4>轨迹回放控制</h4>
-        <div class="input-item">
+        <!-- <div class="input-item">
           <input type="button" class="btn" value="加速" id="start" @click="reStartAnimation(10000)" />
           <input type="button" class="btn" value="减速" id=" speed" @click="reStartAnimation(500)" />
-        </div>
+        </div>-->
         <div class="input-item">
           <input type="button" class="btn" value="开始动画" id="start" @click="startAnimation()" />
           <input type="button" class="btn" value="显示信息" id=" speed" @click="showInfo()" />
