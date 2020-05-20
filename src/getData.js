@@ -303,3 +303,8 @@ export const equip = data => fetch("equip", data, "get");
  * 报警监测 id 传 报警id
  */
 export const alarm = data => fetch("alarm", data, "get");
+
+/**
+ * 报警监测 id 传 报警id
+ */
+export const history = data => fetch("history", data, "get");
