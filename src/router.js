@@ -60,7 +60,7 @@ const router = new Router({
           }
         },
         {
-          path: "/track",
+          path: "/track/:id",
           name: "track",
           component: resolve => require(["@/components/track"], resolve),
           meta: {
