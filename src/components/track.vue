@@ -20,7 +20,9 @@
         </template>
       </el-calendar>
     </el-col>
-    <el-col :span="19" align="center"></el-col>
+    <el-col :span="19" align="center">
+      <div class="map" id="track-map"></div>
+    </el-col>
   </el-row>
 </template>
 
@@ -50,7 +52,29 @@ export default {
     this.equiList();
     this.historyTrackHandle();
   },
+  mounted() {
+    this.initMap();
+  },
   methods: {
+    // 地图引入
+    initMap() {
+      let that = this;
+      this.map = new AMap.Map("track-map", {
+        zoom: 8, //级别
+        center: [112.866504, 36.860657], //中心点坐标
+        resizeEnable: true
+      });
+
+      // 插件
+      AMap.plugin(["AMap.ToolBar", "AMap.Scale", "AMap.GraspRoad"], function() {
+        that.map.addControl(new AMap.ToolBar());
+        that.map.addControl(new AMap.Scale());
+        that.map.addControl(new AMap.GraspRoad());
+      });
+      this.initWebSocket();
+      // console.log("map");
+      // console.log(AMap);
+    },
     /*
      ** 设备列表
      */

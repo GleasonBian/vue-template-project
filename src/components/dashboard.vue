@@ -18,7 +18,6 @@
               <template slot-scope="scope">
                 <div class="carStatus">
                   <div
-                    class
                     :class="{
                       active: scope.row.status == 1,
                       fix: scope.row.status == 2,
@@ -26,6 +25,11 @@
                     }"
                   ></div>
                 </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="历史轨迹" align="center">
+              <template slot-scope="scope">
+                <el-link type="primary" @click="goHistory(scope.row.guid)">查看</el-link>
               </template>
             </el-table-column>
           </el-table>
@@ -310,6 +314,9 @@ export default {
     this.getOverWatch();
   },
   methods: {
+    goHistory(id){
+      this.$router.push({path:'/track/'+id});
+    },
     showBox() {
       this.showView = !this.showView;
       this.showView ? (this.viewBtn = "隐藏信息") : (this.viewBtn = "详细信息");
