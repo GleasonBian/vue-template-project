@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>轨迹回放</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <style>
+        html,
+        body,
+        #container {
+            height: 100%;
+            width: 100%;
+        }
+
+        .input-card .btn {
+            margin-right: 1.2rem;
+            width: 9rem;
+        }
+
+        .input-card .btn:last-child {
+            margin-right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <div class="input-card">
+        <h4>轨迹回放控制</h4>
+        <div class="input-item">
+            <input type="button" class="btn" value="开始动画" id="start" onclick="startAnimation()" />
+            <input type="button" class="btn" value="暂停动画" id="pause" onclick="pauseAnimation()" />
+        </div>
+        <div class="input-item">
+            <input type="button" class="btn" value="继续动画" id="resume" onclick="resumeAnimation()" />
+            <input type="button" class="btn" value="停止动画" id="stop" onclick="stopAnimation()" />
+        </div>
+        <div class="input-item">
+            <input type="button" class="btn" value="顯示運行速度"" id=" speed" onclick="speedAnimation()" />
+
+        </div>
+    </div>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key='key值'">
+    </script>
+    <script>
+        var marker = null;
+        var polyline = null;
+        var passedPolyline = null;
+        var routeInfo = [{"lat":41.899091,"lng":123.532176,"speed":6.02},{"lat":41.899038,"lng":123.532115,"speed":8.42},{"lat":41.864238,"lng":123.510692,"speed":0.89},{"lat":41.86401,"lng":123.510915,"speed":2.61},{"lat":41.863474,"lng":123.510799,"speed":10.31},{"lat":41.863071,"lng":123.510626,"speed":6.76},{"lat":41.862719,"lng":123.510458,"speed":9.22},{"lat":41.861887,"lng":123.50998,"speed":18.36},{"lat":41.860685,"lng":123.509322,"speed":26.62},{"lat":41.859401,"lng":123.50864,"speed":26.9},{"lat":41.858528,"lng":123.508255,"speed":17.02},{"lat":41.85839,"lng":123.508178,"speed":0.0},{"lat":41.857946,"lng":123.508087,"speed":11.64},{"lat":41.857131,"lng":123.507831,"speed":17.96},{"lat":41.85608,"lng":123.507415,"speed":22.2},{"lat":41.855023,"lng":123.507107,"speed":20.21},{"lat":41.854239,"lng":123.507109,"speed":15.07},{"lat":41.853437,"lng":123.507244,"speed":0.0},{"lat":41.85285,"lng":123.507266,"speed":5.11},{"lat":41.852853,"lng":123.50726,"speed":0.0},{"lat":41.852833,"lng":123.50724,"speed":0.0},{"lat":41.852504,"lng":123.507312,"speed":9.93},{"lat":41.851799,"lng":123.507233,"speed":14.16},{"lat":41.851242,"lng":123.507059,"speed":0.0},{"lat":41.851071,"lng":123.507009,"speed":2.83},{"lat":41.850975,"lng":123.506994,"speed":1.88},{"lat":41.850954,"lng":123.507074,"speed":3.12},{"lat":41.850888,"lng":123.507116,"speed":2.55},{"lat":41.850369,"lng":123.506927,"speed":12.25},{"lat":41.849632,"lng":123.506612,"speed":14.88},{"lat":41.849141,"lng":123.506082,"speed":12.58},{"lat":41.848494,"lng":123.505268,"speed":17.33},{"lat":41.847635,"lng":123.504232,"speed":22.73},{"lat":41.844513,"lng":123.500763,"speed":0.26},{"lat":41.844541,"lng":123.500873,"speed":1.15},{"lat":41.844538,"lng":123.500956,"speed":0.59},{"lat":41.844547,"lng":123.500901,"speed":1.31},{"lat":41.844607,"lng":123.500929,"speed":2.27},{"lat":41.844534,"lng":123.501072,"speed":1.57},{"lat":41.8446,"lng":123.50101,"speed":1.28},{"lat":41.844566,"lng":123.500914,"speed":0.32},{"lat":41.844514,"lng":123.501011,"speed":4.44},{"lat":41.844109,"lng":123.500855,"speed":12.22},{"lat":41.843536,"lng":123.500518,"speed":6.65},{"lat":41.841808,"lng":123.47934,"speed":18.47},{"lat":41.840919,"lng":123.478866,"speed":21.47},{"lat":41.840046,"lng":123.478525,"speed":19.79},{"lat":41.839302,"lng":123.478138,"speed":18.34},{"lat":41.838476,"lng":123.477633,"speed":18.76},{"lat":41.837629,"lng":123.477199,"speed":20.21},{"lat":41.836865,"lng":123.476741,"speed":15.45},{"lat":41.836261,"lng":123.476494,"speed":8.81},{"lat":41.836063,"lng":123.476472,"speed":1.23},{"lat":41.836059,"lng":123.476375,"speed":0.88},{"lat":41.83607,"lng":123.476511,"speed":0.52},{"lat":41.835947,"lng":123.4764,"speed":7.09},{"lat":41.835377,"lng":123.476121,"speed":16.47},{"lat":41.834477,"lng":123.475743,"speed":22.19},{"lat":41.833489,"lng":123.475429,"speed":20.63},{"lat":41.832667,"lng":123.475116,"speed":12.04},{"lat":41.832467,"lng":123.475155,"speed":1.64},{"lat":41.832113,"lng":123.474932,"speed":4.9},{"lat":41.832009,"lng":123.475042,"speed":0.68},{"lat":41.832049,"lng":123.475109,"speed":0.42},{"lat":41.831813,"lng":123.474998,"speed":7.82},{"lat":41.831434,"lng":123.474922,"speed":9.01},{"lat":41.830969,"lng":123.474801,"speed":0.26},{"lat":41.831016,"lng":123.474759,"speed":0.63},{"lat":41.831002,"lng":123.474811,"speed":0.37},{"lat":41.830979,"lng":123.474842,"speed":0.19},{"lat":41.831,"lng":123.474881,"speed":2.49},{"lat":41.830476,"lng":123.474859,"speed":13.4},{"lat":41.830074,"lng":123.474814,"speed":4.91},{"lat":41.835844,"lng":123.45395,"speed":26.14},{"lat":41.834962,"lng":123.452371,"speed":29.0},{"lat":41.834881,"lng":123.450394,"speed":31.17},{"lat":41.834637,"lng":123.448592,"speed":28.52},{"lat":41.834968,"lng":123.446697,"speed":31.61},{"lat":41.834239,"lng":123.444774,"speed":32.14},{"lat":41.834564,"lng":123.442773,"speed":30.3},{"lat":41.833447,"lng":123.441212,"speed":29.5},{"lat":41.834491,"lng":123.439277,"speed":26.66},{"lat":41.834464,"lng":123.437458,"speed":28.18},{"lat":41.833889,"lng":123.435907,"speed":25.68},{"lat":41.834097,"lng":123.434818,"speed":36.25},{"lat":41.834124,"lng":123.434497,"speed":15.35},{"lat":41.833805,"lng":123.434234,"speed":8.37},{"lat":41.833916,"lng":123.434072,"speed":9.12},{"lat":41.834113,"lng":123.433634,"speed":8.25},{"lat":41.833876,"lng":123.433384,"speed":11.07},{"lat":41.833807,"lng":123.432707,"speed":16.0},{"lat":41.83432,"lng":123.431755,"speed":18.92},{"lat":41.833885,"lng":123.430365,"speed":21.79},{"lat":41.833032,"lng":123.426448,"speed":12.26},{"lat":41.833191,"lng":123.426148,"speed":8.4},{"lat":41.832995,"lng":123.425893,"speed":4.54},{"lat":41.833207,"lng":123.425644,"speed":10.26},{"lat":41.833552,"lng":123.425237,"speed":5.53},{"lat":41.833566,"lng":123.42494,"speed":13.97},{"lat":41.833564,"lng":123.42421,"speed":16.61},{"lat":41.833379,"lng":123.423503,"speed":9.43},{"lat":41.83317,"lng":123.423291,"speed":4.27},{"lat":41.833259,"lng":123.423173,"speed":0.2},{"lat":41.833292,"lng":123.423196,"speed":0.56},{"lat":41.833315,"lng":123.423336,"speed":9.48},{"lat":41.833719,"lng":123.423198,"speed":2.06},{"lat":41.833402,"lng":123.423224,"speed":6.03},{"lat":41.833474,"lng":123.423232,"speed":4.01},{"lat":41.833261,"lng":123.422898,"speed":12.13},{"lat":41.833146,"lng":123.421998,"speed":17.87},{"lat":41.833189,"lng":123.421189,"speed":7.73},{"lat":41.833016,"lng":123.421064,"speed":3.04},{"lat":41.83258,"lng":123.42113,"speed":3.27},{"lat":41.832915,"lng":123.421084,"speed":2.39},{"lat":41.833145,"lng":123.421143,"speed":1.66},{"lat":41.832833,"lng":123.421134,"speed":1.06},{"lat":41.832969,"lng":123.421123,"speed":2.27},{"lat":41.833039,"lng":123.421166,"speed":1.63},{"lat":41.833188,"lng":123.42104,"speed":0.34},{"lat":41.832959,"lng":123.420934,"speed":7.38},{"lat":41.832785,"lng":123.420406,"speed":14.1},{"lat":41.832976,"lng":123.419447,"speed":18.05},{"lat":41.832722,"lng":123.418305,"speed":21.05},{"lat":41.832819,"lng":123.416974,"speed":20.29},{"lat":41.833235,"lng":123.416011,"speed":4.16},{"lat":41.832908,"lng":123.416037,"speed":2.9},{"lat":41.832515,"lng":123.415689,"speed":10.49},{"lat":41.83246,"lng":123.414803,"speed":18.14},{"lat":41.832752,"lng":123.413677,"speed":19.08},{"lat":41.83275,"lng":123.41255,"speed":19.73},{"lat":41.832427,"lng":123.411404,"speed":18.68},{"lat":41.83222,"lng":123.410159,"speed":22.06},{"lat":41.832284,"lng":123.409089,"speed":5.62},{"lat":41.832393,"lng":123.408715,"speed":8.48},{"lat":41.832029,"lng":123.408214,"speed":11.17},{"lat":41.83231,"lng":123.407423,"speed":19.98},{"lat":41.832169,"lng":123.406281,"speed":17.09},{"lat":41.831934,"lng":123.403808,"speed":3.74},{"lat":41.832033,"lng":123.403582,"speed":7.12},{"lat":41.831947,"lng":123.403109,"speed":9.49},{"lat":41.831807,"lng":123.402498,"speed":6.7},{"lat":41.831841,"lng":123.40205,"speed":9.64}];
+   
+        var lineArr = [];
+        routeInfo.map(val => {
+            lineArr.push(new AMap.LngLat(val.lng, val.lat))
+        })
+        // 1. 创建地图
+        var map = new AMap.Map("container", {
+            resizeEnable: true,
+            center: [routeInfo[0].lng, routeInfo[0].lat],
+            zoom: 17
+        });
+
+        //把之前的線路設為透明
+        if (polyline) {
+            polyline.setOptions({
+                strokeColor: "#000", //线颜色
+                strokeOpacity: 0,
+            })
+        }
+        if (passedPolyline) {
+            passedPolyline.setOptions({
+                strokeColor: "#000", //线颜色
+                strokeOpacity: 0, //线透明度
+            })
+        }
+        //把之前的小汽车marker清除
+        if (marker) {
+            getMap.remove(marker)
+        }
+
+        // 2.创建小汽车marker
+        marker = new AMap.Marker({
+            map: map,
+            position: [routeInfo[0].lng, routeInfo[0].lat],
+            icon: "https://webapi.amap.com/images/car.png",
+            offset: new AMap.Pixel(-26, -13),
+            autoRotation: true,
+            angle: -90,
+        });
+        // 3.创建跟速度信息展示框
+        var carWindow = new AMap.InfoWindow({
+            offset: new AMap.Pixel(6, -25),
+            content: ""
+        });
+
+        // 4、绘制轨迹
+        polyline = new AMap.Polyline({
+            map: map,
+            path: lineArr,
+            showDir: true,
+            strokeColor: "#28F", //线颜色
+            // strokeOpacity: 1,     //线透明度
+            strokeWeight: 6, //线宽
+            // strokeStyle: "solid"  //线样式
+        });
+
+        //5、绘制行駛過後的顏色
+        passedPolyline = new AMap.Polyline({
+            map: map,
+            // path: lineArr,
+            strokeColor: "#AF5", //线颜色
+            // strokeOpacity: 1,     //线透明度
+            strokeWeight: 6, //线宽
+            // strokeStyle: "solid"  //线样式
+        });
+
+        //行駛過後改變顏色
+        marker.on('moving', function (e) {
+            passedPolyline.setPath(e.passedPath);
+        });
+
+        // 6.速度框随车辆移动
+        AMap.event.addListener(marker, 'moving', function (e) {
+            var lastLocation = e.passedPath[e.passedPath.length - 1];
+            carWindow.setPosition(lastLocation);
+            setVehicleSpeedInWidowns(lastLocation);
+        });
+        // 7.打开速度框
+        carWindow.open(map, marker.getPosition());
+        // 8.地图自适应缩放
+        map.setFitView();
+
+        function setVehicleSpeedInWidowns(lnglat) {
+            for (var i = 0; i < routeInfo.length; i++) {
+                if (lnglat.lat == this.routeInfo[i].lat && lnglat.lng == this.routeInfo[i].lng) {
+                    this.carWindow.setContent("速度:" + (this.routeInfo[i].speed * 3.6).toFixed(2) + "公里/时");
+                    return;
+                }
+            }
+        }
+
+        function speedAnimation() {
+            if (!carWindow.getIsOpen()) { //判斷窗體是否顯示
+                carWindow.open(map, marker.getPosition());
+            }
+        }
+
+        function startAnimation() {
+            marker.moveAlong(lineArr, 1000);
+        }
+
+        function pauseAnimation() {
+            marker.pauseMove();
+        }
+
+        function resumeAnimation() {
+            marker.resumeMove();
+        }
+
+        function stopAnimation() {
+            marker.stopMove();
+        }
+    </script>
+</body>
+
+</html>
