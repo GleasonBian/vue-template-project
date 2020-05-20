@@ -257,6 +257,12 @@ export default {
           lnglat.lng == this.hisData[i].longitude
         ) {
           this.carWindow.setContent(
+            "车牌:" + this.hisData[i].platenum +
+            "<br>"+
+            "油位:" + this.hisData[i].curoilpos +
+            "<br>"+
+            "里程:" + this.hisData[i].totalmiles.toFixed(2) +
+            "<br>"+
             "速度:" + this.hisData[i].speed.toFixed(2) + "km/h"
           );
           return;
