@@ -209,7 +209,7 @@ export default {
       //创建车
       this.marker = new AMap.Marker({
         position: this.lineArr[0],
-        icon: "https://webapi.amap.com/images/car.png",
+        icon: "https://img-blog.csdnimg.cn/20200514172516537.png",
         offset: new AMap.Pixel(-26, -13),
         autoRotation: true,
         angle: -90
