@@ -1,6 +1,10 @@
 <template>
   <el-row :gutter="10">
-    <el-dialog title="统计信息" :visible.sync="dialogTableVisible" width="80%"></el-dialog>
+    <div class="echarts_style" v-show="dialogTableVisible">
+      <span class="xxx" @click="closedialog($event)">×</span>
+      <div style="width:80vw; height:500px" ref="chart"></div>
+    </div>
+
     <el-col :span="5" align="center">
       <el-select
         v-model="eqid"
@@ -29,7 +33,7 @@
     <el-col :span="19" align="center">
       <div style="position: absolute; z-index:100">
         <!-- <el-button-group> -->
-        <el-button type="primary" icon="el-icon-s-order" @click="dialogTableVisible = true">统计</el-button>
+        <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle">统计</el-button>
         <!-- <el-button type="primary" icon="el-icon-s-platform"></el-button> -->
         <!-- </el-button-group> -->
       </div>
@@ -55,6 +59,31 @@
 </template>
 
 <style lang="less" scoped>
+.xxx {
+  font-size: 30px;
+  color: red;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
+.echarts_style {
+  width: 80vw;
+  height: 500px;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+  // border: 1px solid black;
+  padding: 50px 24px 15px 24px;
+  box-shadow: 0 0 10px #888888;
+  border-radius: 5px;
+  text-align: right;
+}
 #hismap {
   height: 93vh;
 }
@@ -157,7 +186,12 @@ export default {
       guid: "",
       formDate: "",
       vehicleData: [],
-      dialogTableVisible: false
+      dialogTableVisible: false,
+      gpstime: [], // 时间
+      curmiles: [], // 里程
+      curoilconsume: [], // 油耗
+      speed: [], //速度
+      totaloilconsume: [] // 总油耗
     };
   },
   created() {
@@ -320,7 +354,6 @@ export default {
      ** 历史轨迹处理
      */
     async historyTrackHandle() {
-      console.log("id:", this.$route.params.id);
       let res = null;
       if (this.formDate) {
         res = await history({
@@ -329,22 +362,28 @@ export default {
       } else {
         res = await history({ param: { id: this.eqid } });
       }
-      this.hisData = res.data;
+      this.hisData = res.data; //
+
+      for (var i in res.data) {
+        this.gpstime.push(res.data[i].gpstime);
+        this.curmiles.push(res.data[i].curmiles);
+        this.curoilconsume.push(res.data[i].curoilconsume);
+        this.speed.push(res.data[i].speed);
+        this.totaloilconsume.push(res.data[i].totaloilconsume);
+      }
       this.drawLine();
     },
-
+    dialogOpenHandle() {
+      this.dialogTableVisible = true;
+      this.initCharts();
+    },
     /*
      ** 初始化 echert
      */
-    initCharts(
-      gpstime = [],
-      curmiles = [],
-      curoilconsume = [],
-      speed = [],
-      totaloilconsume = []
-    ) {
+    initCharts() {
       let colors = ["#5793f3", "#d14a61", "#675bba"];
       let myChart = this.$echarts.init(this.$refs.chart);
+      console.log(myChart);
       let option = {
         title: {
           text: "油耗统计",
@@ -405,7 +444,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: gpstime
+          data: this.gpstime
         },
         yAxis: {
           type: "value"
@@ -415,25 +454,25 @@ export default {
             name: "总油耗",
             type: "line",
             stack: "总量",
-            data: totaloilconsume
+            data: this.totaloilconsume
           },
           {
             name: "油耗",
             type: "line",
             stack: "总量",
-            data: curoilconsume
+            data: this.curoilconsume
           },
           {
             name: "里程",
             type: "line",
             stack: "总量",
-            data: curmiles
+            data: this.curmiles
           },
           {
             name: "速度",
             type: "line",
             stack: "总量",
-            data: speed
+            data: this.speed
           }
         ]
       };
@@ -441,6 +480,9 @@ export default {
       window.onresize = function() {
         myChart.resize();
       };
+    },
+    closedialog(e) {
+      this.dialogTableVisible = false;
     }
   }
 };
