@@ -58,112 +58,6 @@
   </el-row>
 </template>
 
-<style lang="less" scoped>
-.xxx {
-  font-size: 30px;
-  color: red;
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  cursor: pointer;
-}
-.echarts_style {
-  width: 80vw;
-  height: 500px;
-  position: absolute;
-  z-index: 100;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  margin: auto;
-  background: #fff;
-  // border: 1px solid black;
-  padding: 50px 24px 15px 24px;
-  box-shadow: 0 0 10px #888888;
-  border-radius: 5px;
-  text-align: right;
-}
-#hismap {
-  height: 93vh;
-}
-.input-card {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border-radius: 0.25rem;
-  width: 22rem;
-  border-width: 0;
-  border-radius: 0.4rem;
-  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, 0.5);
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  padding: 0.75rem 1.25rem;
-  h4 {
-    font-family: inherit;
-    line-height: 1.8;
-    font-weight: 300;
-    color: inherit;
-    font-size: 1.1rem;
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-  }
-  .input-item {
-    position: relative;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -ms-flex-align: center;
-    align-items: center;
-    width: 100%;
-    height: 3rem;
-  }
-  .btn {
-    margin-right: 1.2rem;
-    width: 9rem;
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-      border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    background-color: transparent;
-    background-image: none;
-    color: #25a5f7;
-    border-color: #25a5f7;
-    padding: 0.25rem 0.5rem;
-    line-height: 1.5;
-    border-radius: 1rem;
-    -webkit-appearance: button;
-    cursor: pointer;
-  }
-  .btn:last-child {
-    margin-right: 0;
-  }
-}
-
-.is-selected {
-  color: #1989fa;
-}
-.calendar_style {
-  width: 100%;
-  height: 100%;
-}
-</style>
-
 <script>
 import { equiSelect, history } from "@/getData";
 export default {
@@ -291,13 +185,18 @@ export default {
           lnglat.lng == this.hisData[i].longitude
         ) {
           this.carWindow.setContent(
-            "车牌:" + this.hisData[i].platenum +
-            "<br>"+
-            "油位:" + this.hisData[i].curoilpos +
-            "<br>"+
-            "里程:" + this.hisData[i].totalmiles.toFixed(2) +
-            "<br>"+
-            "速度:" + this.hisData[i].speed.toFixed(2) + "km/h"
+            "车牌:" +
+              this.hisData[i].platenum +
+              "<br>" +
+              "油位:" +
+              this.hisData[i].curoilpos +
+              "<br>" +
+              "里程:" +
+              this.hisData[i].totalmiles.toFixed(2) +
+              "<br>" +
+              "速度:" +
+              this.hisData[i].speed.toFixed(2) +
+              "km/h"
           );
           return;
         }
@@ -487,3 +386,111 @@ export default {
   }
 };
 </script>
+
+
+
+<style lang="less" scoped>
+.xxx {
+  font-size: 30px;
+  color: red;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
+.echarts_style {
+  width: 80vw;
+  height: 500px;
+  position: absolute;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  background: #fff;
+  // border: 1px solid black;
+  padding: 50px 24px 15px 24px;
+  box-shadow: 0 0 10px #888888;
+  border-radius: 5px;
+  text-align: right;
+}
+#hismap {
+  height: 93vh;
+}
+.input-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border-radius: 0.25rem;
+  width: 22rem;
+  border-width: 0;
+  border-radius: 0.4rem;
+  box-shadow: 0 2px 6px 0 rgba(114, 124, 245, 0.5);
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 0.75rem 1.25rem;
+  h4 {
+    font-family: inherit;
+    line-height: 1.8;
+    font-weight: 300;
+    color: inherit;
+    font-size: 1.1rem;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+  .input-item {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+  }
+  .btn {
+    margin-right: 1.2rem;
+    width: 9rem;
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background-color: transparent;
+    background-image: none;
+    color: #25a5f7;
+    border-color: #25a5f7;
+    padding: 0.25rem 0.5rem;
+    line-height: 1.5;
+    border-radius: 1rem;
+    -webkit-appearance: button;
+    cursor: pointer;
+  }
+  .btn:last-child {
+    margin-right: 0;
+  }
+}
+
+.is-selected {
+  color: #1989fa;
+}
+.calendar_style {
+  width: 100%;
+  height: 100%;
+}
+</style>
