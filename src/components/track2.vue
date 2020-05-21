@@ -42,16 +42,16 @@
       <div class="input-card">
         <h4>轨迹回放控制</h4>
         <div class="input-item">
-          <input type="button" class="btn" value="加速" id="start" @click="startAdd()" />
-          <input type="button" class="btn" value="减速" id=" speed" @click="startRed()" />
-        </div>
-        <div class="input-item">
           <input type="button" class="btn" value="开始动画" id="start" @click="startAnimation()" />
           <input type="button" class="btn" value="显示信息" id=" speed" @click="showInfo()" />
         </div>
         <div class="input-item">
           <input type="button" class="btn" value="暂停动画" id="pause" @click="pauseAnimation()" />
           <input type="button" class="btn" value="继续动画" id="resume" @click="resumeAnimation()" />
+        </div>
+        <div class="input-item">
+          <input type="button" class="btn" value="加速" id="start" @click="startAdd()" />
+          <input type="button" class="btn" value="减速" id=" speed" @click="startRed()" />
         </div>
       </div>
     </el-col>
@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       marker: {},
+      hisData:[],//回放位置数组
       map: {},
       firstArr: [116.478935, 39.997761],
       polyline: {}, //最原始
@@ -224,13 +225,17 @@ export default {
       this.marker.moveAlong(this.lineArr, this.markerSpeed);
       // console.log(this.lineArr)
       // console.log(this.newLineArr)
-      // if (this.lineArr.length < this.newLineArr.length) {
-      //   this.lineArr = this.newLineArr; //搞一个和之前数组一样的代码
-      //   this.initroad();
-      //   this.marker.moveAlong(this.lineArr, this.markerSpeed);
-      // } else {
-      //   this.marker.moveAlong(this.lineArr, this.markerSpeed);
-      // }
+
+      if (this.lineArr.length < this.hisData.length) {
+        this.lineArr=[];
+        this.hisData.map(val => {
+          this.lineArr.push(new AMap.LngLat(val.longitude, val.latitude));
+        }); //搞一个和之前数组一样的代码
+        this.initroad();
+        this.marker.moveAlong(this.lineArr, this.markerSpeed);
+      } else {
+        this.marker.moveAlong(this.lineArr, this.markerSpeed);
+      }
     },
     //加速
     startAdd() {
