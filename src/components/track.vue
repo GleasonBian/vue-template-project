@@ -61,7 +61,7 @@
 <script>
 import { equiSelect, history } from "@/getData";
 export default {
-  name: "amap-page",
+  name: "historyTrack",
   data() {
     return {
       marker: null, //车
@@ -386,8 +386,6 @@ export default {
   }
 };
 </script>
-
-
 
 <style lang="less" scoped>
 .xxx {
