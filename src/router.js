@@ -62,7 +62,7 @@ const router = new Router({
         {
           path: "/track/:id",
           name: "track",
-          component: resolve => require(["@/components/track"], resolve),
+          component: resolve => require(["@/components/track2"], resolve),
           meta: {
             crumbs: ["监控平台", "历史轨迹"],
             title: "历史轨迹",
