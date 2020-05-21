@@ -153,12 +153,16 @@ export default {
       // 信息框随车辆移动
       AMap.event.addListener(this.marker, "moving", function(e) {
         var lastLocation = e.passedPath[e.passedPath.length - 1];
+        // console.log(e.passedPath)
         that.carWindow.setPosition(lastLocation);
         that.setInfoContent(lastLocation);
       });
       this.carWindow.open(this.map, this.marker.getPosition());
       this.map.setFitView();
       this.map.setFitView(); //合适的视口
+      // lat: 40.141823
+// lng: 116.703428
+
     },
     drawLine() {
       let that = this;
@@ -190,8 +194,8 @@ export default {
     setInfoContent(lnglat) {
       for (var i = 0; i < this.hisData.length; i++) {
         if (
-          lnglat.lat == this.hisData[i].latitude &&
-          lnglat.lng == this.hisData[i].longitude
+          lnglat.lat == this.hisData[i].latitude.toFixed(6) &&
+          lnglat.lng == this.hisData[i].longitude.toFixed(6)
         ) {
           this.carWindow.setContent(
             "车牌:" +
