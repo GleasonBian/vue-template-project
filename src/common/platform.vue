@@ -1,5 +1,12 @@
 <template>
   <div class="manage_page fillcontain">
+    <el-dialog title="告警信息" :visible.sync="dialogVisible" width="25%" :before-close="handleClose">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">忽 略</el-button>
+        <el-button type="primary" @click="handleAlarmInfo">处 理</el-button>
+      </span>
+    </el-dialog>
     <el-row class="menu-row-style">
       <el-menu
         :default-active="defaultActive"
@@ -138,7 +145,8 @@ export default {
       isCollapse: false,
       /*************************************************** */
       flags1: false,
-      username: sessionStorage.getItem("username")
+      username: sessionStorage.getItem("username"),
+      dialogVisible: false
     };
   },
   watch: {
@@ -161,7 +169,7 @@ export default {
         // const response = await signout();
         this.$message.success("退出登录成功!");
       }
-    }
+    },
     // async getUserPermission() {
     //   const res = await getUserPermission({
     //     systemCode: "wxsupplier"
@@ -173,6 +181,18 @@ export default {
     //     }
     //   }
     // }
+    handleClose(done) {
+      console.log(done);
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          this.dialogVisible = false;
+        })
+        .catch(_ => {});
+    },
+    handleAlarmInfo() {
+      this.$router.push({ path: "/platform/Alarm" });
+      this.dialogVisible = false;
+    }
   },
   computed: {
     defaultActive: function() {

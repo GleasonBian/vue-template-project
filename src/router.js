@@ -121,6 +121,16 @@ const router = new Router({
             menu: "090302"
           }
         },
+        {
+          path: "Alarm",
+          component: resolve => require(["@/components/alarm"], resolve),
+          meta: {
+            crumbs: ["告警", "告警信息"],
+            title: "告警信息",
+            index: 5,
+            menu: "090302"
+          }
+        },
       ]
     },
     {

@@ -10,23 +10,9 @@
         ref="singleTable"
         border
       >
-        <el-table-column
-          type="index"
-          label="序号"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="name"
-          label="名称"
-          width="90"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          prop="plateno"
-          label="号码"
-          width="120"
-          align="center"
-        ></el-table-column>
+        <el-table-column type="index" label="序号" align="center"></el-table-column>
+        <el-table-column prop="name" label="名称" width="90" align="center"></el-table-column>
+        <el-table-column prop="plateno" label="号码" width="120" align="center"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
             <div class="carStatus">
@@ -45,12 +31,7 @@
     </el-col>
     <el-col align="middle" :span="19">
       <!-- 搜索框 -->
-      <gt-search
-        :data="searchData"
-        @handle="searchHandle"
-        size
-        style="margin-bottom:24px;"
-      ></gt-search>
+      <gt-search :data="searchData" @handle="searchHandle" size style="margin-bottom:24px;"></gt-search>
       <!-- 列表 -->
       <div style="width:100%; height:350px;" ref="chart"></div>
       <gt-table
@@ -277,6 +258,8 @@ export default {
           res.data[i].oilleft = res.data[i].oilleft.toFixed(2);
           res.data[i].curoilconsume = res.data[i].curoilconsume.toFixed(2);
           res.data[i].totaloilconsume = res.data[i].totaloilconsume.toFixed(2);
+          res.data[i].curmiles = res.data[i].curmiles.toFixed(2);
+          res.data[i].speed = res.data[i].speed.toFixed(2);
           gpstime.push(res.data[i].gpstime);
           curmiles.push(res.data[i].curmiles);
           curoilconsume.push(res.data[i].curoilconsume);

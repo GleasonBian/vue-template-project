@@ -62,11 +62,11 @@
 <script>
 import { equiSelect, history } from "@/getData";
 export default {
-  name: "amap-page",
+  name: "historyTrack2",
   data() {
     return {
       marker: {},
-      hisData:[],//回放位置数组
+      hisData: [], //回放位置数组
       map: {},
       firstArr: [116.478935, 39.997761],
       polyline: {}, //最原始
@@ -153,16 +153,12 @@ export default {
       // 信息框随车辆移动
       AMap.event.addListener(this.marker, "moving", function(e) {
         var lastLocation = e.passedPath[e.passedPath.length - 1];
-        // console.log(e.passedPath)
         that.carWindow.setPosition(lastLocation);
         that.setInfoContent(lastLocation);
       });
       this.carWindow.open(this.map, this.marker.getPosition());
       this.map.setFitView();
       this.map.setFitView(); //合适的视口
-      // lat: 40.141823
-// lng: 116.703428
-
     },
     drawLine() {
       let that = this;
@@ -194,8 +190,8 @@ export default {
     setInfoContent(lnglat) {
       for (var i = 0; i < this.hisData.length; i++) {
         if (
-          lnglat.lat == this.hisData[i].latitude.toFixed(6) &&
-          lnglat.lng == this.hisData[i].longitude.toFixed(6)
+          lnglat.lat == this.hisData[i].latitude &&
+          lnglat.lng == this.hisData[i].longitude
         ) {
           this.carWindow.setContent(
             "车牌:" +
@@ -231,7 +227,7 @@ export default {
       // console.log(this.newLineArr)
 
       if (this.lineArr.length < this.hisData.length) {
-        this.lineArr=[];
+        this.lineArr = [];
         this.hisData.map(val => {
           this.lineArr.push(new AMap.LngLat(val.longitude, val.latitude));
         }); //搞一个和之前数组一样的代码
@@ -382,8 +378,7 @@ export default {
       } else {
         res = await history({ param: { id: this.eqid } });
       }
-      this.hisData = res.data; //
-
+      this.hisData = res.data;
       for (var i in res.data) {
         this.gpstime.push(res.data[i].gpstime);
         this.curmiles.push(res.data[i].curmiles);
