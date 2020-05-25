@@ -350,26 +350,38 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          if (this.formCurrentStatus === "创建") this.submitAddUser();
-          else if (this.formCurrentStatus === "更新") this.updateCorp();
-          else if (this.formCurrentStatus === "查看") this.viewCorp();
+          if (this.guid) {
+            //编辑
+            this.updateCorp();
+          } else {
+            //新增
+            this.submitAddUser();
+          }
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
         }
       });
     },
-
+    /*
+     ** 更新公司
+     */
+    async updateCorp() {
+      const res = await corpUpdate(this.form);
+      if (res.status === 200) {
+        this.$message.success("更新成功");
+        this.$router.replace({ path: "companyList" });
+      } else this.$message.warning("更新失败,稍后重试");
+    },
     /*
      ** 创建公司
      */
-    async submitAddUser(info) {
+    async submitAddUser() {
       const res = await corperation(this.form);
       if (res.status === 200) {
-        this.getData();
         this.$message.success("公司创建成功");
+        this.$router.replace({ path: "companyList" });
       } else this.$message.warning("公司创建失败");
-      this.dialogFormVisible = false;
     },
 
     /*

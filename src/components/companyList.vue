@@ -8,7 +8,16 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%">
-      <el-button type="primary" size="medium" @click="newComp" style="margin-left:1%">新增</el-button>
+      <el-button
+        type="primary"
+        size="medium"
+        @click="
+          dialogFormVisible = true;
+          formCurrentStatus = '创建';
+        "
+        style="margin-left:1%"
+        >新增</el-button
+      >
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -22,6 +31,7 @@
         :selection="false"
         v-on:viewCorp="viewCorp"
         v-on:deleteCorp="deleteCorp"
+        v-on:updatePretreatment="updatePretreatment"
         :handle="handle"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
@@ -35,6 +45,91 @@
         :total="total"
       ></el-pagination>
     </el-col>
+
+    <!-- 新增 查看 更新 -->
+    <el-dialog
+      :title="formCurrentStatus + '公司'"
+      :visible.sync="dialogFormVisible"
+      width="25%"
+      @close="handleDialogClose('form')"
+      :close-on-click-modal="false"
+      top="0vh"
+      center
+    >
+      <el-form
+        :model="form"
+        status-icon
+        :rules="rules"
+        ref="form"
+        label-width="80px"
+        style="width:100%"
+      >
+        <el-form-item label="公司名称" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="公司编码" prop="code">
+          <el-input v-model="form.code"></el-input>
+        </el-form-item>
+        <el-form-item label="公司电话" prop="tel">
+          <el-input v-model="form.tel"></el-input>
+        </el-form-item>
+        <el-form-item label="公司邮箱" prop="email">
+          <el-input v-model="form.email"></el-input>
+        </el-form-item>
+        <el-form-item label="公司地址" prop="location">
+          <el-input v-model="form.location"></el-input>
+        </el-form-item>
+        <el-form-item label="所属行业" prop="corpclass">
+          <el-input v-model="form.corpclass"></el-input>
+        </el-form-item>
+        <el-form-item label="公司类型" prop="corptype">
+          <el-input v-model="form.corptype"></el-input>
+        </el-form-item>
+        <el-form-item label="证件类型" prop="certtype">
+          <el-input v-model="form.certtype"></el-input>
+        </el-form-item>
+        <el-form-item label="机构代码" prop="certguid">
+          <el-input v-model="form.certguid"></el-input>
+        </el-form-item>
+        <!-- <el-form-item label="上级标识" prop="superior">
+          <el-input v-model="form.superior"></el-input>
+        </el-form-item>-->
+        <el-form-item label="公司税号" prop="taxcode">
+          <el-input v-model="form.taxcode"></el-input>
+        </el-form-item>
+        <el-form-item label="公司备注" prop="description">
+          <el-input v-model="form.description"></el-input>
+        </el-form-item>
+        <el-form-item label="公司简介" prop="briefabout">
+          <el-input v-model="form.briefabout"></el-input>
+        </el-form-item>
+        <el-form-item label="公司级别" prop="corprank">
+          <el-select
+            v-model="form.corprank"
+            placeholder="请选择"
+            style="width:100%"
+          >
+            <el-option label="一级" value="一级"></el-option>
+            <el-option label="二级" value="二级"></el-option>
+            <el-option label="三级" value="三级"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="注册日期" prop="regdate">
+          <el-date-picker
+            v-model="form.regdate"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd hh:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('form')">提交</el-button>
+        <el-button @click="resetForm('form')">重置</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -109,7 +204,13 @@ export default {
       handle: [
         {
           function: "viewCorp",
-          text: "查看/编辑",
+          text: "查看",
+          type: "text",
+          show: true
+        },
+        {
+          function: "updatePretreatment",
+          text: "更新",
           type: "text",
           show: true
         },
@@ -343,15 +444,28 @@ export default {
     this.getData();
   },
   methods: {
-    newComp() {
-      this.$router.push({ path: "companyDetail" });
-    },
     /**
      ** 公司查询
      */
     async getData(val) {
       const res = await corpSelect();
       this.tableData = res.data;
+    },
+
+    /*
+     ** 新增 用户 form 表单 验证
+     */
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.formCurrentStatus === "创建") this.submitAddUser();
+          else if (this.formCurrentStatus === "更新") this.updateCorp();
+          else if (this.formCurrentStatus === "查看") this.viewCorp();
+        } else {
+          this.$message.error("请正确填写红框内容");
+          return false;
+        }
+      });
     },
 
     /*
@@ -370,7 +484,35 @@ export default {
      ** 查看公司
      */
     async viewCorp(index, row) {
-      this.$router.push({ path: "companyDetail", query: { id: row.guid } });
+      console.log(row);
+      this.formCurrentStatus = "查看";
+      const response = await corpDtails({
+        id: row.guid
+      });
+      if (response.status === 200) {
+        this.form = response.data[0];
+        this.dialogFormVisible = true;
+      } else this.$message.warning("请稍后再尝试");
+    },
+
+    /*
+     ** 更新预处理
+     */
+    async updatePretreatment(index, row) {
+      this.viewCorp(index, row);
+      this.formCurrentStatus = "更新";
+    },
+
+    /*
+     ** 更新公司
+     */
+    async updateCorp(index, row) {
+      const res = await corpUpdate(this.form);
+      if (res.status === 200) {
+        this.getData();
+        this.$message.success("更新成功");
+      } else this.$message.warning("更新失败,稍后重试");
+      this.dialogFormVisible = false;
     },
 
     /*
@@ -394,6 +536,21 @@ export default {
         })
         .catch(err => {});
     },
+
+    /*
+     ** 创建公司 form 表单 重置
+     */
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+
+    /*
+     ** 关闭 创建公司  dialog
+     */
+    handleDialogClose(formName) {
+      this.$refs[formName].resetFields();
+    },
+
     /*
      ** 列表 分页
      */
@@ -401,6 +558,14 @@ export default {
       this.limit = val;
       this.$refs.searchBox.internalUser(this.limit, this.offset);
     },
+
+    /*
+     *关闭编辑状态
+     */
+    handleisShowViewUser() {
+      this.isEditor = true;
+    },
+
     /*
      ** 列表 分页
      */
