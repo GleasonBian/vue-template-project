@@ -1,12 +1,5 @@
 <template>
   <div class="manage_page fillcontain">
-    <el-dialog title="告警信息" :visible.sync="dialogVisible" width="25%" :before-close="handleClose">
-      <span>这是一段信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="handleClose">忽 略</el-button>
-        <el-button type="primary" @click="handleAlarmInfo">处 理</el-button>
-      </span>
-    </el-dialog>
     <el-row class="menu-row-style">
       <el-menu
         :default-active="defaultActive"
@@ -146,7 +139,28 @@ export default {
       /*************************************************** */
       flags1: false,
       username: sessionStorage.getItem("username"),
-      dialogVisible: false
+      dialogVisible: false,
+      alarmInfo: {
+        ID: 26596,
+        CreatedAt: "2020-05-22T13:19:34.7506121+08:00",
+        UpdatedAt: "2020-05-22T13:19:34.7506121+08:00",
+        DeletedAt: null,
+        guid: "296fcfc8-cb0f-47aa-a262-ec4028cec4e4",
+        name: "SUV01",
+        alarm_name: "SUV01超速报警",
+        class_type: "超速报警",
+        class_rank: "普通",
+        threshold: 0,
+        actual_value: 16,
+        occur_time: "2020-05-22 13:19:34",
+        duty_guid: "",
+        duty_name: "",
+        handler_guid: "",
+        handler_name: "",
+        handle_time: "",
+        handle_result: "",
+        remark: ""
+      }
     };
   },
   watch: {
@@ -155,6 +169,7 @@ export default {
   created() {
     // this.getUserPermission();
     // this.getPageElement();
+    this.initWebSocket();
   },
   methods: {
     async handleCommand(command) {
@@ -192,6 +207,62 @@ export default {
     handleAlarmInfo() {
       this.$router.push({ path: "/platform/Alarm" });
       this.dialogVisible = false;
+    },
+    initWebSocket() {
+      //初始化weosocket
+      const wsuri = process.env.VUE_APP_SOCKET;
+      // 建立连接
+      this.websock = new WebSocket("ws://119.254.7.117:8090/ws/warning");
+      this.websock.onmessage = this.websocketonmessage;
+      this.websock.onopen = this.websocketonopen;
+      this.websock.onerror = this.websocketonerror;
+      this.websock.onclose = this.websocketclose;
+    },
+    websocketonmessage(event) {
+      console.log(event.data);
+      //数据接收
+      if (event.data instanceof Blob) {
+        let reader = new FileReader();
+        let that = this;
+        reader.onload = () => {
+          if (reader.result == "Hello WebSockets!") return;
+          let data = reader.result;
+          data = eval("(" + data + ")");
+          console.log(data);
+          // this.$notify({
+          //   title: data.class_type,
+          //   dangerouslyUseHTMLString: true,
+          //   type: "warning",
+          //   message: `<strong>
+          //       <p>
+          //         <h1>${data.plate_no}</h1>
+          //         <h2>${data.alarm_name}</h2>
+          //       </p>
+          //       <p>
+          //         <el-button @click="handleAlarmInfo"></el-button>
+          //       </p>
+          //   </strong>`
+          // });
+        };
+      } else {
+        console.log("Result2: " + event.data);
+      }
+    },
+    websocketonopen() {
+      //连接建立之后执行send方法发送数据
+      this.websocketsend("Hello WebSockets!");
+    },
+    websocketsend(Data) {
+      //数据发送
+      this.websock.send(Data);
+    },
+    websocketonerror() {
+      //连接建立失败重连
+      this.initWebSocket();
+    },
+    websocketclose(e) {
+      //关闭
+      console.log("断开连接", e);
     }
   },
   computed: {
@@ -274,6 +345,9 @@ export default {
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
   border-bottom: 5px solid #272b2e;
+}
+.alarm_title {
+  color: #e6a23c;
 }
 </style>
 <style>
