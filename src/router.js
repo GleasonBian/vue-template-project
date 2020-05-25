@@ -72,11 +72,21 @@ const router = new Router({
         },
         {
           path: "companyList",
-          component: resolve => require(["@/components/companyList"], resolve),
+          component: resolve => require(["@/components/platform/companyList"], resolve),
           meta: {
             crumbs: ["平台", "公司管理"],
             title: "公司管理",
             index: 11,
+            menu: "090302"
+          }
+        },
+        {
+          path: "companyDetail",
+          component: resolve => require(["@/components/platform/companyDetail"], resolve),
+          meta: {
+            crumbs: ["平台", "公司管理"],
+            title: "公司管理",
+            index: 12,
             menu: "090302"
           }
         },
