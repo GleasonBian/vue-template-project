@@ -204,21 +204,21 @@ const router = new Router({
       component: resolve => require(["@/common/platform"], resolve),
       children: [
         {
-          path: "assignplan",
-          component: resolve => require(["@/components/assignplan"], resolve),
+          path: "assignList",
+          component: resolve => require(["@/components/task/assignList"], resolve),
           meta: {
-            crumbs: ["计划", "调度计划"],
-            title: "调度计划",
+            crumbs: ["作业管理", "调令"],
+            title: "调令",
             index: 7,
             menu: "090302"
           }
         },
         {
-          path: "assigntask",
-          component: resolve => require(["@/components/assigntask"], resolve),
+          path: "assignDetail",
+          component: resolve => require(["@/components/task/assignDetail"], resolve),
           meta: {
-            crumbs: ["调令", "调度任务"],
-            title: "调度任务",
+            crumbs: ["作业管理", "调令"],
+            title: "调令",
             index: 8,
             menu: "090302"
           }

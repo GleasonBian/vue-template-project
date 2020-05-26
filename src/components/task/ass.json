@@ -1,0 +1,30 @@
+调度编号	            string  `json:"guid" gorm:"guid"`
+调度时间 				string  `json:"dispatchtime" gorm:"dispatchtime"`
+车辆名称  	            string  `json:"equip_name" gorm:"equip_name"`
+车辆Guid  	            string  `json:"equip_guid" gorm:"equip_name"`
+车牌号码        	    string  `json:"plate_no" gorm:"plate_no"`
+项目名称            	string  `json:"dept_name" gorm:"dept_name"`
+项目id            	    string  `json:"dept_guid" gorm:"dept_guid"`
+公司名称 	            string `json:"corp_name" gorm:"corp_name"`
+公司guid				 string `json:"corp_guid" gorm:"corp_guid"`
+交班部门                string `json:"deliver_corp" gorm:"deliver_corp"`
+交班部门guid            string `json:"deliver_corp_guid" gorm:"deliver_corp_guid"`
+接班部门                string  `json:"oncoming_corp" gorm:"oncoming_corp"`
+接班部门guid            string `json:"oncoming_corp_guid" gorm:"oncoming_corp_guid"`
+司机名称                string  `json:"driver_name" gorm:"driver_name"`
+司机长名称              string  `json:"headdriver_name" gorm:"headdriver_name"`
+接油                   	float64  `json:"begin_oil" gorm:"begin_oil"`
+接班时间                string   `json:"begin_time" gorm:"begin_time"`
+交油	                float64  `json:"end_oil" gorm:"end_oil"`
+交班时间  	            string   `json:"end_time" gorm:"end_time"`
+累计油耗                float64  `json:"accum_oil" gorm:"accum_oil"`
+累计工作时长            float64  `json:"accum_working" gorm:"accum_working"`
+加油记录   	            float64  `json:"add_oil" gorm:"add_oil"`
+作业项目 WorkItem{
+                 work_name,begin_time,end_time,work_duration,remark
+				 ..................................................}
+检查项目CheckItem{
+					check_name,b_normal,check_result,handle_result,remark
+					..................................................}
+维修保养记录               string  `json:"fix_recode" gorm:"fix_recode"`
+物料消耗记录               string  `json:"consum_recode" gorm:"consum_recode"`

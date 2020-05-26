@@ -69,10 +69,10 @@
           style="width: 200px;text-align: center;"
         >
           <template slot="title">
-            <i class="iconfont i-menu-four" style="font-size:20px"></i>调令
+            <i class="iconfont i-menu-four" style="font-size:20px"></i>作业管理
           </template>
-          <el-menu-item index="/assign/assignplan" style="text-align: center;">调度计划</el-menu-item>
-          <el-menu-item index="/assign/assigntask" style="text-align: center;">调度任务</el-menu-item>
+          <el-menu-item index="/assign/assignList" style="text-align: center;">车辆调度</el-menu-item>
+          <!-- <el-menu-item index="/assign/assigntask" style="text-align: center;">调度任务</el-menu-item> -->
         </el-submenu>
         <el-submenu
           index="2"

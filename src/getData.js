@@ -268,6 +268,10 @@ export const assigndeDelete = data => fetch("assigndetail", data, "delete");
  * 调度任务详情
  */
 export const assigndeDetail = data => fetch("assigndetail", data, "get");
+/**
+ * 新增调度
+ */
+export const assignoffline = data => fetch("assignoffline", data, "put");
 
 /**
  * 调度报表 - 油总核算
