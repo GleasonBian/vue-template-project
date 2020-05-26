@@ -1,24 +1,34 @@
 <template>
-  <div style="padding:12px">
+  <div>
     <!-- 面包屑 -->
     <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
-    <el-card>
-      <el-col align="center">
-        <gt-search :data="searchData" @handle="oilPlans"></gt-search>
-      </el-col>
-      <el-col align="left" style="margin-bottom:1%;margin-top:1%">
-        <router-link to="/plan/oilApply">
-          <el-button type="primary" size="medium" style="margin-left:1%">新增</el-button>
-        </router-link>
-        <el-button type="primary" size="medium" style="margin-left:1%" @click="BatchDeleteUser">导出</el-button>
-      </el-col>
-    </el-card>
-    <el-card style="margin-top:12px">
+    <gt-search :data="searchData" @handle="oilPlans" size></gt-search>
+
+    <!-- 列表操作按钮 -->
+    <el-col align="left" style="margin-bottom:1%">
+      <router-link to="/index">
+        <el-button type="primary" size="medium" style="margin-left:1%">新增</el-button>
+      </router-link>
+
+      <!-- <el-button
+        type="primary"
+        size="medium"
+        @click="
+          dialogFormVisible = true;
+          formCurrentStatus = '创建';
+        "
+        style="margin-left:1%"
+      >新增</el-button>-->
+      <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
+    </el-col>
+
+    <!-- 内部用户列表 -->
+    <el-col align="middle">
       <gt-table
         :tableData="tableData"
-        style="width: 100%"
+        style="width: 98%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
@@ -29,7 +39,6 @@
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
-        style="margin:12px 0px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="offset"
@@ -38,7 +47,115 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
-    </el-card>
+    </el-col>
+
+    <!-- check tasks -->
+    <el-dialog
+      :title="'任务列表'"
+      :visible.sync="taskDial"
+      width="75%"
+      :close-on-click-modal="false"
+      top="0vh"
+      center
+    >
+      <div style="text-align:center">
+        <gt-table
+          :tableData="t_tableData"
+          style="width: 100%"
+          :optionWidth="optionWidth"
+          :columns="t_columns"
+          :selection="false"
+        ></gt-table>
+      </div>
+    </el-dialog>
+
+    <!-- 新增 查看 更新 -->
+    <el-dialog
+      :title="formCurrentStatus + '计划'"
+      :visible.sync="dialogFormVisible"
+      width="25%"
+      @close="ResetForm('form')"
+      :close-on-click-modal="false"
+      top="0vh"
+      center
+    >
+      <el-form
+        :model="form"
+        status-icon
+        :rules="rules"
+        ref="form"
+        label-width="80px"
+        style="width:100%"
+      >
+        <el-form-item label="所属公司" prop="corpguid">
+          <el-select
+            v-model="form.corpguid"
+            placeholder="请选择"
+            @change="resetDept(form.corpguid)"
+            style="width:100%"
+          >
+            <el-option
+              v-for="item in corpData"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item v-if="form.corpguid" label="所属部门" prop="deptguid">
+          <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptData"
+              track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="人员" prop="staffid">
+          <el-select v-model="form.staffid" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in staffData"
+              track-by="item.guid"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="分类等级" prop="clsrank">
+          <el-select v-model="form.clsrank" placeholder="请选择" style="width:100%">
+            <el-option label="一级" value="一级"></el-option>
+            <el-option label="二级" value="二级"></el-option>
+            <el-option label="三级" value="三级"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="分类类型" prop="clstype">
+          <el-input v-model="form.clstype" placeholder="请选择"></el-input>
+        </el-form-item>
+
+        <el-form-item label="分类类别" prop="class">
+          <el-input v-model="form.class" placeholder="请选择"></el-input>
+        </el-form-item>
+
+        <el-form-item label="计划名称" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="计划编码" prop="code">
+          <el-input v-model="form.code"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('form')">提交</el-button>
+        <el-button @click="ResetForm('form')">重置</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -57,7 +174,7 @@ import {
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
-  name: "oilPlan",
+  name: "createCorperation",
   data() {
     return {
       staffData: [],
@@ -84,32 +201,28 @@ export default {
       ],
       columns: [
         {
-          id: "number",
-          label: "加油申请单号"
-        },
-        {
-          id: "urgent",
-          label: "是否加急"
-        },
-        {
           id: "name",
-          label: "项目名称"
+          label: "计划名称"
         },
         {
-          id: "quantity",
-          label: "加油数量"
+          id: "clstype",
+          label: "分类类型"
         },
         {
-          id: "amount",
-          label: "加油金额"
+          id: "class",
+          label: "分类类别"
         },
         {
-          id: "apply_dept",
-          label: "申请部门"
+          id: "clsrank",
+          label: "分类等级"
         },
         {
-          id: "apply_state",
-          label: "申请状态"
+          id: "corpname",
+          label: "所属公司"
+        },
+        {
+          id: "deptname",
+          label: "所属部门"
         }
       ],
       t_columns: [
@@ -174,24 +287,7 @@ export default {
         // 搜索框 数据
         {
           key: "id", // 与后端交互时的字段 必填
-          label: "申请单号", // 搜索框名称 必填
-          placeholder: "请搜索", // 占位符 选填
-          default: "0", // 搜索框 默认值
-          options: [
-            {
-              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
-              value: "1", // 下拉选项 绑定 值
-              label: "男" // 下拉选项 绑定 名称
-            },
-            {
-              value: "0",
-              label: "女"
-            }
-          ]
-        },
-        {
-          key: "id", // 与后端交互时的字段 必填
-          label: "项目名称", // 搜索框名称 必填
+          label: "搜索框1", // 搜索框名称 必填
           placeholder: "请搜索", // 占位符 选填
           default: "0", // 搜索框 默认值
           options: [
@@ -210,6 +306,30 @@ export default {
           key: "date",
           label: "搜索框2",
           placeholder: "",
+          default: ""
+        },
+        {
+          key: "age",
+          label: "搜索框3",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "ccc",
+          label: "搜索框4",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "asdafs",
+          label: "搜索框5",
+          placeholder: "请搜索",
+          default: ""
+        },
+        {
+          key: "adgdd",
+          label: "搜索框6",
+          placeholder: "请搜索",
           default: ""
         }
       ],

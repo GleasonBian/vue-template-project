@@ -188,6 +188,16 @@ const router = new Router({
           }
         },
         {
+          path: "oilapply",
+          component: resolve => require(["@/components/oilApply"], resolve),
+          meta: {
+            crumbs: ["作业管理", "加油申请"],
+            title: "加油申请",
+            index: 9,
+            menu: "090302"
+          }
+        },
+        {
           path: "oiltask",
           component: resolve => require(["@/components/oiltask"], resolve),
           meta: {

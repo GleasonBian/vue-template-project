@@ -8,21 +8,24 @@
         </div>
         <el-form :inline="true" label-position="right" label-width="80px" :model="alarm">
           <el-form-item label="告警类型">
-            <el-input v-model="alarm.name" :readonly="true"></el-input>
+            <el-input v-model="alarm.class_type" :readonly="true"></el-input>
+          </el-form-item>
+          <el-form-item label="告警等级">
+            <el-input v-model="alarm.class_rank" :readonly="true"></el-input>
           </el-form-item>
           <el-form-item label="告警编号">
-            <el-input v-model="alarm.name" :readonly="true"></el-input>
+            <el-input v-model="alarm.ID" :readonly="true"></el-input>
           </el-form-item>
           <el-form-item label="告警时间">
-            <el-input v-model="alarm.region" :readonly="true"></el-input>
+            <el-input v-model="alarm.occur_time" :readonly="true"></el-input>
           </el-form-item>
         </el-form>
         <el-form label-position="right" label-width="80px" :model="alarm">
           <el-form-item label="告警位置">
-            <el-input v-model="alarm.region" :readonly="true"></el-input>
+            <el-input v-model="alarm.address " :readonly="true"></el-input>
           </el-form-item>
           <el-form-item label="告警描述">
-            <el-input type="textarea" :rows="4" v-model="alarm.region" :readonly="true"></el-input>
+            <el-input type="textarea" :rows="4" v-model="alarm.remark" :readonly="true"></el-input>
           </el-form-item>
         </el-form>
       </el-card>
@@ -32,21 +35,21 @@
             <span>车辆信息</span>
             <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
           </div>
-          <el-form label-position="right" label-width="80px" :model="vehicle">
+          <el-form label-position="right" label-width="80px" :model="alarm">
             <el-form-item label="车辆名称">
-              <el-input v-model="vehicle.type" :readonly="true"></el-input>
+              <el-input v-model="alarm.name" :readonly="true"></el-input>
             </el-form-item>
             <el-form-item label="车牌号码">
-              <el-input v-model="vehicle.type" :readonly="true"></el-input>
+              <el-input v-model="alarm.plat_no" :readonly="true"></el-input>
             </el-form-item>
             <el-form-item label="司机名称">
-              <el-input v-model="vehicle.type" :readonly="true"></el-input>
+              <el-input v-model="alarm.type" :readonly="true"></el-input>
             </el-form-item>
             <el-form-item label="项目名称">
-              <el-input v-model="vehicle.type" :readonly="true"></el-input>
+              <el-input v-model="alarm.type" :readonly="true"></el-input>
             </el-form-item>
             <el-form-item label="所属部门">
-              <el-input v-model="vehicle.type" :readonly="true"></el-input>
+              <el-input v-model="alarm.type" :readonly="true"></el-input>
             </el-form-item>
           </el-form>
         </el-card>
@@ -55,15 +58,18 @@
             <span>油耗信息</span>
             <!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
           </div>
-          <el-form label-position="right" label-width="80px" :model="fuelcons">
+          <el-form label-position="right" label-width="80px" :model="alarm">
+            <el-form-item label="当前阀值">
+              <el-input v-model="alarm.threshold" :readonly="true"></el-input>
+            </el-form-item>
             <el-form-item label="当前油量">
-              <el-input v-model="fuelcons.type" :readonly="true"></el-input>
+              <el-input v-model="alarm.actual_value" :readonly="true"></el-input>
             </el-form-item>
             <el-form-item label="当前里程">
-              <el-input v-model="fuelcons.type" :readonly="true"></el-input>
+              <el-input v-model="alarm.Threshold" :readonly="true"></el-input>
             </el-form-item>
             <el-form-item label="当前速度">
-              <el-input v-model="fuelcons.type" :readonly="true"></el-input>
+              <el-input v-model="alarm.ActualValue" :readonly="true"></el-input>
             </el-form-item>
           </el-form>
         </el-card>
@@ -73,33 +79,33 @@
       <div slot="header" class="clearfix">
         <span>处理信息</span>
       </div>
-      <el-form label-position="right" label-width="80px" :model="handle">
-        <el-form-item label="处理人">
-          <el-input v-model="handle.name"></el-input>
+      <el-form
+        label-position="right"
+        label-width="80px"
+        :model="handle"
+        :rules="rules"
+        ref="handle"
+      >
+        <el-form-item label="处理人" prop="handle_name">
+          <el-input v-model="handle.handle_name"></el-input>
         </el-form-item>
-        <el-form-item label="处理时间">
-          <el-col :span="11">
-            <el-date-picker
-              type="date"
-              placeholder="选择日期"
-              v-model="handle.date1"
-              style="width: 100%;"
-            ></el-date-picker>
-          </el-col>
-          <el-col class="line" :span="2" align="center">--</el-col>
-          <el-col :span="11">
-            <el-time-picker placeholder="选择时间" v-model="handle.date2" style="width: 100%;"></el-time-picker>
-          </el-col>
+        <el-form-item label="处理时间" prop="handle_time">
+          <el-date-picker
+            v-model="handle.handle_time"
+            type="datetime"
+            placeholder="选择日期时间"
+            value-format="yyyy-MM-dd hh:mm:ss"
+          ></el-date-picker>
         </el-form-item>
-        <el-form-item label="处理结果">
-          <el-radio-group v-model="handle.result">
-            <el-radio border label="误报"></el-radio>
-            <el-radio border label="已处理"></el-radio>
-            <el-radio border label="向上汇报"></el-radio>
+        <el-form-item label="处理结果" prop="handle_result">
+          <el-radio-group v-model="handle.handle_result">
+            <el-radio border label="误报" value="误报"></el-radio>
+            <el-radio border label="已处理" value="已处理"></el-radio>
+            <el-radio border label="向上汇报" value="向上汇报"></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="处理说明">
-          <el-input type="textarea" :rows="4" v-model="handle.explain"></el-input>
+        <el-form-item label="处理说明" prop="handle_explain">
+          <el-input type="textarea" :rows="4" v-model="handle.handle_explain"></el-input>
         </el-form-item>
         <!-- <el-form-item label="现场图片">
           <el-input v-model="formLabelAlign.type"></el-input>
@@ -113,30 +119,91 @@
   </div>
 </template>
 <script>
-import { delRole } from "@/getData";
+import { alarm, alarmHandle } from "@/getData";
 export default {
   name: "alarm",
   data() {
     return {
-      alarm: {}, // 告警信息
-      vehicle: {}, // 车辆信息
-      fuelcons: {}, // 油耗信息
+      alarm: {},
       handle: {
-        date: "",
-        time: "",
-        result: "",
-        explain: ""
-      } // 处理信息
+        handle_name: "",
+        handle_time: "",
+        handle_result: "",
+        handle_explain: ""
+      },
+      guid: this.$route.query.id,
+      rules: {
+        handle_name: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        handle_time: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        handle_result: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        handle_explain: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ]
+      }
     };
   },
-  created() {},
+  created() {
+    this.alarmHandle();
+  },
   methods: {
     /*
      ** 告警信息
      */
-    async resetDept(cid) {},
-    submitForm() {},
-    resetForm() {}
+    async alarmHandle() {
+      const res = await alarm({ id: this.guid });
+      this.alarm = res.data;
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.handleinfo();
+        } else {
+          this.$message.error("请正确填写红框内容");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+    async handleinfo() {
+      let data = Object.assign(this.alarm, this.handle);
+      console.log("发送数据:", data);
+      const res = await alarmHandle(data);
+      if (res.data instanceof Object) {
+        this.$message.success("处理成功");
+        this.$router.replace({
+          path: "/dashboard"
+        });
+      }
+    }
+  },
+  watch: {
+    $route(to, from) {
+      console.log(to, from);
+    }
   }
 };
 </script>

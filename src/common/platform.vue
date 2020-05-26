@@ -56,11 +56,11 @@
           style="width: 200px;text-align: center;"
         >
           <template slot="title">
-            <i class="iconfont i-menu-three" style="font-size:20px"></i>计划
+            <i class="iconfont i-menu-three" style="font-size:20px"></i>作业管理
           </template>
           <el-menu-item index="/plan/fixplan" style="text-align: center;">维修计划</el-menu-item>
           <el-menu-item index="/plan/fixtask" style="text-align: center;">维修任务</el-menu-item>
-          <el-menu-item index="/plan/oilplan" style="text-align: center;">加油计划</el-menu-item>
+          <el-menu-item index="/plan/oilplan" style="text-align: center;">车辆加油</el-menu-item>
           <el-menu-item index="/plan/oiltask" style="text-align: center;">加油任务</el-menu-item>
         </el-submenu>
         <el-submenu
@@ -159,7 +159,8 @@ export default {
         handler_name: "",
         handle_time: "",
         handle_result: "",
-        remark: ""
+        remark: "",
+        websock: null
       }
     };
   },
@@ -169,6 +170,9 @@ export default {
   created() {
     // this.getUserPermission();
     // this.getPageElement();
+    // this.initWebSocket();
+  },
+  mounted() {
     this.initWebSocket();
   },
   methods: {
@@ -204,45 +208,65 @@ export default {
         })
         .catch(_ => {});
     },
-    handleAlarmInfo() {
-      this.$router.push({ path: "/platform/Alarm" });
+    handleAlarmInfo(id) {
+      this.$router.push({
+        path: "/platform/Alarm",
+        query: {
+          id: id
+        }
+      });
       this.dialogVisible = false;
     },
     initWebSocket() {
       //初始化weosocket
       const wsuri = process.env.VUE_APP_SOCKET;
       // 建立连接
-      this.websock = new WebSocket("ws://119.254.7.117:8090/ws/warning");
+      this.websock = new WebSocket("ws://192.168.1.150:8090/ws/warning");
       this.websock.onmessage = this.websocketonmessage;
       this.websock.onopen = this.websocketonopen;
       this.websock.onerror = this.websocketonerror;
       this.websock.onclose = this.websocketclose;
     },
     websocketonmessage(event) {
-      console.log(event.data);
       //数据接收
       if (event.data instanceof Blob) {
         let reader = new FileReader();
-        let that = this;
+        reader.readAsText(event.data);
         reader.onload = () => {
-          if (reader.result == "Hello WebSockets!") return;
+          if (reader.result == "ws/warning") return;
           let data = reader.result;
           data = eval("(" + data + ")");
-          console.log(data);
-          // this.$notify({
-          //   title: data.class_type,
-          //   dangerouslyUseHTMLString: true,
-          //   type: "warning",
-          //   message: `<strong>
-          //       <p>
-          //         <h1>${data.plate_no}</h1>
-          //         <h2>${data.alarm_name}</h2>
-          //       </p>
-          //       <p>
-          //         <el-button @click="handleAlarmInfo"></el-button>
-          //       </p>
-          //   </strong>`
-          // });
+          // console.log("解析->", data);
+          const h = this.$createElement;
+          let guid = data.guid;
+          this.$notify({
+            title: data.class_type,
+            type: "warning",
+            position: "top-left",
+            dangerouslyUseHTMLString: true,
+            message: h("div", { class: "message" }, [
+              h("div", { class: "btnList" }, [
+                h("span", null, data.alarm_name),
+                h(
+                  "a",
+                  {
+                    class: "later",
+                    on: {
+                      click: () => {
+                        this.$router.push({
+                          path: "/platform/Alarm",
+                          query: {
+                            id: data.ID
+                          }
+                        });
+                      }
+                    }
+                  },
+                  "处理"
+                )
+              ])
+            ])
+          });
         };
       } else {
         console.log("Result2: " + event.data);
@@ -250,9 +274,10 @@ export default {
     },
     websocketonopen() {
       //连接建立之后执行send方法发送数据
-      this.websocketsend("Hello WebSockets!");
+      this.websocketsend("ws/warning");
     },
     websocketsend(Data) {
+      console.log("Data:", Data);
       //数据发送
       this.websock.send(Data);
     },
@@ -269,6 +294,9 @@ export default {
     defaultActive: function() {
       return this.$route.path;
     }
+  },
+  destroyed() {
+    this.websock.close(); //离开路由之后断开websocket连接
   }
 };
 </script>
@@ -348,6 +376,12 @@ export default {
 }
 .alarm_title {
   color: #e6a23c;
+}
+.later {
+  width: 30px;
+  color: red;
+  margin-left: 5px;
+  cursor: pointer;
 }
 </style>
 <style>

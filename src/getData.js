@@ -311,4 +311,9 @@ export const alarm = data => fetch("alarm", data, "get");
 /**
  * 报警监测 id 传 报警id
  */
+export const alarmHandle = data => fetch("alarm", data, "put");
+
+/**
+ * 报警监测 id 传 报警id
+ */
 export const history = data => fetch("history", data, "get");
