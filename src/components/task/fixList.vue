@@ -57,9 +57,8 @@
 
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%;">
-      <el-button type="primary" style="margin-left:1%" size="medium" @click="newAssign">新增</el-button>
-      <el-button type="primary" size="medium" @click="singleOil">单机油耗核算</el-button>
-      <el-button type="success" size="medium" @click="singleOil">导出</el-button>
+      <el-button type="primary" style="margin-left:1%" size="medium" @click="newFix">新增</el-button>
+      <!-- <el-button type="success" size="medium" @click="singleOil">导出</el-button> -->
       <el-button
         type="primary"
         style="float:right;margin-right:1%"
@@ -114,8 +113,8 @@ export default {
           show: true
         },
         {
-          function: "deleteCorp",
-          text: "删除",
+          function: "newFixTask",
+          text: "新增维修任务",
           type: "text",
           show: true
         }
@@ -194,8 +193,8 @@ export default {
       const res = await equiSelect(this.form);
       this.eqData = res.data;
     },
-    newAssign() {
-      this.$router.push({ path: "assignDetail" });
+    newFix() {
+      this.$router.push({ path: "fixDetail" });
     },
     /**
      ** 调令列表
@@ -209,7 +208,13 @@ export default {
      ** 编辑
      */
     async viewAssign(index, row) {
-      this.$router.push({ path: "assignDetail", query: { id: row.guid } });
+      this.$router.push({ path: "fixDetail", query: { id: row.guid } });
+    },
+    /*
+     ** 新增维修人物
+     */
+    async newFixTask(index, row) {
+      this.$router.push({ path: "fixTask", query: { id: row.guid } });
     },
     /*
      ** 单机油耗核算

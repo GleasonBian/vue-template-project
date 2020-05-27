@@ -284,6 +284,11 @@ export const allCollect = data => fetch("statis", data, "get");
 export const singleCollect = data => fetch("statis", data, "get");
 
 /**
+ * 单机油耗核算
+ */
+export const singleOil = data => fetch("oilreport", data, "get");
+
+/**
  * 登录
  */
 export const login = data => fetch("login", data, "post");

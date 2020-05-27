@@ -62,18 +62,10 @@
           <el-menu-item index="/plan/fixtask" style="text-align: center;">维修任务</el-menu-item>
           <el-menu-item index="/plan/oilplan" style="text-align: center;">车辆加油</el-menu-item>
           <el-menu-item index="/plan/oiltask" style="text-align: center;">加油任务</el-menu-item>
-        </el-submenu>
-        <el-submenu
-          index="4"
-          popper-class="submenu-userManger"
-          style="width: 200px;text-align: center;"
-        >
-          <template slot="title">
-            <i class="iconfont i-menu-four" style="font-size:20px"></i>作业管理
-          </template>
           <el-menu-item index="/assign/assignList" style="text-align: center;">车辆调度</el-menu-item>
-          <!-- <el-menu-item index="/assign/assigntask" style="text-align: center;">调度任务</el-menu-item> -->
+          <el-menu-item index="/plan/fixList" style="text-align: center;">车辆维修</el-menu-item>
         </el-submenu>
+       
         <el-submenu
           index="2"
           popper-class="submenu-userManger"

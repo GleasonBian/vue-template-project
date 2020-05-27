@@ -206,7 +206,37 @@ const router = new Router({
             index: 8,
             menu: "090302"
           }
-        }
+        },
+        {
+          path: "fixList",
+          component: resolve => require(["@/components/task/fixList"], resolve),
+          meta: {
+            crumbs: ["作业管理", "车辆维修"],
+            title: "车辆维修",
+            index: 15,
+            menu: "090302"
+          }
+        },
+        {
+          path: "fixDetail",
+          component: resolve => require(["@/components/task/fixDetail"], resolve),
+          meta: {
+            crumbs: ["作业管理", "车辆维修","维修详情"],
+            title: "维修详情",
+            index: 15,
+            menu: "090302"
+          }
+        },
+        {
+          path: "fixTask",
+          component: resolve => require(["@/components/task/fixTask"], resolve),
+          meta: {
+            crumbs: ["作业管理", "车辆维修","维修任务"],
+            title: "维修任务",
+            index: 15,
+            menu: "090302"
+          }
+        },
       ]
     },
     {
@@ -232,7 +262,17 @@ const router = new Router({
             index: 8,
             menu: "090302"
           }
-        }
+        },
+        {
+          path: "singleOil",
+          component: resolve => require(["@/components/task/singleOil"], resolve),
+          meta: {
+            crumbs: ["作业管理", "单机油耗核算"],
+            title: "单机油耗核算",
+            index: 9,
+            menu: "090302"
+          }
+        },
       ]
     },
     {
