@@ -322,3 +322,13 @@ export const alarmHandle = data => fetch("alarm", data, "put");
  * 报警监测 id 传 报警id
  */
 export const history = data => fetch("history", data, "get");
+
+/**
+ * 维修新增
+ */
+export const newFixPlan = data => fetch("offlinefix", data, "post");
+
+/**
+ * 维修新增
+ */
+export const fixList = data => fetch("fixdetail", data, "get");

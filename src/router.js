@@ -157,26 +157,26 @@ const router = new Router({
       path: "/plan",
       component: resolve => require(["@/common/platform"], resolve),
       children: [
-        {
-          path: "fixplan",
-          component: resolve => require(["@/components/fixplan"], resolve),
-          meta: {
-            crumbs: ["计划", "维修计划"],
-            title: "维修计划",
-            index: 5,
-            menu: "090302"
-          }
-        },
-        {
-          path: "fixtask",
-          component: resolve => require(["@/components/fixtask"], resolve),
-          meta: {
-            crumbs: ["计划", "维修任务"],
-            title: "维修任务",
-            index: 6,
-            menu: "090302"
-          }
-        },
+        // {
+        //   path: "fixplan",
+        //   component: resolve => require(["@/components/fixplan"], resolve),
+        //   meta: {
+        //     crumbs: ["计划", "维修计划"],
+        //     title: "维修计划",
+        //     index: 5,
+        //     menu: "090302"
+        //   }
+        // },
+        // {
+        //   path: "fixtask",
+        //   component: resolve => require(["@/components/fixtask"], resolve),
+        //   meta: {
+        //     crumbs: ["计划", "维修任务"],
+        //     title: "维修任务",
+        //     index: 6,
+        //     menu: "090302"
+        //   }
+        // },
         {
           path: "oilplan",
           component: resolve => require(["@/components/oilplan"], resolve),

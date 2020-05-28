@@ -58,7 +58,7 @@
     <!-- 列表操作按钮 -->
     <el-col align="left" style="margin-bottom:1%;">
       <el-button type="primary" style="margin-left:1%" size="medium" @click="newFix">新增</el-button>
-      <!-- <el-button type="success" size="medium" @click="singleOil">导出</el-button> -->
+      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
       <el-button
         type="primary"
         style="float:right;margin-right:1%"
@@ -76,7 +76,7 @@
         :columns="columns"
         :selection="false"
         v-on:viewAssign="viewAssign"
-        v-on:deleteCorp="deleteCorp"
+        v-on:newFixTask="newFixTask"
         :handle="handle"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
@@ -95,7 +95,7 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { corpSelect, equiSelect } from "@/getData";
+import { corpSelect, equiSelect, download,fixList } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
@@ -122,7 +122,7 @@ export default {
       columns: [
         {
           id: "name",
-          label: "调令编号"
+          label: "维修审批单号"
         },
         {
           id: "corpclass",
@@ -134,23 +134,27 @@ export default {
         },
         {
           id: "corprank",
-          label: "项目名称"
+          label: "申请部门"
         },
         {
           id: "email",
-          label: "作业时长"
+          label: "项目名称"
         },
         {
           id: "tel1",
-          label: "接班时间"
+          label: "项目名称"
         },
         {
           id: "tel",
-          label: "交班时间"
+          label: "维修金额"
         },
         {
-          id: "location",
-          label: "值乘司机"
+          id: "tel",
+          label: "计划维修时间"
+        },
+        {
+          id: "tel",
+          label: "申请时间"
         }
       ],
       tableData: null, // 表格数据
@@ -185,6 +189,9 @@ export default {
     this.getCorp();
   },
   methods: {
+    async exportForm(){
+      window.open(process.env.VUE_APP_URL + "download");
+    },
     dateChange(val) {
       this.queryParam.start = val[0];
       this.queryParam.end = val[1];
@@ -200,7 +207,7 @@ export default {
      ** 调令列表
      */
     async getData(val) {
-      const res = await corpSelect({param:this.queryParam});
+      const res = await fixList({param:this.queryParam});
       this.tableData = res.data;
     },
 
