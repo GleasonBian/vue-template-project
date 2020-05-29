@@ -175,6 +175,20 @@ export default {
         this.lineArr.push(new AMap.LngLat(val.longitude, val.latitude));
       });
       this.map.setZoomAndCenter(18, this.lineArr[0]); //设置地图中心
+      //起点
+      new AMap.Marker({
+        map: this.map,
+        position: this.lineArr[0],
+        icon: "https://img-blog.csdnimg.cn/20200529153725255.png",
+        autoRotation: true,
+      });
+      //终点
+      new AMap.Marker({
+        map: this.map,
+        position: this.lineArr[this.lineArr.length-1],
+        icon: "https://img-blog.csdnimg.cn/20200529153800221.png",
+        autoRotation: true,
+      });
       //创建车
       this.marker = new AMap.Marker({
         position: this.lineArr[0],

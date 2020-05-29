@@ -165,12 +165,12 @@
             </el-card>
           </el-col>
 
-          <el-col v-if="form.guid" style="margin-top:20px;" :span="24">
+          <el-col v-if="form.code" style="margin-top:20px;" :span="24">
             <el-card>
               <div slot="header" class="clearfix">审批记录</div>
               <div>
                 <el-table
-                  :data="form.CheckItem"
+                  :data="form.approve"
                   ref="table"
                   tooltip-effect="dark"
                   border
@@ -180,7 +180,7 @@
                   <el-table-column label="处理节点" prop="node" align="center"></el-table-column>
                   <el-table-column label="处理人" align="center">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.handler"></el-input>
+                      <el-input v-model="scope.row.node"></el-input>
                     </template>
                   </el-table-column>
                   <el-table-column label="处理时间" align="center">
@@ -222,7 +222,7 @@
             v-for="(fix,index) in form.fixrecord"
             :key="index"
             style="margin-top:20px;"
-            v-if="form.guid"
+            v-if="form.code"
             :span="24"
           >
             <el-card>
@@ -278,6 +278,7 @@ import {
   newFixPlan,
   corpDtails,
   corpSelect,
+  fixPlanDetail,
   equiSelect,
   getDeptList
 } from "@/getData";
@@ -291,26 +292,7 @@ export default {
   },
   data() {
     return {
-      counter: 0,
-      code: null, //公司id，判断是否是新增
-      compList: [], //上级公司列表
-      deptList: [], //上级'部门'列表
-      eqData: [], //设备列表
-      worksTable: [], //工作表格
-      checkTable: [], //检查表格
-      selectlistRow: [], //表格选中的行
-      form: {
-        guid: null, //调度编号
-        fixrecord: [
-          // {
-          //   handler: "经办人",
-          //   fixer: "维修人",
-          //   real_start: "实际维修时间",
-          //   real_amount: "实际维修金额",
-          //   remark: "维修备注"
-          // }
-        ], //维修记录
-        approve: [
+      approve: [
           //审批记录
           {
             node: "申请部门",
@@ -360,18 +342,39 @@ export default {
             remark: ""
           }
         ], //检查项目
+      counter: 0,
+      code: null, //公司id，判断是否是新增
+      compList: [], //上级公司列表
+      deptList: [], //上级'部门'列表
+      eqData: [], //设备列表
+      worksTable: [], //工作表格
+      checkTable: [], //检查表格
+      selectlistRow: [], //表格选中的行
+      form: {
+        guid: null, //调度编号
+        fixrecord: [
+          // {
+          //   handler: "经办人",
+          //   fixer: "维修人",
+          //   real_start: "实际维修时间",
+          //   real_amount: "实际维修金额",
+          //   remark: "维修备注"
+          // }
+        ], //维修记录
+        approve:[],
+        
       }
     };
   },
   created() {
-    this.form.guid = this.$route.query.id;
+    this.form.code = this.$route.query.id;
     this.getCompList();
   },
   mounted() {
     this.getDeptList();
     this.getEqList();
-    if (this.form.guid) {
-      // this.viewCorp(this.guid);
+    if (this.form.code) {
+      this.viewCorp(this.form.code);
     }
   },
   methods: {
@@ -431,12 +434,14 @@ export default {
      ** 查看公司
      */
     async viewCorp(guid) {
-      const response = await corpDtails({
-        id: guid
+      const response = await fixPlanDetail({
+        param: {code:this.form.code}
       });
       if (response.status === 200) {
-        this.form = response.data[0];
-        console.log(this.form);
+        this.form = response.data;
+        if(!this.form.approve.length){
+          this.form.approve=this.approve;
+        }
       } else this.$message.warning("请稍后再尝试");
     },
     async getEqList() {

@@ -15,8 +15,8 @@
         lable-width="120px"
       >
         <el-col :span="8">
-          <el-form-item label="车辆名称" prop="equip_guid">
-            <el-select v-model="queryParam.equip_guid" placeholder="请选择" style="width:100%">
+          <el-form-item label="车辆名称" prop="equip">
+            <el-select v-model="queryParam.equip" clearable placeholder="请选择" style="width:100%">
               <el-option
                 v-for="item in eqData"
                 :key="item.guid"
@@ -27,8 +27,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="项目名称" prop="equip_guid">
-            <el-select v-model="queryParam.corp_guid" placeholder="请选择" style="width:100%">
+          <el-form-item label="项目名称" prop="proj_deptid">
+            <el-select v-model="queryParam.proj_deptid" clearable placeholder="请选择" style="width:100%">
               <el-option
                 v-for="item in corpData"
                 :key="item.guid"
@@ -39,8 +39,9 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="接班时间" prop="equip_guid">
+          <el-form-item label="接班时间" prop="date">
             <el-date-picker
+             clearable
               v-model="queryParam.date"
               type="datetimerange"
               value-format="yyyy-MM-dd HH:mm:ss"
@@ -121,39 +122,35 @@ export default {
       ],
       columns: [
         {
-          id: "name",
+          id: "code",
           label: "维修审批单号"
         },
         {
-          id: "corpclass",
+          id: "equipname",
           label: "车辆名称"
         },
         {
-          id: "corptype",
+          id: "plant_no",
           label: "车牌号码"
         },
         {
-          id: "corprank",
+          id: "deptnamesched",
           label: "申请部门"
         },
         {
-          id: "email",
+          id: "project_name",
           label: "项目名称"
         },
         {
-          id: "tel1",
-          label: "项目名称"
-        },
-        {
-          id: "tel",
+          id: "real_amount",
           label: "维修金额"
         },
         {
-          id: "tel",
+          id: "planstart",
           label: "计划维修时间"
         },
         {
-          id: "tel",
+          id: "apply_date",
           label: "申请时间"
         }
       ],
@@ -215,13 +212,13 @@ export default {
      ** 编辑
      */
     async viewAssign(index, row) {
-      this.$router.push({ path: "fixDetail", query: { id: row.guid } });
+      this.$router.push({ path: "fixDetail", query: { id: row.code } });
     },
     /*
      ** 新增维修人物
      */
     async newFixTask(index, row) {
-      this.$router.push({ path: "fixTask", query: { id: row.guid } });
+      this.$router.push({ path: "fixTask", query: { id: row.code } });
     },
     /*
      ** 单机油耗核算

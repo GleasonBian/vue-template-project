@@ -327,8 +327,16 @@ export const history = data => fetch("history", data, "get");
  * 维修新增
  */
 export const newFixPlan = data => fetch("offlinefix", data, "post");
+/**
+ * 维修申请回显
+ */
+export const fixPlanDetail = data => fetch("offlinefix", data, "get");
 
 /**
  * 维修新增
  */
 export const fixList = data => fetch("fixdetail", data, "get");
+/**
+ * 维修任务新增
+ */
+export const fixTask = data => fetch("fixreport", data, "post");
