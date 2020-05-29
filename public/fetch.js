@@ -4,7 +4,7 @@
  * @Github: https://github.com/GleasonBian
  * @Date: 2020-05-09 16:25:18
  * @LastEditors: OBKoro1
- * @LastEditTime: 2020-05-15 09:52:15
+ * @LastEditTime: 2020-05-28 19:37:51
  */
 // public/fetch.js
 
@@ -35,20 +35,17 @@ export default async (url = "", data = {}, type = "POST") => {
    */
   if (type == "GET") {
     //请求参数 拼接字符串
-    
+
     data.id ? url = url + '/' + data.id : url = url;
-    if(data.param){
+    if (data.param) {
       let dataStr = [];
-        Object.keys(data.param).forEach(key => {
-          console.log('param',data.param)
-          console.log('key',key)
-          dataStr .push(key + "=" + data.param[key]);
-        });
-        console.log(dataStr);
-        if (dataStr.length) {
-          dataStr = dataStr.join('&');
-          url += "?" + dataStr;
-        }
+      Object.keys(data.param).forEach(key => {
+        dataStr.push(key + "=" + data.param[key]);
+      });
+      if (dataStr.length) {
+        dataStr = dataStr.join('&');
+        url += "?" + dataStr;
+      }
     }
 
     return new Promise((resolve, reject) => {

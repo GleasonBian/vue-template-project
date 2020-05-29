@@ -1,28 +1,24 @@
 <template>
   <div style="padding:12px">
-    <!-- 面包屑 -->
-    <!-- <headTop></headTop> -->
-
     <!-- 搜索框 -->
-    <el-card>
-      <el-col align="center">
-        <gt-search :data="searchData" @handle="oilPlans"></gt-search>
-      </el-col>
+    <el-card class="serarch">
+      <gt-search :data="searchData" @handle="oilApplyList" style="width:100%"></gt-search>
+    </el-card>
+
+    <el-card style="margin-top:12px;">
       <el-col align="left" style="margin-bottom:1%;margin-top:1%">
         <router-link to="/plan/oilApply">
           <el-button type="primary" size="medium" style="margin-left:1%">新增</el-button>
         </router-link>
-        <el-button type="primary" size="medium" style="margin-left:1%" @click="BatchDeleteUser">导出</el-button>
+        <el-button type="success" size="medium" style="margin-left:1%" @click="BatchDeleteUser">导出</el-button>
       </el-col>
-    </el-card>
-    <el-card style="margin-top:12px">
       <gt-table
         :tableData="tableData"
         style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
-        v-on:checkTasks="checkTasks"
+        v-on:checkHandle="checkHandle"
         v-on:DeleteHandle="DeleteHandle"
         v-on:UpdatePreprocessing="UpdatePreprocessing"
         :handle="handle"
@@ -60,31 +56,29 @@ export default {
   name: "oilPlan",
   data() {
     return {
-      staffData: [],
-      show: true,
       handle: [
         {
-          function: "checkTasks",
-          text: "查看任务",
+          function: "checkHandle",
+          text: "查看",
           type: "text",
           show: true
         },
         {
           function: "UpdatePreprocessing",
-          text: "更新计划",
+          text: "更新",
           type: "text",
           show: true
         },
         {
           function: "DeleteHandle",
-          text: "删除计划",
+          text: "删除",
           type: "text",
           show: true
         }
       ],
       columns: [
         {
-          id: "number",
+          id: "code",
           label: "加油申请单号"
         },
         {
@@ -92,8 +86,8 @@ export default {
           label: "是否加急"
         },
         {
-          id: "name",
-          label: "项目名称"
+          id: "project_name",
+          label: "项目部"
         },
         {
           id: "quantity",
@@ -104,7 +98,7 @@ export default {
           label: "加油金额"
         },
         {
-          id: "apply_dept",
+          id: "deptname",
           label: "申请部门"
         },
         {
@@ -112,99 +106,25 @@ export default {
           label: "申请状态"
         }
       ],
-      t_columns: [
-        {
-          id: "name",
-          label: "任务名称"
-        },
-        {
-          id: "planoil",
-          label: "计划加油"
-        },
-        {
-          id: "factoil",
-          label: "实际加油"
-        },
-        {
-          id: "beforeoil",
-          label: "加前油量"
-        },
-        {
-          id: "afteroil",
-          label: "加后油量"
-        },
-        {
-          id: "staffname",
-          label: "加油人员"
-        },
-        {
-          id: "deptname",
-          label: "加油部门"
-        },
-        {
-          id: "location",
-          label: "地理位置"
-        }
-      ],
-      // 创建 更新 删除 表单
-      form: {
-        certguid: "", // 证件号码
-        certtype: "", // 证件类型
-        clstype: "", // 分类类型
-        class: "", // 分类类别
-        clsrank: "", // 分类等级
-        corpguid: "", // 公司标识
-        deptguid: "", // 部门标识
-        code: "", // 计划编码
-        name: "", // 计划名称
-        proddate: "", // 生产日期
-        producer: "", // 生产厂家
-        descrifptio: "" // 描述
-      },
       tableData: [], // 表格数据
-      t_tableData: [], // 表格数据
-      taskDial: false, //task dialog
       total: 0,
       limit: 10,
       offset: 1,
-      multipleSelection: [], // 用于批量 删除
-      dialogFormVisible: false, // 是否显示 新增 删除 更新 对话框
-      formCurrentStatus: "", // 表单当前状态
+      optionWidth: 250,
       searchData: [
         // 搜索框 数据
         {
-          key: "id", // 与后端交互时的字段 必填
+          key: "code", // 与后端交互时的字段 必填
           label: "申请单号", // 搜索框名称 必填
           placeholder: "请搜索", // 占位符 选填
-          default: "0", // 搜索框 默认值
-          options: [
-            {
-              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
-              value: "1", // 下拉选项 绑定 值
-              label: "男" // 下拉选项 绑定 名称
-            },
-            {
-              value: "0",
-              label: "女"
-            }
-          ]
+          default: ""
         },
         {
-          key: "id", // 与后端交互时的字段 必填
-          label: "项目名称", // 搜索框名称 必填
+          key: "guid", // 与后端交互时的字段 必填
+          label: "项目部", // 搜索框名称 必填
           placeholder: "请搜索", // 占位符 选填
-          default: "0", // 搜索框 默认值
-          options: [
-            {
-              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
-              value: "1", // 下拉选项 绑定 值
-              label: "男" // 下拉选项 绑定 名称
-            },
-            {
-              value: "0",
-              label: "女"
-            }
-          ]
+          default: "", // 搜索框 默认值
+          options: []
         },
         {
           key: "date",
@@ -212,220 +132,35 @@ export default {
           placeholder: "",
           default: ""
         }
-      ],
-      Regular: Regular, // 表单校验正则
-      // 表单校验规则
-      rules: {
-        certguid: [
-          {
-            required: true,
-            message: "证件号码 必填"
-          }
-        ],
-        certtype: [
-          {
-            required: true,
-            message: "证件类型 必填"
-          }
-        ],
-        clstype: [
-          {
-            required: true,
-            message: "必填 分类类型",
-            trigger: ["blur", "change"]
-          }
-        ],
-        class: [
-          {
-            required: true,
-            message: "必填 分类类别",
-            trigger: ["blur", "change"]
-          }
-        ],
-        clsrank: [
-          {
-            required: true,
-            message: "必填 分类等级",
-            trigger: ["blur", "change"]
-          }
-        ],
-        corpguid: [
-          {
-            required: true,
-            message: "必填 公司标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        deptguid: [
-          {
-            required: true,
-            message: "必填 部门标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        staffid: [
-          {
-            required: true,
-            message: "必填 人员标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        code: [
-          {
-            required: true,
-            message: "计划编码 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        name: [
-          {
-            required: true,
-            message: "计划名称 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        proddate: [
-          {
-            required: true,
-            message: "生产日期 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        producer: [
-          {
-            required: true,
-            message: "生产厂家 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        descrifptio: [
-          {
-            required: false,
-            message: "描述信息 必填",
-            trigger: ["blur", "change"]
-          }
-        ]
-      },
-      isShowViewUser: false, // 是否显示 查看用户 dialog
-      isEditor: true,
-      optionWidth: 250,
-      // 公司列表
-      corpData: [],
-      // 部门列表
-      deptData: []
+      ]
     };
   },
-  beforeCreate() {},
   created() {
-    this.staffList();
-    this.corpList();
-    this.deptList();
-    this.oilPlans();
+    this.getDeptList();
+    this.oilApplyList();
   },
   methods: {
     /**
-     * 查看任务列表
-     * **/
-    async checkTasks(index, row) {
-      this.taskDial = true;
-      this.oTasks(row.guid);
-    },
-
-    /**
-     ** 任务列表
+     ** 详情
      */
-    async oTasks(id) {
-      const res = await oildeSelect({ id: id + "/oilplan" });
-      this.t_tableData = res.data;
-    },
-
-    /**
-     ** 人员列表
-     */
-    async staffList(val) {
-      const res = await getStaffList();
-      this.staffData = res.data;
-    },
-
-    /**
-     ** 公司列表
-     */
-    async corpList(val) {
-      const res = await corpSelect();
-      console.log("公司列表", res.data);
-      this.corpData = res.data;
-    },
-
-    /**
-     ** 部门列表
-     */
-    async deptList(val) {
-      const res = await getDeptList({ deptguid: val || null });
-      console.log("部门列表", res.data);
-      this.deptData = res.data;
-    },
-
-    /**
-     ** 更换公司清空部门, 重新获取部门列表
-     */
-    resetDept(cid) {
-      this.deptData = [];
-      this.form.deptguid = null;
-      this.$forceUpdate();
-      this.deptList(cid);
-    },
-
-    /*
-     ** form 表单 验证
-     */
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          console.log(valid);
-          console.log(this.formCurrentStatus);
-          if (this.formCurrentStatus === "创建") this.CreateHandle();
-          else if (this.formCurrentStatus === "更新") this.UpdateHandle();
-          else if (this.formCurrentStatus === "查看") this.ExamineHandle();
-        } else {
-          this.$message.error("请正确填写红框内容");
-          return false;
-        }
-      });
-    },
-
-    /**
-     ** 公司列表
-     */
-    async oilPlans() {
-      const res = await oilSelect();
+    async oilApplyList(param) {
+      const res = await oildeSelect({ param: param });
       this.tableData = res.data;
-    },
-
-    /*
-     ** 创建处理
-     */
-    async CreateHandle(info) {
-      const res = await oilCreate(this.form);
-      if (res.status === 200) {
-        this.oilPlans();
-        this.$message.success("计划创建成功");
-      } else this.$message.warning("计划创建失败");
-      this.dialogFormVisible = false;
     },
 
     /*
      ** 查看处理
      */
-    async ExamineHandle(index, row) {
+    async checkHandle(index, row) {
       console.log(row);
-      this.formCurrentStatus = "查看";
-      const response = await oilDetails({
-        id: row.guid
-      });
-      if (response.status === 200) {
-        this.form = response.data;
-        this.dialogFormVisible = true;
-      } else this.$message.warning("请稍后再尝试");
+      // this.formCurrentStatus = "查看";
+      // const response = await oilDetails({
+      //   id: row.guid
+      // });
+      // if (response.status === 200) {
+      //   this.form = response.data;
+      //   this.dialogFormVisible = true;
+      // } else this.$message.warning("请稍后再尝试");
     },
 
     /*
@@ -471,34 +206,11 @@ export default {
     },
 
     /*
-     ** form 表单 重置
-     */
-    ResetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
-
-    /*
-     ** 关闭 dialog
-     */
-    DialogClose(formName) {
-      console.log(1234);
-      this.$refs[formName].resetFields();
-      console.log(this.$refs[formName]);
-    },
-
-    /*
      ** 列表 分页
      */
     handleSizeChange(val) {
       this.limit = val;
       this.$refs.searchBox.internalUser(this.limit, this.offset);
-    },
-
-    /*
-     *关闭编辑状态
-     */
-    handleisShowViewUser() {
-      this.isEditor = true;
     },
 
     /*
@@ -512,18 +224,8 @@ export default {
     /*
      ** 列表 批量删除 用户
      */
-    async BatchDeleteUser() {
-      if (this.multipleSelection.length === 0) {
-        this.$message.warning("请选择删除数据!");
-        return;
-      }
-      let data = {
-        ids: JSON.stringify(this.multipleSelection)
-      };
-      let res = await deleteUserByIds(data);
-      if (res.result) this.$message.success(res.message);
-      else this.$message.warning(res.message);
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+    BatchDeleteUser() {
+      window.open(process.env.VUE_APP_URL + "download");
     },
 
     /*
@@ -533,6 +235,19 @@ export default {
       let arr = [];
       for (var item of val) arr.push(item.id);
       this.multipleSelection = arr;
+    },
+
+    /**
+     ** 部门列表
+     */
+    async getDeptList() {
+      const res = await getDeptList();
+      res.data.map(item => {
+        console.log(item);
+        item.value = item.guid;
+        item.label = item.name;
+      });
+      this.searchData[1].options = res.data;
     }
   },
   components: {
@@ -541,4 +256,11 @@ export default {
   }
 };
 </script>
-<style></style>
+<style>
+.serarch {
+  width: 100%;
+  /* display: flex;
+  justify-content: space-around;
+  align-items: center; */
+}
+</style>

@@ -157,26 +157,6 @@ const router = new Router({
       path: "/plan",
       component: resolve => require(["@/common/platform"], resolve),
       children: [
-        // {
-        //   path: "fixplan",
-        //   component: resolve => require(["@/components/fixplan"], resolve),
-        //   meta: {
-        //     crumbs: ["计划", "维修计划"],
-        //     title: "维修计划",
-        //     index: 5,
-        //     menu: "090302"
-        //   }
-        // },
-        // {
-        //   path: "fixtask",
-        //   component: resolve => require(["@/components/fixtask"], resolve),
-        //   meta: {
-        //     crumbs: ["计划", "维修任务"],
-        //     title: "维修任务",
-        //     index: 6,
-        //     menu: "090302"
-        //   }
-        // },
         {
           path: "oilplan",
           component: resolve => require(["@/components/oilplan"], resolve),
@@ -198,11 +178,41 @@ const router = new Router({
           }
         },
         {
-          path: "oiltask",
-          component: resolve => require(["@/components/oiltask"], resolve),
+          path: "repair",
+          component: resolve => require(["@/components/repair"], resolve),
           meta: {
-            crumbs: ["计划", "加油任务"],
-            title: "加油任务",
+            crumbs: ["作业管理", "车辆保养"],
+            title: "车辆保养",
+            index: 8,
+            menu: "090302"
+          }
+        },
+        {
+          path: "day",
+          component: resolve => require(["@/components/repairDay"], resolve),
+          meta: {
+            crumbs: ["作业管理", "车辆保养", "日常保养"],
+            title: "日常保养",
+            index: 8,
+            menu: "090302"
+          }
+        },
+        {
+          path: "week",
+          component: resolve => require(["@/components/repairWeek"], resolve),
+          meta: {
+            crumbs: ["作业管理", "车辆保养", "周常保养"],
+            title: "周常保养",
+            index: 8,
+            menu: "090302"
+          }
+        },
+        {
+          path: "month",
+          component: resolve => require(["@/components/repairMonth"], resolve),
+          meta: {
+            crumbs: ["作业管理", "车辆保养", "月常保养"],
+            title: "月常保养",
             index: 8,
             menu: "090302"
           }
@@ -221,7 +231,7 @@ const router = new Router({
           path: "fixDetail",
           component: resolve => require(["@/components/task/fixDetail"], resolve),
           meta: {
-            crumbs: ["作业管理", "车辆维修","维修详情"],
+            crumbs: ["作业管理", "车辆维修", "维修详情"],
             title: "维修详情",
             index: 15,
             menu: "090302"
@@ -231,7 +241,7 @@ const router = new Router({
           path: "fixTask",
           component: resolve => require(["@/components/task/fixTask"], resolve),
           meta: {
-            crumbs: ["作业管理", "车辆维修","维修任务"],
+            crumbs: ["作业管理", "车辆维修", "维修任务"],
             title: "维修任务",
             index: 15,
             menu: "090302"

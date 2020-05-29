@@ -24,9 +24,9 @@
               <el-button slot="append">元</el-button>
             </el-input>
           </el-form-item>
-          <el-form-item label="申请时间" prop="add_oil_date">
+          <el-form-item label="申请时间" prop="apply_date">
             <el-date-picker
-              v-model="form.add_oil_date"
+              v-model="form.apply_date"
               type="datetime"
               placeholder="选择日期时间"
               value-format="yyyy-MM-dd HH:mm:ss"
@@ -51,6 +51,16 @@
               ></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="项目部" prop="project_dept">
+            <el-select v-model="form.project_dept" placeholder="请选择" style="width:100%">
+              <el-option
+                v-for="item in deptList"
+                :key="item.guid"
+                :label="item.name"
+                :value="item.guid"
+              ></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="申请部门" prop="apply_dept">
             <el-select v-model="form.apply_dept" placeholder="请选择" style="width:100%">
               <el-option
@@ -61,10 +71,16 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="项目名称" prop="item_name">
-            <el-select v-model="form.item_name" placeholder="请选择" style="width:100%">
-              <el-option label="太焦项目" value="太焦项目"></el-option>
-            </el-select>
+          <el-form-item label="是否加急" prop="urgent">
+            <el-switch
+              v-model="form.urgent"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="是"
+              inactive-text="否"
+              active-value="是"
+              inactive-value="否"
+            ></el-switch>
           </el-form-item>
         </el-form>
       </el-card>
@@ -147,7 +163,7 @@
               v-model="scope.row.guid"
               placeholder="请选择"
               style="width:100%"
-              @change="selectHandle(scope.row)"
+              @change="selectHandle"
             >
               <el-option
                 v-for="item in equiList"
@@ -198,6 +214,8 @@
               inactive-color="#ff4949"
               active-text="是"
               inactive-text="否"
+              active-value="是"
+              inactive-value="否"
             ></el-switch>
           </template>
         </el-table-column>
@@ -225,9 +243,13 @@
   </div>
 </template>
 <script>
-import { getCompList, getDeptList, equiSelect } from "@/getData";
+import {
+  getCompList,
+  getDeptList,
+  equiSelect,
+  offlineoildetail
+} from "@/getData";
 import headTop from "@/common/headTop";
-import { Regular } from "@/config/verification";
 export default {
   name: "companyDetail",
   components: {
@@ -244,15 +266,12 @@ export default {
         company: "", // 所属公司
         quantity: "", // 加油数量
         amount: "", // 加油金额
-        add_oil_date: "", // 申请时间
+        apply_date: "", // 申请时间
         apply_state: "", // 申请状态
-        item_name: "太焦项目", // 项目名称
+        project_dept: "", // 项目部
         apply_dept: "", // 申请部门
-        add_oil_price: ""
-        // add_oil_id: "", // 加油申请单号 自动生成 生成规则: 年月日-编号（20200509-003）
+        urgent: "是" // 是否加急
       },
-      dialogVisible: false,
-      Regular: Regular, // 表单校验正则
       // 表单校验规则
       rules: {
         company: [
@@ -276,7 +295,7 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        add_oil_date: [
+        apply_date: [
           {
             required: true,
             message: "必填",
@@ -290,7 +309,7 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        item_name: [
+        project_dept: [
           {
             required: true,
             message: "必填",
@@ -304,13 +323,6 @@ export default {
             trigger: ["blur", "change"]
           }
         ]
-        // add_oil_price: [
-        //   {
-        //     required: true,
-        //     message: "必填",
-        //     trigger: ["blur", "change"]
-        //   }
-        // ]
       },
       tableData: [],
       selectlistRow: [],
@@ -410,22 +422,6 @@ export default {
     },
 
     /*
-     ** 表单提交验证
-     */
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.tableData.length === 0
-            ? this.$message.warning("请添加车辆")
-            : "";
-        } else {
-          this.$message.error("请正确填写红框内容");
-          return false;
-        }
-      });
-    },
-
-    /*
      ** 表格单机行 处理方法
      */
     async clickRowHandle(row) {
@@ -449,7 +445,7 @@ export default {
         oil_grade: "", // 油料等级(标号)
         unit: "", // 单位
         quantity: "", // 加油数量
-        urgent: "", // 是否加急
+        urgent: false, // 是否加急
         priority: "", // 优先顺序
         remarks: "" // 备注
       };
@@ -494,18 +490,51 @@ export default {
     },
 
     /*
-     ** 表格多选处理
+     ** 选中车辆 自动添加 车牌号码
      */
-    selectHandle(row) {
-      console.log(row);
+    selectHandle(guid) {
       let that = this;
-      that.tableData.forEach(function(item, index) {
-        // 如果选中数据跟元数据某一条标识相等，删除对应的源数据
-        if (row.guid === item.guid) {
-          console.log(index);
-          that.tableData[index].plateno = row.plateno;
+      var val = this.equiList;
+      if (val) {
+        // 将选中数据遍历
+        val.forEach(function(item, index) {
+          // 遍历源数据
+          that.tableData.forEach(function(itemI, indexI) {
+            // 如果选中数据跟元数据某一条标识相等，删除对应的源数据
+            if (item.guid === itemI.guid) {
+              itemI.plateno = item.plateno;
+            }
+          });
+        });
+      }
+      console.log(this.tableData);
+    },
+
+    /*
+     ** 表单提交验证
+     */
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.tableData.length === 0
+            ? this.$message.warning("请添加车辆")
+            : this.offlineoildetailHandle();
+        } else {
+          this.$message.error("请正确填写红框内容");
+          return false;
         }
       });
+    },
+
+    /*
+     ** 表单提交验证
+     */
+    async offlineoildetailHandle() {
+      this.form.approval = this.approval;
+      this.form.vehicle = this.tableData;
+      const res = await offlineoildetail(this.form);
+      console.log("提交数据数据:", this.form);
+      console.log("返回数据:", res);
     }
   }
 };

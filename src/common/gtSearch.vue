@@ -2,9 +2,7 @@
   <div class="search-box">
     <div class="search-box-single" v-if="data.length <= 3">
       <div class="search-item" v-for="(item, index) in data" :key="index">
-        <div class="search-item-label">
-          {{ item.label ? item.label : "暂无!" }}：
-        </div>
+        <div class="search-item-label">{{ item.label ? item.label : "暂无!" }}：</div>
         <el-select
           v-if="item.options"
           v-model="search[item.key]"
@@ -25,7 +23,7 @@
           v-model="search[item.key]"
           type="daterange"
           format="yyyy年MM月dd日"
-          value-format="yyyy-MM-ddmm:ss"
+          value-format="yyyy-MM-ddHH:mm:ss"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -48,18 +46,13 @@
           @click="searchHandle"
           :size="size"
           style="width:32%; margin-right:15px"
-          >搜 索</el-button
-        >
-        <el-button type="info" @click="reset" :size="size" style="width:32%"
-          >重 置</el-button
-        >
+        >搜 索</el-button>
+        <el-button type="info" @click="reset" :size="size" style="width:32%">重 置</el-button>
       </div>
     </div>
     <div class="search-box-multi" v-else-if="data.length > 3">
       <div class="search-multi-item" v-for="(item, index) in data" :key="index">
-        <div class="search-item-label">
-          {{ item.label ? item.label : "暂无!" }}：
-        </div>
+        <div class="search-item-label">{{ item.label ? item.label : "暂无!" }}：</div>
         <el-select
           v-if="item.options"
           v-model="search[item.key]"
@@ -103,11 +96,8 @@
           @click="searchHandle"
           :size="size"
           style="width:32%; margin-right:15px"
-          >搜 索</el-button
-        >
-        <el-button type="info" @click="reset" :size="size" style="width:32%"
-          >重 置</el-button
-        >
+        >搜 索</el-button>
+        <el-button type="info" @click="reset" :size="size" style="width:32%">重 置</el-button>
       </div>
     </div>
   </div>
@@ -157,6 +147,7 @@ export default {
       this.$emit("handle", this.search);
     },
     dateChange(val) {
+      val[1] = val[1].replace("00:00:00", "23:59:59");
       this.search.start = val[0];
       this.search.end = val[1];
     }

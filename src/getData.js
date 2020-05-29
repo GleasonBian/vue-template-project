@@ -340,3 +340,14 @@ export const fixList = data => fetch("fixdetail", data, "get");
  * 维修任务新增
  */
 export const fixTask = data => fetch("fixreport", data, "post");
+
+/**
+ * 作业管理 车辆加油
+ */
+export const offlineoildetail = data => fetch("offlineoildetail", data, "post");
+
+/**
+ * 作业管理 车辆保养
+ */
+export const repair = data => fetch("repair", data, "post");
+

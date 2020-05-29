@@ -7,6 +7,7 @@ import "element-ui/lib/theme-chalk/index.css";
 import "./style/common.less";
 import gtTable from "@/common/gtTable";
 import gtSearch from "@/common/gtSearch";
+import headTop from "@/common/headTop";
 import VueAMap from "vue-amap";
 import echarts from "echarts";
 import axios from "axios";
@@ -36,6 +37,7 @@ VueAMap.initAMapApiLoader({
 Vue.config.productionTip = false;
 Vue.component("gt-table", gtTable);
 Vue.component("gt-search", gtSearch);
+Vue.component("gt-header", headTop);
 
 /*
  ** 全局加载动画 开关
@@ -47,7 +49,7 @@ let loading = null;
  ** 添加请求拦截器
  */
 axios.interceptors.request.use(
-  function(config) {
+  function (config) {
     // 在发送请求之前做些什么
     loading = Vue.prototype.$loading({
       lock: true,
@@ -71,7 +73,7 @@ axios.interceptors.request.use(
 
     return config;
   },
-  function(error) {
+  function (error) {
     loading.close();
     // 对请求错误做些什么
     return Promise.reject(error);
@@ -82,7 +84,7 @@ axios.interceptors.request.use(
  ** 添加响应拦截器
  */
 axios.interceptors.response.use(
-  function(response) {
+  function (response) {
     if ("Authorization" in response.headers)
       sessionStorage["Authorization"] = response.headers.Authorization;
 
@@ -103,7 +105,7 @@ axios.interceptors.response.use(
 
     return response;
   },
-  function(error) {
+  function (error) {
     loading.close();
     if (error.response.status >= 500) {
       Vue.prototype.$message.error("服务异常,稍后重试 !");
