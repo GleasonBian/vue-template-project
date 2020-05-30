@@ -149,7 +149,7 @@
   </div>
 </template>
 <script>
-import { getCompList, getDeptList, equiSelect } from "@/getData";
+import { getCompList, getDeptList, equiSelect, repair } from "@/getData";
 export default {
   name: "repairDay",
   data() {
@@ -622,7 +622,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(this.form);
+          this.repairHadnle();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -648,8 +648,8 @@ export default {
           // });
         });
       }
-      console.log(this.tableData);
     },
+
     /*
      ** 合并行 与 列
      */
@@ -741,6 +741,14 @@ export default {
           };
         }
       }
+    },
+
+    /*
+     ** 周提交
+     */
+    async repairHadnle() {
+      let data = this.form;
+      const res = await repair(data);
     }
   }
 };

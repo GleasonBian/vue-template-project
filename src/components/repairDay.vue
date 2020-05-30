@@ -149,7 +149,13 @@
   </div>
 </template>
 <script>
-import { getCompList, getDeptList, equiSelect, repair } from "@/getData";
+import {
+  getCompList,
+  getDeptList,
+  equiSelect,
+  repair,
+  repairAll
+} from "@/getData";
 export default {
   name: "repairDay",
   data() {
@@ -568,7 +574,9 @@ export default {
     this.getDeptList();
     this.getEquiList();
   },
-  mounted() {},
+  mounted() {
+    this.getRepairDetail();
+  },
   methods: {
     /**
      ** 公司列表
@@ -592,6 +600,16 @@ export default {
     async getEquiList() {
       const res = await equiSelect();
       this.equiList = res.data;
+    },
+
+    /*
+     ** 获取详情
+     */
+    async getRepairDetail() {
+      if (!this.$route.query.id) return;
+      const res = await repairAll({ id: this.$route.query.id });
+      this.form = res.data;
+      console.log(res);
     },
 
     /*
@@ -699,9 +717,12 @@ export default {
      ** 合并行 与 列
      */
     async repairHadnle() {
-      console.log(this.form);
       let data = this.form;
       const res = await repair(data);
+      if (res.data instanceof Object && res.status === 200)
+        this.$router.push({
+          path: "repair"
+        });
     }
   }
 };

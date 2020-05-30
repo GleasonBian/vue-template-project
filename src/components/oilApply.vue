@@ -87,11 +87,9 @@
       <el-card style="margin-top:12px; width:70%">
         <div slot="header" class="clearfix">
           <span>审批记录</span>
-          <!-- <el-button type="text" style="margin-left:12px" @click="addRow"></el-button>
-          <el-button type="text" style="margin-left:12px" @click="delData">移除车辆</el-button>-->
         </div>
         <el-table
-          :data="approval"
+          :data="form.approval"
           @row-click="clickRowHandle"
           ref="approvalTable"
           highlight-current-row
@@ -146,7 +144,7 @@
         <el-button type="text" style="margin-left:12px" @click="delData">移除车辆</el-button>
       </div>
       <el-table
-        :data="tableData"
+        :data="form.vehicle"
         @row-click="clickRowHandle"
         ref="oilTable"
         highlight-current-row
@@ -247,7 +245,8 @@ import {
   getCompList,
   getDeptList,
   equiSelect,
-  offlineoildetail
+  offlineoildetail, // 加油申请创建
+  oilApplyDetail // 加油申请查看
 } from "@/getData";
 import headTop from "@/common/headTop";
 export default {
@@ -270,7 +269,69 @@ export default {
         apply_state: "", // 申请状态
         project_dept: "", // 项目部
         apply_dept: "", // 申请部门
-        urgent: "是" // 是否加急
+        urgent: "是", // 是否加急
+        approval: [
+          {
+            node: "申请部门",
+            handler: "",
+            time: "",
+            state: "",
+            opinion: "",
+            option: [
+              {
+                label: "提交",
+                value: "提交"
+              },
+              {
+                label: "草稿",
+                value: "草稿"
+              }
+            ]
+          },
+          {
+            node: "审核部门",
+            handler: "",
+            time: "",
+            state: "",
+            opinion: "",
+            option: [
+              {
+                label: "待审核",
+                value: "待审核"
+              },
+              {
+                label: "已通过",
+                value: "已通过"
+              },
+              {
+                label: "已驳回",
+                value: "已驳回"
+              }
+            ]
+          },
+          {
+            node: "接收部门",
+            handler: "",
+            time: "",
+            state: "",
+            opinion: "",
+            option: [
+              {
+                label: "待审核",
+                value: "待审核"
+              },
+              {
+                label: "已通过",
+                value: "已通过"
+              },
+              {
+                label: "已驳回",
+                value: "已驳回"
+              }
+            ]
+          }
+        ],
+        vehicle: []
       },
       // 表单校验规则
       rules: {
@@ -324,69 +385,7 @@ export default {
           }
         ]
       },
-      tableData: [],
-      selectlistRow: [],
-      approval: [
-        {
-          node: "申请部门",
-          handler: "",
-          time: "",
-          state: "",
-          opinion: "",
-          option: [
-            {
-              label: "提交",
-              value: "提交"
-            },
-            {
-              label: "草稿",
-              value: "草稿"
-            }
-          ]
-        },
-        {
-          node: "审核部门",
-          handler: "",
-          time: "",
-          state: "",
-          opinion: "",
-          option: [
-            {
-              label: "待审核",
-              value: "待审核"
-            },
-            {
-              label: "已通过",
-              value: "已通过"
-            },
-            {
-              label: "已驳回",
-              value: "已驳回"
-            }
-          ]
-        },
-        {
-          node: "接收部门",
-          handler: "",
-          time: "",
-          state: "",
-          opinion: "",
-          option: [
-            {
-              label: "待审核",
-              value: "待审核"
-            },
-            {
-              label: "已通过",
-              value: "已通过"
-            },
-            {
-              label: "已驳回",
-              value: "已驳回"
-            }
-          ]
-        }
-      ]
+      selectlistRow: []
     };
   },
   created() {
@@ -394,7 +393,9 @@ export default {
     this.getDeptList();
     this.getEquiList();
   },
-  mounted() {},
+  mounted() {
+    this.oilApplyCheck();
+  },
   methods: {
     /**
      ** 公司列表
@@ -449,7 +450,7 @@ export default {
         priority: "", // 优先顺序
         remarks: "" // 备注
       };
-      this.tableData.push(list);
+      this.form.vehicle.push(list);
       this.counter++;
     },
 
@@ -477,10 +478,10 @@ export default {
         // 将选中数据遍历
         val.forEach(function(item, index) {
           // 遍历源数据
-          that.tableData.forEach(function(itemI, indexI) {
+          that.form.vehicle.forEach(function(itemI, indexI) {
             // 如果选中数据跟元数据某一条标识相等，删除对应的源数据
             if (item.guid === itemI.guid) {
-              that.tableData.splice(indexI, 1);
+              that.form.vehicle.splice(indexI, 1);
             }
           });
         });
@@ -499,7 +500,7 @@ export default {
         // 将选中数据遍历
         val.forEach(function(item, index) {
           // 遍历源数据
-          that.tableData.forEach(function(itemI, indexI) {
+          that.form.vehicle.forEach(function(itemI, indexI) {
             // 如果选中数据跟元数据某一条标识相等，删除对应的源数据
             if (item.guid === itemI.guid) {
               itemI.plateno = item.plateno;
@@ -507,7 +508,7 @@ export default {
           });
         });
       }
-      console.log(this.tableData);
+      console.log(this.form.vehicle);
     },
 
     /*
@@ -516,7 +517,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.tableData.length === 0
+          this.form.vehicle.length === 0
             ? this.$message.warning("请添加车辆")
             : this.offlineoildetailHandle();
         } else {
@@ -530,11 +531,23 @@ export default {
      ** 表单提交验证
      */
     async offlineoildetailHandle() {
-      this.form.approval = this.approval;
-      this.form.vehicle = this.tableData;
       const res = await offlineoildetail(this.form);
-      console.log("提交数据数据:", this.form);
-      console.log("返回数据:", res);
+      if (res.data instanceof Object && res.status === 200) {
+        this.$message.success("添加成功");
+        this.$router.push({
+          path: "/plan/oilplan"
+        });
+      } else this.$message.warning("添加失败, 请稍后尝试!");
+    },
+
+    /*
+     ** 加油详情查看
+     */
+    async oilApplyCheck() {
+      if (!this.$route.query.id) return;
+      const res = await oilApplyDetail({ id: this.$route.query.id });
+      this.form = res.data;
+      console.log(res);
     }
   }
 };

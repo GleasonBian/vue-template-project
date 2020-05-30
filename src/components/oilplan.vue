@@ -49,7 +49,8 @@ import {
   oilUpdate,
   oilDetails,
   oildeSelect,
-  oilDelete
+  oilDelete,
+  OfflineDeleteOilRecode
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
@@ -141,7 +142,7 @@ export default {
   },
   methods: {
     /**
-     ** 详情
+     ** 加油申请列表
      */
     async oilApplyList(param) {
       const res = await oildeSelect({ param: param });
@@ -152,15 +153,12 @@ export default {
      ** 查看处理
      */
     async checkHandle(index, row) {
-      console.log(row);
-      // this.formCurrentStatus = "查看";
-      // const response = await oilDetails({
-      //   id: row.guid
-      // });
-      // if (response.status === 200) {
-      //   this.form = response.data;
-      //   this.dialogFormVisible = true;
-      // } else this.$message.warning("请稍后再尝试");
+      this.$router.push({
+        path: "/plan/oilApply",
+        query: {
+          id: row.code
+        }
+      });
     },
 
     /*
@@ -187,20 +185,20 @@ export default {
     /*
      ** 删除处理
      */
-    async DeleteHandle(index, row) {
+    DeleteHandle(index, row) {
       let that = this;
       this.$confirm("删除计划?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          let res = oilDelete({ id: row.guid });
-          console.log(res);
+        .then(async () => {
+          let res = await OfflineDeleteOilRecode({ id: row.code });
+          this.$message.success("删除成功");
           if (res.status === 200) {
             this.$message.success("删除成功");
-          }
-          this.oilPlans();
+            this.oilApplyList();
+          } else this.$message.warning("删除失败,请稍后再试");
         })
         .catch(err => {});
     },

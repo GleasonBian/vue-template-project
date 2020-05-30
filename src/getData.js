@@ -351,3 +351,18 @@ export const offlineoildetail = data => fetch("offlineoildetail", data, "post");
  */
 export const repair = data => fetch("repair", data, "post");
 
+/**
+ * 加油申请详情查看
+ */
+export const oilApplyDetail = data => fetch("offlineoildetail", data, "get");
+
+/**
+ * 加油申请详情查看
+ */
+export const OfflineDeleteOilRecode = data => fetch("OfflineDeleteOilRecode", data, "delete");
+
+/**
+ * 保养记录所有
+ */
+export const repairAll = data => fetch("repair", data, "get");
+

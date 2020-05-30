@@ -3,7 +3,7 @@
     <!-- 搜索框 -->
 
     <el-card>
-      <gt-search :data="searchData" @handle="corpList" size></gt-search>
+      <gt-search :data="searchData" @handle="searchHandle" size></gt-search>
     </el-card>
 
     <el-card style="margin-top:12px">
@@ -15,7 +15,7 @@
         </el-select>
         <el-button type="primary" size="medium" @click="CreateHandle" plain>创建</el-button>
 
-        <el-button type="primary" size="medium" @click="BatchDeleteUser">导出</el-button>
+        <el-button type="primary" size="medium" @click="exportExcel">导出</el-button>
       </el-col>
       <el-col align="middle">
         <gt-table
@@ -27,7 +27,6 @@
           v-on:ExamineHandle="ExamineHandle"
           v-on:DeleteHandle="DeleteHandle"
           v-on:UpdatePreprocessing="UpdatePreprocessing"
-          v-on:IntoTask="IntoTask"
           :handle="handle"
         ></gt-table>
         <!-- v-on:selection-change="handleSelectionChange" -->
@@ -57,7 +56,8 @@ import {
   oildeUpdate, // 更新加油任务
   oildeDelete, // 加油任务删除
   oilTaskStart, // 加油任务开始
-  oilTaskStop // 加油任务结束
+  oilTaskStop, // 加油任务结束
+  repairAll // 保养记录
 } from "@/getData";
 export default {
   name: "fixtask",
@@ -82,46 +82,49 @@ export default {
           text: "删除",
           type: "text",
           show: true
-        },
-        {
-          function: "IntoTask",
-          text: "任务",
-          type: "text",
-          show: true
         }
       ],
+      // type: "day",
+      //   guid: "", // 车辆guid
+      //   time: "", // 保养时间
+      //   state: "", // 保养状态
+      //   repair_dept: "", // 保养部门 guid
+      //   company: "", // 公司 guid
+      //   project_dept: "", // 项目部 guid
+      //   driver_chief: "", // 司机长
+      //   driver: "", // 司机
       columns: [
         {
-          id: "name",
+          id: "code",
           label: "保养记录编号"
         },
         {
-          id: "planoil",
-          label: "车辆名称"
+          id: "type",
+          label: "保养类型"
         },
         {
-          id: "factoil",
-          label: "车牌号码"
-        },
-        {
-          id: "beforeoil",
-          label: "申请部门"
-        },
-        {
-          id: "afteroil",
-          label: "项目名称"
-        },
-        {
-          id: "staffname",
-          label: "保养周期"
-        },
-        {
-          id: "deptname",
-          label: "保养人"
-        },
-        {
-          id: "location",
+          id: "time",
           label: "保养时间"
+        },
+        {
+          id: "state",
+          label: "保养状态"
+        },
+        {
+          id: "repair_dept",
+          label: "保养部门"
+        },
+        {
+          id: "project_dept",
+          label: "项目部"
+        },
+        {
+          id: "driver_chief",
+          label: "司机长"
+        },
+        {
+          id: "driver",
+          label: "司机"
         }
       ],
       tableData: [], // 表格数据
@@ -176,7 +179,9 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getRepairList();
+  },
   methods: {
     /*
      ** 创建处理
@@ -184,17 +189,17 @@ export default {
     async CreateHandle(info) {
       switch (this.select) {
         case "1":
-          this.$router.replace({
+          this.$router.push({
             path: "day"
           });
           break;
         case "2":
-          this.$router.replace({
+          this.$router.push({
             path: "week"
           });
           break;
         case "3":
-          this.$router.replace({
+          this.$router.push({
             path: "month"
           });
           break;
@@ -206,14 +211,40 @@ export default {
      */
     async ExamineHandle(index, row) {
       console.log(index, row);
-      this.formCurrentStatus = "查看";
-      const response = await oildeDetail({
-        id: row.guid
-      });
-      if (response.status === 200) {
-        this.form = row;
-        this.dialogFormVisible = true;
-      } else this.$message.warning("请稍后再尝试");
+      switch (row.type) {
+        case "日常保养":
+          this.$router.push({
+            path: "day",
+            query: {
+              id: row.code
+            }
+          });
+          break;
+        case "周常保养":
+          this.$router.push({
+            path: "week",
+            query: {
+              id: row.code
+            }
+          });
+          break;
+        case "月常保养":
+          this.$router.push({
+            path: "month",
+            query: {
+              id: row.code
+            }
+          });
+          break;
+      }
+      // this.formCurrentStatus = "查看";
+      // const response = await oildeDetail({
+      //   id: row.guid
+      // });
+      // if (response.status === 200) {
+      //   this.form = row;
+      //   this.dialogFormVisible = true;
+      // } else this.$message.warning("请稍后再尝试");
     },
 
     /*
@@ -260,20 +291,24 @@ export default {
     },
 
     /*
-     ** form 表单 重置
+     ** 获取保养记录列表
      */
-    ResetForm(formName) {
-      console.log(formName);
-      console.log(this.$refs[formName]);
-      this.$refs[formName].resetFields();
-    },
-
-    /*
-     ** 关闭 dialog
-     */
-    DialogClose(formName) {
-      console.log(formName);
-      this.$refs[formName].resetFields();
+    async getRepairList(formName) {
+      const res = await repairAll();
+      this.tableData = res.data;
+      res.data.map(item => {
+        switch (item.type) {
+          case "day":
+            item.type = "日常保养";
+            break;
+          case "week":
+            item.type = "周常保养";
+            break;
+          case "month":
+            item.type = "月常保养";
+            break;
+        }
+      });
     },
 
     /*
@@ -300,30 +335,16 @@ export default {
     },
 
     /*
-     ** 列表 批量删除 用户
+     ** 搜索处理
      */
-    async BatchDeleteUser() {
-      if (this.multipleSelection.length === 0) {
-        this.$message.warning("请选择删除数据!");
-        return;
-      }
-      let data = {
-        ids: JSON.stringify(this.multipleSelection)
-      };
-      let res = await deleteUserByIds(data);
-      if (res.result) this.$message.success(res.message);
-      else this.$message.warning(res.message);
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+    searchHandle(val) {
+      console.log("搜索:", val);
     },
 
     /*
-     ** 列表 批量删除 用户  预处理
+     ** 导出 excel
      */
-    handleSelectionChange(val) {
-      let arr = [];
-      for (var item of val) arr.push(item.id);
-      this.multipleSelection = arr;
-    }
+    exportExcel(val) {}
   },
   components: {}
 };
