@@ -153,8 +153,9 @@ import {
   getCompList,
   getDeptList,
   equiSelect,
-  repair,
-  repairAll
+  repairCreat, // 保养创建
+  repairDetail, // 根据 code 查询 详情
+  repairUpdate // 更新
 } from "@/getData";
 export default {
   name: "repairDay",
@@ -507,6 +508,7 @@ export default {
           }
         ]
       },
+      id: this.$route.query.id,
       // 表单校验规则
       rules: {
         guid: [
@@ -607,7 +609,7 @@ export default {
      */
     async getRepairDetail() {
       if (!this.$route.query.id) return;
-      const res = await repairAll({ id: this.$route.query.id });
+      const res = await repairDetail({ id: this.$route.query.id });
       this.form = res.data;
       console.log(res);
     },
@@ -618,7 +620,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.repairHadnle();
+          this.id ? this.repairUpdate() : this.repairHadnle();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -714,11 +716,22 @@ export default {
       }
     },
     /*
-     ** 合并行 与 列
+     ** 保存
      */
     async repairHadnle() {
       let data = this.form;
-      const res = await repair(data);
+      const res = await repairCreat(data);
+      if (res.data instanceof Object && res.status === 200)
+        this.$router.push({
+          path: "repair"
+        });
+    },
+    /*
+     ** 更新
+     */
+    async repairUpdate() {
+      let data = this.form;
+      const res = await repairUpdate(data);
       if (res.data instanceof Object && res.status === 200)
         this.$router.push({
           path: "repair"

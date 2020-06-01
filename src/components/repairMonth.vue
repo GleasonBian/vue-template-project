@@ -149,7 +149,14 @@
   </div>
 </template>
 <script>
-import { getCompList, getDeptList, equiSelect, repair } from "@/getData";
+import {
+  getCompList,
+  getDeptList,
+  equiSelect,
+  repairCreat, // 保养创建
+  repairDetail, // 根据 code 查询 详情
+  repairUpdate // 更新
+} from "@/getData";
 export default {
   name: "repairDay",
   data() {
@@ -266,6 +273,7 @@ export default {
           }
         ]
       },
+      id: this.$route.query.id,
       // 表单校验规则
       rules: {
         guid: [
@@ -333,7 +341,9 @@ export default {
     this.getDeptList();
     this.getEquiList();
   },
-  mounted() {},
+  mounted() {
+    this.getRepairDetail();
+  },
   methods: {
     /**
      ** 公司列表
@@ -360,12 +370,22 @@ export default {
     },
 
     /*
+     ** 获取详情
+     */
+    async getRepairDetail() {
+      if (!this.$route.query.id) return;
+      const res = await repairDetail({ id: this.$route.query.id });
+      this.form = res.data;
+      console.log(res);
+    },
+
+    /*
      ** 表单提交验证
      */
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.repairHadnle();
+          this.id ? this.repairUpdate() : this.repairHadnle();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -391,8 +411,8 @@ export default {
           // });
         });
       }
+      console.log(this.tableData);
     },
-
     /*
      ** 合并行 与 列
      */
@@ -412,13 +432,23 @@ export default {
         }
       }
     },
-
     /*
-     ** 周提交
+     ** 保存
      */
     async repairHadnle() {
       let data = this.form;
-      const res = await repair(data);
+      const res = await repairCreat(data);
+      if (res.data instanceof Object && res.status === 200)
+        this.$router.push({
+          path: "repair"
+        });
+    },
+    /*
+     ** 更新
+     */
+    async repairUpdate() {
+      let data = this.form;
+      const res = await repairUpdate(data);
       if (res.data instanceof Object && res.status === 200)
         this.$router.push({
           path: "repair"

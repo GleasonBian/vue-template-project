@@ -17,19 +17,17 @@
 
         <el-button type="primary" size="medium" @click="exportExcel">导出</el-button>
       </el-col>
-      <el-col align="middle">
-        <gt-table
-          :tableData="tableData"
-          style="width: 100%"
-          :optionWidth="optionWidth"
-          :columns="columns"
-          :selection="false"
-          v-on:ExamineHandle="ExamineHandle"
-          v-on:DeleteHandle="DeleteHandle"
-          v-on:UpdatePreprocessing="UpdatePreprocessing"
-          :handle="handle"
-        ></gt-table>
-      </el-col>
+
+      <gt-table
+        :tableData="tableData"
+        style="width: 100%"
+        :optionWidth="optionWidth"
+        :columns="columns"
+        :selection="false"
+        v-on:ExamineHandle="ExamineHandle"
+        v-on:DeleteHandle="DeleteHandle"
+        :handle="handle"
+      ></gt-table>
       <el-pagination
         style="margin:12px"
         @size-change="handleSizeChange"
@@ -50,14 +48,8 @@ import {
   getStaffList, // 人员
   equiSelect, // 设备列表
   oilSelect, // 加油计划列表
-  oildeCreate, // 加油任务创建
-  oildeSelect, // 加油任务列表
-  oildeDetail, // 加油任务详情
-  oildeUpdate, // 更新加油任务
-  oildeDelete, // 加油任务删除
-  oilTaskStart, // 加油任务开始
-  oilTaskStop, // 加油任务结束
-  repairAll // 保养记录
+  repairList, // 保养记录
+  repairDelete // 删除保养记录
 } from "@/getData";
 export default {
   name: "fixtask",
@@ -67,13 +59,7 @@ export default {
       handle: [
         {
           function: "ExamineHandle",
-          text: "查看",
-          type: "text",
-          show: true
-        },
-        {
-          function: "UpdatePreprocessing",
-          text: "更新",
+          text: "查看/更新",
           type: "text",
           show: true
         },
@@ -250,11 +236,7 @@ export default {
     /*
      ** 更新预处理
      */
-    UpdatePreprocessing(index, row) {
-      console.log(index, row);
-      this.ExamineHandle(index, row);
-      this.formCurrentStatus = "更新";
-    },
+    UpdatePreprocessing(index, row) {},
 
     /*
      ** 更新处理
@@ -280,11 +262,10 @@ export default {
         type: "warning"
       })
         .then(async () => {
-          let res = await oildeDelete({ id: row.guid });
-          console.log(res);
+          let res = await repairDelete({ id: row.code });
           if (res.status === 200) {
             this.$message.success("删除成功");
-            this.detaList();
+            this.getRepairList();
           }
         })
         .catch(err => {});
@@ -294,7 +275,7 @@ export default {
      ** 获取保养记录列表
      */
     async getRepairList(formName) {
-      const res = await repairAll();
+      const res = await repairList();
       this.tableData = res.data;
       res.data.map(item => {
         switch (item.type) {

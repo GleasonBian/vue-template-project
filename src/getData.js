@@ -346,10 +346,6 @@ export const fixTask = data => fetch("fixreport", data, "post");
  */
 export const offlineoildetail = data => fetch("offlineoildetail", data, "post");
 
-/**
- * 作业管理 车辆保养
- */
-export const repair = data => fetch("repair", data, "post");
 
 /**
  * 加油申请详情查看
@@ -361,8 +357,29 @@ export const oilApplyDetail = data => fetch("offlineoildetail", data, "get");
  */
 export const OfflineDeleteOilRecode = data => fetch("OfflineDeleteOilRecode", data, "delete");
 
-/**
- * 保养记录所有
- */
-export const repairAll = data => fetch("repair", data, "get");
 
+
+/**
+ * 作业管理 车辆保养创建
+ */
+export const repairCreat = data => fetch("repaircreat", data, "post");
+
+/**
+ * 作业管理 保养列表
+ */
+export const repairList = data => fetch("repairlist", data, "get");
+
+/**
+ * 作业管理 保养记录详情
+ */
+export const repairDetail = data => fetch("repaircheck", data, "get");
+
+/**
+ * 作业管理 更新
+ */
+export const repairUpdate = data => fetch("repairupdate", data, "put");
+
+/**
+ * 作业管理 删除
+ */
+export const repairDelete = data => fetch("repairdel", data, "delete");
