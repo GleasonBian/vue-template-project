@@ -94,6 +94,7 @@
           ref="approvalTable"
           highlight-current-row
           style="width:100%;"
+          size="mini"
         >
           <el-table-column type="index" label="序号" align="center"></el-table-column>
           <el-table-column prop="node" label="处理节点" align="center">
@@ -152,6 +153,7 @@
         stripe
         border
         @selection-change="selectRow"
+        size="mini"
       >
         <el-table-column type="selection" label="序号" align="center"></el-table-column>
         <el-table-column type="index" label="序号" align="center"></el-table-column>

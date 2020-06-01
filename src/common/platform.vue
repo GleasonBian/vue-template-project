@@ -19,42 +19,15 @@
         <el-menu-item index="/dashboard" style>
           <i class="iconfont i-menu-one"></i>监控平台
         </el-menu-item>
-        <el-submenu
-          index="5"
-          popper-class="submenu-userManger"
-          style="width: 200px;text-align: center;"
-        >
+        <el-submenu index="5" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
             <i class="iconfont i-menu-six"></i>实时监测
           </template>
           <el-menu-item index="/monitor/oil" class="myClass" style="text-align: center;">油耗监测</el-menu-item>
           <el-menu-item index="/monitor/warn" style="text-align: center;">告警监测</el-menu-item>
         </el-submenu>
-        <!-- <el-submenu
-		      index="1"
-		      popper-class="submenu-userManger"
-		      @mouseover.native="on_mouse(2)"
-		      @mouseout.native="out_mouse(1)"
-		    >
-		      <template slot="title">
-		        <i class="iconfont i-menu-six"></i>统计
-		      </template>
-		      <el-menu-item
-		        style="width:100vw;padding-left:185px"
-		        @mouseover.native="on_mouse(2)"
-		        @mouseout.native="out_mouse(1)"
-		      >
-		        <el-menu-item index="/report/fixRep" class="myClass" style="float:left">维修报表</el-menu-item>
-		        <el-menu-item index="/report/oilRep" style="float:left">加油报表</el-menu-item>
-		        <el-menu-item index="/report/assignRep" style="float:left">调度报表</el-menu-item>
-		      </el-menu-item>
-        </el-submenu>-->
 
-        <el-submenu
-          index="3"
-          popper-class="submenu-userManger"
-          style="width: 200px;text-align: center;"
-        >
+        <el-submenu index="3" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
             <i class="iconfont i-menu-three" style="font-size:20px"></i>作业管理
           </template>
@@ -64,11 +37,7 @@
           <el-menu-item index="/plan/fixList" style="text-align: center;">车辆维修</el-menu-item>
         </el-submenu>
 
-        <el-submenu
-          index="2"
-          popper-class="submenu-userManger"
-          style="width: 200px;text-align: center;"
-        >
+        <el-submenu index="2" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
             <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
           </template>
@@ -112,7 +81,6 @@
 </template>
 
 <script>
-// import { getUserPermission, getPageElement } from "@/getData";
 export default {
   name: "platform",
   components: {},
@@ -154,14 +122,8 @@ export default {
       }
     };
   },
-  watch: {
-    //使用watch 监听$router的变化
-  },
-  created() {
-    // this.getUserPermission();
-    // this.getPageElement();
-    // this.initWebSocket();
-  },
+  watch: {},
+  created() {},
   mounted() {
     this.initWebSocket();
   },
@@ -191,7 +153,6 @@ export default {
     //   }
     // }
     handleClose(done) {
-      console.log(done);
       this.$confirm("确认关闭？")
         .then(_ => {
           this.dialogVisible = false;
@@ -348,25 +309,14 @@ export default {
   background-color: rgb(0, 0, 0) !important;
 }
 
-// .menu-row-style {
-//   position: absolute;
-//   top: 0px;
-//   left: 0px;
-//   z-index: 100;
-//   width: 100%;
-// }
-.kailong {
+.menu-row-style {
   position: absolute;
-  z-index: 99999;
-  width: 0;
-  height: 0;
-  border-right: 5px solid transparent;
-  border-left: 5px solid transparent;
-  border-bottom: 5px solid #272b2e;
+  top: 0px;
+  left: 0px;
+  z-index: 100;
+  width: 100%;
 }
-.alarm_title {
-  color: #e6a23c;
-}
+
 .later {
   width: 30px;
   color: red;
