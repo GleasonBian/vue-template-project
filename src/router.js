@@ -353,7 +353,7 @@ const router = new Router({
 });
 // 每个页面 添加title
 router.beforeEach((to, from, next) => {
-  window.document.title = to.meta.title;
+  window.document.title = "设备管理系统/" + to.meta.title;
   next();
 });
 export default router;
