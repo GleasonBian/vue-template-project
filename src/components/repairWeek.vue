@@ -749,6 +749,10 @@ export default {
     async repairHadnle() {
       let data = this.form;
       const res = await repair(data);
+      if (res.data instanceof Object && res.status === 200)
+        this.$router.push({
+          path: "repair"
+        });
     }
   }
 };

@@ -29,17 +29,17 @@
           v-on:UpdatePreprocessing="UpdatePreprocessing"
           :handle="handle"
         ></gt-table>
-        <!-- v-on:selection-change="handleSelectionChange" -->
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="offset"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="10"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-        ></el-pagination>
       </el-col>
+      <el-pagination
+        style="margin:12px"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="offset"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+      ></el-pagination>
     </el-card>
   </div>
 </template>
