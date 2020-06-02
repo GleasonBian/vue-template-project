@@ -84,11 +84,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="offset"
+        :current-page="queryParam.page_index"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
+        :page-size="queryParam.page_size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+        :total="queryParam.total_count"
       ></el-pagination>
     </el-col>
   </div>
@@ -102,7 +102,10 @@ export default {
   name: "createCorperation",
   data() {
     return {
-      queryParam: {},
+      queryParam: {
+        page_index:1,
+        page_size:10,
+      },
       eqData: [], //设备列表
       corpData: [], //公司列表
       show: true,
@@ -159,23 +162,6 @@ export default {
       limit: 10,
       offset: 1,
       // 创建 更新 删除 表单
-      form: {
-        briefabout: "", //公司简介
-        certguid: "", //公司组织结构代码
-        certtype: "", //证件类型
-        code: "", //公司编码
-        corpclass: "", //所属行业
-        corprank: "", //公司级别
-        corptype: "", //公司类型
-        description: "", //备注
-        location: "", //地理信息
-        name: "", //公司名称
-        regdate: "", // 注册日期
-        superior: "", // 上级标识
-        taxcode: "", // 税号
-        email: "", // 公司邮箱
-        tel: "" // 公司电话
-      },
       
       optionWidth: 250
     };
@@ -205,7 +191,10 @@ export default {
      */
     async getData(val) {
       const res = await fixList({param:this.queryParam});
-      this.tableData = res.data;
+      this.tableData = res.data.fixplandetail;
+      this.queryParam.page_index=res.data.page_index;
+      this.queryParam.page_size=res.data.page_size;
+      this.queryParam.total_count=res.data.total_count;
     },
 
     /*
@@ -269,15 +258,15 @@ export default {
      ** 列表 分页
      */
     handleSizeChange(val) {
-      this.limit = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.queryParam.page_size = val;
+      this.getData();
     },
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
-      this.offset = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.queryParam.page_index = val;
+      this.getData();
     },
 
     async getCorp() {

@@ -27,7 +27,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="项目名称" prop="equip_guid">
+          <el-form-item label="项目名称" prop="corp_guid">
             <el-select v-model="queryParam.corp_guid" placeholder="请选择" style="width:100%">
               <el-option
                 v-for="item in corpData"
@@ -39,7 +39,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="接班时间" prop="equip_guid">
+          <el-form-item label="接班时间" prop="date">
             <el-date-picker
               v-model="queryParam.date"
               type="datetimerange"
@@ -84,11 +84,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="offset"
+        :current-page="queryParam.pageno"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
+        :page-size="queryParam.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+        :total="queryParam.total"
       ></el-pagination>
     </el-col>
   </div>
@@ -107,7 +107,14 @@ export default {
   name: "createCorperation",
   data() {
     return {
-      queryParam: {},
+      queryParam: {
+        equip_guid:null,
+        start:null,
+        end:null,
+        corp_guid:null,
+        pageno:1,
+        pagesize:10
+      },
       eqData: [], //设备列表
       corpData: [], //公司列表
       show: true,
@@ -160,28 +167,6 @@ export default {
         }
       ],
       tableData: null, // 表格数据
-      total: 0,
-      limit: 10,
-      offset: 1,
-      // 创建 更新 删除 表单
-      form: {
-        briefabout: "", //公司简介
-        certguid: "", //公司组织结构代码
-        certtype: "", //证件类型
-        code: "", //公司编码
-        corpclass: "", //所属行业
-        corprank: "", //公司级别
-        corptype: "", //公司类型
-        description: "", //备注
-        location: "", //地理信息
-        name: "", //公司名称
-        regdate: "", // 注册日期
-        superior: "", // 上级标识
-        taxcode: "", // 税号
-        email: "", // 公司邮箱
-        tel: "" // 公司电话
-      },
-
       optionWidth: 250
     };
   },
@@ -207,7 +192,10 @@ export default {
      */
     async getData(val) {
       const res = await assigndeSelect({ param: this.queryParam });
-      this.tableData = res.data;
+      this.tableData = res.data.list;
+      this.queryParam.total=res.data.total
+      this.queryParam.pageno=res.data.pageno
+      this.queryParam.pagesize=res.data.pagesize
     },
 
     /*
@@ -267,15 +255,15 @@ export default {
      ** 列表 分页
      */
     handleSizeChange(val) {
-      this.limit = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.queryParam.pagesize = val;
+      this.getData();
     },
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
-      this.offset = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.queryParam.pageno = val;
+      this.getData();
     },
 
     async getCorp() {
