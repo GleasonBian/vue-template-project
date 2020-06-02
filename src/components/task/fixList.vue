@@ -187,7 +187,7 @@ export default {
   },
   methods: {
     async exportForm(){
-      window.open(process.env.VUE_APP_URL + "download");
+      window.open(process.env.VUE_APP_URL + "download/3");
     },
     dateChange(val) {
       this.queryParam.start = val[0];

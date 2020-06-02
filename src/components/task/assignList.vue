@@ -59,7 +59,7 @@
     <el-col align="left" style="margin-bottom:1%;">
       <el-button type="primary" style="margin-left:1%" size="medium" @click="newAssign">新增</el-button>
       <el-button type="primary" size="medium" @click="singleOil">单机油耗核算</el-button>
-      <el-button type="success" size="medium" @click="singleOil">导出</el-button>
+      <el-button type="success" size="medium" @click="downAss">导出</el-button>
       <el-button
         type="primary"
         style="float:right;margin-right:1%"
@@ -77,7 +77,7 @@
         :columns="columns"
         :selection="false"
         v-on:viewAssign="viewAssign"
-        v-on:deleteCorp="deleteCorp"
+        v-on:deleteAssign="deleteAssign"
         :handle="handle"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
@@ -96,7 +96,12 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { corpSelect, equiSelect } from "@/getData";
+import {
+  corpSelect,
+  equiSelect,
+  assigndeSelect,
+  assignDelete
+} from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
@@ -114,7 +119,7 @@ export default {
           show: true
         },
         {
-          function: "deleteCorp",
+          function: "deleteAssign",
           text: "删除",
           type: "text",
           show: true
@@ -122,35 +127,35 @@ export default {
       ],
       columns: [
         {
-          id: "name",
+          id: "code",
           label: "调令编号"
         },
         {
-          id: "corpclass",
+          id: "equipname",
           label: "车辆名称"
         },
         {
-          id: "corptype",
+          id: "plat_no",
           label: "车牌号码"
         },
         {
-          id: "corprank",
+          id: "project_name",
           label: "项目名称"
         },
         {
-          id: "email",
+          id: "accum_working",
           label: "作业时长"
         },
         {
-          id: "tel1",
+          id: "factstart",
           label: "接班时间"
         },
         {
-          id: "tel",
+          id: "factstop",
           label: "交班时间"
         },
         {
-          id: "location",
+          id: "driver_name",
           label: "值乘司机"
         }
       ],
@@ -176,7 +181,7 @@ export default {
         email: "", // 公司邮箱
         tel: "" // 公司电话
       },
-      
+
       optionWidth: 250
     };
   },
@@ -201,7 +206,7 @@ export default {
      ** 调令列表
      */
     async getData(val) {
-      const res = await corpSelect({param:this.queryParam});
+      const res = await assigndeSelect({ param: this.queryParam });
       this.tableData = res.data;
     },
 
@@ -209,14 +214,18 @@ export default {
      ** 编辑
      */
     async viewAssign(index, row) {
-      this.$router.push({ path: "assignDetail", query: { id: row.guid } });
+      this.$router.push({ path: "assignDetail", query: { id: row.code } });
     },
     /*
      ** 单机油耗核算
      */
     async singleOil() {
       if (
-        !(this.queryParam.equip_guid && this.queryParam.start && this.queryParam.end)
+        !(
+          this.queryParam.equip_guid &&
+          this.queryParam.start &&
+          this.queryParam.end
+        )
       ) {
         this.$message({
           type: "warning",
@@ -238,20 +247,18 @@ export default {
     /*
      ** 删除公司
      */
-    async deleteCorp(index, row) {
+    async deleteAssign(index, row) {
       console.log(row);
       let that = this;
-      this.$confirm("删除公司?", "提示", {
+      this.$confirm("删除调令?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          let res = corpDelete({ id: row.guid });
+          let res = assignDelete({ id: row.code });
           console.log(res);
-          if (res.status === 200) {
-            this.$message.success("删除成功");
-          }
+          this.$message.success("删除成功");
           that.getData();
         })
         .catch(err => {});
@@ -275,7 +282,9 @@ export default {
       const res = await corpSelect();
       this.corpData = res.data;
     },
-
+    downAss() {
+      window.open(process.env.VUE_APP_URL + "download/2");
+    },
     getDataHandle(val) {
       this.queryParam = val;
     }

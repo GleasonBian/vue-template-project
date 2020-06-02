@@ -180,7 +180,7 @@
                   <el-table-column label="处理节点" prop="node" align="center"></el-table-column>
                   <el-table-column label="处理人" align="center">
                     <template slot-scope="scope">
-                      <el-input v-model="scope.row.node"></el-input>
+                      <el-input v-model="scope.row.handler"></el-input>
                     </template>
                   </el-table-column>
                   <el-table-column label="处理时间" align="center">
@@ -198,9 +198,53 @@
                   </el-table-column>
                   <el-table-column label="处理状态" align="center">
                     <template slot-scope="scope">
-                      <el-select v-model="scope.row.state" placeholder="请选择" style="width:100%">
+                      <el-select
+                        v-if="scope.row.node=='申请部门'"
+                        v-model="scope.row.state"
+                        placeholder="请选择"
+                        style="width:100%"
+                      >
                         <el-option
-                          v-for="item in scope.row.status"
+                          v-for="item in status1"
+                          :key="item.guid"
+                          :label="item.name"
+                          :value="item.guid"
+                        ></el-option>
+                      </el-select>
+                      <el-select
+                        v-if="scope.row.node=='设备部'"
+                        v-model="scope.row.state"
+                        placeholder="请选择"
+                        style="width:100%"
+                      >
+                        <el-option
+                          v-for="item in status2"
+                          :key="item.guid"
+                          :label="item.name"
+                          :value="item.guid"
+                        ></el-option>
+                      </el-select>
+                      <el-select
+                        v-if="scope.row.node=='分管领导'"
+                        v-model="scope.row.state"
+                        placeholder="请选择"
+                        style="width:100%"
+                      >
+                        <el-option
+                          v-for="item in status3"
+                          :key="item.guid"
+                          :label="item.name"
+                          :value="item.guid"
+                        ></el-option>
+                      </el-select>
+                      <el-select
+                        v-if="scope.row.node=='项目经理'"
+                        v-model="scope.row.state"
+                        placeholder="请选择"
+                        style="width:100%"
+                      >
+                        <el-option
+                          v-for="item in status4"
                           :key="item.guid"
                           :label="item.name"
                           :value="item.guid"
@@ -279,6 +323,7 @@ import {
   corpDtails,
   corpSelect,
   fixPlanDetail,
+  editFix,
   equiSelect,
   getDeptList
 } from "@/getData";
@@ -292,56 +337,56 @@ export default {
   },
   data() {
     return {
+      status1: [
+        { guid: "提交", name: "提交" },
+        { guid: "草稿", name: "草稿" }
+      ],
+      status2: [
+        { guid: "待审核", name: "待审核" },
+        { guid: "已通过", name: "已通过" },
+        { guid: "已驳回", name: "已驳回" }
+      ],
+      status3: [
+        { guid: "待审核", name: "待审核" },
+        { guid: "已通过", name: "已通过" },
+        { guid: "已驳回", name: "已驳回" }
+      ],
+      status4: [
+        { guid: "待审核", name: "待审核" },
+        { guid: "已通过", name: "已通过" },
+        { guid: "已驳回", name: "已驳回" }
+      ],
       approve: [
-          //审批记录
-          {
-            node: "申请部门",
-            status: [
-              { guid: "提交", name: "提交" },
-              { guid: "草稿", name: "草稿" }
-            ],
-            state: "",
-            handler: "",
-            time: "",
-            remark: ""
-          },
-          {
-            node: "设备部",
-            status: [
-              { guid: "待审核", name: "待审核" },
-              { guid: "已通过", name: "已通过" },
-              { guid: "已驳回", name: "已驳回" }
-            ],
-            state: "",
-            handler: "",
-            time: "",
-            remark: ""
-          },
-          {
-            node: "分管领导",
-            status: [
-              { guid: "待审核", name: "待审核" },
-              { guid: "已通过", name: "已通过" },
-              { guid: "已驳回", name: "已驳回" }
-            ],
-            state: "",
-            handler: "",
-            time: "",
-            remark: ""
-          },
-          {
-            node: "项目经理",
-            status: [
-              { guid: "待审核", name: "待审核" },
-              { guid: "已通过", name: "已通过" },
-              { guid: "已驳回", name: "已驳回" }
-            ],
-            state: "",
-            handler: "",
-            time: "",
-            remark: ""
-          }
-        ], //检查项目
+        //审批记录
+        {
+          node: "申请部门",
+          state: "",
+          handler: "",
+          time: "",
+          remark: ""
+        },
+        {
+          node: "设备部",
+          state: "",
+          handler: "",
+          time: "",
+          remark: ""
+        },
+        {
+          node: "分管领导",
+          state: "",
+          handler: "",
+          time: "",
+          remark: ""
+        },
+        {
+          node: "项目经理",
+          state: "",
+          handler: "",
+          time: "",
+          remark: ""
+        }
+      ], //检查项目
       counter: 0,
       code: null, //公司id，判断是否是新增
       compList: [], //上级公司列表
@@ -361,8 +406,7 @@ export default {
           //   remark: "维修备注"
           // }
         ], //维修记录
-        approve:[],
-        
+        approve: []
       }
     };
   },
@@ -401,9 +445,9 @@ export default {
       //     return false;
       //   }
       // });
-      if (this.guid) {
+      if (this.form.code) {
         //编辑
-        this.updateCorp();
+        this.updateFix();
       } else {
         //新增
         this.submitAddUser();
@@ -412,11 +456,11 @@ export default {
     /*
      ** 更新公司
      */
-    async updateCorp() {
-      const res = await corpUpdate(this.form);
+    async updateFix() {
+      const res = await editFix(this.form);
       if (res.status === 200) {
         this.$message.success("更新成功");
-        this.$router.replace({ path: "companyList" });
+        this.$router.replace({ path: "fixList" });
       } else this.$message.warning("更新失败,稍后重试");
     },
     /*
@@ -435,12 +479,12 @@ export default {
      */
     async viewCorp(guid) {
       const response = await fixPlanDetail({
-        param: {code:this.form.code}
+        param: { code: this.form.code }
       });
       if (response.status === 200) {
         this.form = response.data;
-        if(!this.form.approve.length){
-          this.form.approve=this.approve;
+        if (!this.form.approve.length) {
+          this.form.approve = this.approve;
         }
       } else this.$message.warning("请稍后再尝试");
     },

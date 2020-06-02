@@ -51,7 +51,7 @@
           <el-card>
             <div slot="header" class="clearfix">
               油料核算明细
-              <el-button type="success" style="float:right;" size="small">导出</el-button>
+              <el-button @click="downReport" type="success" style="float:right;" size="small">导出</el-button>
             </div>
             <div>
               <el-table
@@ -113,6 +113,9 @@ export default {
   },
   mounted() {},
   methods: {
+    downReport(){
+       window.open(process.env.VUE_APP_URL + "download/1");
+    },
     goback() {
       this.$router.go(-1);
     },

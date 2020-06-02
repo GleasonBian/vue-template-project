@@ -328,7 +328,14 @@
   </div>
 </template>
 <script>
-import { assignoffline, corpSelect, equiSelect, getDeptList } from "@/getData";
+import {
+  assignoffline,
+  corpSelect,
+  equiSelect,
+  getDeptList,
+  editAssign,
+  viewAssign
+} from "@/getData";
 import headTop from "@/common/headTop";
 import { Regular } from "@/config/verification";
 export default {
@@ -340,7 +347,7 @@ export default {
   data() {
     return {
       counter: 0,
-      code: null, //公司id，判断是否是新增
+      code: '', //公司id，判断是否是新增
       compList: [], //上级公司列表
       deptList: [], //上级'部门'列表
       eqData: [], //设备列表
@@ -348,7 +355,7 @@ export default {
       checkTable: [], //检查表格
       selectlistRow: [], //表格选中的行
       form: {
-        guid: null, //调度编号
+        code: null, //调度编号
         dispatchtime: null, //调度时间
         equip_name: null, //车辆名称
         equip_guid: null, //车辆Guid
@@ -445,14 +452,14 @@ export default {
     };
   },
   created() {
-    this.guid = this.$route.query.id;
+    this.form.code = this.$route.query.id;
     this.getCompList();
   },
   mounted() {
     this.getDeptList();
     this.getEqList();
-    if (this.guid) {
-      this.viewCorp(this.guid);
+    if (this.form.code) {
+      this.viewCorp(this.form.code);
     }
   },
   methods: {
@@ -521,9 +528,9 @@ export default {
       //     return false;
       //   }
       // });
-      if (this.guid) {
+      if (this.form.code) {
         //编辑
-        this.updateCorp();
+        this.editAssign();
       } else {
         //新增
         this.submitAddUser();
@@ -532,11 +539,11 @@ export default {
     /*
      ** 更新公司
      */
-    async updateCorp() {
-      const res = await corpUpdate(this.form);
+    async editAssign() {
+      const res = await editAssign(this.form);
       if (res.status === 200) {
         this.$message.success("更新成功");
-        this.$router.replace({ path: "companyList" });
+        this.$router.replace({ path: "assignList" });
       } else this.$message.warning("更新失败,稍后重试");
     },
     /*
@@ -554,12 +561,11 @@ export default {
      ** 查看公司
      */
     async viewCorp(guid) {
-      const response = await corpDtails({
+      const response = await viewAssign({
         id: guid
       });
       if (response.status === 200) {
-        this.form = response.data[0];
-        console.log(this.form);
+        this.form = response.data;
       } else this.$message.warning("请稍后再尝试");
     },
     async getEqList() {

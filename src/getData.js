@@ -210,59 +210,22 @@ export const oilTaskStart = data => fetch("oildetail/start", data, "put");
 export const oilTaskStop = data => fetch("oildetail/stop", data, "put");
 
 /**
- * 创建调度计划
- */
-export const assignCreate = data => fetch("assignment", data, "post");
-
-/**
- * 调度计划列表
- */
-export const assignSelect = data => fetch("assignment", data, "get");
-
-/**
  * 更新调度计划
  */
 export const assignUpdate = data => fetch("assignment", data, "put");
 
-/**
- * 删除调度计划
- */
-export const assignDelete = data => fetch("assignment", data, "delete");
 
 /**
  * 调度计划详情
  */
 export const assignDetails = data => fetch("assignment", data, "get");
 
-/**
- * 创建调度任务
- */
-export const assigndeCreate = data => fetch("assigndetail", data, "post");
 
 /**
  * 调度任务列表
  */
 export const assigndeSelect = data => fetch("assigndetail", data, "get");
 
-/**
- * 更新调度任务
- */
-export const assigndeUpdate = data => fetch("assigndetail", data, "put");
-
-/**
- * 更新调度任务开始
- */
-export const assigndeStart = data => fetch("assigndetail/start", data, "put");
-
-/**
- * 更新调度任务结束
- */
-export const assigndeStop = data => fetch("assigndetail/stop", data, "put");
-
-/**
- * 删除调度任务
- */
-export const assigndeDelete = data => fetch("assigndetail", data, "delete");
 
 /**
  * 调度任务详情
@@ -271,7 +234,23 @@ export const assigndeDetail = data => fetch("assigndetail", data, "get");
 /**
  * 新增调度
  */
-export const assignoffline = data => fetch("assignoffline", data, "put");
+export const assignoffline = data => fetch("assignoffline", data, "post");
+/**
+ * 调度列表
+ */
+export const assignList = data => fetch("assignoffline", data, "get");
+/**
+ * 调度列表删除
+ */
+export const assignDelete = data => fetch("assignoffline", data, "delete");
+/**
+ * 调度详情
+ */
+export const viewAssign = data => fetch("assignoffline", data, "get");
+/**
+ * 调度更新
+ */
+export const editAssign = data => fetch("assignoffline", data, "put");
 
 /**
  * 调度报表 - 油总核算
@@ -331,6 +310,10 @@ export const newFixPlan = data => fetch("offlinefix", data, "post");
  * 维修申请回显
  */
 export const fixPlanDetail = data => fetch("offlinefix", data, "get");
+/**
+ * 维修申请编辑
+ */
+export const editFix = data => fetch("offlinefix", data, "put");
 
 /**
  * 维修新增

@@ -170,9 +170,9 @@ export default {
     },
     initWebSocket() {
       //初始化weosocket
-      const wsuri = process.env.VUE_APP_SOCKET;
+      const wsuri = process.env.VUE_APP_WORNING;
       // 建立连接
-      this.websock = new WebSocket("ws://192.168.1.150:8090/ws/warning");
+      this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.websocketonmessage;
       this.websock.onopen = this.websocketonopen;
       this.websock.onerror = this.websocketonerror;

@@ -380,6 +380,7 @@ export default {
               // 以 icon 的 [center bottom] 为原点
               offset: new AMap.Pixel(-24, -30)
             });
+            console.log(this.points[i])
             this.map.add(marker);
             break;
           }
@@ -778,7 +779,6 @@ export default {
                 that.marks[j].extData.location +
                 "</div>"
             );
-            let data2 = that.marks[j].extData.guid;
             point.on("click", function(e) {
               infoWindow.setContent(
                 that.createInfoWindow(title, content.join(""))
