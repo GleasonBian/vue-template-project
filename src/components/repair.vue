@@ -3,7 +3,7 @@
     <!-- 搜索框 -->
 
     <el-card>
-      <gt-search :data="searchData" @handle="searchHandle" size></gt-search>
+      <gt-search :data="searchData" @handle="getRepairList" size></gt-search>
     </el-card>
 
     <el-card style="margin-top:12px">
@@ -121,42 +121,35 @@ export default {
       // 搜索框数据
       searchData: [
         {
-          key: "guid", // 与后端交互时的字段 必填
-          label: "车辆牌号", // 搜索框名称 必填
+          key: "flag", // 与后端交互时的字段 必填
+          label: "保养类型", // 搜索框名称 必填
           placeholder: "请选择", // 占位符 选填
-          default: "0", // 搜索框 默认值
+          default: "", // 搜索框 默认值
           options: [
             {
-              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
-              value: "福田", // 下拉选项 绑定 值
-              label: "0019" // 下拉选项 绑定 名称
+              label: "日常保养",
+              value: "day"
             },
             {
-              value: "本田",
-              label: "00210"
+              label: "周常保养",
+              value: "week"
+            },
+            {
+              label: "月常保养",
+              value: "month"
             }
           ]
         },
         {
-          key: "OPM",
+          key: "opm",
           label: "项目部",
           placeholder: "请选择",
           default: "",
-          options: [
-            {
-              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
-              value: "福田", // 下拉选项 绑定 值
-              label: "0019" // 下拉选项 绑定 名称
-            },
-            {
-              value: "本田",
-              label: "00210"
-            }
-          ]
+          options: []
         },
         {
           key: "date",
-          label: "搜索框3",
+          label: "选择日期",
           placeholder: "请选择",
           default: ""
         }
@@ -167,6 +160,8 @@ export default {
   beforeCreate() {},
   created() {
     this.getRepairList();
+    // this.getEquiList();
+    this.getDeptList();
   },
   methods: {
     /*
@@ -234,21 +229,28 @@ export default {
     },
 
     /*
-     ** 更新预处理
+     ** 设备列表
      */
-    UpdatePreprocessing(index, row) {},
+    async getEquiList() {
+      const res = await equiSelect();
+      res.data.map(item => {
+        item.value = item.guid;
+        item.label = item.plateno;
+      });
+      this.searchData[0].options = res.data;
+    },
 
-    /*
-     ** 更新处理
+    /**
+     ** 部门列表
      */
-    async UpdateHandle(index, row) {
-      this.ExamineHandle(index, row);
-      const res = await oildeUpdate(this.form);
-      if (res.status === 200) {
-        this.detaList();
-        this.$message.success("更新成功");
-      } else this.$message.warning("更新失败,稍后重试");
-      this.dialogFormVisible = false;
+    async getDeptList() {
+      const res = await getDeptList();
+      res.data.map(item => {
+        console.log(item);
+        item.value = item.guid;
+        item.label = item.name;
+      });
+      this.searchData[1].options = res.data;
     },
 
     /*
@@ -274,8 +276,8 @@ export default {
     /*
      ** 获取保养记录列表
      */
-    async getRepairList(formName) {
-      const res = await repairList();
+    async getRepairList(param) {
+      const res = await repairList({ param: param });
       this.tableData = res.data;
       res.data.map(item => {
         switch (item.type) {
@@ -318,8 +320,9 @@ export default {
     /*
      ** 搜索处理
      */
-    searchHandle(val) {
-      console.log("搜索:", val);
+    async searchHandle(param) {
+      const res = await oildeSelect({ param: param });
+      this.tableData = res.data;
     },
 
     /*

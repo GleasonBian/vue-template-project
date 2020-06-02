@@ -3,7 +3,7 @@
     <gt-header></gt-header>
     <el-card style="margin-top:12px;margin-right:12px;width:100%">
       <div slot="header" class="clearfix">
-        <span>机车日常检查保养记录表</span>
+        <span>机车周常检查保养记录表</span>
       </div>
       <el-form
         :model="form"

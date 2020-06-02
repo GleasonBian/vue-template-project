@@ -7,7 +7,7 @@
           v-if="item.options"
           v-model="search[item.key]"
           :placeholder="
-            item.placeholder ? item.placeholder : '请选择搜索关键字'
+            item.placeholder ? item.placeholder : '请选择'
           "
           style="width:100%; margin-right:15px"
         >
@@ -57,7 +57,7 @@
           v-if="item.options"
           v-model="search[item.key]"
           :placeholder="
-            item.placeholder ? item.placeholder : '请选择搜索关键字'
+            item.placeholder ? item.placeholder : '请选择'
           "
           style="width:100%; margin-right:15px"
         >
@@ -84,7 +84,7 @@
           v-else
           v-model="search[item.key]"
           :placeholder="
-            item.placeholder ? item.placeholder : '请输入搜索关键字'
+            item.placeholder ? item.placeholder : '请输入'
           "
           :size="size"
           style="margin-right:15px"
@@ -142,7 +142,11 @@ export default {
     },
     reset() {
       this.$props.data.map(item => {
-        this.$set(this.search, item.key, "");
+        delete this.search.date;
+        if (item.key === "date") {
+          this.$set(this.search, "start", "");
+          this.$set(this.search, "end", "");
+        } else this.$set(this.search, item.key, "");
       });
       this.$emit("handle", this.search);
     },
