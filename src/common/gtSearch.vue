@@ -23,7 +23,7 @@
           v-model="search[item.key]"
           type="daterange"
           format="yyyy年MM月dd日"
-          value-format="yyyy-MM-ddHH:mm:ss"
+          value-format="yyyy-MM-dd HH:mm:ss"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -73,7 +73,7 @@
           v-model="search[item.key]"
           type="daterange"
           format="yyyy年MM月dd日"
-          value-format="yyyy-MM-ddmm:ss"
+          value-format="yyyy-MM-dd HH:mm:ss"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
@@ -135,10 +135,8 @@ export default {
   watch: {},
   methods: {
     searchHandle() {
-      if ("date" in this.search) {
-        delete this.search.date;
-        this.$emit("handle", this.search);
-      } else this.$emit("handle", this.search);
+      if ("date" in this.search) delete this.search.date;
+      this.$emit("handle", this.search);
     },
     reset() {
       this.$props.data.map(item => {
@@ -165,8 +163,7 @@ export default {
     this.$props.data.map(item => {
       this.$set(this.search, item.key, item.default ? item.default : "");
     });
-  },
-  mounted() {}
+  }
 };
 </script>
 <style scoped>

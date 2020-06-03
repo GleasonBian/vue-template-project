@@ -20,7 +20,7 @@
                 v-model="form.guid"
                 placeholder="请选择"
                 style="width:100%"
-                @change="selectHandle"
+                @change="equidHandle"
               >
                 <el-option
                   v-for="item in equiList"
@@ -48,7 +48,12 @@
               </el-select>
             </el-form-item>
             <el-form-item label="保养部门" prop="repair_dept">
-              <el-select v-model="form.repair_dept" placeholder="请选择" style="width:100%">
+              <el-select
+                v-model="form.repair_dept"
+                @change="repairHandle"
+                placeholder="请选择"
+                style="width:100%"
+              >
                 <el-option
                   v-for="item in deptList"
                   :key="item.guid"
@@ -60,7 +65,12 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="所属公司" prop="company">
-              <el-select v-model="form.company" placeholder="请选择" style="width:100%">
+              <el-select
+                v-model="form.company"
+                @change="companyHandle"
+                placeholder="请选择"
+                style="width:100%"
+              >
                 <el-option
                   v-for="item in compList"
                   :key="item.guid"
@@ -70,7 +80,12 @@
               </el-select>
             </el-form-item>
             <el-form-item label="项目部" prop="project_dept">
-              <el-select v-model="form.project_dept" placeholder="请选择" style="width:100%">
+              <el-select
+                v-model="form.project_dept"
+                @change="projectHandle"
+                placeholder="请选择"
+                style="width:100%"
+              >
                 <el-option
                   v-for="item in deptList"
                   :key="item.guid"
@@ -392,26 +407,70 @@ export default {
         }
       });
     },
+
     /*
-     ** 选中车辆 自动添加 车牌号码
+     ** 选择设备 带出id
      */
-    selectHandle(guid) {
+    equidHandle(guid) {
       let that = this;
-      var val = this.equiList;
-      if (val) {
+      var equiList = this.equiList;
+      if (equiList) {
         // 将选中数据遍历
-        val.forEach(function(item, index) {
-          // 遍历源数据
-          //
-          // that.tableData.forEach(function(itemI, indexI) {
-          //   // 如果选中数据跟元数据某一条标识相等，删除对应的源数据
-          //   if (item.guid === itemI.guid) {
-          //     itemI.plateno = item.plateno;
-          //   }
-          // });
+        equiList.forEach(function(item, index) {
+          if (item.guid === guid) {
+            that.form.plateno = item.plateno;
+          }
         });
       }
-      console.log(this.tableData);
+    },
+
+    /*
+     ** 项目部门 带出id
+     */
+    projectHandle(guid) {
+      let that = this;
+      var deptList = this.deptList;
+      if (deptList) {
+        // 将选中数据遍历
+        deptList.forEach(function(item, index) {
+          if (item.guid === guid) {
+            that.form.proname = item.name;
+          }
+        });
+      }
+    },
+
+    /*
+     ** 保养部门 带出id
+     */
+    repairHandle(guid) {
+      let that = this;
+      var deptList = this.deptList;
+      if (deptList) {
+        // 将选中数据遍历
+        deptList.forEach(function(item, index) {
+          if (item.guid === guid) {
+            that.form.repaname = item.name;
+          }
+        });
+      }
+    },
+
+    /*
+     ** 选择公司 带出id
+     */
+    companyHandle(guid) {
+      console.log(guid);
+      let that = this;
+      var compList = this.compList;
+      if (compList) {
+        // 将选中数据遍历
+        compList.forEach(function(item, index) {
+          if (item.guid === guid) {
+            that.form.compname = item.name;
+          }
+        });
+      }
     },
     /*
      ** 合并行 与 列

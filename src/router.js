@@ -158,8 +158,8 @@ const router = new Router({
       component: resolve => require(["@/common/platform"], resolve),
       children: [
         {
-          path: "oilplan",
-          component: resolve => require(["@/components/oilplan"], resolve),
+          path: "refuel",
+          component: resolve => require(["@/components/refuel"], resolve),
           meta: {
             crumbs: ["计划", "加油计划"],
             title: "加油计划",

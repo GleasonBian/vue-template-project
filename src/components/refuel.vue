@@ -2,7 +2,7 @@
   <div style="padding:12px">
     <!-- 搜索框 -->
     <el-card class="serarch">
-      <gt-search :data="searchData" @handle="oilApplyList" style="width:100%"></gt-search>
+      <gt-search :data="searchData" @handle="oilApplyList" ref="refuelSearch" style="width:100%"></gt-search>
     </el-card>
 
     <el-card style="margin-top:12px;">
@@ -12,25 +12,24 @@
         </router-link>
         <el-button type="success" size="medium" style="margin-left:1%" @click="BatchDeleteUser">导出</el-button>
       </el-col>
+      <!-- refuel -->
       <gt-table
         :tableData="tableData"
         style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
-        v-on:checkHandle="checkHandle"
+        v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
-        v-on:UpdatePreprocessing="UpdatePreprocessing"
         :handle="handle"
       ></gt-table>
-      <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
         style="margin:12px 0px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="offset"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
+        :current-page="pageno"
+        :page-sizes="[1,2,3,4]"
+        :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
@@ -43,30 +42,25 @@ import headTop from "@/common/headTop";
 import {
   getStaffList,
   corpSelect,
-  getDeptList,
   oilCreate,
   oilSelect,
   oilUpdate,
   oilDetails,
   oildeSelect,
-  oilDelete,
-  OfflineDeleteOilRecode
+  /* ---------- */
+  getDeptList, // 部门列表
+  refuelList, // 加油申请列表
+  refuelDelete // 加油申请删除
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
-  name: "oilPlan",
+  name: "refuel",
   data() {
     return {
       handle: [
         {
-          function: "checkHandle",
-          text: "查看",
-          type: "text",
-          show: true
-        },
-        {
-          function: "UpdatePreprocessing",
-          text: "更新",
+          function: "ExamineHandle",
+          text: "查看/编辑",
           type: "text",
           show: true
         },
@@ -109,8 +103,8 @@ export default {
       ],
       tableData: [], // 表格数据
       total: 0,
-      limit: 10,
-      offset: 1,
+      pagesize: 2,
+      pageno: 1,
       optionWidth: 250,
       searchData: [
         // 搜索框 数据
@@ -121,7 +115,7 @@ export default {
           default: ""
         },
         {
-          key: "guid", // 与后端交互时的字段 必填
+          key: "dept_guid", // 与后端交互时的字段 必填
           label: "项目部", // 搜索框名称 必填
           placeholder: "请搜索", // 占位符 选填
           default: "", // 搜索框 默认值
@@ -144,15 +138,18 @@ export default {
     /**
      ** 加油申请列表
      */
-    async oilApplyList(param) {
-      const res = await oildeSelect({ param: param });
-      this.tableData = res.data;
+    async oilApplyList(param = {}) {
+      param.pagesize = this.pagesize;
+      param.pageno = this.pageno;
+      const res = await refuelList({ param: param });
+      this.total = res.data.total;
+      this.tableData = res.data.list;
     },
 
     /*
      ** 查看处理
      */
-    async checkHandle(index, row) {
+    async ExamineHandle(index, row) {
       this.$router.push({
         path: "/plan/oilApply",
         query: {
@@ -162,21 +159,14 @@ export default {
     },
 
     /*
-     ** 更新预处理
-     */
-    async UpdatePreprocessing(index, row) {
-      console.log(index, row);
-      this.ExamineHandle(index, row);
-      this.formCurrentStatus = "更新";
-    },
-
-    /*
-     ** 更新处理
+     ** 下载
      */
     async UpdateHandle(index, row) {
+      this.ExamineHandle(index, row);
+      this.formCurrentStatus = "更新";
       const res = await oilUpdate(this.form);
       if (res.status === 200) {
-        this.oilPlans();
+        this.refuels();
         this.$message.success("更新成功");
       } else this.$message.warning("更新失败,稍后重试");
       this.dialogFormVisible = false;
@@ -187,13 +177,13 @@ export default {
      */
     DeleteHandle(index, row) {
       let that = this;
-      this.$confirm("删除计划?", "提示", {
+      this.$confirm("删除加油申请?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(async () => {
-          let res = await OfflineDeleteOilRecode({ id: row.code });
+          let res = await refuelDelete({ id: row.code });
           this.$message.success("删除成功");
           if (res.status === 200) {
             this.$message.success("删除成功");
@@ -207,16 +197,16 @@ export default {
      ** 列表 分页
      */
     handleSizeChange(val) {
-      this.limit = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.pagesize = val;
+      this.$refs.refuelSearch.searchHandle();
     },
 
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
-      this.offset = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.pageno = val;
+      this.$refs.refuelSearch.searchHandle();
     },
 
     /*
@@ -224,15 +214,6 @@ export default {
      */
     BatchDeleteUser() {
       window.open(process.env.VUE_APP_URL + "download");
-    },
-
-    /*
-     ** 列表 批量删除 用户  预处理
-     */
-    handleSelectionChange(val) {
-      let arr = [];
-      for (var item of val) arr.push(item.id);
-      this.multipleSelection = arr;
     },
 
     /**

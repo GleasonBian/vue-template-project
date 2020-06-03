@@ -31,7 +31,7 @@
           <template slot="title">
             <i class="iconfont i-menu-three" style="font-size:20px"></i>作业管理
           </template>
-          <el-menu-item index="/plan/oilplan" style="text-align: center;">车辆加油</el-menu-item>
+          <el-menu-item index="/plan/refuel" style="text-align: center;">车辆加油</el-menu-item>
           <el-menu-item index="/plan/repair" style="text-align: center;">车辆保养</el-menu-item>
           <el-menu-item index="/assign/assignList" style="text-align: center;">车辆调度</el-menu-item>
           <el-menu-item index="/plan/fixList" style="text-align: center;">车辆维修</el-menu-item>

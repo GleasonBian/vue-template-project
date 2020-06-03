@@ -3,7 +3,7 @@
     <!-- 搜索框 -->
 
     <el-card>
-      <gt-search :data="searchData" @handle="getRepairList" size></gt-search>
+      <gt-search :data="searchData" @handle="getRepairList" ref="gtSearch"></gt-search>
     </el-card>
 
     <el-card style="margin-top:12px">
@@ -15,7 +15,7 @@
         </el-select>
         <el-button type="primary" size="medium" @click="CreateHandle" plain>创建</el-button>
 
-        <el-button type="primary" size="medium" @click="exportExcel">导出</el-button>
+        <!-- <el-button type="primary" size="medium" @click="exportExcel">导出</el-button> -->
       </el-col>
 
       <gt-table
@@ -26,14 +26,15 @@
         :selection="false"
         v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
+        v-on:downloadHandle="downloadHandle"
         :handle="handle"
       ></gt-table>
       <el-pagination
         style="margin:12px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="offset"
-        :page-sizes="[10, 20, 30, 40]"
+        :current-page="pageno"
+        :page-sizes="[2, 4, 6]"
         :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -49,7 +50,8 @@ import {
   equiSelect, // 设备列表
   oilSelect, // 加油计划列表
   repairList, // 保养记录
-  repairDelete // 删除保养记录
+  repairDelete, // 删除保养记录
+  repairexport // 单条导出
 } from "@/getData";
 export default {
   name: "fixtask",
@@ -68,20 +70,21 @@ export default {
           text: "删除",
           type: "text",
           show: true
+        },
+        {
+          function: "downloadHandle",
+          text: "导出",
+          type: "text",
+          show: true
         }
       ],
-      // type: "day",
-      //   guid: "", // 车辆guid
-      //   time: "", // 保养时间
-      //   state: "", // 保养状态
-      //   repair_dept: "", // 保养部门 guid
-      //   company: "", // 公司 guid
-      //   project_dept: "", // 项目部 guid
-      //   driver_chief: "", // 司机长
-      //   driver: "", // 司机
       columns: [
         {
           id: "code",
+          label: "保养记录编号"
+        },
+        {
+          id: "plateno",
           label: "保养记录编号"
         },
         {
@@ -97,11 +100,11 @@ export default {
           label: "保养状态"
         },
         {
-          id: "repair_dept",
+          id: "repaname",
           label: "保养部门"
         },
         {
-          id: "project_dept",
+          id: "proname",
           label: "项目部"
         },
         {
@@ -114,9 +117,9 @@ export default {
         }
       ],
       tableData: [], // 表格数据
-      total: 0,
-      limit: 10,
-      offset: 1,
+      total: 6,
+      pageno: 1,
+      pagesize: 2,
       optionWidth: 250,
       // 搜索框数据
       searchData: [
@@ -160,7 +163,6 @@ export default {
   beforeCreate() {},
   created() {
     this.getRepairList();
-    // this.getEquiList();
     this.getDeptList();
   },
   methods: {
@@ -276,10 +278,17 @@ export default {
     /*
      ** 获取保养记录列表
      */
-    async getRepairList(param) {
+    async getRepairList(param = {}) {
+      param.pageno = this.pageno;
+      param.pagesize = this.pagesize;
+      console.log(param);
       const res = await repairList({ param: param });
-      this.tableData = res.data;
-      res.data.map(item => {
+
+      this.tableData = res.data.list;
+      this.total = res.data.total;
+      // this.pagesize = res.data.pagesize;
+      // this.pageno = res.data.pagesize;
+      res.data.list.map(item => {
         switch (item.type) {
           case "day":
             item.type = "日常保养";
@@ -298,23 +307,19 @@ export default {
      ** 列表 分页
      */
     handleSizeChange(val) {
-      this.limit = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
-    },
-
-    /*
-     *关闭编辑状态
-     */
-    handleisShowViewUser() {
-      this.isEditor = true;
+      this.pagesize = val;
+      console.log(`size每页:${val}条`);
+      console.log(`size第${this.pageno}页`);
+      this.$refs.gtSearch.searchHandle();
     },
 
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
-      this.offset = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      console.log(`current每页:${this.pagesize}条`);
+      this.pageno = val;
+      this.$refs.gtSearch.searchHandle();
     },
 
     /*
@@ -328,7 +333,14 @@ export default {
     /*
      ** 导出 excel
      */
-    exportExcel(val) {}
+    exportExcel(val) {},
+
+    /*
+     ** 单条导出
+     */
+    downloadHandle(index, row) {
+      window.open(process.env.VUE_APP_URL + `repairexport/${row.code}`);
+    }
   },
   components: {}
 };

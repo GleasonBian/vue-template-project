@@ -174,6 +174,7 @@ export const fixTaskStop = data => fetch("/fixdetail/stop", data, "put");
  * 维修任务删除
  */
 export const fixdeDelete = data => fetch("fixdetail", data, "delete");
+
 /**
  * 创建加油任务
  */
@@ -319,31 +320,45 @@ export const editFix = data => fetch("offlinefix", data, "put");
  * 维修新增
  */
 export const fixList = data => fetch("fixdetail", data, "get");
+
 /**
  * 维修任务新增
  */
 export const fixTask = data => fetch("fixreport", data, "post");
 
+
+/* -----------------------加油申请 -------------------------------*/
+
 /**
- * 作业管理 车辆加油
+ * 作业管理 / 加油申请 / 创建
  */
-export const offlineoildetail = data => fetch("offlineoildetail", data, "post");
-
+export const refuelCreate = data => fetch("refuel", data, "post");
 
 /**
- * 加油申请详情查看
+ * 作业管理 / 加油申请 / 列表 !id
  */
-export const oilApplyDetail = data => fetch("offlineoildetail", data, "get");
+export const refuelList = data => fetch("refuel", data, "get");
 
 /**
- * 加油申请详情查看
+ * 作业管理 / 加油申请 / 详情 id
  */
-export const OfflineDeleteOilRecode = data => fetch("OfflineDeleteOilRecode", data, "delete");
-
-
+export const refuelDetail = data => fetch("refuel", data, "get");
 
 /**
- * 作业管理 车辆保养创建
+ * 作业管理 / 加油申请 / 删除 id
+ */
+export const refuelDelete = data => fetch("refuel", data, "delete");
+
+/**
+ * 作业管理 / 加油申请 / 更新 id
+ */
+export const refuelUpdate = data => fetch("refuel", data, "put");
+
+
+/* -----------------------加油申请 -------------------------------*/
+
+/**
+ * 作业管理 / 车辆保养 / 创建 id
  */
 export const repairCreat = data => fetch("repaircreat", data, "post");
 
@@ -358,11 +373,16 @@ export const repairList = data => fetch("repairlist", data, "get");
 export const repairDetail = data => fetch("repaircheck", data, "get");
 
 /**
- * 作业管理 更新
+ * 作业管理 保养更新
  */
 export const repairUpdate = data => fetch("repairupdate", data, "put");
 
 /**
- * 作业管理 删除
+ * 作业管理 保养删除
  */
 export const repairDelete = data => fetch("repairdel", data, "delete");
+
+/**
+ * 车辆保养 下载
+ */
+export const repairexport = data => fetch("repairexport", data, "get");
