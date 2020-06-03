@@ -366,3 +366,11 @@ export const repairUpdate = data => fetch("repairupdate", data, "put");
  * 作业管理 删除
  */
 export const repairDelete = data => fetch("repairdel", data, "delete");
+/**
+ * 公司分页查询
+ */
+export const allCorpList = data => fetch("corps", data, "get");
+/**
+ * 公司按级别查询
+ */
+export const corpRank = data => fetch("corprank", data, "get");

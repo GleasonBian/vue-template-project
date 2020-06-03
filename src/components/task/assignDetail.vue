@@ -454,13 +454,14 @@ export default {
   created() {
     this.form.code = this.$route.query.id;
     this.getCompList();
-  },
-  mounted() {
     this.getDeptList();
     this.getEqList();
     if (this.form.code) {
       this.viewCorp(this.form.code);
     }
+  },
+  mounted() {
+    
   },
   methods: {
     // 获取表格选中时的数据

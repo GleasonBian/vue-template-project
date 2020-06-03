@@ -2,7 +2,7 @@
   <div>
     <!-- 面包屑 -->
     <headTop></headTop>
-    <div class="formWidth">
+    <div style="margin:15px">
       <el-card>
         <el-form
           :model="form"
@@ -14,8 +14,8 @@
         >
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="公司编码" prop="guid">
-                <el-input disabled v-model="form.guid"></el-input>
+              <el-form-item label="公司编码" prop="code">
+                <el-input disabled v-model="form.code"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -38,24 +38,33 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="上级公司" prop="corp_guid">
-                <el-select v-model="form.corp_guid" placeholder="请选择" style="width:100%">
+              <el-form-item label="公司级别" prop="corprank">
+                <el-select
+                  v-model="form.corprank"
+                  @change="changeLevel"
+                  placeholder="请选择"
+                  style="width:100%"
+                >
+                  <el-option label="局级" value="1"></el-option>
+                  <el-option label="分公司" value="2"></el-option>
+                  <el-option label="项目部" value="3"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item v-if="form.corprank!=='1'" label="上级公司" prop="superior">
+                <el-select
+                  :disabled="form.corprank=='1'"
+                  v-model="form.superior"
+                  placeholder="请选择"
+                  style="width:100%"
+                >
                   <el-option
                     v-for="item in compList"
                     :key="item.guid"
                     :label="item.name"
                     :value="item.guid"
                   ></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="公司级别" prop="corprank">
-                <el-select v-model="form.corprank" placeholder="请选择" style="width:100%">
-                  <el-option label="股份公司" value="股份公司"></el-option>
-                  <el-option label="一级公司" value="一级公司"></el-option>
-                  <el-option label="二级公司" value="二级公司"></el-option>
-                  <el-option label="三级公司" value="三级公司"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -82,9 +91,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="成立日期" prop="regdate">
+              <el-form-item label="成立日期" prop="establishtime">
                 <el-date-picker
-                  v-model="form.regdate"
+                  v-model="form.establishtime"
                   type="date"
                   placeholder="选择日期"
                   format="yyyy 年 MM 月 dd 日"
@@ -94,22 +103,28 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="法人姓名" prop="name">
-                <el-input maxlength="100" v-model="form.name"></el-input>
+              <el-form-item label="法人姓名" prop="legal">
+                <el-input maxlength="100" v-model="form.legal"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="所在区域" prop="name">
-                <el-input maxlength="100" v-model="form.name"></el-input>
+              <el-form-item label="联系人" prop="contactperson">
+                <el-input v-model="form.contactperson"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="所在区域" prop="regioncodeArr">
+                <sel-area
+                  v-model="form.regioncodeArr"
+                  :modelArr="form.regioncodeArr"
+                  :isAll="false"
+                  @region="recRegion"
+                  @regionCode="recRegionCode"
+                ></sel-area>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="详细地址" prop="location">
-                <el-input v-model="form.location"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="联系人" prop="location">
                 <el-input v-model="form.location"></el-input>
               </el-form-item>
             </el-col>
@@ -129,8 +144,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="机构代码" prop="certguid">
-                <el-input v-model="form.certguid"></el-input>
+              <el-form-item label="机构代码" prop="orgcode">
+                <el-input v-model="form.orgcode"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -166,21 +181,36 @@
 <script>
 import {
   corperation,
-  corpSelect,
+  corpRank,
   corpDtails,
   corpUpdate,
   corpDelete
 } from "@/getData";
+import { regionData, TextToCode, CodeToText } from "element-china-area-data";
 import headTop from "@/common/headTop";
+import selArea from "@/common/gtArea";
 import { Regular } from "@/config/verification";
 export default {
   name: "companyDetail",
   components: {
-    // searchBox,
+    selArea,
     headTop
   },
   data() {
+    const hasRegion = (rule, value, callback) => {
+      console.log("3",rule,value,callback);
+      if (!value) {
+        console.log("1",value)
+        callback(new Error("必填 所在区域"));
+      } else {
+        console.log("2",value)
+        callback();
+      }
+
+    };
     return {
+      options: regionData,
+      selectedOptions: [],
       guid: null, //公司id，判断是否是新增
       compList: [], //上级公司列表
       form: {
@@ -195,37 +225,72 @@ export default {
         location: "", //地理信息
         name: "", //公司名称
         regdate: "", // 注册日期
+        establishtime: "", // 成立日期
         superior: "", // 上级标识
         taxcode: "", // 税号
         email: "", // 公司邮箱
+        contactperson: "", // 公司联系人
+        legal: "", // 公司法人
+        region: "", // 所在区域
+        regioncode: "", //区域编码(后台存用的)
+        regioncodeArr: [], //区域编码(前端用的)
         tel: "" // 公司电话
       },
-
       Regular: Regular, // 表单校验正则
       // 表单校验规则
       rules: {
         status: [
           {
             required: true,
-            message: "企业状态 必填"
+            message: "必填 企业状态 "
+          }
+        ],
+        regioncodeArr: [
+          {
+            required: true,
+            message: "必填 所在区域 "
+          },{
+            validator:hasRegion,
+            trigger: ["blur", "change"]
           }
         ],
         name: [
           {
             required: true,
-            message: "公司名称 必填"
+            message: "必填 公司名称 "
           }
         ],
         shortname: [
           {
             required: true,
-            message: "公司简称 必填"
+            message: "必填 公司简称"
+          }
+        ],
+        establishtime: [
+          {
+            required: true,
+            message: "必填 成立日期 ",
+            trigger: ["blur", "change"]
           }
         ],
         code: [
           {
+            required: false,
+            message: "必填 公司编码 ",
+            trigger: ["blur", "change"]
+          }
+        ],
+        contactperson: [
+          {
             required: true,
-            message: "公司编码 邮箱",
+            message: "必填 联系人 ",
+            trigger: ["blur", "change"]
+          }
+        ],
+        legal: [
+          {
+            required: true,
+            message: "必填 法人姓名 ",
             trigger: ["blur", "change"]
           }
         ],
@@ -257,7 +322,7 @@ export default {
             trigger: "blur"
           }
         ],
-        certguid: [
+        orgcode: [
           {
             required: true,
             message: "必填 公司组织机构代码",
@@ -266,7 +331,7 @@ export default {
         ],
         superior: [
           {
-            required: false,
+            required: true,
             message: "必填  上级标识",
             trigger: ["blur", "change"]
           }
@@ -325,7 +390,7 @@ export default {
   },
   created() {
     this.guid = this.$route.query.id;
-    this.getCompList();
+    // this.getCompList();
   },
   mounted() {
     if (this.guid) {
@@ -333,6 +398,22 @@ export default {
     }
   },
   methods: {
+    recRegion(region) {
+      this.form.region = region;
+    },
+    recRegionCode(code) {
+      this.form.regioncodeArr = code;
+      this.form.regioncode = JSON.stringify(code);
+    },
+    addressChange(arr) {
+      console.log(arr);
+      console.log(CodeToText[arr[0]], CodeToText[arr[1]], CodeToText[arr[2]]);
+    },
+    changeLevel() {
+      let level = this.form.corprank;
+      this.form.superior = ""; //重置
+      this.getCompList(level - 1); //上级公司列表
+    },
     goback() {
       this.$router.go(-1);
     },
@@ -340,7 +421,7 @@ export default {
      ** 公司列表查询
      */
     async getCompList(val) {
-      const res = await corpSelect();
+      const res = await corpRank({ id: val });
       this.compList = res.data;
     },
 
@@ -393,7 +474,8 @@ export default {
       });
       if (response.status === 200) {
         this.form = response.data[0];
-        console.log(this.form);
+        this.form.regioncodeArr = JSON.parse(this.form.regioncode);
+        if (this.form.corprank > 1) this.getCompList(this.form.corprank - 1);
       } else this.$message.warning("请稍后再尝试");
     }
   }

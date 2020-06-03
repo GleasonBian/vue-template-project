@@ -85,7 +85,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="queryParam.page_index"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="[1, 2, 3, 4]"
         :page-size="queryParam.page_size"
         layout="total, sizes, prev, pager, next, jumper"
         :total="queryParam.total_count"
@@ -104,7 +104,7 @@ export default {
     return {
       queryParam: {
         page_index:1,
-        page_size:10,
+        page_size:1,
       },
       eqData: [], //设备列表
       corpData: [], //公司列表
