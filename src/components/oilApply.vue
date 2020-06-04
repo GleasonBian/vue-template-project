@@ -15,7 +15,13 @@
           style="width:100%"
         >
           <el-form-item label="加油数量" prop="quantity">
-            <el-input placeholder="请输入数字" type="number" v-model.number="form.quantity" :step="0.01">
+            <el-input
+              placeholder="请输入数字"
+              type="number"
+              v-model.number="form.quantity"
+              :step="0.01"
+              :readonly="true"
+            >
               <el-button slot="append">升</el-button>
             </el-input>
           </el-form-item>
@@ -121,7 +127,7 @@
             <template slot-scope="scope">
               <el-select v-model="scope.row.state" placeholder="请选择" style="width:100%">
                 <el-option
-                  v-for="(item,index) in scope.row.option"
+                  v-for="(item,index) in optionState"
                   :key="index"
                   :label="item.label"
                   :value="item.value"
@@ -155,7 +161,7 @@
         @selection-change="selectRow"
         size="mini"
       >
-        <el-table-column type="selection" label="序号" align="center"></el-table-column>
+        <el-table-column type="selection" align="center"></el-table-column>
         <el-table-column type="index" label="序号" align="center"></el-table-column>
         <el-table-column prop="guid" label="车牌号码" align="center">
           <template slot-scope="scope">
@@ -164,6 +170,7 @@
               placeholder="请选择"
               style="width:100%"
               @change="selectHandle"
+              size="mini"
             >
               <el-option
                 v-for="item in equiList"
@@ -176,14 +183,36 @@
         </el-table-column>
         <el-table-column prop="oil_address" label="加油地点" align="center">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.oil_address"></el-input>
+            <el-input v-model="scope.row.oil_address" size="mini"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="plan_time" label="加油时间" align="center">
+          <template slot-scope="scope">
+            <el-date-picker
+              size="mini"
+              v-model="scope.row.plan_time"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              type="datetime"
+              placeholder="选择日期时间"
+            ></el-date-picker>
           </template>
         </el-table-column>
         <el-table-column prop="oil_grade" label="加油标号" align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.oil_grade" placeholder="请选择" style="width:100%">
-              <el-option label="#95" value="#95"></el-option>
+            <el-select
+              v-model="scope.row.oil_grade"
+              placeholder="请选择"
+              style="width:100%"
+              size="mini"
+            >
+              <el-option label="#91" value="#91"></el-option>
               <el-option label="#92" value="#92"></el-option>
+              <el-option label="#93" value="#93"></el-option>
+              <el-option label="#94" value="#94"></el-option>
+              <el-option label="#95" value="#95"></el-option>
+              <el-option label="#96" value="#96"></el-option>
+              <el-option label="#97" value="#97"></el-option>
+              <el-option label="#98" value="#98"></el-option>
             </el-select>
           </template>
         </el-table-column>
@@ -194,12 +223,14 @@
               step="0.01"
               v-model.number="scope.row.quantity"
               autocomplete="off"
+              size="mini"
+              @change="sumRefuelNumber"
             ></el-input>
           </template>
         </el-table-column>
         <el-table-column prop="unit" label="油量单位" align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.unit" placeholder="请选择" style="width:100%">
+            <el-select v-model="scope.row.unit" placeholder="请选择" style="width:100%" size="mini">
               <el-option label="升" value="升"></el-option>
               <el-option label="桶" value="桶"></el-option>
               <el-option label="吨" value="吨"></el-option>
@@ -221,7 +252,12 @@
         </el-table-column>
         <el-table-column prop="priority" label="优先顺序" align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.priority" placeholder="请选择" style="width:100%">
+            <el-select
+              v-model="scope.row.priority"
+              placeholder="请选择"
+              style="width:100%"
+              size="mini"
+            >
               <el-option label="一级" value="一级"></el-option>
               <el-option label="二级" value="二级"></el-option>
               <el-option label="三级" value="三级"></el-option>
@@ -230,7 +266,7 @@
         </el-table-column>
         <el-table-column prop="remarks" label="备注" align="center">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.remarks"></el-input>
+            <el-input v-model="scope.row.remarks" size="mini"></el-input>
           </template>
         </el-table-column>
       </el-table>
@@ -247,17 +283,19 @@ import {
   getCompList,
   getDeptList,
   equiSelect,
-  offlineoildetail, // 加油申请创建
-  oilApplyDetail // 加油申请查看
+  refuelCreate, // 加油申请创建
+  refuelDetail, // 加油申请查看
+  refuelUpdate // 加油详情更新
 } from "@/getData";
 import headTop from "@/common/headTop";
 export default {
-  name: "companyDetail",
+  name: "oilApply",
   components: {
     headTop
   },
   data() {
     return {
+      id: this.$route.query.id,
       counter: 0,
       guid: null, //公司id，判断是否是新增
       compList: [], // 公司列表
@@ -265,7 +303,7 @@ export default {
       equiList: [],
       form: {
         company: "", // 所属公司
-        quantity: "", // 加油数量
+        quantity: 0, // 加油数量
         amount: "", // 加油金额
         apply_date: "", // 申请时间
         apply_state: "", // 申请状态
@@ -278,59 +316,21 @@ export default {
             handler: "",
             time: "",
             state: "",
-            opinion: "",
-            option: [
-              {
-                label: "提交",
-                value: "提交"
-              },
-              {
-                label: "草稿",
-                value: "草稿"
-              }
-            ]
+            opinion: ""
           },
           {
             node: "审核部门",
             handler: "",
             time: "",
             state: "",
-            opinion: "",
-            option: [
-              {
-                label: "待审核",
-                value: "待审核"
-              },
-              {
-                label: "已通过",
-                value: "已通过"
-              },
-              {
-                label: "已驳回",
-                value: "已驳回"
-              }
-            ]
+            opinion: ""
           },
           {
             node: "接收部门",
             handler: "",
             time: "",
             state: "",
-            opinion: "",
-            option: [
-              {
-                label: "待审核",
-                value: "待审核"
-              },
-              {
-                label: "已通过",
-                value: "已通过"
-              },
-              {
-                label: "已驳回",
-                value: "已驳回"
-              }
-            ]
+            opinion: ""
           }
         ],
         vehicle: []
@@ -346,7 +346,7 @@ export default {
         ],
         quantity: [
           {
-            required: true,
+            required: false,
             message: "必填 ",
             trigger: ["blur", "change"]
           }
@@ -387,7 +387,29 @@ export default {
           }
         ]
       },
-      selectlistRow: []
+      selectlistRow: [],
+      optionState: [
+        {
+          label: "草稿",
+          value: "草稿"
+        },
+        {
+          label: "提交",
+          value: "提交"
+        },
+        {
+          label: "待审核",
+          value: "待审核"
+        },
+        {
+          label: "已通过",
+          value: "已通过"
+        },
+        {
+          label: "已驳回",
+          value: "已驳回"
+        }
+      ]
     };
   },
   created() {
@@ -450,7 +472,8 @@ export default {
         quantity: "", // 加油数量
         urgent: false, // 是否加急
         priority: "", // 优先顺序
-        remarks: "" // 备注
+        remarks: "", // 备注
+        plan_time: ""
       };
       this.form.vehicle.push(list);
       this.counter++;
@@ -519,9 +542,11 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.form.vehicle.length === 0
-            ? this.$message.warning("请添加车辆")
-            : this.offlineoildetailHandle();
+          if (this.form.vehicle.length === 0) {
+            this.$message.warning("请添加车辆");
+            return;
+          }
+          this.id ? this.refuelUpdateHandle() : this.refuelCreateHandle();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -532,12 +557,12 @@ export default {
     /*
      ** 表单提交验证
      */
-    async offlineoildetailHandle() {
-      const res = await offlineoildetail(this.form);
+    async refuelCreateHandle() {
+      const res = await refuelCreate(this.form);
       if (res.data instanceof Object && res.status === 200) {
         this.$message.success("添加成功");
         this.$router.push({
-          path: "/plan/oilplan"
+          path: "/plan/refuel"
         });
       } else this.$message.warning("添加失败, 请稍后尝试!");
     },
@@ -547,9 +572,31 @@ export default {
      */
     async oilApplyCheck() {
       if (!this.$route.query.id) return;
-      const res = await oilApplyDetail({ id: this.$route.query.id });
+      const res = await refuelDetail({ id: this.$route.query.id });
       this.form = res.data;
-      console.log(res);
+    },
+
+    /*
+     ** 加油详情更新
+     */
+    async refuelUpdateHandle() {
+      if (!this.$route.query.id) return;
+      const res = await refuelUpdate(this.form);
+      if (res.data instanceof Object && res.status === 200)
+        this.$router.push({
+          path: "refuel"
+        });
+    },
+
+    /*
+     ** 合计加油数据
+     */
+    sumRefuelNumber() {
+      this.form.quantity = 0;
+      this.form.vehicle.map(item => {
+        // if (item.)
+        this.form.quantity += item.quantity;
+      });
     }
   }
 };

@@ -370,12 +370,12 @@ export const repairCreat = data => fetch("repaircreat", data, "post");
 export const repairList = data => fetch("repairlist", data, "get");
 
 /**
- * 作业管理 保养记录详情
+ * 作业管理 / 车辆保养 / 详情 id
  */
 export const repairDetail = data => fetch("repaircheck", data, "get");
 
 /**
- * 作业管理 保养更新
+ * 作业管理 / 车辆保养 / 更新 id
  */
 export const repairUpdate = data => fetch("repairupdate", data, "put");
 
