@@ -184,7 +184,6 @@ export default {
       })
         .then(async () => {
           let res = await refuelDelete({ id: row.code });
-          this.$message.success("删除成功");
           if (res.status === 200) {
             this.$message.success("删除成功");
             this.oilApplyList();
