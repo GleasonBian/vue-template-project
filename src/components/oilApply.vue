@@ -479,7 +479,7 @@ export default {
         urgent: false, // 是否加急
         priority: "", // 优先顺序
         remarks: "", // 备注
-        plan_time: ""
+        plan_time: "" // 加油时间
       };
       this.form.vehicle.push(list);
       this.counter++;
@@ -511,7 +511,10 @@ export default {
           // 遍历源数据
           that.form.vehicle.forEach(function(itemI, indexI) {
             // 如果选中数据跟元数据某一条标识相等，删除对应的源数据
-            if (item.guid === itemI.guid) {
+            if (
+              item.guid === itemI.guid &&
+              item.plan_time === itemI.plan_time
+            ) {
               that.form.vehicle.splice(indexI, 1);
             }
           });
