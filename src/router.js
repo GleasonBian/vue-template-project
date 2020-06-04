@@ -133,8 +133,18 @@ const router = new Router({
           }
         },
         {
-          path: "staff",
-          component: resolve => require(["@/components/staff"], resolve),
+          path: "staffList",
+          component: resolve => require(["@/components/platform/staffList"], resolve),
+          meta: {
+            crumbs: ["平台", "人员管理"],
+            title: "人员管理",
+            index: 3,
+            menu: "090302"
+          }
+        },
+        {
+          path: "staffDetail",
+          component: resolve => require(["@/components/platform/staffDetail"], resolve),
           meta: {
             crumbs: ["平台", "人员管理"],
             title: "人员管理",

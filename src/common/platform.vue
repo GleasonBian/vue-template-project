@@ -53,7 +53,7 @@
             style="text-align: center;"
           >公司管理</el-menu-item>
           <el-menu-item index="/platform/deptList" style="text-align: center;">部门管理</el-menu-item>
-          <el-menu-item index="/platform/staff" style="text-align: center;">人员管理</el-menu-item>
+          <el-menu-item index="/platform/staffList" style="text-align: center;">人员管理</el-menu-item>
           <el-menu-item index="/platform/role" style="text-align: center;">角色管理</el-menu-item>
         </el-submenu>
 
