@@ -383,18 +383,16 @@ export const repairUpdate = data => fetch("repairupdate", data, "put");
 export const repairDelete = data => fetch("repairdel", data, "delete");
 
 /**
- * 车辆保养 下载
+ * 作业管理 / 车辆保养 / 删除 id
  */
-<<<<<<< HEAD
-export const repairexport = data => fetch("repairexport", data, "get");
-=======
 export const repairDelete = data => fetch("repairdel", data, "delete");
+
 /**
  * 公司分页查询
  */
 export const allCorpList = data => fetch("corps", data, "get");
+
 /**
  * 公司按级别查询
  */
 export const corpRank = data => fetch("corprank", data, "get");
->>>>>>> df681c3edf329f57b67bf43a6ef788a356453da0
