@@ -363,7 +363,7 @@ export const refuelUpdate = data => fetch("refuel", data, "put");
 export const repairCreat = data => fetch("repaircreat", data, "post");
 
 /**
- * 作业管理 保养列表
+ * 作业管理 / 车辆保养 / 列表 
  */
 export const repairList = data => fetch("repairlist", data, "get");
 
@@ -378,14 +378,10 @@ export const repairDetail = data => fetch("repaircheck", data, "get");
 export const repairUpdate = data => fetch("repairupdate", data, "put");
 
 /**
- * 作业管理 保养删除
- */
-export const repairDelete = data => fetch("repairdel", data, "delete");
-
-/**
  * 作业管理 / 车辆保养 / 删除 id
  */
 export const repairDelete = data => fetch("repairdel", data, "delete");
+
 
 /**
  * 公司分页查询
