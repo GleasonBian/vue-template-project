@@ -4,12 +4,59 @@
     <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
-    <gt-search :data="searchData" @handle="getData" size></gt-search>
+    <el-row :gutter="20" class="searchBox">
+      <el-form
+        :model="queryParam"
+        status-icon
+        ref="form"
+        label-width="auto"
+        style="width:100%"
+        lable-width="120px"
+      >
+        <el-col :span="8">
+          <el-form-item label="公司名称" prop="name">
+            <el-input clearable v-model="queryParam.name"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="所在区域" prop="regioncodeArr">
+            <sel-area
+              v-model="queryParam.regioncodeArr"
+              :isAll="false"
+              :isClear="true"
+              @region="recRegion"
+              @regionCode="recRegionCode"
+            ></sel-area>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="创建时间" prop="date">
+            <el-date-picker
+              clearable
+              v-model="queryParam.date"
+              type="datetimerange"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              style="width:100%; margin-right:15px"
+              @change="dateChange(queryParam.date)"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-form>
+    </el-row>
 
     <!-- 列表操作按钮 -->
-    <el-col align="left" style="margin-bottom:1%">
-      <el-button type="primary" size="medium" @click="newComp" style="margin-left:1%">新增</el-button>
-      <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
+    <el-col align="left" style="margin-bottom:1%;">
+      <el-button type="primary" style="margin-left:1%" size="medium" @click="newComp">新增</el-button>
+      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
+      <el-button
+        type="primary"
+        style="float:right;margin-right:1%"
+        size="medium"
+        @click="getData"
+      >查询</el-button>
     </el-col>
 
     <!-- 内部用户列表 -->
@@ -28,11 +75,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="offset"
+        :current-page="queryParam.pageno"
         :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
+        :page-size="queryParam.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
+        :total="queryParam.total"
       ></el-pagination>
     </el-col>
   </div>
@@ -40,71 +87,31 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
+import selArea from "@/common/gtArea";
 import {
   corperation,
   corpSelect,
   corpDtails,
   corpUpdate,
+  allCorpList,
   corpDelete
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
   data() {
-    var checkUserName = async (rule, value, callback) => {
-      // 验证 登录手机号
-      if (!value) return callback(new Error("手机号码 不能为空"));
-      else if (!Regular.Phone.test(value))
-        return callback(new Error("请输入正确固话或手机号"));
-      else if (value) {
-        // 调用接口 验证唯一性
-        let res = await checkPhone({
-          phoneNo: value
-        });
-        if (res.result) callback();
-        else callback(new Error("该号码已存在,请更换号码注册"));
-      }
-    };
-    let checkName = (rule, value, callback) => {
-      // 验证 user Name
-      if (!value) return callback(new Error("用户名称 不能为空"));
-      else if (!Regular.Username.test(value))
-        callback(new Error("2到16位（汉字, 字母，数字，下划线，连字符）"));
-      else {
-        callback();
-      }
-    };
-    let checkEmail = (rule, value, callback) => {
-      // 验证 email
-      if (!value) return callback(new Error("邮箱不能为空"));
-      else if (!Regular.Email.test(value))
-        return callback(new Error("邮箱格式非法"));
-      else {
-        callback();
-      }
-    };
-    var validatePass = (rule, value, callback) => {
-      // 验证 密码
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.form.checkPass !== "") {
-          this.$refs.form.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      // 验证 确认密码
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.form.password) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
     return {
+      queryParam: {
+        regioncodeArr: [],
+        name: "",
+        region: "",
+        start: "",
+        end: "",
+        date: "",
+        pageno: 1,
+        pagesize: 10,
+        total: null
+      },
       show: true,
       handle: [
         {
@@ -122,219 +129,34 @@ export default {
       ],
       columns: [
         {
+          id: "guid",
+          label: "公司编号"
+        },
+        {
           id: "name",
           label: "公司名称"
         },
         {
-          id: "corpclass",
-          label: "所属行业"
+          id: "superiorname",
+          label: "上级公司"
         },
         {
-          id: "corptype",
-          label: "公司类型"
+          id: "status",
+          label: "公司状态"
         },
         {
-          id: "corprank",
-          label: "公司级别"
+          id: "region",
+          label: "所在区域"
         },
         {
-          id: "email",
-          label: "公司邮箱"
-        },
-        {
-          id: "tel",
-          label: "公司电话"
-        },
-        {
-          id: "location",
-          label: "地理位置"
+          id: "regdate",
+          label: "注册时间"
         }
       ],
       tableData: null, // 表格数据
       total: 0,
       limit: 10,
       offset: 1,
-      multipleSelection: [], // 用于批量 删除
-      dialogFormVisible: false, // 是否显示 新增 删除 更新 对话框
-      formCurrentStatus: "", // 表单当前状态
-      // 创建 更新 删除 表单
-      form: {
-        briefabout: "", //公司简介
-        certguid: "", //公司组织结构代码
-        certtype: "", //证件类型
-        code: "", //公司编码
-        corpclass: "", //所属行业
-        corprank: "", //公司级别
-        corptype: "", //公司类型
-        description: "", //备注
-        location: "", //地理信息
-        name: "", //公司名称
-        regdate: "", // 注册日期
-        superior: "", // 上级标识
-        taxcode: "", // 税号
-        email: "", // 公司邮箱
-        tel: "" // 公司电话
-      },
-      searchData: [
-        // 搜索框 数据
-        {
-          key: "id", // 与后端交互时的字段 必填
-          label: "搜索框1", // 搜索框名称 必填
-          placeholder: "请搜索", // 占位符 选填
-          default: "0", // 搜索框 默认值
-          options: [
-            {
-              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
-              value: "1", // 下拉选项 绑定 值
-              label: "男" // 下拉选项 绑定 名称
-            },
-            {
-              value: "0",
-              label: "女"
-            }
-          ]
-        },
-        {
-          key: "date",
-          label: "搜索框2",
-          placeholder: "",
-          default: ""
-        },
-        {
-          key: "age",
-          label: "搜索框3",
-          placeholder: "请搜索",
-          default: ""
-        },
-        {
-          key: "ccc",
-          label: "搜索框4",
-          placeholder: "请搜索",
-          default: ""
-        },
-        {
-          key: "asdafs",
-          label: "搜索框5",
-          placeholder: "请搜索",
-          default: ""
-        },
-        {
-          key: "adgdd",
-          label: "搜索框6",
-          placeholder: "请搜索",
-          default: ""
-        }
-      ],
-      Regular: Regular, // 表单校验正则
-      // 表单校验规则
-      rules: {
-        name: [
-          {
-            required: true,
-            message: "公司名称 必填"
-          }
-        ],
-        code: [
-          {
-            required: true,
-            message: "公司编码 邮箱",
-            trigger: ["blur", "change"]
-          }
-        ],
-        location: [
-          {
-            required: true,
-            message: "必填 地理信息",
-            trigger: ["blur", "change"]
-          }
-        ],
-        corpclass: [
-          {
-            required: true,
-            message: "必填 所属行业",
-            trigger: ["blur", "change"]
-          }
-        ],
-        corptype: [
-          {
-            required: true,
-            message: "必填 公司类型",
-            trigger: ["blur", "change"]
-          }
-        ],
-        certtype: [
-          {
-            required: true,
-            message: "必填 证件类型",
-            trigger: "blur"
-          }
-        ],
-        certguid: [
-          {
-            required: true,
-            message: "必填 公司组织机构代码",
-            trigger: "blur"
-          }
-        ],
-        superior: [
-          {
-            required: false,
-            message: "必填  上级标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        taxcode: [
-          {
-            required: true,
-            message: "必填 公司税号",
-            trigger: ["blur", "change"]
-          }
-        ],
-        description: [
-          {
-            required: false,
-            message: "公司备注",
-            trigger: ["blur", "change"]
-          }
-        ],
-        briefabout: [
-          {
-            required: false,
-            message: "必填 公司简介",
-            trigger: ["blur", "change"]
-          }
-        ],
-        regdate: [
-          {
-            required: true,
-            message: "必填 注册日期",
-            trigger: ["blur", "change"]
-          }
-        ],
-        corprank: [
-          {
-            required: true,
-            message: "必填 公司级别",
-            trigger: ["blur", "change"]
-          }
-        ],
-        email: [
-          {
-            required: true,
-            message: "必填 公司邮箱",
-            trigger: ["blur", "change"]
-          }
-        ],
-        tel: [
-          {
-            required: true,
-            message: "必填 公司电话",
-            trigger: ["blur", "change"]
-          }
-        ]
-      },
-      isShowViewUser: false, // 是否显示 查看用户 dialog
-      isEditor: true,
       optionWidth: 250
     };
   },
@@ -343,15 +165,33 @@ export default {
     this.getData();
   },
   methods: {
+    recRegion(region) {
+      region !== "undefined"
+        ? (this.queryParam.region = region)
+        : (this.queryParam.region = "");
+    },
+    recRegionCode(code) {
+      this.queryParam.regioncodeArr = code || [];
+    },
+    async exportForm() {
+      window.open(process.env.VUE_APP_URL + "download/5");
+    },
+    dateChange(val) {
+      this.queryParam.start = val[0];
+      this.queryParam.end = val[1];
+    },
     newComp() {
       this.$router.push({ path: "companyDetail" });
     },
     /**
      ** 公司查询
      */
-    async getData(val) {
-      const res = await corpSelect();
-      this.tableData = res.data;
+    async getData() {
+      const res = await allCorpList({ param: this.queryParam });
+      this.tableData = res.data.list;
+      this.queryParam.pagesize = res.data.pagesize;
+      this.queryParam.pageno = res.data.pageno;
+      this.queryParam.total = res.data.total;
     },
 
     /*
@@ -398,15 +238,15 @@ export default {
      ** 列表 分页
      */
     handleSizeChange(val) {
-      this.limit = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.queryParam.pagesize = val;
+      this.getData();
     },
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
-      this.offset = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.queryParam.pageno = val;
+      this.getData();
     },
 
     /*
@@ -436,9 +276,13 @@ export default {
     }
   },
   components: {
-    // searchBox,
+    selArea,
     headTop
   }
 };
 </script>
-<style></style>
+<style>
+.searchBox {
+  padding: 15px 20px;
+}
+</style>
