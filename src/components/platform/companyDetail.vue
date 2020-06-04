@@ -29,7 +29,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="公司名称" prop="name">
-                <el-input maxlength="100" v-model="form.name"></el-input>
+                <el-input maxlength="100" clearable v-model="form.name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -118,6 +118,7 @@
                   v-model="form.regioncodeArr"
                   :modelArr="form.regioncodeArr"
                   :isAll="false"
+                  :isClear="false"
                   @region="recRegion"
                   @regionCode="recRegionCode"
                 ></sel-area>
@@ -186,7 +187,6 @@ import {
   corpUpdate,
   corpDelete
 } from "@/getData";
-import { regionData, TextToCode, CodeToText } from "element-china-area-data";
 import headTop from "@/common/headTop";
 import selArea from "@/common/gtArea";
 import { Regular } from "@/config/verification";
@@ -197,17 +197,6 @@ export default {
     headTop
   },
   data() {
-    const hasRegion = (rule, value, callback) => {
-      console.log("3",rule,value,callback);
-      if (!value) {
-        console.log("1",value)
-        callback(new Error("必填 所在区域"));
-      } else {
-        console.log("2",value)
-        callback();
-      }
-
-    };
     return {
       options: regionData,
       selectedOptions: [],
@@ -249,9 +238,6 @@ export default {
           {
             required: true,
             message: "必填 所在区域 "
-          },{
-            validator:hasRegion,
-            trigger: ["blur", "change"]
           }
         ],
         name: [
@@ -404,10 +390,6 @@ export default {
     recRegionCode(code) {
       this.form.regioncodeArr = code;
       this.form.regioncode = JSON.stringify(code);
-    },
-    addressChange(arr) {
-      console.log(arr);
-      console.log(CodeToText[arr[0]], CodeToText[arr[1]], CodeToText[arr[2]]);
     },
     changeLevel() {
       let level = this.form.corprank;

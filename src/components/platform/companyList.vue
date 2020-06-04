@@ -22,8 +22,8 @@
           <el-form-item label="所在区域" prop="regioncodeArr">
             <sel-area
               v-model="queryParam.regioncodeArr"
-              :modelArr="queryParam.regioncodeArr"
               :isAll="false"
+              :isClear="true"
               @region="recRegion"
               @regionCode="recRegionCode"
             ></sel-area>

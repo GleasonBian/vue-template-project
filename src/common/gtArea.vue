@@ -4,8 +4,9 @@
       style="width:100%"
       size="large"
       :options="options"
-      clearable
+      :clearable="isClear"
       v-model="regionCode"
+      
       @change="addressChange"
     ></el-cascader>
   </div>
@@ -26,6 +27,10 @@ export default {
       default: []
     },
     isAll: {
+      type: Boolean,
+      default: false
+    },
+    isClear: {
       type: Boolean,
       default: false
     }
