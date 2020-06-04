@@ -14,24 +14,24 @@
         lable-width="120px"
       >
         <el-col :span="8">
-          <el-form-item label="公司名称" prop="name">
+          <el-form-item label="部门名称" prop="name">
             <el-input clearable v-model="queryParam.name"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="所在区域" prop="regioncodeArr">
-            <sel-area
-              v-model="queryParam.regioncodeArr"
-              :modelArr="queryParam.regioncodeArr"
-              :isAll="false"
-              :isClear="true"
-              @region="recRegion"
-              @regionCode="recRegionCode"
-            ></sel-area>
+          <el-form-item label="所属公司" prop="corpguid">
+            <el-select clearable v-model="queryParam.corpguid" placeholder="请选择" style="width:100%">
+              <el-option
+                v-for="item in compList"
+                :key="item.guid"
+                :value="item.guid"
+                :label="item.name"
+              ></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="创建时间" prop="date">
+          <el-form-item label="注册时间" prop="date">
             <el-date-picker
               clearable
               v-model="queryParam.date"
@@ -88,24 +88,23 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import selArea from "@/common/gtArea";
+// import selArea from "@/common/gtArea";
 import {
   corperation,
   corpSelect,
   corpDtails,
   corpUpdate,
-  allCorpList,
-  corpDelete
+  deptPage,
+  delDept
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
   data() {
     return {
+      compList:[],
       queryParam: {
-        regioncodeArr: [],
         name: "",
-        region: "",
         start: "",
         end: "",
         date: "",
@@ -130,24 +129,24 @@ export default {
       ],
       columns: [
         {
-          id: "guid",
-          label: "公司编号"
+          id: "name",
+          label: "部门名称"
         },
         {
-          id: "name",
-          label: "公司名称"
+          id: "shortname",
+          label: "部门简称"
         },
         {
           id: "superiorname",
-          label: "上级公司"
+          label: "上级部门"
+        },
+        {
+          id: "corp_name",
+          label: "所属公司"
         },
         {
           id: "status",
-          label: "公司状态"
-        },
-        {
-          id: "region",
-          label: "所在区域"
+          label: "部门状态"
         },
         {
           id: "regdate",
@@ -164,31 +163,31 @@ export default {
   beforeCreate() {},
   created() {
     this.getData();
+    this.getCompList();
   },
   methods: {
-    recRegion(region) {
-      region !== "undefined"
-        ? (this.queryParam.region = region)
-        : (this.queryParam.region = "");
-    },
-    recRegionCode(code) {
-      this.queryParam.regioncodeArr = code || [];
+    
+    async getCompList(){
+      const res = await corpSelect();
+      if (res.data) {
+        this.compList = res.data;
+      } else this.$message.warning(res.message);
     },
     async exportForm() {
-      window.open(process.env.VUE_APP_URL + "download/5");
+      window.open(process.env.VUE_APP_URL + "download/6");
     },
     dateChange(val) {
       this.queryParam.start = val[0];
       this.queryParam.end = val[1];
     },
     newComp() {
-      this.$router.push({ path: "companyDetail" });
+      this.$router.push({ path: "deptDetail" });
     },
     /**
      ** 公司查询
      */
     async getData() {
-      const res = await allCorpList({ param: this.queryParam });
+      const res = await deptPage({ param: this.queryParam });
       this.tableData = res.data.list;
       this.queryParam.pagesize = res.data.pagesize;
       this.queryParam.pageno = res.data.pageno;
@@ -211,7 +210,7 @@ export default {
      ** 查看公司
      */
     async viewCorp(index, row) {
-      this.$router.push({ path: "companyDetail", query: { id: row.guid } });
+      this.$router.push({ path: "deptDetail", query: { id: row.guid } });
     },
 
     /*
@@ -226,7 +225,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          let res = corpDelete({ id: row.guid });
+          let res = delDept({ id: row.guid });
           console.log(res);
           if (res.status === 200) {
             this.$message.success("删除成功");
@@ -277,7 +276,6 @@ export default {
     }
   },
   components: {
-    selArea,
     headTop
   }
 };

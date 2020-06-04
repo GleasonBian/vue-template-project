@@ -101,9 +101,20 @@ const router = new Router({
           }
         },
         {
-          path: "departmentList",
+          path: "deptList",
           component: resolve =>
-            require(["@/components/departmentList"], resolve),
+            require(["@/components/platform/deptList"], resolve),
+          meta: {
+            crumbs: ["平台", "部门管理"],
+            title: "部门管理",
+            index: 1,
+            menu: "090302"
+          }
+        },
+        {
+          path: "deptDetail",
+          component: resolve =>
+            require(["@/components/platform/deptDetail"], resolve),
           meta: {
             crumbs: ["平台", "部门管理"],
             title: "部门管理",

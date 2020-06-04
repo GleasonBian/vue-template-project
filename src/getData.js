@@ -17,6 +17,8 @@ export const getDeptDetail = data => fetch("dept", data, "get");
 export const editDeptDetail = data => fetch("dept", data, "put");
 //删除部门 delDept
 export const delDept = data => fetch("dept", data, "delete");
+//删除部门 delDept
+export const deptPage = data => fetch("depts", data, "get");
 
 //获取人员列表
 export const getStaffList = data => fetch("staff", data, "get");

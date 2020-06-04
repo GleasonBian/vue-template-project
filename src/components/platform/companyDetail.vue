@@ -14,8 +14,8 @@
         >
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item label="公司编码" prop="code">
-                <el-input disabled v-model="form.code"></el-input>
+              <el-form-item label="公司编码" prop="guid">
+                <el-input disabled v-model="form.guid"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -198,8 +198,6 @@ export default {
   },
   data() {
     return {
-      options: regionData,
-      selectedOptions: [],
       guid: null, //公司id，判断是否是新增
       compList: [], //上级公司列表
       form: {
@@ -380,6 +378,7 @@ export default {
   },
   mounted() {
     if (this.guid) {
+      this.form.code=this.guid
       this.viewCorp(this.guid);
     }
   },
