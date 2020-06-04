@@ -16,9 +16,15 @@
             <img src="https://img-blog.csdnimg.cn/20200520140729270.png" alt style="width:90%" />
           </div>
         </el-menu-item>
+
         <el-menu-item index="/dashboard" style>
           <i class="iconfont i-menu-one"></i>监控平台
         </el-menu-item>
+
+        <el-menu-item index="/platform/equipment" style>
+          <i class="iconfont i-menu-one"></i>车辆台账
+        </el-menu-item>
+
         <el-submenu index="5" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
             <i class="iconfont i-menu-six"></i>实时监测
@@ -47,10 +53,10 @@
             style="text-align: center;"
           >公司管理</el-menu-item>
           <el-menu-item index="/platform/deptList" style="text-align: center;">部门管理</el-menu-item>
-          <el-menu-item index="/platform/role" style="text-align: center;">角色管理</el-menu-item>
           <el-menu-item index="/platform/staff" style="text-align: center;">人员管理</el-menu-item>
-          <el-menu-item index="/platform/equipment" style="text-align: center;">设备管理</el-menu-item>
+          <el-menu-item index="/platform/role" style="text-align: center;">角色管理</el-menu-item>
         </el-submenu>
+
         <el-menu-item style="float:right">
           <i class="el-icon-user"></i>
           <el-dropdown @command="handleCommand" class="dddddd">
@@ -70,7 +76,6 @@
 		        <el-menu-item index="/charge/chargework">交接班</el-menu-item>
         </el-submenu>-->
       </el-menu>
-
       <el-row>
         <transition>
           <router-view></router-view>
