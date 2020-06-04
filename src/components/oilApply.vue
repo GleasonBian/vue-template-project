@@ -230,7 +230,13 @@
         </el-table-column>
         <el-table-column prop="unit" label="油量单位" align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.unit" placeholder="请选择" style="width:100%" size="mini">
+            <el-select
+              v-model="scope.row.unit"
+              placeholder="请选择"
+              @change="sumRefuelNumber"
+              style="width:100%"
+              size="mini"
+            >
               <el-option label="升" value="升"></el-option>
               <el-option label="桶" value="桶"></el-option>
               <el-option label="吨" value="吨"></el-option>
@@ -594,8 +600,7 @@ export default {
     sumRefuelNumber() {
       this.form.quantity = 0;
       this.form.vehicle.map(item => {
-        // if (item.)
-        this.form.quantity += item.quantity;
+        if (item.unit === "升") this.form.quantity += item.quantity;
       });
     }
   }
