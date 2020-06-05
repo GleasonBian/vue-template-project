@@ -37,17 +37,8 @@
   </div>
 </template>
 <script>
-import searchBox from "@/common/gtSearch";
-import headTop from "@/common/headTop";
 import {
-  getStaffList,
-  corpSelect,
-  oilCreate,
-  oilSelect,
   oilUpdate,
-  oilDetails,
-  oildeSelect,
-  /* ---------- */
   getDeptList, // 部门列表
   refuelList, // 加油申请列表
   refuelDelete // 加油申请删除
@@ -227,10 +218,6 @@ export default {
       });
       this.searchData[1].options = res.data;
     }
-  },
-  components: {
-    // searchBox,
-    headTop
   }
 };
 </script>

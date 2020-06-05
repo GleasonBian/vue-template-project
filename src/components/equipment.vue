@@ -1,28 +1,14 @@
 <template>
-  <div>
-    <!-- 面包屑 -->
-    <!-- <headTop></headTop> -->
+  <div style="padding:12px">
+    <el-card style="margin-bottom:12px">
+      <gt-search :data="searchData"></gt-search>
+    </el-card>
 
-    <!-- 搜索框 -->
-    <gt-search :data="searchData" @handle="corpList" size></gt-search>
+    <el-card>
+      <router-link to="/platform/vehicle">
+        <el-button type="primary" size="medium" style="margin-bottom:12px">新增</el-button>
+      </router-link>
 
-    <!-- 列表操作按钮 -->
-    <el-col align="left" style="margin-bottom:1%">
-      <el-button
-        type="primary"
-        size="medium"
-        @click="
-          dialogFormVisible = true;
-          formCurrentStatus = '创建';
-        "
-        style="margin-left:1%"
-        >新增</el-button
-      >
-      <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
-    </el-col>
-
-    <!-- 内部用户列表 -->
-    <el-col align="middle">
       <gt-table
         :tableData="tableData"
         style="width: 98%"
@@ -31,182 +17,25 @@
         :selection="false"
         v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
-        v-on:UpdatePreprocessing="UpdatePreprocessing"
         :handle="handle"
       ></gt-table>
-      <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
+        style="margin-top:12px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="offset"
+        :current-page="pageno"
         :page-sizes="[10, 20, 30, 40]"
         :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
       ></el-pagination>
-    </el-col>
+    </el-card>
 
     <!-- 新增 查看 更新 -->
-    <el-dialog
-      :title="formCurrentStatus + '设备'"
-      :visible.sync="dialogFormVisible"
-      width="25%"
-      @close="DialogClose('form')"
-      :close-on-click-modal="false"
-      top="0vh"
-      center
-    >
-      <el-form
-        :model="form"
-        status-icon
-        :rules="rules"
-        ref="form"
-        label-width="80px"
-        style="width:100%"
-      >
-        <el-form-item label="所属公司" prop="corpguid">
-          <el-select
-            v-model="form.corpguid"
-            placeholder="请选择"
-            @change="resetDept(form.corpguid)"
-            style="width:100%"
-          >
-            <el-option
-              v-for="item in corpData"
-              :key="item.guid"
-              :label="item.name"
-              :value="item.guid"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="所属部门" prop="deptguid">
-          <el-select
-            v-model="form.deptguid"
-            placeholder="请选择"
-            style="width:100%"
-          >
-            <el-option
-              v-for="item in deptData"
-              track-by="item.guid"
-              :key="item.guid"
-              :label="item.name"
-              :value="item.guid"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <!-- 
-        <el-form-item label="证件号码" prop="certguid">
-          <el-input v-model="form.certguid"></el-input>
-        </el-form-item>
-
-        <el-form-item label="证件类型" prop="certtype">
-          <el-input v-model="form.certtype"></el-input>
-        </el-form-item>-->
-
-        <el-form-item label="设备名称" prop="name">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-
-        <!-- <el-form-item label="设备编码" prop="code">
-          <el-input v-model="form.code"></el-input>
-        </el-form-item> -->
-
-        <el-form-item label="车辆牌号" prop="plateno">
-          <el-input v-model="form.plateno"></el-input>
-        </el-form-item>
-
-        <el-form-item label="油箱高度" prop="oilboxheight">
-          <el-input-number
-            v-model.number="form.oilboxheight"
-            :step="10"
-          ></el-input-number>
-          cm
-        </el-form-item>
-
-        <el-form-item label="油箱容量" prop="oilboxvol">
-          <el-input-number
-            v-model.number="form.oilboxvol"
-            :step="10"
-          ></el-input-number>
-          L
-        </el-form-item>
-
-        <el-form-item label="手机号" prop="simnumber">
-          <el-input v-model="form.simnumber"></el-input>
-        </el-form-item>
-
-        <el-form-item label="终端id" prop="terminalid">
-          <el-input v-model="form.terminalid"></el-input>
-        </el-form-item>
-
-        <el-form-item label="分类等级" prop="clsrank">
-          <el-select
-            v-model="form.clsrank"
-            placeholder="请选择"
-            style="width:100%"
-          >
-            <el-option label="一级" value="一级"></el-option>
-            <el-option label="二级" value="二级"></el-option>
-            <el-option label="三级" value="三级"></el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="车辆类型" prop="clstype">
-          <el-select
-            v-model="form.clstype"
-            placeholder="请选择"
-            style="width:100%"
-          >
-            <el-option label="轨道车" value="轨道车"></el-option>
-            <el-option label="东风机车" value="东风机车"></el-option>
-            <el-option label="SUV" value="SUV"></el-option>
-          </el-select>
-          <!-- <el-input v-model="form.clstype" placeholder="请输入"></el-input> -->
-        </el-form-item>
-
-        <el-form-item label="车辆型号" prop="class">
-          <el-input v-model="form.class" placeholder="请输入"></el-input>
-        </el-form-item>
-
-        <el-form-item label="生产日期" prop="proddate">
-          <el-date-picker
-            v-model="form.proddate"
-            type="date"
-            placeholder="选择日期"
-            format="yyyy 年 MM 月 dd 日"
-            value-format="yyyy-MM-dd"
-            style="width:100%"
-          ></el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="生产厂家" prop="producer">
-          <el-input v-model="form.producer"></el-input>
-        </el-form-item>
-
-        <el-form-item label="描述信息" prop="description">
-          <el-input v-model="form.description"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm('form')">提交</el-button>
-        <el-button @click="ResetForm('form')">重置</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
-import searchBox from "@/common/gtSearch";
-import headTop from "@/common/headTop";
-import {
-  corpSelect,
-  getDeptList,
-  equiCreate,
-  equiSelect,
-  equiUpdate,
-  equiDetails,
-  equiDelete
-} from "@/getData";
+import { equiDelete, equiSelect } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
@@ -216,13 +45,7 @@ export default {
       handle: [
         {
           function: "ExamineHandle",
-          text: "查看",
-          type: "text",
-          show: true
-        },
-        {
-          function: "UpdatePreprocessing",
-          text: "更新",
+          text: "查看/更新",
           type: "text",
           show: true
         },
@@ -267,33 +90,12 @@ export default {
           label: "油箱容量/L"
         }
       ],
-      // 创建 更新 删除 表单
-      form: {
-        certguid: "", // 证件号码
-        certtype: "", // 证件类型
-        clstype: "", // 车辆类型
-        class: "", // 车辆型号
-        clsrank: "", // 分类等级
-        corpguid: "", // 公司标识
-        deptguid: "", // 部门标识
-        code: "", // 设备编码
-        name: "", // 设备名称
-        proddate: "", // 生产日期
-        producer: "", // 生产厂家
-        description: "", // 描述
-        plateno: null, //车牌号
-        simnumber: null, //手机号
-        terminalid: null //终端id
-      },
       tableData: [], // 表格数据
+      optionWidth: 250,
       total: 0,
-      limit: 10,
-      offset: 1,
-      multipleSelection: [], // 用于批量 删除
-      dialogFormVisible: false, // 是否显示 新增 删除 更新 对话框
-      formCurrentStatus: "", // 表单当前状态
+      pagesize: 10,
+      pageno: 1,
       searchData: [
-        // 搜索框 数据
         {
           key: "id", // 与后端交互时的字段 必填
           label: "搜索框1", // 搜索框名称 必填
@@ -322,231 +124,25 @@ export default {
           label: "搜索框3",
           placeholder: "请搜索",
           default: ""
-        },
-        {
-          key: "ccc",
-          label: "搜索框4",
-          placeholder: "请搜索",
-          default: ""
-        },
-        {
-          key: "asdafs",
-          label: "搜索框5",
-          placeholder: "请搜索",
-          default: ""
-        },
-        {
-          key: "adgdd",
-          label: "搜索框6",
-          placeholder: "请搜索",
-          default: ""
         }
-      ],
-      Regular: Regular, // 表单校验正则
-      // 表单校验规则
-      rules: {
-        // certguid: [
-        //   {
-        //     required: true,
-        //     message: "证件号码 必填"
-        //   }
-        // ],
-        // certtype: [
-        //   {
-        //     required: true,
-        //     message: "证件类型 必填"
-        //   }
-        // ],
-        clstype: [
-          {
-            required: true,
-            message: "必填 车辆类型",
-            trigger: ["blur", "change"]
-          }
-        ],
-        class: [
-          {
-            required: true,
-            message: "必填 车辆型号",
-            trigger: ["blur", "change"]
-          }
-        ],
-        clsrank: [
-          {
-            required: true,
-            message: "必填 分类等级",
-            trigger: ["blur", "change"]
-          }
-        ],
-        corpguid: [
-          {
-            required: true,
-            message: "必填 公司标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        deptguid: [
-          {
-            required: true,
-            message: "必填 部门标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        // code: [
-        //   {
-        //     required: true,
-        //     message: "设备编码 必填",
-        //     trigger: ["blur", "change"]
-        //   }
-        // ],
-        name: [
-          {
-            required: true,
-            message: "设备名称 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        proddate: [
-          {
-            required: true,
-            message: "生产日期 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        producer: [
-          {
-            required: true,
-            message: "生产厂家 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        plateno: [
-          {
-            required: true,
-            message: "车牌号 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        oilboxheight: [
-          {
-            required: true,
-            message: "油箱高度 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        oilboxvol: [
-          {
-            required: true,
-            message: "油箱容量 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        simnumber: [
-          {
-            required: true,
-            message: "手机号 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        terminalid: [
-          {
-            required: true,
-            message: "终端id 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        description: [
-          {
-            required: false,
-            message: "描述信息 必填",
-            trigger: ["blur", "change"]
-          }
-        ]
-      },
-      isShowViewUser: false, // 是否显示 查看用户 dialog
-      isEditor: true,
-      optionWidth: 250,
-      // 公司列表
-      corpData: [],
-      // 部门列表
-      deptData: []
+      ]
     };
   },
   beforeCreate() {},
   created() {
-    this.corpList();
-    this.deptList();
     this.equiList();
   },
   methods: {
     /**
-     ** 公司列表
-     */
-    async corpList(val) {
-      const res = await corpSelect();
-      console.log("公司列表", res.data);
-      this.corpData = res.data;
-    },
-
-    /**
-     ** 部门列表
-     */
-    async deptList(val) {
-      const res = await getDeptList({ deptguid: val || null });
-      console.log("部门列表", res.data);
-      this.deptData = res.data;
-    },
-
-    /**
-     ** 更换公司清空部门, 重新获取部门列表
-     */
-    async resetDept(cid) {
-      this.deptData = [];
-      this.form.deptguid = null;
-      this.$forceUpdate();
-      this.deptList(cid);
-    },
-
-    /*
-     ** form 表单 验证
-     */
-    submitForm(formName) {
-      console.log("232323");
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          if (this.formCurrentStatus === "创建") this.CreateHandle();
-          else if (this.formCurrentStatus === "更新") this.UpdateHandle();
-          else if (this.formCurrentStatus === "查看") this.ExamineHandle();
-        } else {
-          this.$message.error("请正确填写红框内容");
-          return false;
-        }
-      });
-    },
-
-    /**
-     ** 公司列表
+     ** 设备列表
      */
     async equiList() {
       const res = await equiSelect();
-      console.log("公司列表", res.data);
       this.tableData = res.data;
     },
 
     /*
-     ** 创建处理
-     */
-    async CreateHandle(info) {
-      const res = await equiCreate(this.form);
-      if (res.status === 200) {
-        this.equiList();
-        this.$message.success("设备创建成功");
-      } else this.$message.warning("设备创建失败");
-      this.dialogFormVisible = false;
-    },
-
-    /*
-     ** 查看处理
+     ** 查看更新处理
      */
     async ExamineHandle(index, row) {
       console.log(row);
@@ -558,27 +154,6 @@ export default {
         this.form = response.data;
         this.dialogFormVisible = true;
       } else this.$message.warning("请稍后再尝试");
-    },
-
-    /*
-     ** 更新预处理
-     */
-    async UpdatePreprocessing(index, row) {
-      console.log(index, row);
-      this.ExamineHandle(index, row);
-      this.formCurrentStatus = "更新";
-    },
-
-    /*
-     ** 更新处理
-     */
-    async UpdateHandle(index, row) {
-      const res = await equiUpdate(this.form);
-      if (res.status === 200) {
-        this.equiList();
-        this.$message.success("更新成功");
-      } else this.$message.warning("更新失败,稍后重试");
-      this.dialogFormVisible = false;
     },
 
     /*
@@ -603,20 +178,6 @@ export default {
     },
 
     /*
-     ** form 表单 重置
-     */
-    ResetForm(formName) {
-      this.$refs[formName].resetFields();
-    },
-
-    /*
-     ** 关闭 dialog
-     */
-    DialogClose(formName) {
-      this.$refs[formName].resetFields();
-    },
-
-    /*
      ** 列表 分页
      */
     handleSizeChange(val) {
@@ -625,49 +186,12 @@ export default {
     },
 
     /*
-     *关闭编辑状态
-     */
-    handleisShowViewUser() {
-      this.isEditor = true;
-    },
-
-    /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
       this.offset = val;
       this.$refs.searchBox.internalUser(this.limit, this.offset);
-    },
-
-    /*
-     ** 列表 批量删除 用户
-     */
-    async BatchDeleteUser() {
-      if (this.multipleSelection.length === 0) {
-        this.$message.warning("请选择删除数据!");
-        return;
-      }
-      let data = {
-        ids: JSON.stringify(this.multipleSelection)
-      };
-      let res = await deleteUserByIds(data);
-      if (res.result) this.$message.success(res.message);
-      else this.$message.warning(res.message);
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
-    },
-
-    /*
-     ** 列表 批量删除 用户  预处理
-     */
-    handleSelectionChange(val) {
-      let arr = [];
-      for (var item of val) arr.push(item.id);
-      this.multipleSelection = arr;
     }
-  },
-  components: {
-    // searchBox,
-    headTop
   }
 };
 </script>

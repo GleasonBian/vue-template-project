@@ -47,8 +47,8 @@
               <el-option label="已驳回" value="已驳回"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属公司" prop="company">
-            <el-select v-model="form.company" placeholder="请选择" style="width:100%">
+          <el-form-item label="所属公司" prop="corpguid">
+            <el-select v-model="form.corpguid" placeholder="请选择" style="width:100%">
               <el-option
                 v-for="item in compList"
                 :key="item.guid"
@@ -68,7 +68,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="申请部门" prop="apply_dept">
-            <el-select v-model="form.apply_dept" placeholder="请选择" style="width:100%">
+            <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
               <el-option
                 v-for="item in deptList"
                 :key="item.guid"
@@ -308,13 +308,13 @@ export default {
       deptList: [], // 部门列表
       equiList: [],
       form: {
-        company: "", // 所属公司
+        corpguid: "", // 所属公司
         quantity: 0, // 加油数量
         amount: "", // 加油金额
         apply_date: "", // 申请时间
         apply_state: "", // 申请状态
         project_dept: "", // 项目部
-        apply_dept: "", // 申请部门
+        deptguid: "", // 申请部门
         urgent: "是", // 是否加急
         approval: [
           {
@@ -343,7 +343,7 @@ export default {
       },
       // 表单校验规则
       rules: {
-        company: [
+        corpguid: [
           {
             required: true,
             message: "必填",
@@ -385,7 +385,7 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        apply_dept: [
+        deptguid: [
           {
             required: true,
             message: "必填",

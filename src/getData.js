@@ -360,10 +360,10 @@ export const refuelDelete = data => fetch("refuel", data, "delete");
 export const refuelUpdate = data => fetch("refuel", data, "put");
 
 
-/* -----------------------加油申请 -------------------------------*/
+/* -----------------------车辆保养 -------------------------------*/
 
 /**
- * 作业管理 / 车辆保养 / 创建 id
+ * 作业管理 / 车辆保养 / 创建 !id
  */
 export const repairCreat = data => fetch("repaircreat", data, "post");
 
