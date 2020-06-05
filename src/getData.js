@@ -22,6 +22,8 @@ export const deptPage = data => fetch("depts", data, "get");
 
 //获取人员列表
 export const getStaffList = data => fetch("staff", data, "get");
+//获取人员列表
+export const staffPage = data => fetch("staffs", data, "get");
 //获取人员详情
 export const getStaffDetail = data => fetch("staff", data, "get");
 //新增人员

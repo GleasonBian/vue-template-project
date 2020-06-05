@@ -14,7 +14,7 @@
         lable-width="120px"
       >
         <el-col :span="8">
-          <el-form-item label="部门名称" prop="name">
+          <el-form-item label="人员名称" prop="name">
             <el-input clearable v-model="queryParam.name"></el-input>
           </el-form-item>
         </el-col>
@@ -92,10 +92,8 @@ import headTop from "@/common/headTop";
 import {
   corperation,
   corpSelect,
-  corpDtails,
-  corpUpdate,
-  deptPage,
-  delDept
+  staffPage,
+  delStaff
 } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
@@ -105,6 +103,7 @@ export default {
       compList:[],
       queryParam: {
         name: "",
+        corpguid: "",
         start: "",
         end: "",
         date: "",
@@ -130,23 +129,23 @@ export default {
       columns: [
         {
           id: "name",
-          label: "部门名称"
+          label: "姓名"
         },
         {
-          id: "shortname",
-          label: "部门简称"
+          id: "postname",
+          label: "岗位"
         },
         {
-          id: "superiorname",
-          label: "上级部门"
-        },
-        {
-          id: "corp_name",
+          id: "corpname",
           label: "所属公司"
         },
         {
-          id: "status",
-          label: "部门状态"
+          id: "deptname",
+          label: "所属部门"
+        },
+        {
+          id: "phonenum",
+          label: "手机号码"
         },
         {
           id: "regdate",
@@ -174,20 +173,20 @@ export default {
       } else this.$message.warning(res.message);
     },
     async exportForm() {
-      window.open(process.env.VUE_APP_URL + "download/6");
+      window.open(process.env.VUE_APP_URL + "download/7");
     },
     dateChange(val) {
       this.queryParam.start = val[0];
       this.queryParam.end = val[1];
     },
     newComp() {
-      this.$router.push({ path: "deptDetail" });
+      this.$router.push({ path: "staffDetail" });
     },
     /**
      ** 公司查询
      */
     async getData() {
-      const res = await deptPage({ param: this.queryParam });
+      const res = await staffPage({ param: this.queryParam });
       this.tableData = res.data.list;
       this.queryParam.pagesize = res.data.pagesize;
       this.queryParam.pageno = res.data.pageno;
@@ -210,7 +209,7 @@ export default {
      ** 查看公司
      */
     async viewCorp(index, row) {
-      this.$router.push({ path: "deptDetail", query: { id: row.guid } });
+      this.$router.push({ path: "staffDetail", query: { id: row.guid } });
     },
 
     /*
@@ -225,7 +224,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          let res = delDept({ id: row.guid });
+          let res = delStaff({ id: row.guid });
           console.log(res);
           if (res.status === 200) {
             this.$message.success("删除成功");

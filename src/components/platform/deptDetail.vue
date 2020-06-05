@@ -25,7 +25,12 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="所属公司" prop="corp_guid">
-                <el-select v-model="form.corp_guid" @change="changeDepts" placeholder="请选择所属公司" style="width:100%">
+                <el-select
+                  v-model="form.corp_guid"
+                  @change="changeDepts"
+                  placeholder="请选择所属公司"
+                  style="width:100%"
+                >
                   <el-option
                     v-for="item in compList"
                     :key="item.guid"
@@ -145,7 +150,7 @@ export default {
         superior: "", // 上级标识
         region: "", // 所在区域
         regioncode: "", //区域编码(后台存用的)
-        regioncodeArr: [], //区域编码(前端用的)
+        regioncodeArr: [] //区域编码(前端用的)
       },
       Regular: Regular, // 表单校验正则
       // 表单校验规则
@@ -216,19 +221,17 @@ export default {
   },
   created() {
     this.guid = this.$route.query.id;
-    this.getCompList();
-    // this.getDeptList();
-  },
-  mounted() {
     if (this.guid) {
       this.viewCorp(this.guid);
     }
+    this.getCompList();
   },
+  mounted() {},
   methods: {
-    changeDepts(){
-      let corpguid=this.form.corp_guid;
-      this.form.superior=null;
-      this.getDeptList(corpguid)
+    changeDepts() {
+      let corpguid = this.form.corp_guid;
+      this.form.superior = null;
+      this.getDeptList(corpguid);
     },
     recRegion(region) {
       this.form.region = region;
@@ -251,7 +254,7 @@ export default {
      **部门列表查询
      */
     async getDeptList(corpguid) {
-      const res = await getDeptList({param:{corpguid}});
+      const res = await getDeptList({ param: { corpguid } });
       this.deptList = res.data;
     },
 
@@ -290,9 +293,9 @@ export default {
     async submitAddUser() {
       const res = await saveAddDept(this.form);
       if (res.status === 200) {
-        this.$message.success("公司创建成功");
+        this.$message.success("创建成功");
         this.$router.replace({ path: "deptList" });
-      } else this.$message.warning("公司创建失败");
+      } else this.$message.warning("创建失败");
     },
 
     /*
@@ -306,6 +309,7 @@ export default {
         this.form = response.data[0];
         this.form.regioncodeArr = JSON.parse(this.form.regioncode);
         if (this.form.corprank > 1) this.getCompList(this.form.corprank - 1);
+        this.getDeptList(this.form.corp_guid);
       } else this.$message.warning("请稍后再尝试");
     }
   }
