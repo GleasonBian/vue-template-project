@@ -135,8 +135,8 @@
               ></el-date-picker>
             </el-form-item>
 
-            <el-form-item label="监控等级" prop="clsrank">
-              <el-select v-model="form.clsrank" placeholder="请选择" style="width:100%">
+            <el-form-item label="监控等级" prop="monitor">
+              <el-select v-model="form.monitor" placeholder="请选择" style="width:100%">
                 <el-option label="一级" value="一级"></el-option>
                 <el-option label="二级" value="二级"></el-option>
                 <el-option label="三级" value="三级"></el-option>
@@ -144,7 +144,7 @@
             </el-form-item>
 
             <el-form-item label="初始里程" prop="init_mileage">
-              <el-input v-model="form.km_oil_wear" type="number" :step="10" :min="1" :max="300">
+              <el-input v-model="form.init_mileage" type="number" :step="10" :min="1" :max="300">
                 <el-button slot="append">升/百公里</el-button>
               </el-input>
             </el-form-item>
@@ -197,13 +197,13 @@
               </el-row>
             </el-form-item>
 
-            <el-form-item label="公里/油耗" prop="oil_wear">
+            <el-form-item label="公里/油耗" prop="km_oil_wear">
               <el-input v-model="form.km_oil_wear" type="number" :step="10" :min="1" :max="300">
                 <el-button slot="append">升/百公里</el-button>
               </el-input>
             </el-form-item>
 
-            <el-form-item label="小时/油耗" prop="oil_wear">
+            <el-form-item label="小时/油耗" prop="hr_oil_wear">
               <el-input v-model="form.hr_oil_wear" type="number" :step="10" :min="1" :max="300">
                 <el-button slot="append">升/小时</el-button>
               </el-input>
@@ -229,8 +229,7 @@
         style="width:100%;"
         stripe
         border
-        @selection-change="selectRow"
-        size="mini"
+        @selection-change="selectRowHandle"
       >
         <el-table-column type="selection" align="center"></el-table-column>
         <el-table-column type="index" label="序号" align="center"></el-table-column>
@@ -241,109 +240,43 @@
               placeholder="请选择"
               style="width:100%"
               @change="selectHandle"
-              size="mini"
             >
               <el-option
-                v-for="item in equiList"
+                v-for="item in staffData"
                 :key="item.guid"
-                :label="item.plateno"
+                :label="item.name"
                 :value="item.guid"
               ></el-option>
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="oil_address" label="手机号码" align="center">
+        <el-table-column prop="phonenum" label="手机号码" align="center">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.oil_address" size="mini"></el-input>
+            <el-input v-model="scope.row.phonenum" :readonly="true"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="plan_time" label="加油时间" align="center">
+        <el-table-column prop="corpname" label="所属公司" align="center">
           <template slot-scope="scope">
-            <el-date-picker
-              size="mini"
-              v-model="scope.row.plan_time"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              type="datetime"
-              placeholder="选择日期时间"
-            ></el-date-picker>
+            <el-input v-model="scope.row.corpname" :readonly="true"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="oil_grade" label="加油标号" align="center">
+        <el-table-column prop="deptname" label="所属部门" align="center">
           <template slot-scope="scope">
-            <el-select
-              v-model="scope.row.oil_grade"
-              placeholder="请选择"
-              style="width:100%"
-              size="mini"
-            >
-              <el-option label="#91" value="#91"></el-option>
-              <el-option label="#92" value="#92"></el-option>
-              <el-option label="#93" value="#93"></el-option>
-              <el-option label="#94" value="#94"></el-option>
-              <el-option label="#95" value="#95"></el-option>
-              <el-option label="#96" value="#96"></el-option>
-              <el-option label="#97" value="#97"></el-option>
-              <el-option label="#98" value="#98"></el-option>
-            </el-select>
+            <el-input v-model="scope.row.deptname" :readonly="true"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="quantity" label="加油数量" align="center">
-          <template slot-scope="scope">
-            <el-input
-              type="number"
-              step="0.01"
-              v-model.number="scope.row.quantity"
-              autocomplete="off"
-              size="mini"
-              @change="sumRefuelNumber"
-            ></el-input>
-          </template>
-        </el-table-column>
-        <el-table-column prop="unit" label="油量单位" align="center">
-          <template slot-scope="scope">
-            <el-select
-              v-model="scope.row.unit"
-              placeholder="请选择"
-              @change="sumRefuelNumber"
-              style="width:100%"
-              size="mini"
-            >
-              <el-option label="升" value="升"></el-option>
-              <el-option label="桶" value="桶"></el-option>
-              <el-option label="吨" value="吨"></el-option>
-            </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column prop="urgent" label="是否加急" align="center">
+        <el-table-column prop="default" label="是否默认" align="center">
           <template slot-scope="scope">
             <el-switch
-              v-model="scope.row.urgent"
+              v-model="scope.row.default"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="是"
               inactive-text="否"
               active-value="是"
               inactive-value="否"
+              @change="defaultDriverHandle"
             ></el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column prop="priority" label="优先顺序" align="center">
-          <template slot-scope="scope">
-            <el-select
-              v-model="scope.row.priority"
-              placeholder="请选择"
-              style="width:100%"
-              size="mini"
-            >
-              <el-option label="一级" value="一级"></el-option>
-              <el-option label="二级" value="二级"></el-option>
-              <el-option label="三级" value="三级"></el-option>
-            </el-select>
-          </template>
-        </el-table-column>
-        <el-table-column prop="remarks" label="备注" align="center">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.remarks" size="mini"></el-input>
           </template>
         </el-table-column>
       </el-table>
@@ -353,146 +286,237 @@
 
 <script>
 import {
-  corpSelect,
-  getDeptList,
-  equiCreate,
-  equiUpdate,
-  equiDetails
+  equiCreate, // 设备创建
+  equiUpdate, // 设备更新
+  equiDetails, // 设备详情
+  corpSelect, // 公司列表
+  getDeptList, // 部门列表
+  getStaffList //人员
 } from "@/getData";
 export default {
   data() {
     return {
       // 表单校验规则
       rules: {
-        clstype: [
-          {
-            required: true,
-            message: "必填 车辆类型",
-            trigger: ["blur", "change"]
-          }
-        ],
-        class: [
-          {
-            required: true,
-            message: "必填 车辆型号",
-            trigger: ["blur", "change"]
-          }
-        ],
-        clsrank: [
-          {
-            required: true,
-            message: "必填 分类等级",
-            trigger: ["blur", "change"]
-          }
-        ],
-        corpguid: [
-          {
-            required: true,
-            message: "必填 公司标识",
-            trigger: ["blur", "change"]
-          }
-        ],
-        deptguid: [
-          {
-            required: true,
-            message: "必填 部门标识",
-            trigger: ["blur", "change"]
-          }
-        ],
         name: [
           {
             required: true,
-            message: "设备名称 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        proddate: [
-          {
-            required: true,
-            message: "生产日期 必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        producer: [
-          {
-            required: true,
-            message: "生产厂家 必填",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
         plateno: [
           {
             required: true,
-            message: "车牌号 必填",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        oilboxheight: [
+        color: [
           {
             required: true,
-            message: "油箱高度 必填",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        oilboxvol: [
+        clstype: [
           {
             required: true,
-            message: "油箱容量 必填",
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
-        simnumber: [
+        class: [
           {
             required: true,
-            message: "手机号 必填",
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        corpguid: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        deptguid: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        status: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        source_type: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        manage_type: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        producer: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        proddate: [
+          {
+            required: true,
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
         terminalid: [
           {
             required: true,
-            message: "终端id 必填",
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        simnumber: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        vehicle_use: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        repair_date: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        monitor: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        init_mileage: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        oilboxheight: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        oilboxvol: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        min_speed: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        max_speed: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        km_oil_wear: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"]
+          }
+        ],
+        hr_oil_wear: [
+          {
+            required: true,
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ],
         description: [
           {
-            required: false,
-            message: "描述信息 必填",
+            required: true,
+            message: "必填",
             trigger: ["blur", "change"]
           }
         ]
       },
       // 创建 更新 删除 表单
       form: {
-        certguid: "", // 证件号码
-        certtype: "", // 证件类型
-        clstype: "", // 车辆类型
-        class: "", // 车辆型号
-        clsrank: "", // 分类等级
-        corpguid: "", // 公司标识
-        deptguid: "", // 部门标识
-        code: "", // 设备编码
-        name: "", // 设备名称
-        proddate: "", // 生产日期
-        producer: "", // 生产厂家
-        description: "", // 描述
-        plateno: null, //车牌号
-        simnumber: null, //手机号
-        terminalid: null, //终端id
+        name: "", //车辆名称
+        plateno: "", //车牌号码
+        color: "", //车辆颜色
+        clstype: "", //车辆类型
+        class: "", //车辆型号
+        corpguid: "", //所属公司
+        deptguid: "", //上级部门
+        status: "", //车辆状态
+        source_type: "", //来源类型
+        manage_type: "", //管理类型
+        producer: "", //生产厂家
+        proddate: "", //生产日期
+        terminalid: "", //终端id
+        simnumber: "", //手机号
+        vehicle_use: "", //车辆用途
+        repair_date: "", //保养日期
+        monitor: "", //监控等级
+        init_mileage: "", //初始里程
+        oilboxheight: "", //油箱高度
+        oilboxvol: "", //油箱容量
+        min_speed: "", //最小速度
+        max_speed: "", //最大速度
+        km_oil_wear: "", //公里/油耗
+        hr_oil_wear: "", //小时/油耗
+        description: "", //描述信息
         driver: []
       },
       // 选择行
-      selectRow: [],
+      selectRowList: [],
       // 公司列表
       corpData: [],
       // 部门列表
-      deptData: []
+      deptData: [],
+      // 人员
+      staffData: []
     };
   },
   created() {
     this.corpList();
     this.deptList();
+    this.staffList();
   },
 
   methods: {
@@ -521,8 +545,15 @@ export default {
      */
     async deptList(val) {
       const res = await getDeptList({ deptguid: val || null });
-      console.log("部门列表", res.data);
       this.deptData = res.data;
+    },
+
+    /**
+     ** 人员列表
+     */
+    async staffList(val) {
+      const res = await getStaffList();
+      this.staffData = res.data;
     },
 
     /**
@@ -534,6 +565,7 @@ export default {
       this.$forceUpdate();
       this.deptList(cid);
     },
+
     /*
      ** 更新处理
      */
@@ -573,27 +605,80 @@ export default {
     /*
      ** 表格多选处理
      */
-    selectRow(val) {
-      this.selectRow = val;
+    selectRowHandle(val) {
+      this.selectRowList = val;
     },
+
     /*
      ** 增加行
      */
     addRow() {
       let list = {
-        guid: "", // 车辆名称
-        plateno: "", // 车辆牌号
-        oil_address: "", // 加油地址
-        oil_grade: "", // 油料等级(标号)
-        unit: "", // 单位
-        quantity: "", // 加油数量
-        urgent: false, // 是否加急
-        priority: "", // 优先顺序
-        remarks: "", // 备注
-        plan_time: "" // 加油时间
+        guid: "", // 人员guid
+        name: "", // 人员名称
+        phonenum: "", // 手机号
+        corpname: "", // 公司名称
+        corpguid: "", // 公司id
+        deptname: "", // 部门名称
+        deptguid: "", // 部门id
+        default: false // 默认司机
       };
-      this.form.vehicle.push(list);
-      this.counter++;
+      this.form.driver.push(list);
+    },
+
+    /*
+     ** 删除表格选中项目
+     */
+    delData() {
+      if (!this.selectRowList.length) {
+        this.$message.warning("请选择删除的行");
+        return;
+      }
+      var that = this;
+      // 拿到选中的数据；
+      var val = this.selectRowList;
+      // 如果选中数据存在
+      if (val) {
+        // 将选中数据遍历
+        val.forEach(function(item, index) {
+          // 遍历源数据
+          that.form.driver.forEach(function(itemI, indexI) {
+            // 如果选中数据跟元数据某一条标识相等，删除对应的源数据
+            if (item.guid === itemI.guid && item.phonenum === itemI.phonenum) {
+              that.form.driver.splice(indexI, 1);
+            }
+          });
+        });
+      }
+      // 清除选中状态
+      this.$refs.driverTable.clearSelection();
+    },
+
+    /*
+     ** 选中车辆 自动添加 车牌号码
+     */
+    selectHandle(guid) {
+      let that = this;
+      var val = this.staffData;
+      if (val) {
+        // 将选中数据遍历
+        val.forEach(function(item, index) {
+          // 遍历源数据
+          that.form.driver.forEach(function(itemI, indexI) {
+            // 如果选中数据跟元数据某一条标识相等
+            if (item.guid === itemI.guid) {
+              itemI.corpguid = item.corpguid;
+              itemI.corpname = item.corpname;
+              itemI.deptguid = item.deptguid;
+              itemI.deptname = item.deptname;
+              itemI.phonenum = item.phonenum;
+            }
+          });
+        });
+      }
+    },
+    defaultDriverHandle(val, ccc) {
+      console.log(val, ccc);
     }
   }
 };
