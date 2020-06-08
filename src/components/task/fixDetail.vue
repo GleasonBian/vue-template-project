@@ -65,7 +65,7 @@
                   <el-form-item label="项目名称" prop="proj_deptid">
                     <el-select v-model="form.proj_deptid" placeholder="请选择" style="width:100%">
                       <el-option
-                        v-for="item in deptList"
+                        v-for="item in compList"
                         :key="item.guid"
                         :label="item.name"
                         :value="item.guid"
@@ -82,9 +82,9 @@
                       style="width:100%"
                     >
                       <el-option
-                        v-for="item in deptList"
+                        v-for="item in compList"
                         :key="item.guid"
-                        :label="item.superior"
+                        :label="item.superiorname"
                         :value="item.guid"
                       ></el-option>
                     </el-select>
@@ -321,7 +321,7 @@
 import {
   newFixPlan,
   corpDtails,
-  corpSelect,
+  corpRank,
   fixPlanDetail,
   editFix,
   equiSelect,
@@ -429,7 +429,7 @@ export default {
      ** 公司列表查询
      */
     async getCompList(val) {
-      const res = await corpSelect();
+      const res = await corpRank({id:3});
       this.compList = res.data;
     },
 

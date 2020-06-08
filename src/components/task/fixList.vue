@@ -28,7 +28,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="项目名称" prop="proj_deptid">
-            <el-select v-model="queryParam.proj_deptid" clearable placeholder="请选择" style="width:100%">
+            <el-select
+              v-model="queryParam.proj_deptid"
+              clearable
+              placeholder="请选择"
+              style="width:100%"
+            >
               <el-option
                 v-for="item in corpData"
                 :key="item.guid"
@@ -41,7 +46,7 @@
         <el-col :span="8">
           <el-form-item label="接班时间" prop="date">
             <el-date-picker
-             clearable
+              clearable
               v-model="queryParam.date"
               type="datetimerange"
               value-format="yyyy-MM-dd HH:mm:ss"
@@ -96,15 +101,15 @@
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import { corpSelect, equiSelect, download,fixList } from "@/getData";
+import { corpRank, equiSelect, download, fixList } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
   data() {
     return {
       queryParam: {
-        page_index:1,
-        page_size:1,
+        page_index: 1,
+        page_size: 1
       },
       eqData: [], //设备列表
       corpData: [], //公司列表
@@ -162,7 +167,7 @@ export default {
       limit: 10,
       offset: 1,
       // 创建 更新 删除 表单
-      
+
       optionWidth: 250
     };
   },
@@ -172,7 +177,7 @@ export default {
     this.getCorp();
   },
   methods: {
-    async exportForm(){
+    async exportForm() {
       window.open(process.env.VUE_APP_URL + "download/3");
     },
     dateChange(val) {
@@ -190,11 +195,11 @@ export default {
      ** 调令列表
      */
     async getData(val) {
-      const res = await fixList({param:this.queryParam});
+      const res = await fixList({ param: this.queryParam });
       this.tableData = res.data.fixplandetail;
-      this.queryParam.page_index=res.data.page_index;
-      this.queryParam.page_size=res.data.page_size;
-      this.queryParam.total_count=res.data.total_count;
+      this.queryParam.page_index = res.data.page_index;
+      this.queryParam.page_size = res.data.page_size;
+      this.queryParam.total_count = res.data.total_count;
     },
 
     /*
@@ -214,7 +219,11 @@ export default {
      */
     async singleOil() {
       if (
-        !(this.queryParam.equip_guid && this.queryParam.start && this.queryParam.end)
+        !(
+          this.queryParam.equip_guid &&
+          this.queryParam.start &&
+          this.queryParam.end
+        )
       ) {
         this.$message({
           type: "warning",
@@ -270,7 +279,7 @@ export default {
     },
 
     async getCorp() {
-      const res = await corpSelect();
+      const res = await corpRank({id:3});
       this.corpData = res.data;
     },
 

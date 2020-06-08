@@ -97,7 +97,7 @@
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
 import {
-  corpSelect,
+  corpRank,
   equiSelect,
   assigndeSelect,
   assignDelete
@@ -267,7 +267,7 @@ export default {
     },
 
     async getCorp() {
-      const res = await corpSelect();
+      const res = await corpRank({id:3});
       this.corpData = res.data;
     },
     downAss() {

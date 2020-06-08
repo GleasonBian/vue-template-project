@@ -68,7 +68,7 @@
                   <el-form-item label="项目名称" prop="dept_guid">
                     <el-select v-model="form.dept_guid" placeholder="请选择" style="width:100%">
                       <el-option
-                        v-for="item in deptList"
+                        v-for="item in projList"
                         :key="item.guid"
                         :label="item.name"
                         :value="item.guid"
@@ -331,6 +331,7 @@
 import {
   assignoffline,
   corpSelect,
+  corpRank,
   equiSelect,
   getDeptList,
   editAssign,
@@ -349,6 +350,7 @@ export default {
       counter: 0,
       code: '', //公司id，判断是否是新增
       compList: [], //上级公司列表
+      projList: [], //上级公司列表
       deptList: [], //上级'部门'列表
       eqData: [], //设备列表
       worksTable: [], //工作表格
@@ -455,6 +457,7 @@ export default {
     this.form.code = this.$route.query.id;
     this.getCompList();
     this.getDeptList();
+    this.getProj();
     this.getEqList();
     if (this.form.code) {
       this.viewCorp(this.form.code);
@@ -464,6 +467,10 @@ export default {
     
   },
   methods: {
+    async getProj() {
+      const res = await corpRank({id:3});
+      this.projList = res.data;
+    },
     // 获取表格选中时的数据
     selectRow(val) {
       this.selectlistRow = val;
