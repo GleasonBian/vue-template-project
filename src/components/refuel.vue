@@ -6,12 +6,16 @@
     </el-card>
 
     <el-card style="margin-top:12px;">
-      <el-col align="left" style="margin-bottom:1%;margin-top:1%">
-        <router-link to="/plan/oilApply">
-          <el-button type="primary" size="medium" style="margin-left:1%">新增</el-button>
-        </router-link>
-        <el-button type="success" size="medium" style="margin-left:1%" @click="BatchDeleteUser">导出</el-button>
-      </el-col>
+      <router-link to="/plan/oilApply">
+        <el-button type="primary" size="medium">新增</el-button>
+      </router-link>
+      <el-button
+        type="success"
+        size="medium"
+        style="margin-left:1%; margin-bottom:12px"
+        @click="BatchDeleteUser"
+      >导出</el-button>
+
       <!-- refuel -->
       <gt-table
         :tableData="tableData"
@@ -24,14 +28,14 @@
         :handle="handle"
       ></gt-table>
       <el-pagination
-        style="margin:12px 0px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pageno"
-        :page-sizes="[1,2,3,4]"
+        :page-sizes="[10,20,30,40]"
         :page-size="pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
+        style="margin-top:12px"
       ></el-pagination>
     </el-card>
   </div>

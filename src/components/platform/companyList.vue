@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:12px">
+  <div>
     <el-row :gutter="20" class="searchBox">
       <el-form
         :model="queryParam"

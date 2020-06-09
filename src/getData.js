@@ -72,6 +72,11 @@ export const corpDelete = data => fetch("corp", data, "delete");
 /**
  * 创建设备
  */
+export const equiSelectAll = data => fetch("equipments", data, "get");
+
+/**
+ * 创建设备
+ */
 export const equiCreate = data => fetch("equipment", data, "post");
 
 /**

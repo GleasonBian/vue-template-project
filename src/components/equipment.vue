@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import { equiDelete, equiSelect, corpSelect } from "@/getData";
+import { equiDelete, equiSelectAll, corpSelect } from "@/getData";
 export default {
   name: "createCorperation",
   data() {
@@ -147,7 +147,7 @@ export default {
     async equiList(param = {}) {
       param.pagesize = this.pagesize;
       param.pageno = this.pageno;
-      const res = await equiSelect({ param: param });
+      const res = await equiSelectAll({ param: param });
       this.total = res.data.total;
       res.data.list.map(item => {
         item.value = item.name;

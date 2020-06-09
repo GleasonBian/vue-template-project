@@ -182,7 +182,7 @@
                   :value="item.guid"
                 ></el-option>
               </el-select>
-              <el-button style="width:25%" @click="dialogVisible = true">添加油箱</el-button>
+              <el-button style="width:25%" @click="dialogVisible = true">新增</el-button>
             </el-form-item>
 
             <el-form-item label="终端id" prop="terminalid">
@@ -193,7 +193,7 @@
               <el-input v-model="form.simnumber"></el-input>
             </el-form-item>
 
-            <el-form-item label="保养日期" prop="repair_date">
+            <!-- <el-form-item label="保养日期" prop="repair_date">
               <el-date-picker
                 v-model="form.repair_date"
                 type="date"
@@ -202,7 +202,7 @@
                 value-format="yyyy-MM-dd"
                 style="width:100%"
               ></el-date-picker>
-            </el-form-item>
+            </el-form-item>-->
 
             <el-form-item label="监控等级" prop="monitor">
               <el-select v-model="form.monitor" placeholder="请选择" style="width:100%">
@@ -275,7 +275,7 @@
             </el-form-item>
 
             <el-form-item label="描述信息" prop="description">
-              <el-input v-model="form.description"></el-input>
+              <el-input v-model="form.description" type="textarea" :rows="5"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -347,12 +347,10 @@
       </el-table>
     </el-card>
 
-    <el-card class="content_width" shadow="never">
-      <el-col align="center" style="margin-bottom:12px">
-        <el-button type="primary" @click="submitForm('form')">保存</el-button>
-        <el-button @click="$router.go(-1)">返回</el-button>
-      </el-col>
-    </el-card>
+    <el-col align="center" class="content_width">
+      <el-button type="primary" @click="submitForm('form')">保存</el-button>
+      <el-button @click="$router.go(-1)">返回</el-button>
+    </el-col>
   </div>
 </template>
 
@@ -660,8 +658,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.CreateHandle();
-          // this.$route.query.id ? this.UpdateHandle() : this.CreateHandle();
+          this.$route.query.id ? this.UpdateHandle() : this.CreateHandle();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;

@@ -1,150 +1,96 @@
 <template>
-  <div style="padding: 12px">
+  <div class="page_container">
     <headTop></headTop>
-    <div class="add_apply">
-      <el-card style="margin-top:12px;margin-right:12px;width:30%">
-        <div slot="header" class="clearfix">
-          <span>加油申请</span>
-        </div>
-        <el-form
-          :model="form"
-          status-icon
-          :rules="rules"
-          ref="form"
-          label-width="80px"
-          style="width:100%"
-        >
-          <el-form-item label="加油数量" prop="quantity">
-            <el-input
-              placeholder="请输入数字"
-              type="number"
-              v-model.number="form.quantity"
-              :step="0.01"
-              :readonly="true"
-            >
-              <el-button slot="append">升</el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="加油金额" prop="amount">
-            <el-input placeholder="请输入加油金额" type="number" v-model.number="form.amount" :step="0.01">
-              <el-button slot="append">元</el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item label="申请时间" prop="apply_date">
-            <el-date-picker
-              v-model="form.apply_date"
-              type="datetime"
-              placeholder="选择日期时间"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              style="width:100%"
-            ></el-date-picker>
-          </el-form-item>
-          <el-form-item label="申请状态" prop="apply_state">
-            <el-select v-model="form.apply_state" placeholder="请选择" style="width:100%">
-              <el-option label="草稿" value="草稿"></el-option>
-              <el-option label="审批中" value="审批中"></el-option>
-              <el-option label="已通过" value="已通过"></el-option>
-              <el-option label="已驳回" value="已驳回"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="所属公司" prop="corpguid">
-            <el-select v-model="form.corpguid" placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in compList"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="项目部" prop="project_dept">
-            <el-select v-model="form.project_dept" placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in deptList"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="申请部门" prop="apply_dept">
-            <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in deptList"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="是否加急" prop="urgent">
-            <el-switch
-              v-model="form.urgent"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              active-text="是"
-              inactive-text="否"
-              active-value="是"
-              inactive-value="否"
-            ></el-switch>
-          </el-form-item>
-        </el-form>
-      </el-card>
-      <el-card style="margin-top:12px; width:70%">
-        <div slot="header" class="clearfix">
-          <span>审批记录</span>
-        </div>
-        <el-table
-          :data="form.approval"
-          @row-click="clickRowHandle"
-          ref="approvalTable"
-          highlight-current-row
-          style="width:100%;"
-          size="mini"
-        >
-          <el-table-column type="index" label="序号" align="center"></el-table-column>
-          <el-table-column prop="node" label="处理节点" align="center">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.node" :readonly="true"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column prop="handler" label="处理人" align="center">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.handler" placeholder="请输入处理人"></el-input>
-            </template>
-          </el-table-column>
-          <el-table-column prop="time" label="处理时间" align="center">
-            <template slot-scope="scope">
-              <el-date-picker
-                v-model="scope.row.time"
-                type="datetime"
-                placeholder="选择日期时间"
-                value-format="yyyy-MM-dd HH:mm:ss"
-              ></el-date-picker>
-            </template>
-          </el-table-column>
-          <el-table-column prop="state" label="处理状态" align="center">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.state" placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="(item,index) in optionState"
-                  :key="index"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column prop="opinion" label="处理意见" align="center">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.opinion" placeholder="请输入处理意见"></el-input>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
-    </div>
+    <el-card style="margin-top:12px;margin-right:12px;width:30%">
+      <div slot="header" class="clearfix">
+        <span>加油申请</span>
+      </div>
+      <el-form
+        :model="form"
+        status-icon
+        :rules="rules"
+        ref="form"
+        label-width="80px"
+        style="width:100%"
+      >
+        <el-form-item label="加油数量" prop="quantity">
+          <el-input
+            placeholder="请输入数字"
+            type="number"
+            v-model.number="form.quantity"
+            :step="0.01"
+            :readonly="true"
+          >
+            <el-button slot="append">升</el-button>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="加油金额" prop="amount">
+          <el-input placeholder="请输入加油金额" type="number" v-model.number="form.amount" :step="0.01">
+            <el-button slot="append">元</el-button>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="申请时间" prop="apply_date">
+          <el-date-picker
+            v-model="form.apply_date"
+            type="datetime"
+            placeholder="选择日期时间"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            style="width:100%"
+          ></el-date-picker>
+        </el-form-item>
+        <el-form-item label="申请状态" prop="apply_state">
+          <el-select v-model="form.apply_state" placeholder="请选择" style="width:100%">
+            <el-option label="草稿" value="草稿"></el-option>
+            <el-option label="审批中" value="审批中"></el-option>
+            <el-option label="已通过" value="已通过"></el-option>
+            <el-option label="已驳回" value="已驳回"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属公司" prop="corpguid">
+          <el-select v-model="form.corpguid" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in compList"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="项目部" prop="project_dept">
+          <el-select v-model="form.project_dept" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptList"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="申请部门" prop="apply_dept">
+          <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deptList"
+              :key="item.guid"
+              :label="item.name"
+              :value="item.guid"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否加急" prop="urgent">
+          <el-switch
+            v-model="form.urgent"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            active-text="是"
+            inactive-text="否"
+            active-value="是"
+            inactive-value="否"
+          ></el-switch>
+        </el-form-item>
+      </el-form>
+    </el-card>
 
-    <el-card style="margin-top:12px">
+    <el-card>
       <div slot="header" class="clearfix">
         <span>车辆添加</span>
         <el-button type="text" style="margin-left:12px" @click="addRow">添加车辆</el-button>
@@ -277,8 +223,59 @@
         </el-table-column>
       </el-table>
     </el-card>
-
-    <el-col align="center" style="margin-top:12px">
+    <el-card style="margin-top:12px; width:70%">
+      <div slot="header" class="clearfix">
+        <span>审批记录</span>
+      </div>
+      <el-table
+        :data="form.approval"
+        @row-click="clickRowHandle"
+        ref="approvalTable"
+        highlight-current-row
+        style="width:100%;"
+        size="mini"
+      >
+        <el-table-column type="index" label="序号" align="center"></el-table-column>
+        <el-table-column prop="node" label="处理节点" align="center">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.node" :readonly="true"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="handler" label="处理人" align="center">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.handler" placeholder="请输入处理人"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column prop="time" label="处理时间" align="center">
+          <template slot-scope="scope">
+            <el-date-picker
+              v-model="scope.row.time"
+              type="datetime"
+              placeholder="选择日期时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            ></el-date-picker>
+          </template>
+        </el-table-column>
+        <el-table-column prop="state" label="处理状态" align="center">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.state" placeholder="请选择" style="width:100%">
+              <el-option
+                v-for="(item,index) in optionState"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column prop="opinion" label="处理意见" align="center">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.opinion" placeholder="请输入处理意见"></el-input>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+    <el-col align="center">
       <el-button type="primary" @click="submitForm('form')">保存</el-button>
       <el-button @click="$router.go(-1)">返回</el-button>
     </el-col>
