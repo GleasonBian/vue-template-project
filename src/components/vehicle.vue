@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:12px">
+  <div class="page_container">
     <el-dialog
       title="油箱添加"
       :visible.sync="dialogVisible"
@@ -61,7 +61,7 @@
         <el-button @click="tankHandle" type="primary">确定</el-button>
       </span>
     </el-dialog>
-    <el-card>
+    <el-card class="content_width" shadow="never">
       <div slot="header" class="clearfix">
         <span>车辆基本信息</span>
       </div>
@@ -281,7 +281,7 @@
         </el-row>
       </el-form>
     </el-card>
-    <el-card style="margin-top:12px">
+    <el-card class="content_width" shadow="never">
       <div slot="header" class="clearfix">
         <span>司机管理</span>
         <el-button type="text" style="margin-left:12px" @click="addRow">添加司机</el-button>
@@ -347,7 +347,7 @@
       </el-table>
     </el-card>
 
-    <el-card style="margin-top:12px">
+    <el-card class="content_width" shadow="never">
       <el-col align="center" style="margin-bottom:12px">
         <el-button type="primary" @click="submitForm('form')">保存</el-button>
         <el-button @click="$router.go(-1)">返回</el-button>
@@ -660,7 +660,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$route.query.id ? this.UpdateHandle() : this.CreateHandle();
+          this.CreateHandle();
+          // this.$route.query.id ? this.UpdateHandle() : this.CreateHandle();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;

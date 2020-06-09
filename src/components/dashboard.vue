@@ -38,9 +38,9 @@
       <el-col style="position:relative;overflow:hidden;" :span="18">
         <div class="grid-content bg-purple">
           <div class="map" id="track-map"></div>
-          <el-button @click="showBox" class="viewbtn" :type="showView?'primary':'info'">{{viewBtn}}</el-button>
-          <el-button @click="closeLine" class="viewline" type="info">清空轨迹</el-button>
           <el-button @click="getOverWatch()" class="viewTotal" type="primary">总览</el-button>
+          <el-button @click="closeLine" class="viewline" type="info">清空轨迹</el-button>
+          <el-button @click="showBox" class="viewbtn" :type="showView?'primary':'info'">{{viewBtn}}</el-button>
           <div class="card" :class="{'active':showView}">
             <el-card v-if="totalView" class="box-card">
               <div class="clearfix">

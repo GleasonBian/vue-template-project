@@ -1,9 +1,5 @@
 <template>
-  <div>
-    <!-- 面包屑 -->
-    <!-- <headTop></headTop> -->
-
-    <!-- 搜索框 -->
+  <div style="padding:12px">
     <el-row :gutter="20" class="searchBox">
       <el-form
         :model="queryParam"
@@ -49,7 +45,7 @@
     </el-row>
 
     <!-- 列表操作按钮 -->
-    <el-col align="left" style="margin-bottom:1%;">
+    <el-col align="left" style="margin-bottom:1%">
       <el-button type="primary" style="margin-left:1%" size="medium" @click="newComp">新增</el-button>
       <el-button type="success" size="medium" @click="exportForm">导出</el-button>
       <el-button
