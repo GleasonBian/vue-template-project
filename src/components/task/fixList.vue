@@ -85,11 +85,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="queryParam.page_index"
-        :page-sizes="[1, 2, 3, 4]"
-        :page-size="queryParam.page_size"
+        :current-page="queryParam.pageno"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="queryParam.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="queryParam.total_count"
+        :total="queryParam.total"
       ></el-pagination>
     </el-col>
   </div>
@@ -104,8 +104,8 @@ export default {
   data() {
     return {
       queryParam: {
-        page_index: 1,
-        page_size: 1
+        pageno: 1,
+        pagesize: 10
       },
       eqData: [], //设备列表
       corpData: [], //公司列表
@@ -192,10 +192,10 @@ export default {
      */
     async getData(val) {
       const res = await fixList({ param: this.queryParam });
-      this.tableData = res.data.fixplandetail;
-      this.queryParam.page_index = res.data.page_index;
-      this.queryParam.page_size = res.data.page_size;
-      this.queryParam.total_count = res.data.total_count;
+      this.tableData = res.data.list;
+      this.queryParam.pageno = res.data.pageno;
+      this.queryParam.pagesize = res.data.pagesize;
+      this.queryParam.total = res.data.total;
     },
 
     /*
@@ -263,14 +263,14 @@ export default {
      ** 列表 分页
      */
     handleSizeChange(val) {
-      this.queryParam.page_size = val;
+      this.queryParam.pagesize = val;
       this.getData();
     },
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
-      this.queryParam.page_index = val;
+      this.queryParam.pageno = val;
       this.getData();
     },
 

@@ -109,10 +109,10 @@ export default {
   data() {
     return {
       queryParam: {
-        equip_guid: null,
-        start: null,
-        end: null,
-        corp_guid: null,
+        equip_guid: '',
+        start: '',
+        end: '',
+        corp_guid: '',
         pageno: 1,
         pagesize: 10
       },

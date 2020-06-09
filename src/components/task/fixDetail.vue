@@ -296,7 +296,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="实际维修金额" prop="real_amount">
-                  <el-input v-model="fix.real_amount"></el-input>
+                  <el-input v-model.number="fix.real_amount"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="24" style="margin-top:20px">
