@@ -1,8 +1,8 @@
 <template>
-  <div class="search-box">
-    <div class="search-box-single" v-if="data.length <= 3">
-      <div class="search-item" v-for="(item, index) in data" :key="index">
-        <div class="search-item-label">{{ item.label ? item.label : "暂无!" }}：</div>
+  <div class="search_box">
+    <div class="search_box_single" v-if="data.length <= 3">
+      <div class="search_item" v-for="(item, index) in data" :key="index">
+        <div class="search_item_label">{{ item.label ? item.label : "暂无!" }}：</div>
         <el-select
           v-if="item.options"
           v-model="search[item.key]"
@@ -21,8 +21,8 @@
         <el-date-picker
           v-else-if="item.key === 'date'"
           v-model="search[item.key]"
-          type="daterange"
-          format="yyyy年MM月dd日"
+          :type="item.type ? item.type : 'daterange'"
+          format="yyyy-MM-dd HH:mm:ss"
           value-format="yyyy-MM-dd HH:mm:ss"
           range-separator="至"
           start-placeholder="开始日期"
@@ -40,7 +40,7 @@
           style="margin-right:15px"
         ></el-input>
       </div>
-      <div class="search-item">
+      <div class="search_item">
         <el-button
           type="primary"
           @click="searchHandle"
@@ -50,9 +50,9 @@
         <el-button type="info" @click="reset" :size="size" style="width:32%">重 置</el-button>
       </div>
     </div>
-    <div class="search-box-multi" v-else-if="data.length > 3">
-      <div class="search-multi-item" v-for="(item, index) in data" :key="index">
-        <div class="search-item-label">{{ item.label ? item.label : "暂无!" }}：</div>
+    <div class="search_box_multi" v-else-if="data.length > 3">
+      <div class="search_multi_item" v-for="(item, index) in data" :key="index">
+        <div class="search_item_label">{{ item.label ? item.label : "暂无!" }}：</div>
         <el-select
           v-if="item.options"
           v-model="search[item.key]"
@@ -90,7 +90,7 @@
           style="margin-right:15px"
         ></el-input>
       </div>
-      <div class="search-multi-item-button">
+      <div class="search_multi_item_button">
         <el-button
           type="primary"
           @click="searchHandle"
@@ -168,33 +168,33 @@ export default {
 </script>
 <style scoped>
 /* 单行搜索框(<3个) */
-.search-box-single {
+.search_box_single {
   display: flex;
   justify-content: space-between;
-  width: 95%;
-  margin-top: 10px;
+  width: 100%;
+  /* margin-top: 10px; */
 }
-.search-item {
+.search_item {
   display: flex;
   justify-content: center;
   width: 25%;
   align-items: center;
 }
 /* 两行搜索框(>3<=6个) */
-.search-item-label {
+.search_item_label {
   width: 140px;
   text-align: right;
   letter-spacing: 2px;
   font-size: 14px;
   color: #606266;
 }
-.search-box-double {
+.search_box-double {
   /* border: 1px solid red; */
   width: 99.8%;
   display: flex;
   justify-content: space-between;
 }
-.search-box-double-input {
+.search_box-double-input {
   width: 80%;
   /* border: 1px solid gray; */
   display: flex;
@@ -202,7 +202,7 @@ export default {
   flex-wrap: wrap;
   padding: 10px 10px 0px 50px;
 }
-.search-box-double-button {
+.search_box-double-button {
   width: 20%;
   /* border: 1px solid rgb(10, 224, 196); */
   display: flex;
@@ -210,7 +210,7 @@ export default {
   padding: 10px 50px 15px 10px;
   justify-content: space-between;
 }
-.search-box-double-item {
+.search_box-double-item {
   display: flex;
   justify-content: center;
   width: 30%;
@@ -221,7 +221,7 @@ export default {
   width: 50%;
 }
 /* 多行搜索框(>6个) */
-.search-box-multi {
+.search_box_multi {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -230,7 +230,7 @@ export default {
   margin-right: 20px;
   margin-top: 10px;
 }
-.search-multi-item {
+.search_multi_item {
   display: flex;
   justify-content: center;
   width: 33%;
@@ -238,7 +238,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.search-multi-item-button {
+.search_multi_item_button {
   margin-left: auto;
   width: 33%;
 }

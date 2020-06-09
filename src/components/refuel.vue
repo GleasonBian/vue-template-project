@@ -22,7 +22,6 @@
         v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
         :handle="handle"
-        size
       ></gt-table>
       <el-pagination
         style="margin:12px 0px"

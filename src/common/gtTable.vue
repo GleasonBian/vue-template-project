@@ -123,7 +123,7 @@ export default {
     },
     tableHeaderColor({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 0) {
-        return "background-color: lightblue;color: #333333;font-weight: bold; font-size:14px;";
+        return "background-color: #e0e0e0;color: #333333;font-weight: bold; font-size:14px;";
       }
     }
   },
@@ -153,6 +153,6 @@ export default {
 }
 
 .el-table .success-row {
-  background: #f0f9eb;
+  background: rgb(241, 241, 241);
 }
 </style>

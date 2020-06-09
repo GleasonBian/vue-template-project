@@ -11,11 +11,11 @@
         router
         mode="horizontal"
       >
-        <el-menu-item>
+        <!-- <el-menu-item>
           <div style="width:280px; text-align:center">
             <img src="https://img-blog.csdnimg.cn/20200520140729270.png" alt style="width:90%" />
           </div>
-        </el-menu-item>
+        </el-menu-item>-->
 
         <el-menu-item index="/dashboard" style>
           <i class="iconfont i-menu-one"></i>监控平台

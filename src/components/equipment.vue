@@ -84,18 +84,6 @@ export default {
         {
           id: "manage_type",
           label: "管理类型"
-        },
-        {
-          id: "oilboxheight",
-          label: "总里程"
-        },
-        {
-          id: "oill",
-          label: "总油耗"
-        },
-        {
-          id: "oilboxvol",
-          label: "工作总时长"
         }
       ],
       tableData: [], // 表格数据

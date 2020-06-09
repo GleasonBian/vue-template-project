@@ -1,61 +1,71 @@
 <template>
-  <el-row :gutter="10">
-    <el-col :span="5" align="center">
-      <el-table
-        :data="vehicleData"
-        @row-click="clickRow"
-        highlight-current-row
-        size="mini"
-        style="min-width:300px"
-        ref="singleTable"
-        border
-      >
-        <el-table-column type="index" label="序号" align="center"></el-table-column>
-        <el-table-column prop="name" label="名称" width="90" align="center"></el-table-column>
-        <el-table-column prop="plateno" label="号码" width="120" align="center"></el-table-column>
-        <el-table-column label="状态">
-          <template slot-scope="scope">
-            <div class="carStatus">
-              <div
-                class="active"
-                :class="{
+  <div style="padding:12px">
+    <el-row :gutter="10">
+      <el-col :span="5" align="center">
+        <!--  style="min-width:300px" -->
+        <el-card>
+          <el-table
+            :data="vehicleData"
+            @row-click="clickRow"
+            highlight-current-row
+            size="mini"
+            ref="singleTable"
+            border
+          >
+            <el-table-column type="index" label="序号" align="center"></el-table-column>
+            <el-table-column prop="name" label="名称" align="center"></el-table-column>
+            <el-table-column prop="plateno" label="号码" align="center"></el-table-column>
+            <!-- <el-table-column label="状态">
+              <template slot-scope="scope">
+                <div class="carStatus">
+                  <div
+                    class="active"
+                    :class="{
                   active: scope.row.status == 1,
                   fix: scope.row.status == 2,
                   stop: scope.row.status == 3
                 }"
-              ></div>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-col>
-    <el-col align="middle" :span="19">
-      <!-- 搜索框 -->
-      <gt-search :data="searchData" @handle="searchHandle" size style="margin-bottom:24px;"></gt-search>
-      <!-- 列表 -->
-      <div style="width:100%; height:350px;" ref="chart"></div>
-      <gt-table
-        :tableData="
+                  ></div>
+                </div>
+              </template>
+            </el-table-column>-->
+          </el-table>
+        </el-card>
+      </el-col>
+      <el-col align="middle" :span="19">
+        <!-- 搜索框 -->
+        <el-card>
+          <gt-search :data="searchData" @handle="searchHandle" dateType="datetimerange"></gt-search>
+        </el-card>
+        <!-- 列表 -->
+        <el-card style="margin-top:12px">
+          <div style="width:100%; height:350px;" ref="chart"></div>
+        </el-card>
+        <el-card style="margin-top:12px">
+          <gt-table
+            :tableData="
           tableData.slice((currentPage - 1) * pagesize, currentPage * pagesize)
         "
-        style="width: 100%"
-        :optionWidth="optionWidth"
-        :columns="columns"
-        :selection="false"
-      ></gt-table>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="10"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        style="margin:20px"
-      ></el-pagination>
-    </el-col>
-  </el-row>
+            style="width: 100%"
+            :optionWidth="optionWidth"
+            :columns="columns"
+            :selection="false"
+          ></gt-table>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="10"
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+            style="margin:20px"
+          ></el-pagination>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 <script>
 import { equiSelect, oilView } from "@/getData";

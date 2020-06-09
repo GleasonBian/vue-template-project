@@ -1,10 +1,5 @@
 <template>
   <div>
-    <!-- 面包屑 -->
-    <!-- <headTop></headTop> -->
-
-    <!-- 搜索框 -->
-    <!-- <gt-search :data="searchData" @handle="getDataHandle" size></gt-search> -->
     <el-row :gutter="20" class="searchBox">
       <el-form
         :model="queryParam"
