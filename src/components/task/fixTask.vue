@@ -2,7 +2,7 @@
   <div>
     <!-- 面包屑 -->
     <headTop></headTop>
-    <div class="formWidth">
+    <div class="page_container">
       <el-form
         :model="form"
         status-icon

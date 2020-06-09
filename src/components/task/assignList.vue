@@ -6,53 +6,7 @@
     <!-- 搜索框 -->
     <!-- <gt-search :data="searchData" @handle="getDataHandle" size></gt-search> -->
     <el-row class="searchBox">
-      <!-- <el-form
-        :model="queryParam"
-        status-icon
-        ref="form"
-        label-width="auto"
-        style="width:100%"
-        lable-width="120px"
-      >
-        <el-col :span="8">
-          <el-form-item label="车辆名称" prop="equip_guid">
-            <el-select v-model="queryParam.equip_guid" placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in eqData"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="项目名称" prop="corp_guid">
-            <el-select v-model="queryParam.corp_guid" placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in corpData"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="接班时间" prop="date">
-            <el-date-picker
-              v-model="queryParam.date"
-              type="datetimerange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              style="width:100%; margin-right:15px"
-              @change="dateChange(queryParam.date)"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-form>-->
+      
       <el-card style="margin-bottom:12px">
         <gt-search :data="searchData" @handle="getData" ref="assignSearch"></gt-search>
       </el-card>
@@ -65,12 +19,7 @@
           <el-button type="primary" style size="medium" @click="newAssign">新增</el-button>
           <el-button type="primary" size="medium" @click="singleOil">单机油耗核算</el-button>
           <el-button type="success" size="medium" @click="downAss">导出</el-button>
-          <!-- <el-button
-        type="primary"
-        style="float:right;margin-right:1%"
-        size="medium"
-        @click="getData"
-          >查询</el-button>-->
+          
         </el-col>
 
         <!-- 内部用户列表 -->

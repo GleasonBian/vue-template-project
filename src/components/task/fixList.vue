@@ -1,97 +1,44 @@
 <template>
   <div>
-    <el-row :gutter="20" class="searchBox">
-      <el-form
-        :model="queryParam"
-        status-icon
-        ref="form"
-        label-width="auto"
-        style="width:100%"
-        lable-width="120px"
-      >
-        <el-col :span="8">
-          <el-form-item label="车辆名称" prop="equip">
-            <el-select v-model="queryParam.equip" clearable placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in eqData"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="项目名称" prop="proj_deptid">
-            <el-select
-              v-model="queryParam.proj_deptid"
-              clearable
-              placeholder="请选择"
-              style="width:100%"
-            >
-              <el-option
-                v-for="item in corpData"
-                :key="item.guid"
-                :label="item.name"
-                :value="item.guid"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="接班时间" prop="date">
-            <el-date-picker
-              clearable
-              v-model="queryParam.date"
-              type="datetimerange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              style="width:100%; margin-right:15px"
-              @change="dateChange(queryParam.date)"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-form>
+    <el-row class="searchBox">
+      <el-card style="margin-bottom:12px">
+        <gt-search :data="searchData" @handle="getData" ref="fixSearch"></gt-search>
+      </el-card>
     </el-row>
+    <el-row class="pd15_20">
+      <el-card>
+        <!-- 列表操作按钮 -->
+        <el-col align="left" style="margin-bottom:1%;">
+          <el-button type="primary" size="medium" @click="newFix">新增</el-button>
+          <el-button type="success" size="medium" @click="exportForm">导出</el-button>
+        </el-col>
 
-    <!-- 列表操作按钮 -->
-    <el-col align="left" style="margin-bottom:1%;">
-      <el-button type="primary" style="margin-left:1%" size="medium" @click="newFix">新增</el-button>
-      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
-      <el-button
-        type="primary"
-        style="float:right;margin-right:1%"
-        size="medium"
-        @click="getData"
-      >查询</el-button>
-    </el-col>
-
-    <!-- 内部用户列表 -->
-    <el-col align="middle">
-      <gt-table
-        :tableData="tableData"
-        style="width: 100%"
-        :optionWidth="optionWidth"
-        :columns="columns"
-        :selection="false"
-        v-on:viewAssign="viewAssign"
-        v-on:newFixTask="newFixTask"
-        :handle="handle"
-        size="mini"
-      ></gt-table>
-      <!-- v-on:selection-change="handleSelectionChange" -->
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="queryParam.pageno"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="queryParam.pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="queryParam.total"
-      ></el-pagination>
-    </el-col>
+        <!-- 内部用户列表 -->
+        <el-col align="middle">
+          <gt-table
+            :tableData="tableData"
+            style="width: 100%"
+            :optionWidth="optionWidth"
+            :columns="columns"
+            :selection="false"
+            v-on:viewAssign="viewAssign"
+            v-on:newFixTask="newFixTask"
+            :handle="handle"
+            size="mini"
+          ></gt-table>
+          <!-- v-on:selection-change="handleSelectionChange" -->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="queryParam.pageno"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="queryParam.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="queryParam.total"
+          ></el-pagination>
+        </el-col>
+      </el-card>
+    </el-row>
   </div>
 </template>
 <script>
@@ -103,6 +50,26 @@ export default {
   name: "createCorperation",
   data() {
     return {
+      searchData: [
+        {
+          key: "equip", // 与后端交互时的字段 必填
+          label: "车辆", // 搜索框名称 必填
+          placeholder: "请选择", // 占位符 选填
+          options: []
+        },
+        {
+          key: "proj_deptid",
+          label: "项目名称",
+          placeholder: "请选择", // 占位符 选填
+          options: []
+        },
+        {
+          key: "date",
+          label: "起止时间",
+          placeholder: "请选择",
+          type: "datetimerange"
+        }
+      ],
       queryParam: {
         pageno: 1,
         pagesize: 10
@@ -182,7 +149,11 @@ export default {
     },
     async getEqList() {
       const res = await equiSelect(this.form);
-      this.eqData = res.data;
+      res.data.map(item => {
+        item.value = item.guid;
+        item.label = item.name + "-" + item.plateno;
+      });
+      this.searchData[0].options = res.data;
     },
     newFix() {
       this.$router.push({ path: "fixDetail" });
@@ -190,7 +161,8 @@ export default {
     /**
      ** 调令列表
      */
-    async getData(val) {
+    async getData(param = {}) {
+      this.queryParam = param;
       const res = await fixList({ param: this.queryParam });
       this.tableData = res.data.list;
       this.queryParam.pageno = res.data.pageno;
@@ -209,33 +181,6 @@ export default {
      */
     async newFixTask(index, row) {
       this.$router.push({ path: "fixTask", query: { id: row.code } });
-    },
-    /*
-     ** 单机油耗核算
-     */
-    async singleOil() {
-      if (
-        !(
-          this.queryParam.equip_guid &&
-          this.queryParam.start &&
-          this.queryParam.end
-        )
-      ) {
-        this.$message({
-          type: "warning",
-          message: "请先进行条件搜索"
-        });
-        return;
-      } else {
-        this.$router.push({
-          path: "singleOil",
-          query: {
-            equip_guid: this.queryParam.equip_guid,
-            start: this.queryParam.start,
-            end: this.queryParam.end
-          }
-        });
-      }
     },
 
     /*
@@ -264,19 +209,23 @@ export default {
      */
     handleSizeChange(val) {
       this.queryParam.pagesize = val;
-      this.getData();
+      this.$refs.fixSearch.searchHandle();
     },
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
       this.queryParam.pageno = val;
-      this.getData();
+      this.$refs.fixSearch.searchHandle();
     },
 
     async getCorp() {
       const res = await corpRank({ id: 3 });
-      this.corpData = res.data;
+      res.data.map(item => {
+        item.label = item.name;
+        item.value = item.guid;
+      });
+      this.searchData[1].options = res.data;
     },
 
     getDataHandle(val) {
