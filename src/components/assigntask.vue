@@ -16,8 +16,7 @@
           formCurrentStatus = '创建';
         "
         style="margin-left:1%"
-        >新增</el-button
-      >
+      >新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -25,7 +24,7 @@
     <el-col align="middle">
       <gt-table
         :tableData="tableData"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
@@ -34,6 +33,7 @@
         v-on:UpdatePreprocessing="UpdatePreprocessing"
         v-on:IntoTask="IntoTask"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
@@ -65,11 +65,7 @@
         label-width="80px"
         style="width:100%"
       >
-        <el-form-item
-          label="所属公司"
-          prop="corpguid"
-          v-if="formCurrentStatus === '创建'"
-        >
+        <el-form-item label="所属公司" prop="corpguid" v-if="formCurrentStatus === '创建'">
           <el-select
             v-model="form.corpguid"
             placeholder="请选择"
@@ -90,11 +86,7 @@
         </el-form-item>
 
         <el-form-item label="计划标识" prop="planguid">
-          <el-select
-            v-model="form.planguid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.planguid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in assignData"
               :key="item.guid"
@@ -105,11 +97,7 @@
         </el-form-item>
 
         <el-form-item label="设备标识" prop="equipguid">
-          <el-select
-            v-model="form.equipguid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.equipguid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in equiData"
               track-by="item.guid"
@@ -129,11 +117,7 @@
         </el-form-item>
 
         <el-form-item label="调度部门" prop="deptsched">
-          <el-select
-            v-model="form.deptsched"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.deptsched" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in deptData"
               track-by="item.guid"
@@ -145,11 +129,7 @@
         </el-form-item>
 
         <el-form-item label="接收部门" prop="deptrecv">
-          <el-select
-            v-model="form.deptrecv"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.deptrecv" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in deptData"
               track-by="item.guid"
@@ -238,23 +218,13 @@
       @close="DialogClose('form2')"
       center
     >
-      <el-form
-        :model="form2"
-        status-icon
-        ref="form2"
-        label-width="80px"
-        style="width:100%"
-      >
+      <el-form :model="form2" status-icon ref="form2" label-width="80px" style="width:100%">
         <el-form-item
           label="任务标识"
           prop="assignid"
           :rules="[{ required: true, message: '任务标识 必填' }]"
         >
-          <el-select
-            v-model="form2.assignid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form2.assignid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in tableData"
               track-by="item.guid"
@@ -264,16 +234,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="设备标识"
-          prop="equipid"
-          :rules="[{ required: true, message: '设备标识 必填' }]"
-        >
-          <el-select
-            v-model="form2.equipid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+        <el-form-item label="设备标识" prop="equipid" :rules="[{ required: true, message: '设备标识 必填' }]">
+          <el-select v-model="form2.equipid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in equiData"
               track-by="item.guid"
@@ -283,16 +245,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="人员名称"
-          prop="staffid"
-          :rules="[{ required: true, message: '人员名称 必填' }]"
-        >
-          <el-select
-            v-model="form2.staffid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+        <el-form-item label="人员名称" prop="staffid" :rules="[{ required: true, message: '人员名称 必填' }]">
+          <el-select v-model="form2.staffid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in staffData"
               track-by="item.guid"

@@ -72,13 +72,14 @@
     <el-col align="middle">
       <gt-table
         :tableData="tableData"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
         v-on:viewAssign="viewAssign"
         v-on:deleteAssign="deleteAssign"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
@@ -108,12 +109,12 @@ export default {
   data() {
     return {
       queryParam: {
-        equip_guid:null,
-        start:null,
-        end:null,
-        corp_guid:null,
-        pageno:1,
-        pagesize:10
+        equip_guid: null,
+        start: null,
+        end: null,
+        corp_guid: null,
+        pageno: 1,
+        pagesize: 10
       },
       eqData: [], //设备列表
       corpData: [], //公司列表
@@ -193,9 +194,9 @@ export default {
     async getData(val) {
       const res = await assigndeSelect({ param: this.queryParam });
       this.tableData = res.data.list;
-      this.queryParam.total=res.data.total
-      this.queryParam.pageno=res.data.pageno
-      this.queryParam.pagesize=res.data.pagesize
+      this.queryParam.total = res.data.total;
+      this.queryParam.pageno = res.data.pageno;
+      this.queryParam.pagesize = res.data.pagesize;
     },
 
     /*

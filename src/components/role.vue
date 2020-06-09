@@ -14,8 +14,7 @@
         size="medium"
         @click="getDeptTree('newUser')"
         style="margin-left:1%"
-        >新增</el-button
-      >
+      >新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">删除</el-button> -->
     </el-col>
 
@@ -23,13 +22,14 @@
     <el-col align="middle">
       <gt-table
         :tableData="staffList"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
         v-on:editRole="editRole"
         v-on:delRole="delRole"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -54,18 +54,8 @@
       top="5vh"
       center
     >
-      <el-form
-        :model="form"
-        status-icon
-        ref="form"
-        label-width="80px"
-        style="width:100%"
-      >
-        <el-form-item
-          label="所属公司"
-          prop="corpguid"
-          :rules="[{ required: true, message: '公司 必选' }]"
-        >
+      <el-form :model="form" status-icon ref="form" label-width="80px" style="width:100%">
+        <el-form-item label="所属公司" prop="corpguid" :rules="[{ required: true, message: '公司 必选' }]">
           <el-select
             v-model="form.corpguid"
             @change="resetDept(form.corpguid)"
@@ -86,11 +76,7 @@
           prop="deptguid"
           :rules="[{ required: true, message: '部门 必选' }]"
         >
-          <el-select
-            v-model="form.deptguid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in deptList"
               track-by="item.guid"
@@ -100,18 +86,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="角色名称"
-          prop="name"
-          :rules="[{ required: true, message: '角色名称 必填' }]"
-        >
+        <el-form-item label="角色名称" prop="name" :rules="[{ required: true, message: '角色名称 必填' }]">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item
-          label="角色编号"
-          prop="code"
-          :rules="[{ required: true, message: '角色编号 必填' }]"
-        >
+        <el-form-item label="角色编号" prop="code" :rules="[{ required: true, message: '角色编号 必填' }]">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
       </el-form>
@@ -138,11 +116,7 @@
         label-width="80px"
         style="width:100%"
       >
-        <el-form-item
-          label="所属公司"
-          prop="corpguid"
-          :rules="[{ required: true, message: '公司 必选' }]"
-        >
+        <el-form-item label="所属公司" prop="corpguid" :rules="[{ required: true, message: '公司 必选' }]">
           <el-select
             v-model="roleDetail.corpguid"
             @change="resetDept2(roleDetail.corpguid)"
@@ -163,11 +137,7 @@
           prop="deptguid"
           :rules="[{ required: true, message: '部门 必选' }]"
         >
-          <el-select
-            v-model="roleDetail.deptguid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="roleDetail.deptguid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in deptList"
               track-by="item.guid"
@@ -177,27 +147,15 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="角色名称"
-          prop="name"
-          :rules="[{ required: true, message: '角色名称 必填' }]"
-        >
+        <el-form-item label="角色名称" prop="name" :rules="[{ required: true, message: '角色名称 必填' }]">
           <el-input v-model="roleDetail.name"></el-input>
         </el-form-item>
-        <el-form-item
-          label="角色编号"
-          prop="code"
-          :rules="[{ required: true, message: '角色编号 必填' }]"
-        >
+        <el-form-item label="角色编号" prop="code" :rules="[{ required: true, message: '角色编号 必填' }]">
           <el-input v-model="roleDetail.code"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button
-          type="primary"
-          @click="submitForm('roleDetail', roleDetail.guid)"
-          >提交</el-button
-        >
+        <el-button type="primary" @click="submitForm('roleDetail', roleDetail.guid)">提交</el-button>
       </span>
     </el-dialog>
 

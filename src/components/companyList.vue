@@ -16,8 +16,7 @@
           formCurrentStatus = '创建';
         "
         style="margin-left:1%"
-        >新增</el-button
-      >
+      >新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -25,7 +24,7 @@
     <el-col align="middle">
       <gt-table
         :tableData="tableData"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
@@ -33,6 +32,7 @@
         v-on:deleteCorp="deleteCorp"
         v-on:updatePretreatment="updatePretreatment"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
@@ -104,11 +104,7 @@
           <el-input v-model="form.briefabout"></el-input>
         </el-form-item>
         <el-form-item label="公司级别" prop="corprank">
-          <el-select
-            v-model="form.corprank"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.corprank" placeholder="请选择" style="width:100%">
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>

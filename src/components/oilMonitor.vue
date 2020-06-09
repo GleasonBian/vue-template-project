@@ -38,7 +38,7 @@
         :tableData="
           tableData.slice((currentPage - 1) * pagesize, currentPage * pagesize)
         "
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"

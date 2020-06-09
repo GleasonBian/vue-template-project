@@ -28,6 +28,7 @@
         v-on:DeleteHandle="DeleteHandle"
         v-on:downloadHandle="downloadHandle"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <el-pagination
         style="margin:12px"
@@ -119,7 +120,7 @@ export default {
       tableData: [], // 表格数据
       total: 6,
       pageno: 1,
-      pagesize: 2,
+      pagesize: 10,
       optionWidth: 250,
       // 搜索框数据
       searchData: [

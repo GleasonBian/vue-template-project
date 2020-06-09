@@ -14,8 +14,7 @@
         size="medium"
         @click="getDeptTree('newUser')"
         style="margin-left:1%"
-        >新增</el-button
-      >
+      >新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">删除</el-button> -->
     </el-col>
 
@@ -23,13 +22,14 @@
     <el-col align="middle">
       <gt-table
         :tableData="deptList"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
         v-on:editDept="editDept"
         v-on:delDept="delDept"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -54,23 +54,9 @@
       top="5vh"
       center
     >
-      <el-form
-        :model="form"
-        status-icon
-        ref="form"
-        label-width="80px"
-        style="width:100%"
-      >
-        <el-form-item
-          label="所属公司"
-          prop="corp_guid"
-          :rules="[{ required: true, message: '公司 必选' }]"
-        >
-          <el-select
-            v-model="form.corp_guid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+      <el-form :model="form" status-icon ref="form" label-width="80px" style="width:100%">
+        <el-form-item label="所属公司" prop="corp_guid" :rules="[{ required: true, message: '公司 必选' }]">
+          <el-select v-model="form.corp_guid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in compList"
               :key="item.guid"
@@ -79,18 +65,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="部门名称"
-          prop="name"
-          :rules="[{ required: true, message: '部门名称 必填' }]"
-        >
+        <el-form-item label="部门名称" prop="name" :rules="[{ required: true, message: '部门名称 必填' }]">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item
-          label="部门编号"
-          prop="code"
-          :rules="[{ required: true, message: '部门编号 必填' }]"
-        >
+        <el-form-item label="部门编号" prop="code" :rules="[{ required: true, message: '部门编号 必填' }]">
           <el-input v-model="form.code"></el-input>
         </el-form-item>
         <el-form-item
@@ -112,21 +90,13 @@
           prop="deptrank"
           :rules="[{ required: true, message: '部门级别 必填' }]"
         >
-          <el-select
-            v-model="form.deptrank"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.deptrank" placeholder="请选择" style="width:100%">
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="注册日期"
-          prop="regdate"
-          :rules="[{ required: true, message: '注册日期 必填' }]"
-        >
+        <el-form-item label="注册日期" prop="regdate" :rules="[{ required: true, message: '注册日期 必填' }]">
           <el-date-picker
             v-model="form.regdate"
             type="date"
@@ -184,16 +154,8 @@
         label-width="80px"
         style="width:100%"
       >
-        <el-form-item
-          label="所属公司"
-          prop="corp_guid"
-          :rules="[{ required: true, message: '公司 必选' }]"
-        >
-          <el-select
-            v-model="deptDetail.corp_guid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+        <el-form-item label="所属公司" prop="corp_guid" :rules="[{ required: true, message: '公司 必选' }]">
+          <el-select v-model="deptDetail.corp_guid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in compList"
               :key="item.guid"
@@ -202,18 +164,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="部门名称"
-          prop="name"
-          :rules="[{ required: true, message: '部门名称 必填' }]"
-        >
+        <el-form-item label="部门名称" prop="name" :rules="[{ required: true, message: '部门名称 必填' }]">
           <el-input v-model="deptDetail.name"></el-input>
         </el-form-item>
-        <el-form-item
-          label="部门编号"
-          prop="code"
-          :rules="[{ required: true, message: '部门编号 必填' }]"
-        >
+        <el-form-item label="部门编号" prop="code" :rules="[{ required: true, message: '部门编号 必填' }]">
           <el-input v-model="deptDetail.code"></el-input>
         </el-form-item>
         <el-form-item
@@ -235,21 +189,13 @@
           prop="deptrank"
           :rules="[{ required: true, message: '部门级别 必填' }]"
         >
-          <el-select
-            v-model="deptDetail.deptrank"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="deptDetail.deptrank" placeholder="请选择" style="width:100%">
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="注册日期"
-          prop="regdate"
-          :rules="[{ required: true, message: '注册日期 必填' }]"
-        >
+        <el-form-item label="注册日期" prop="regdate" :rules="[{ required: true, message: '注册日期 必填' }]">
           <el-date-picker
             v-model="deptDetail.regdate"
             type="date"
@@ -285,11 +231,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button
-          type="primary"
-          @click="submitForm('deptDetail', deptDetail.guid)"
-          >提交</el-button
-        >
+        <el-button type="primary" @click="submitForm('deptDetail', deptDetail.guid)">提交</el-button>
       </span>
     </el-dialog>
 

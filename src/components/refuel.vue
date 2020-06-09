@@ -22,6 +22,7 @@
         v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
         :handle="handle"
+        size
       ></gt-table>
       <el-pagination
         style="margin:12px 0px"
@@ -94,7 +95,7 @@ export default {
       ],
       tableData: [], // 表格数据
       total: 0,
-      pagesize: 2,
+      pagesize: 10,
       pageno: 1,
       optionWidth: 250,
       searchData: [

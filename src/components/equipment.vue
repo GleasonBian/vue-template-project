@@ -1,7 +1,7 @@
 <template>
   <div style="padding:12px">
     <el-card style="margin-bottom:12px">
-      <gt-search :data="searchData"></gt-search>
+      <gt-search :data="searchData" @handle="equiList" ref="equiSearch"></gt-search>
     </el-card>
 
     <el-card>
@@ -11,13 +11,14 @@
 
       <gt-table
         :tableData="tableData"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
         v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <el-pagination
         style="margin-top:12px"
@@ -35,8 +36,7 @@
   </div>
 </template>
 <script>
-import { equiDelete, equiSelect } from "@/getData";
-import { Regular } from "@/config/verification";
+import { equiDelete, equiSelect, corpSelect } from "@/getData";
 export default {
   name: "createCorperation",
   data() {
@@ -58,6 +58,18 @@ export default {
       ],
       columns: [
         {
+          id: "equip_no",
+          label: "车辆编号"
+        },
+        {
+          id: "plateno",
+          label: "车牌号码"
+        },
+        {
+          id: "name",
+          label: "车辆名称"
+        },
+        {
           id: "corpname",
           label: "所属公司"
         },
@@ -66,28 +78,24 @@ export default {
           label: "所属部门"
         },
         {
-          id: "name",
-          label: "设备名称"
+          id: "status",
+          label: "车辆状态"
         },
         {
-          id: "clstype",
-          label: "车辆类型"
-        },
-        {
-          id: "class",
-          label: "车辆型号"
-        },
-        {
-          id: "plateno",
-          label: "车牌号"
+          id: "manage_type",
+          label: "管理类型"
         },
         {
           id: "oilboxheight",
-          label: "油箱高度/cm"
+          label: "总里程"
+        },
+        {
+          id: "oill",
+          label: "总油耗"
         },
         {
           id: "oilboxvol",
-          label: "油箱容量/L"
+          label: "工作总时长"
         }
       ],
       tableData: [], // 表格数据
@@ -97,33 +105,39 @@ export default {
       pageno: 1,
       searchData: [
         {
-          key: "id", // 与后端交互时的字段 必填
-          label: "搜索框1", // 搜索框名称 必填
-          placeholder: "请搜索", // 占位符 选填
-          default: "0", // 搜索框 默认值
+          key: "name", // 与后端交互时的字段 必填
+          label: "车辆名称", // 搜索框名称 必填
+          placeholder: "请输入" // 占位符 选填
+          // options: []
+        },
+        {
+          key: "manage_type", // 与后端交互时的字段 必填
+          label: "管理类型", // 搜索框名称 必填
+          placeholder: "请选择", // 占位符 选填
           options: [
             {
-              // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
-              value: "1", // 下拉选项 绑定 值
-              label: "男" // 下拉选项 绑定 名称
+              label: "公司直管",
+              value: "公司直管"
             },
             {
-              value: "0",
-              label: "女"
+              label: "项目自管",
+              value: "项目自管"
+            },
+            {
+              label: "劳务自带",
+              value: "劳务自带"
+            },
+            {
+              label: "专业租赁",
+              value: "专业租赁"
             }
           ]
         },
         {
-          key: "date",
-          label: "搜索框2",
-          placeholder: "",
-          default: ""
-        },
-        {
-          key: "age",
-          label: "搜索框3",
-          placeholder: "请搜索",
-          default: ""
+          key: "corpguid",
+          label: "所属公司",
+          placeholder: "请选择", // 占位符 选填
+          options: []
         }
       ]
     };
@@ -131,29 +145,48 @@ export default {
   beforeCreate() {},
   created() {
     this.equiList();
+    this.corpList();
   },
   methods: {
     /**
      ** 设备列表
      */
-    async equiList() {
-      const res = await equiSelect();
-      this.tableData = res.data;
+    async equiList(param = {}) {
+      param.pagesize = this.pagesize;
+      param.pageno = this.pageno;
+      const res = await equiSelect({ param: param });
+      this.total = res.data.total;
+      res.data.list.map(item => {
+        item.value = item.name;
+        item.label = item.name;
+      });
+      // this.searchData[0].options = res.data.list;
+      this.tableData = res.data.list;
+    },
+
+    /**
+     ** 公司列表
+     */
+    async corpList(val) {
+      const res = await corpSelect();
+      res.data.map(item => {
+        item.value = item.guid;
+        item.label = item.name;
+      });
+      this.searchData[2].options = res.data;
     },
 
     /*
      ** 查看更新处理
      */
-    async ExamineHandle(index, row) {
-      console.log(row);
-      this.formCurrentStatus = "查看";
-      const response = await equiDetails({
-        id: row.guid
+
+    ExamineHandle(index, row) {
+      this.$router.push({
+        path: "vehicle",
+        query: {
+          id: row.guid
+        }
       });
-      if (response.status === 200) {
-        this.form = response.data;
-        this.dialogFormVisible = true;
-      } else this.$message.warning("请稍后再尝试");
     },
 
     /*
@@ -166,13 +199,12 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          let res = equiDelete({ id: row.guid });
-          console.log(res);
+        .then(async () => {
+          const res = await equiDelete({ id: row.guid });
           if (res.status === 200) {
             this.$message.success("删除成功");
+            this.equiList();
           }
-          this.equiList();
         })
         .catch(err => {});
     },
@@ -181,16 +213,16 @@ export default {
      ** 列表 分页
      */
     handleSizeChange(val) {
-      this.limit = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.pagesize = val;
+      this.$refs.equiSearch.searchHandle();
     },
 
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
-      this.offset = val;
-      this.$refs.searchBox.internalUser(this.limit, this.offset);
+      this.pageno = val;
+      this.$refs.equiSearch.searchHandle();
     }
   }
 };

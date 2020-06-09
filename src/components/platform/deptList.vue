@@ -64,13 +64,14 @@
     <el-col align="middle">
       <gt-table
         :tableData="tableData"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
         v-on:viewCorp="viewCorp"
         v-on:deleteCorp="deleteCorp"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
@@ -102,7 +103,7 @@ export default {
   name: "createCorperation",
   data() {
     return {
-      compList:[],
+      compList: [],
       queryParam: {
         name: "",
         start: "",
@@ -166,8 +167,7 @@ export default {
     this.getCompList();
   },
   methods: {
-    
-    async getCompList(){
+    async getCompList() {
       const res = await corpSelect();
       if (res.data) {
         this.compList = res.data;

@@ -1,10 +1,71 @@
 <template>
   <div style="padding:12px">
+    <el-dialog
+      title="油箱添加"
+      :visible.sync="dialogVisible"
+      width="45%"
+      :modal-append-to-body="false"
+      :before-close="handleClose"
+      center
+    >
+      <el-form ref="tank" :model="tank" label-width="86px" :rules="tankRules">
+        <el-form-item label="车辆名称" prop="category">
+          <el-input v-model="tank.category" placeholder="请输入车量"></el-input>
+        </el-form-item>
+
+        <el-form-item label="车辆型号" prop="kind">
+          <el-input v-model="tank.kind"></el-input>
+        </el-form-item>
+
+        <el-form-item label="油箱形状" prop="shape">
+          <el-select v-model="tank.shape" placeholder="请选择" style="width:100%">
+            <el-option label="长方体" value="长方体"></el-option>
+            <el-option label="圆柱体" value="圆柱体"></el-option>
+            <el-option label="异型油箱" value="异型油箱"></el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="油箱容积" prop="theory_volume">
+          <el-input v-model.number="form.theory_volume" type="number" :step="10" :min="1">
+            <el-button slot="append">升</el-button>
+          </el-input>
+        </el-form-item>
+
+        <el-form-item label="油箱高度" prop="height">
+          <el-input v-model.number="form.height" type="number" :step="10" :min="1" :max="3000">
+            <el-button slot="append">厘米</el-button>
+          </el-input>
+        </el-form-item>
+
+        <el-form-item label="油箱长度" prop="length">
+          <el-input v-model.number="tank['length']" type="number" :step="10" :min="1">
+            <el-button slot="append">厘米</el-button>
+          </el-input>
+        </el-form-item>
+
+        <el-form-item label="油箱宽度" prop="width">
+          <el-input v-model.number="tank['width']" type="number" :step="10" :min="1">
+            <el-button slot="append">厘米</el-button>
+          </el-input>
+        </el-form-item>
+
+        <el-form-item label="油箱半径" prop="radius">
+          <el-input v-model.number="tank['radius']" type="number" :step="10" :min="1">
+            <el-button slot="append">厘米</el-button>
+          </el-input>
+        </el-form-item>
+        <el-form-item></el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button @click="tankHandle" type="primary">确定</el-button>
+      </span>
+    </el-dialog>
     <el-card>
       <div slot="header" class="clearfix">
         <span>车辆基本信息</span>
       </div>
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="form" :model="form" label-width="86px" :rules="rules">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="车辆名称" prop="name">
@@ -38,8 +99,25 @@
               <!-- <el-input v-model="form.clstype" placeholder="请输入"></el-input> -->
             </el-form-item>
 
-            <el-form-item label="车辆型号" prop="class">
-              <el-input v-model="form.class" placeholder="请输入"></el-input>
+            <el-form-item label="车辆状态" prop="status">
+              <el-select v-model="form.status" placeholder="请选择" style="width:100%">
+                <el-option label="正常" value="正常"></el-option>
+                <el-option label="停用" value="停用"></el-option>
+                <el-option label="封存" value="封存"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="来源类型" prop="source_type">
+              <el-select v-model="form.source_type" placeholder="请选择" style="width:100%">
+                <el-option label="自购" value="自购"></el-option>
+                <el-option label="租赁" value="租赁"></el-option>
+                <el-option label="借调" value="借调"></el-option>
+                <el-option label="其他" value="其他"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="车辆用途" prop="vehicle_use">
+              <el-input v-model="form.vehicle_use"></el-input>
             </el-form-item>
 
             <el-form-item label="所属公司" prop="corpguid">
@@ -70,23 +148,6 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item label="车辆状态" prop="status">
-              <el-select v-model="form.status" placeholder="请选择" style="width:100%">
-                <el-option label="正常" value="正常"></el-option>
-                <el-option label="停用" value="停用"></el-option>
-                <el-option label="封存" value="封存"></el-option>
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="来源类型" prop="source_type">
-              <el-select v-model="form.source_type" placeholder="请选择" style="width:100%">
-                <el-option label="自购" value="自购"></el-option>
-                <el-option label="租赁" value="租赁"></el-option>
-                <el-option label="借调" value="借调"></el-option>
-                <el-option label="其他" value="其他"></el-option>
-              </el-select>
-            </el-form-item>
-
             <el-form-item label="管理类型" prop="manage_type">
               <el-select v-model="form.manage_type" placeholder="请选择" style="width:100%">
                 <el-option label="公司直管" value="公司直管"></el-option>
@@ -112,16 +173,24 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="邮箱类型" prop="tank_guid">
+              <el-select v-model="form.tank_guid" placeholder="请选择" style="width:75%">
+                <el-option
+                  v-for="item in tankData"
+                  :key="item.guid"
+                  :label="item.category"
+                  :value="item.guid"
+                ></el-option>
+              </el-select>
+              <el-button style="width:25%" @click="dialogVisible = true">添加油箱</el-button>
+            </el-form-item>
+
             <el-form-item label="终端id" prop="terminalid">
               <el-input v-model="form.terminalid"></el-input>
             </el-form-item>
 
             <el-form-item label="手机号" prop="simnumber">
               <el-input v-model="form.simnumber"></el-input>
-            </el-form-item>
-
-            <el-form-item label="车辆用途" prop="vehicle_use">
-              <el-input v-model="form.vehicle_use"></el-input>
             </el-form-item>
 
             <el-form-item label="保养日期" prop="repair_date">
@@ -144,67 +213,63 @@
             </el-form-item>
 
             <el-form-item label="初始里程" prop="init_mileage">
-              <el-input v-model="form.init_mileage" type="number" :step="10" :min="1" :max="300">
+              <el-input
+                v-model.number="form.init_mileage"
+                type="number"
+                :step="10"
+                :min="1"
+                :max="300"
+              >
                 <el-button slot="append">升/百公里</el-button>
               </el-input>
             </el-form-item>
 
-            <el-form-item label="油箱高度" prop="oilboxheight">
-              <el-input
-                v-model.number="form.oilboxheight"
-                type="number"
-                :step="10"
+            <el-form-item label="速度阀值" prop="max_speed">
+              <el-input-number
                 :min="1"
-                :max="3000"
-              >
-                <el-button slot="append">厘米</el-button>
-              </el-input>
+                :max="200"
+                controls-position="right"
+                v-model.number="form.max_speed"
+                :step="5"
+                step-strictly
+                placeholder="超速报警阀值"
+                style="width:100%"
+              ></el-input-number>
             </el-form-item>
 
-            <el-form-item label="油箱容量" prop="oilboxvol">
-              <el-input v-model.number="form.oilboxvol" :step="10" type="number">
-                <el-button slot="append">升</el-button>
-              </el-input>
-            </el-form-item>
-
-            <el-form-item label="限制时速">
-              <el-row>
-                <el-col :span="11">
-                  <el-input-number
-                    :min="1"
-                    :max="200"
-                    controls-position="right"
-                    v-model="form.min_speed"
-                    :step="5"
-                    step-strictly
-                    placeholder="最大速度(km/h)"
-                    style="width:100%"
-                  ></el-input-number>
-                </el-col>
-                <el-col :span="2" align="center">-</el-col>
-                <el-col :span="11">
-                  <el-input-number
-                    :min="1"
-                    :max="200"
-                    controls-position="right"
-                    v-model="form.max_speed"
-                    :step="5"
-                    step-strictly
-                    placeholder="最小速度(km/h)"
-                    style="width:100%"
-                  ></el-input-number>
-                </el-col>
-              </el-row>
+            <el-form-item label="油耗阀值" prop="max_oil_wear">
+              <el-input-number
+                :min="1"
+                :max="200"
+                controls-position="right"
+                v-model.number="form.max_oil_wear"
+                :step="5"
+                step-strictly
+                placeholder="油耗报警阀值"
+                style="width:100%"
+              ></el-input-number>
             </el-form-item>
 
             <el-form-item label="公里/油耗" prop="km_oil_wear">
-              <el-input v-model="form.km_oil_wear" type="number" :step="10" :min="1" :max="300">
+              <el-input
+                v-model.number="form.km_oil_wear"
+                type="number"
+                :step="10"
+                :min="1"
+                :max="300"
+              >
                 <el-button slot="append">升/百公里</el-button>
               </el-input>
             </el-form-item>
 
             <el-form-item label="小时/油耗" prop="hr_oil_wear">
-              <el-input v-model="form.hr_oil_wear" type="number" :step="10" :min="1" :max="300">
+              <el-input
+                v-model.number="form.hr_oil_wear"
+                type="number"
+                :step="10"
+                :min="1"
+                :max="300"
+              >
                 <el-button slot="append">升/小时</el-button>
               </el-input>
             </el-form-item>
@@ -265,7 +330,7 @@
             <el-input v-model="scope.row.deptname" :readonly="true"></el-input>
           </template>
         </el-table-column>
-        <el-table-column prop="default" label="是否默认" align="center">
+        <el-table-column prop="default" label="默认司机" align="center">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.default"
@@ -275,11 +340,18 @@
               inactive-text="否"
               active-value="是"
               inactive-value="否"
-              @change="defaultDriverHandle"
+              @change="defaultDriverHandle(scope.$index)"
             ></el-switch>
           </template>
         </el-table-column>
       </el-table>
+    </el-card>
+
+    <el-card style="margin-top:12px">
+      <el-col align="center" style="margin-bottom:12px">
+        <el-button type="primary" @click="submitForm('form')">保存</el-button>
+        <el-button @click="$router.go(-1)">返回</el-button>
+      </el-col>
     </el-card>
   </div>
 </template>
@@ -291,11 +363,16 @@ import {
   equiDetails, // 设备详情
   corpSelect, // 公司列表
   getDeptList, // 部门列表
-  getStaffList //人员
+  getStaffList, //人员
+  tankCreate, // 邮箱创建
+  tankList, // 邮箱列表
+  equiSelect // 获取详情
 } from "@/getData";
 export default {
   data() {
     return {
+      dialogVisible: false,
+      tankRules: {},
       // 表单校验规则
       rules: {
         name: [
@@ -431,14 +508,7 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        oilboxvol: [
-          {
-            required: true,
-            message: "必填",
-            trigger: ["blur", "change"]
-          }
-        ],
-        min_speed: [
+        max_oil_wear: [
           {
             required: true,
             message: "必填",
@@ -466,7 +536,7 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        description: [
+        tank_guid: [
           {
             required: true,
             message: "必填",
@@ -480,7 +550,6 @@ export default {
         plateno: "", //车牌号码
         color: "", //车辆颜色
         clstype: "", //车辆类型
-        class: "", //车辆型号
         corpguid: "", //所属公司
         deptguid: "", //上级部门
         status: "", //车辆状态
@@ -494,14 +563,23 @@ export default {
         repair_date: "", //保养日期
         monitor: "", //监控等级
         init_mileage: "", //初始里程
-        oilboxheight: "", //油箱高度
-        oilboxvol: "", //油箱容量
-        min_speed: "", //最小速度
-        max_speed: "", //最大速度
+        max_oil_wear: "", //油耗报警阀值
+        max_speed: "", // 速度报警阀值
         km_oil_wear: "", //公里/油耗
         hr_oil_wear: "", //小时/油耗
         description: "", //描述信息
-        driver: []
+        driver: [], // 司机
+        tank_guid: "" // 油箱
+      },
+      tank: {
+        category: "", // 车辆名称
+        kind: "", // 车辆型号
+        shape: "", // 长方体,圆柱体,异型油箱
+        theory_volume: 0, // 理论容积
+        height: 0, // 油箱高度
+        length: 0, // 油箱长度
+        width: 0, //宽度
+        radius: 0 // 油箱半径
       },
       // 选择行
       selectRowList: [],
@@ -510,26 +588,23 @@ export default {
       // 部门列表
       deptData: [],
       // 人员
-      staffData: []
+      staffData: [],
+      // 邮箱
+      tankData: []
     };
   },
   created() {
+    this.staffList();
     this.corpList();
     this.deptList();
-    this.staffList();
+    this.tankListHandle();
   },
-
+  mounted() {
+    this.getVehicleDetail();
+  },
   methods: {
-    /*
-     ** 创建处理
-     */
-    async CreateHandle(info) {
-      const res = await equiCreate(this.form);
-      if (res.status === 200) {
-        this.equiList();
-        this.$message.success("设备创建成功");
-      } else this.$message.warning("设备创建失败");
-      this.dialogFormVisible = false;
+    handleClose() {
+      this.dialogVisible = false;
     },
 
     /**
@@ -572,27 +647,38 @@ export default {
     async UpdateHandle(index, row) {
       const res = await equiUpdate(this.form);
       if (res.status === 200) {
-        this.equiList();
+        this.$router.push({
+          path: "equipment"
+        });
         this.$message.success("更新成功");
       } else this.$message.warning("更新失败,稍后重试");
-      this.dialogFormVisible = false;
     },
 
     /*
      ** form 表单 验证
      */
     submitForm(formName) {
-      console.log("232323");
       this.$refs[formName].validate(valid => {
         if (valid) {
-          if (this.formCurrentStatus === "创建") this.CreateHandle();
-          else if (this.formCurrentStatus === "更新") this.UpdateHandle();
-          else if (this.formCurrentStatus === "查看") this.ExamineHandle();
+          this.$route.query.id ? this.UpdateHandle() : this.CreateHandle();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
         }
       });
+    },
+
+    /*
+     ** 创建处理
+     */
+    async CreateHandle() {
+      const res = await equiCreate(this.form);
+      if (res.status === 200) {
+        this.$message.success("设备创建成功");
+        this.$router.push({
+          path: "equipment"
+        });
+      } else this.$message.warning("设备创建失败");
     },
 
     /*
@@ -621,7 +707,7 @@ export default {
         corpguid: "", // 公司id
         deptname: "", // 部门名称
         deptguid: "", // 部门id
-        default: false // 默认司机
+        default: "否" // 默认司机
       };
       this.form.driver.push(list);
     },
@@ -658,8 +744,8 @@ export default {
      ** 选中车辆 自动添加 车牌号码
      */
     selectHandle(guid) {
-      let that = this;
-      var val = this.staffData;
+      let that = this,
+        val = this.staffData;
       if (val) {
         // 将选中数据遍历
         val.forEach(function(item, index) {
@@ -668,6 +754,7 @@ export default {
             // 如果选中数据跟元数据某一条标识相等
             if (item.guid === itemI.guid) {
               itemI.corpguid = item.corpguid;
+              itemI.name = item.name;
               itemI.corpname = item.corpname;
               itemI.deptguid = item.deptguid;
               itemI.deptname = item.deptname;
@@ -677,12 +764,63 @@ export default {
         });
       }
     },
-    defaultDriverHandle(val, ccc) {
-      console.log(val, ccc);
+
+    /*
+     ** 默认司机处理
+     */
+    defaultDriverHandle(val) {
+      let that = this;
+      that.form.driver.forEach(function(item, index) {
+        that.form.driver[index].default = "否";
+      });
+      that.form.driver[val].default = "是";
+    },
+
+    /*
+     ** 添加邮箱
+     */
+    async tankHandle() {
+      const res = await tankCreate(this.tank);
+      console.log(res);
+      if (res.status === 200) {
+        this.tankListHandle();
+        this.tank = {
+          category: "", // 车辆名称
+          kind: "", // 车辆型号
+          shape: "", // 长方体,圆柱体,异型油箱
+          theory_volume: 0, // 理论容积
+          height: 0, // 油箱高度
+          length: 0, // 油箱长度
+          width: 0, //宽度
+          radius: 0 // 油箱半径
+        };
+        this.$message.success("添加成功");
+      } else this.$message.warning("添加失败稍后再试!");
+      this.dialogVisible = false;
+    },
+
+    /*
+     ** 油箱列表
+     */
+    async tankListHandle() {
+      const res = await tankList();
+      this.tankData = res.data.list;
+    },
+
+    /*
+     ** 获取详情
+     */
+    async getVehicleDetail() {
+      if (!this.$route.query.id) return;
+      const res = await equiSelect({ id: this.$route.query.id });
+      this.form = res.data;
     }
   }
 };
 </script>
 
 <style>
+.dialog-footer {
+  text-align: center;
+}
 </style>

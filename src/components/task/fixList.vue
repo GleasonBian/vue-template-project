@@ -77,13 +77,14 @@
     <el-col align="middle">
       <gt-table
         :tableData="tableData"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
         v-on:viewAssign="viewAssign"
         v-on:newFixTask="newFixTask"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
@@ -279,7 +280,7 @@ export default {
     },
 
     async getCorp() {
-      const res = await corpRank({id:3});
+      const res = await corpRank({ id: 3 });
       this.corpData = res.data;
     },
 

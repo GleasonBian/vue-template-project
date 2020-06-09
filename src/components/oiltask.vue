@@ -29,6 +29,7 @@
           v-on:UpdatePreprocessing="UpdatePreprocessing"
           v-on:IntoTask="IntoTask"
           :handle="handle"
+          size="mini"
         ></gt-table>
         <!-- v-on:selection-change="handleSelectionChange" -->
         <el-pagination

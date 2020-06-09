@@ -8,20 +8,10 @@
     :row-class-name="tableRowClassName"
     @selection-change="handleSelectionChange"
     :header-cell-style="tableHeaderColor"
+    :size="size"
   >
-    <el-table-column
-      type="selection"
-      align="center"
-      header-align="center"
-      v-if="selection"
-    ></el-table-column>
-    <el-table-column
-      align="center"
-      header-align="center"
-      type="index"
-      label="序号"
-      width="50"
-    ></el-table-column>
+    <el-table-column type="selection" align="center" header-align="center" v-if="selection"></el-table-column>
+    <el-table-column align="center" header-align="center" type="index" label="序号" width="50"></el-table-column>
     <el-table-column
       v-for="col in columns"
       :prop="col.id"
@@ -58,26 +48,20 @@
       :width="optionWidth"
     >
       <template slot-scope="scope">
-        <span
-          v-for="(item, index) in handle"
-          :key="index"
-          style="margin-right:5px"
-        >
+        <span v-for="(item, index) in handle" :key="index" style="margin-right:5px">
           <el-button
             v-if="item.show"
             :size="item.size ? item.size : 'mini'"
             :type="item.type ? item.type : 'text'"
             @click="handleClick(item.function, scope.$index, scope.row)"
-            >{{ item.text }}</el-button
-          >
+          >{{ item.text }}</el-button>
           <el-button
             v-else
             :size="item.size ? item.size : 'mini'"
             :type="item.type ? item.type : 'text'"
             v-show="scope.row.show"
             @click="handleClick(item.function, scope.$index, scope.row)"
-            >{{ item.text }}</el-button
-          >
+          >{{ item.text }}</el-button>
         </span>
       </template>
     </el-table-column>
@@ -113,6 +97,11 @@ export default {
       validator: function(value) {
         return value;
       }
+    },
+    size: {
+      type: String,
+      default: "mini",
+      required: false
     }
   },
   computed: {},

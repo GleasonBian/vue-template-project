@@ -16,8 +16,7 @@
           formCurrentStatus = '创建';
         "
         style="margin-left:1%"
-        >新增</el-button
-      >
+      >新增</el-button>
       <!-- <el-button type="danger" size="medium" @click="BatchDeleteUser">批量删除</el-button> -->
     </el-col>
 
@@ -25,7 +24,7 @@
     <el-col align="middle">
       <gt-table
         :tableData="tableData"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"
@@ -33,6 +32,7 @@
         v-on:DeleteHandle="DeleteHandle"
         v-on:UpdatePreprocessing="UpdatePreprocessing"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
@@ -101,11 +101,7 @@
         </el-form-item>
 
         <el-form-item v-if="form.corpguid" label="所属部门" prop="deptguid">
-          <el-select
-            v-model="form.deptguid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in deptData"
               track-by="item.guid"
@@ -117,11 +113,7 @@
         </el-form-item>
 
         <el-form-item label="人员" prop="staffid">
-          <el-select
-            v-model="form.staffid"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.staffid" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in staffData"
               track-by="item.guid"
@@ -133,11 +125,7 @@
         </el-form-item>
 
         <el-form-item label="分类等级" prop="clsrank">
-          <el-select
-            v-model="form.clsrank"
-            placeholder="请选择"
-            style="width:100%"
-          >
+          <el-select v-model="form.clsrank" placeholder="请选择" style="width:100%">
             <el-option label="一级" value="一级"></el-option>
             <el-option label="二级" value="二级"></el-option>
             <el-option label="三级" value="三级"></el-option>

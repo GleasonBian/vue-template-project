@@ -397,3 +397,13 @@ export const allCorpList = data => fetch("corps", data, "get");
  * 公司按级别查询
  */
 export const corpRank = data => fetch("corprank", data, "get");
+
+/**
+ * 车辆管理 / 邮箱 / 创建
+ */
+export const tankCreate = data => fetch("tanks", data, "post");
+
+/**
+ * 车辆管理 / 邮箱 / 列表
+ */
+export const tankList = data => fetch("tanks", data, "get");

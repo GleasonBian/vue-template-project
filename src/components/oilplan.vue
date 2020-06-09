@@ -22,6 +22,7 @@
         v-on:DeleteHandle="DeleteHandle"
         v-on:UpdatePreprocessing="UpdatePreprocessing"
         :handle="handle"
+        size="mini"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination
