@@ -78,7 +78,7 @@ export default {
 
 @media screen and (min-width: 1367px) {
   .header_container {
-    height: 60px;
+    height: 50px;
   }
 }
 

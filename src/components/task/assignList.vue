@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="pd15">
     <!-- 面包屑 -->
     <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
     <!-- <gt-search :data="searchData" @handle="getDataHandle" size></gt-search> -->
-    <el-row :gutter="20" class="searchBox">
-      <el-form
+    <el-row class="searchBox">
+      <!-- <el-form
         :model="queryParam"
         status-icon
         ref="form"
@@ -52,71 +52,93 @@
             ></el-date-picker>
           </el-form-item>
         </el-col>
-      </el-form>
+      </el-form>-->
+      <el-card style="margin-bottom:12px">
+        <gt-search :data="searchData" @handle="getData" ref="assignSearch"></gt-search>
+      </el-card>
     </el-row>
 
     <!-- 列表操作按钮 -->
-    <el-col align="left" style="margin-bottom:1%;">
-      <el-button type="primary" style="margin-left:1%" size="medium" @click="newAssign">新增</el-button>
-      <el-button type="primary" size="medium" @click="singleOil">单机油耗核算</el-button>
-      <el-button type="success" size="medium" @click="downAss">导出</el-button>
-      <el-button
+    <el-row>
+      <el-card>
+        <el-col align="left" style="margin-bottom:1%;">
+          <el-button type="primary" style size="medium" @click="newAssign">新增</el-button>
+          <el-button type="primary" size="medium" @click="singleOil">单机油耗核算</el-button>
+          <el-button type="success" size="medium" @click="downAss">导出</el-button>
+          <!-- <el-button
         type="primary"
         style="float:right;margin-right:1%"
         size="medium"
         @click="getData"
-      >查询</el-button>
-    </el-col>
+          >查询</el-button>-->
+        </el-col>
 
-    <!-- 内部用户列表 -->
-    <el-col align="middle">
-      <gt-table
-        :tableData="tableData"
-        style="width: 100%"
-        :optionWidth="optionWidth"
-        :columns="columns"
-        :selection="false"
-        v-on:viewAssign="viewAssign"
-        v-on:deleteAssign="deleteAssign"
-        :handle="handle"
-        size="mini"
-      ></gt-table>
-      <!-- v-on:selection-change="handleSelectionChange" -->
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="queryParam.pageno"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="queryParam.pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="queryParam.total"
-      ></el-pagination>
-    </el-col>
+        <!-- 内部用户列表 -->
+        <el-col align="middle">
+          <gt-table
+            :tableData="tableData"
+            style="width: 100%"
+            :optionWidth="optionWidth"
+            :columns="columns"
+            :selection="false"
+            v-on:viewAssign="viewAssign"
+            v-on:deleteAssign="deleteAssign"
+            :handle="handle"
+            size="mini"
+          ></gt-table>
+          <!-- v-on:selection-change="handleSelectionChange" -->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="queryParam.pageno"
+            :page-sizes="[10, 20, 30, 40]"
+            :page-size="queryParam.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="queryParam.total"
+            style="margin:10px"
+          ></el-pagination>
+        </el-col>
+      </el-card>
+    </el-row>
   </div>
 </template>
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import {
-  corpRank,
-  equiSelect,
-  assigndeSelect,
-  assignDelete
-} from "@/getData";
+import { corpRank, equiSelect, assigndeSelect, assignDelete } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
   data() {
     return {
       queryParam: {
-        equip_guid: '',
-        start: '',
-        end: '',
-        corp_guid: '',
+        equip_guid: "",
+        start: "",
+        end: "",
+        corp_guid: "",
         pageno: 1,
         pagesize: 10
       },
-      eqData: [], //设备列表
+      searchData: [
+        {
+          key: "equip_guid", // 与后端交互时的字段 必填
+          label: "车辆", // 搜索框名称 必填
+          placeholder: "请选择", // 占位符 选填
+          options: []
+        },
+        {
+          key: "corpguid",
+          label: "所属公司",
+          placeholder: "请选择", // 占位符 选填
+          options: []
+        },
+        {
+          key: "date",
+          label: "交接班时间",
+          placeholder: "请选择",
+          type: "datetimerange"
+        }
+      ],
       corpData: [], //公司列表
       show: true,
       handle: [
@@ -183,7 +205,11 @@ export default {
     },
     async getEqList() {
       const res = await equiSelect(this.form);
-      this.eqData = res.data;
+      res.data.map(item => {
+        item.value = item.guid;
+        item.label = item.name + "-" + item.plateno;
+      });
+      this.searchData[0].options = res.data;
     },
     newAssign() {
       this.$router.push({ path: "assignDetail" });
@@ -191,7 +217,8 @@ export default {
     /**
      ** 调令列表
      */
-    async getData(val) {
+    async getData(param = {}) {
+      this.queryParam = param;
       const res = await assigndeSelect({ param: this.queryParam });
       this.tableData = res.data.list;
       this.queryParam.total = res.data.total;
@@ -246,7 +273,6 @@ export default {
       })
         .then(() => {
           let res = assignDelete({ id: row.code });
-          console.log(res);
           this.$message.success("删除成功");
           that.getData();
         })
@@ -257,19 +283,23 @@ export default {
      */
     handleSizeChange(val) {
       this.queryParam.pagesize = val;
-      this.getData();
+      this.$refs.assignSearch.searchHandle();
     },
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
       this.queryParam.pageno = val;
-      this.getData();
+      this.$refs.assignSearch.searchHandle();
     },
 
     async getCorp() {
-      const res = await corpRank({id:3});
-      this.corpData = res.data;
+      const res = await corpRank({ id: 3 });
+      res.data.map(item => {
+        item.label = item.name;
+        item.value = item.guid;
+      });
+      this.searchData[1].options = res.data;
     },
     downAss() {
       window.open(process.env.VUE_APP_URL + "download/2");
@@ -285,7 +315,7 @@ export default {
 };
 </script>
 <style scoped>
-.searchBox {
-  padding: 15px 20px;
+.pd15 {
+  padding: 15px;
 }
 </style>

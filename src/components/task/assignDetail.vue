@@ -1,330 +1,303 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <headTop></headTop>
-    <div class="formWidth">
-      <el-form
-        :model="form"
-        status-icon
-        ref="form"
-        label-width="auto"
-        style="width:100%"
-        lable-width="120px"
-      >
-        <el-row :gutter="20">
-          <!-- 基本信息 -->
-          <el-col :span="12">
-            <el-card>
-              <div slot="header" class="clearfix">基本信息</div>
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <el-form-item label="调度编号" prop="code">
-                    <el-input readonly v-model="form.code"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="调度时间" prop="dispatchtime">
-                    <el-date-picker
-                      v-model="form.dispatchtime"
-                      type="datetime"
-                      placeholder="选择日期"
-                      format="yyyy 年 MM 月 dd 日 HH:mm:ss"
-                      default-time="12:00:00"
-                      value-format="yyyy-MM-dd HH:mm:ss"
-                      style="width:100%"
-                    ></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="车辆名称" prop="equip_guid">
-                    <el-select v-model="form.equip_guid" placeholder="请选择" style="width:100%">
-                      <el-option
-                        v-for="item in eqData"
-                        :key="item.guid"
-                        :label="item.name"
-                        :value="item.guid"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="车牌号码" prop="plate_no">
-                    <el-select
-                      disabled
-                      v-model="form.equip_guid"
-                      placeholder="请选择"
-                      style="width:100%"
-                    >
-                      <el-option
-                        v-for="item in eqData"
-                        :key="item.guid"
-                        :label="item.plateno"
-                        :value="item.guid"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="项目名称" prop="dept_guid">
-                    <el-select v-model="form.dept_guid" placeholder="请选择" style="width:100%">
-                      <el-option
-                        v-for="item in projList"
-                        :key="item.guid"
-                        :label="item.name"
-                        :value="item.guid"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="所属公司" prop="corp_guid">
-                    <el-select
-                      disabled
-                      v-model="form.dept_guid"
-                      placeholder="请选择"
-                      style="width:100%"
-                    >
-                      <el-option
-                        v-for="item in deptList"
-                        :key="item.guid"
-                        :label="item.superior"
-                        :value="item.guid"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="交班部门" prop="deliver_corp_guid">
-                    <el-select
-                      v-model="form.deliver_corp_guid"
-                      placeholder="请选择"
-                      style="width:100%"
-                    >
-                      <el-option
-                        v-for="item in deptList"
-                        :key="item.guid"
-                        :label="item.name"
-                        :value="item.guid"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="接班部门" prop="oncoming_corp_guid">
-                    <el-select
-                      v-model="form.oncoming_corp_guid"
-                      placeholder="请选择"
-                      style="width:100%"
-                    >
-                      <el-option
-                        v-for="item in deptList"
-                        :key="item.guid"
-                        :label="item.name"
-                        :value="item.guid"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="司机名称" prop="driver_name">
-                    <el-input v-model="form.driver_name"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="司机长" prop="headdriver_name">
-                    <el-input v-model="form.headdriver_name"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-card>
-          </el-col>
+   <headTop ></headTop>
+    <el-form
+      :model="form"
+      status-icon
+      ref="form"
+      label-width="auto"
+      style="width:100%"
+      lable-width="120px"
+    >
+      <div class="page_container">
+         
+        <!-- 基本信息 -->
+        <el-card class="content_width" shadow="naver">
+          <div slot="header" class="clearfix">基本信息</div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="调度编号" prop="code">
+                <el-input readonly v-model="form.code"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="调度时间" prop="dispatchtime">
+                <el-date-picker
+                  v-model="form.dispatchtime"
+                  type="datetime"
+                  placeholder="选择日期"
+                  format="yyyy 年 MM 月 dd 日 HH:mm:ss"
+                  default-time="12:00:00"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  style="width:100%"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="车辆名称" prop="equip_guid">
+                <el-select v-model="form.equip_guid" placeholder="请选择" style="width:100%">
+                  <el-option
+                    v-for="item in eqData"
+                    :key="item.guid"
+                    :label="item.name"
+                    :value="item.guid"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="车牌号码" prop="plate_no">
+                <el-select disabled v-model="form.equip_guid" placeholder="请选择" style="width:100%">
+                  <el-option
+                    v-for="item in eqData"
+                    :key="item.guid"
+                    :label="item.plateno"
+                    :value="item.guid"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="项目名称" prop="dept_guid">
+                <el-select v-model="form.dept_guid" placeholder="请选择" style="width:100%">
+                  <el-option
+                    v-for="item in projList"
+                    :key="item.guid"
+                    :label="item.name"
+                    :value="item.guid"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="所属公司" prop="corp_guid">
+                <el-select disabled v-model="form.dept_guid" placeholder="请选择" style="width:100%">
+                  <el-option
+                    v-for="item in deptList"
+                    :key="item.guid"
+                    :label="item.superior"
+                    :value="item.guid"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="交班部门" prop="deliver_corp_guid">
+                <el-select v-model="form.deliver_corp_guid" placeholder="请选择" style="width:100%">
+                  <el-option
+                    v-for="item in deptList"
+                    :key="item.guid"
+                    :label="item.name"
+                    :value="item.guid"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="接班部门" prop="oncoming_corp_guid">
+                <el-select v-model="form.oncoming_corp_guid" placeholder="请选择" style="width:100%">
+                  <el-option
+                    v-for="item in deptList"
+                    :key="item.guid"
+                    :label="item.name"
+                    :value="item.guid"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="司机名称" prop="driver_name">
+                <el-input v-model="form.driver_name"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="司机长" prop="headdriver_name">
+                <el-input v-model="form.headdriver_name"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
 
-          <!-- 油耗信息 -->
-          <el-col :span="12">
-            <el-card>
-              <div slot="header" class="clearfix">油耗信息</div>
-              <el-row :gutter="20">
-                <el-col :span="12">
-                  <el-form-item label="接油" prop="begin_oil">
-                    <el-input-number v-model.number="form.begin_oil" :step=".1"></el-input-number>&nbsp;升
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="接班时间" prop="begin_time">
-                    <el-date-picker
-                      v-model="form.begin_time"
-                      type="datetime"
-                      placeholder="选择日期"
-                      format="yyyy 年 MM 月 dd 日 HH:mm:ss"
-                      value-format="yyyy-MM-dd HH:mm:ss"
-                      default-time="12:00:00"
-                      style="width:100%"
-                    ></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="交油" prop="end_oil">
-                    <el-input-number v-model.number="form.end_oil" :step=".1"></el-input-number>&nbsp;升
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="交班时间" prop="end_time">
-                    <el-date-picker
-                      v-model="form.end_time"
-                      type="datetime"
-                      placeholder="选择日期"
-                      format="yyyy 年 MM 月 dd 日 HH:mm:ss"
-                      default-time="12:00:00"
-                      value-format="yyyy-MM-dd HH:mm:ss"
-                      style="width:100%"
-                    ></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="累计油耗" prop="accum_oil">
-                    <el-input-number v-model.number="form.accum_oil" :step=".1"></el-input-number>&nbsp;升
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="作业时长" prop="accum_working">
-                    <el-input
-                      type="number"
-                      placeholder="小时"
-                      v-model.number="form.accum_working"
-                      :step=".01"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="加油记录" prop="add_oil">
-                    <el-input-number v-model.number="form.add_oil" :step=".1"></el-input-number>&nbsp;升
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-card>
-          </el-col>
-          <el-col style="margin-top:20px;" :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">作业项目</div>
-              <div>
-                <div style="margin-bottom:20px">
-                  <el-button plain type="primary" @click="addRow">添加作业</el-button>
-                  <el-button plain type="danger" @click="delData">移除作业</el-button>
-                </div>
-                <el-table
-                  :data="form.WorkItem"
-                  ref="table"
-                  tooltip-effect="dark"
-                  border
-                  stripe
-                  style="width: 100%"
-                  @selection-change="selectRow"
-                >
-                  <el-table-column type="selection" width="45" align="center"></el-table-column>
-                  <el-table-column label="作业项目" align="center">
-                    <template slot-scope="scope">
-                      <el-input v-model="scope.row.work_name"></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="开始时间" align="center">
-                    <template slot-scope="scope">
-                      <el-date-picker
-                        v-model="scope.row.begin_time"
-                        type="datetime"
-                        placeholder="选择日期"
-                        format="yyyy 年 MM 月 dd 日 HH:mm:ss"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        default-time="12:00:00"
-                        style="width:100%"
-                      ></el-date-picker>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="结束时间" align="center">
-                    <template slot-scope="scope">
-                      <el-date-picker
-                        v-model="scope.row.end_time"
-                        type="datetime"
-                        placeholder="选择日期"
-                        format="yyyy 年 MM 月 dd 日 HH:mm:ss"
-                        value-format="yyyy-MM-dd HH:mm:ss"
-                        default-time="12:00:00"
-                        style="width:100%"
-                      ></el-date-picker>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="作业时长" align="center">
-                    <template slot-scope="scope">
-                      <el-input type="number" v-model="scope.row.work_duration"></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="备注" align="center">
-                    <template slot-scope="scope">
-                      <el-input v-model="scope.row.remark"></el-input>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col style="margin-top:20px;" :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">检查项目</div>
-              <div>
-                <el-table
-                  :data="form.CheckItem"
-                  ref="table"
-                  tooltip-effect="dark"
-                  border
-                  stripe
-                  style="width: 100%"
-                >
-                  <el-table-column label="检查项目" prop="check_name" align="center"></el-table-column>
-                  <el-table-column label="是否正常" align="center">
-                    <template slot-scope="scope">
-                      <el-select v-model="scope.row.b_normal" placeholder="请选择" style="width:100%">
-                        <el-option label="是" value="是"></el-option>
-                        <el-option label="否" value="否"></el-option>
-                      </el-select>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="检查情况" align="center">
-                    <template slot-scope="scope">
-                      <el-input maxlength="500" show-word-limit v-model="scope.row.check_result"></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="处理结果" align="center">
-                    <template slot-scope="scope">
-                      <el-input maxlength="500" show-word-limit v-model="scope.row.handle_result"></el-input>
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="备注" align="center">
-                    <template slot-scope="scope">
-                      <el-input v-model="scope.row.remark"></el-input>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <el-col :span="24" style="margin-top:20px">
-                  <el-form-item label="维修保养记录" prop="fix_recode">
-                    <el-input type="textarea" v-model="form.fix_recode"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                  <el-form-item label="物料消耗记录" prop="consum_recode">
-                    <el-input type="textarea" v-model="form.consum_recode"></el-input>
-                  </el-form-item>
-                </el-col>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24" style="text-align:center;margin-top:20px">
+        <!-- 油耗信息 -->
+        <el-card class="content_width" shadow="naver">
+          <div slot="header" class="clearfix">油耗信息</div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="接油" prop="begin_oil">
+                <el-input-number v-model.number="form.begin_oil" :step=".1"></el-input-number>&nbsp;升
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="接班时间" prop="begin_time">
+                <el-date-picker
+                  v-model="form.begin_time"
+                  type="datetime"
+                  placeholder="选择日期"
+                  format="yyyy 年 MM 月 dd 日 HH:mm:ss"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  default-time="12:00:00"
+                  style="width:100%"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="交油" prop="end_oil">
+                <el-input-number v-model.number="form.end_oil" :step=".1"></el-input-number>&nbsp;升
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="交班时间" prop="end_time">
+                <el-date-picker
+                  v-model="form.end_time"
+                  type="datetime"
+                  placeholder="选择日期"
+                  format="yyyy 年 MM 月 dd 日 HH:mm:ss"
+                  default-time="12:00:00"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  style="width:100%"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="累计油耗" prop="accum_oil">
+                <el-input-number v-model.number="form.accum_oil" :step=".1"></el-input-number>&nbsp;升
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="作业时长" prop="accum_working">
+                <el-input
+                  type="number"
+                  placeholder="小时"
+                  v-model.number="form.accum_working"
+                  :step=".01"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="加油记录" prop="add_oil">
+                <el-input-number v-model.number="form.add_oil" :step=".1"></el-input-number>&nbsp;升
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
+        <el-card class="content_width" shadow="naver">
+          <div slot="header" class="clearfix">作业项目</div>
+          <div>
+            <div style="margin-bottom:20px">
+              <el-button plain type="primary" @click="addRow">添加作业</el-button>
+              <el-button plain type="danger" @click="delData">移除作业</el-button>
+            </div>
+            <el-table
+              :data="form.WorkItem"
+              ref="table"
+              tooltip-effect="dark"
+              border
+              stripe
+              style="width: 100%"
+              @selection-change="selectRow"
+            >
+              <el-table-column type="selection" width="45" align="center"></el-table-column>
+              <el-table-column label="作业项目" align="center">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.work_name"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="开始时间" align="center">
+                <template slot-scope="scope">
+                  <el-date-picker
+                    v-model="scope.row.begin_time"
+                    type="datetime"
+                    placeholder="选择日期"
+                    format="yyyy 年 MM 月 dd 日 HH:mm:ss"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    default-time="12:00:00"
+                    style="width:100%"
+                  ></el-date-picker>
+                </template>
+              </el-table-column>
+              <el-table-column label="结束时间" align="center">
+                <template slot-scope="scope">
+                  <el-date-picker
+                    v-model="scope.row.end_time"
+                    type="datetime"
+                    placeholder="选择日期"
+                    format="yyyy 年 MM 月 dd 日 HH:mm:ss"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                    default-time="12:00:00"
+                    style="width:100%"
+                  ></el-date-picker>
+                </template>
+              </el-table-column>
+              <el-table-column label="作业时长" align="center">
+                <template slot-scope="scope">
+                  <el-input type="number" v-model="scope.row.work_duration"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="备注" align="center">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.remark"></el-input>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-card>
+        <el-card class="content_width" shadow="naver">
+          <div slot="header" class="clearfix">检查项目</div>
+          <div>
+            <el-table
+              :data="form.CheckItem"
+              ref="table"
+              tooltip-effect="dark"
+              border
+              stripe
+              style="width: 100%"
+            >
+              <el-table-column label="检查项目" prop="check_name" align="center"></el-table-column>
+              <el-table-column label="是否正常" align="center">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.b_normal" placeholder="请选择" style="width:100%">
+                    <el-option label="是" value="是"></el-option>
+                    <el-option label="否" value="否"></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column label="检查情况" align="center">
+                <template slot-scope="scope">
+                  <el-input maxlength="500" show-word-limit v-model="scope.row.check_result"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="处理结果" align="center">
+                <template slot-scope="scope">
+                  <el-input maxlength="500" show-word-limit v-model="scope.row.handle_result"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="备注" align="center">
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.remark"></el-input>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-col :span="24" style="margin-top:20px">
+              <el-form-item label="维修保养记录" prop="fix_recode">
+                <el-input type="textarea" v-model="form.fix_recode"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="物料消耗记录" prop="consum_recode">
+                <el-input type="textarea" v-model="form.consum_recode"></el-input>
+              </el-form-item>
+            </el-col>
+          </div>
+        </el-card>
+  
+          <el-col :span="24" align="center" class="content_width">
             <el-button type="primary" @click="submitForm('form')">保存</el-button>
             <el-button @click="goback">返回</el-button>
           </el-col>
-        </el-row>
-      </el-form>
-    </div>
+
+      </div>
+    </el-form>
   </div>
 </template>
 <script>
@@ -348,7 +321,7 @@ export default {
   data() {
     return {
       counter: 0,
-      code: '', //公司id，判断是否是新增
+      code: "", //公司id，判断是否是新增
       compList: [], //上级公司列表
       projList: [], //上级公司列表
       deptList: [], //上级'部门'列表
@@ -463,12 +436,10 @@ export default {
       this.viewCorp(this.form.code);
     }
   },
-  mounted() {
-    
-  },
+  mounted() {},
   methods: {
     async getProj() {
-      const res = await corpRank({id:3});
+      const res = await corpRank({ id: 3 });
       this.projList = res.data;
     },
     // 获取表格选中时的数据
