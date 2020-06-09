@@ -8,7 +8,12 @@
       <router-link to="/platform/vehicle">
         <el-button type="primary" size="medium" style="margin-bottom:12px">新增</el-button>
       </router-link>
-
+      <el-button
+        type="success"
+        size="medium"
+        style="margin-bottom:12px; margin-left:12px"
+        @click="exportHandle"
+      >导出</el-button>
       <gt-table
         :tableData="tableData"
         style="width: 100%"
@@ -211,6 +216,12 @@ export default {
     handleCurrentChange(val) {
       this.pageno = val;
       this.$refs.equiSearch.searchHandle();
+    },
+    exportHandle() {
+      window.open(
+        process.env.VUE_APP_URL +
+          `download/9?pagesize=${this.pagesize}&pageno=${this.pageno}`
+      );
     }
   }
 };

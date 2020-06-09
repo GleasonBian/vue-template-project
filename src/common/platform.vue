@@ -59,13 +59,18 @@
 
         <el-menu-item style="float:right">
           <i class="el-icon-user"></i>
-          <el-dropdown @command="handleCommand" class="dddddd">
+          <el-dropdown class="dddddd">
             <div class="avator" style="color:#fff">
               {{ username }}
               <i class="el-icon-caret-bottom"></i>
             </div>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="singout">退出</el-dropdown-item>
+              <el-dropdown-item command="singout" icon="el-icon-plus">消息</el-dropdown-item>
+              <el-dropdown-item
+                command="singout"
+                icon="el-icon-circle-plus"
+                @command="handleCommand"
+              >退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-menu-item>

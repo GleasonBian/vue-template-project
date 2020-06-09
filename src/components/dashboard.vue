@@ -371,7 +371,11 @@ export default {
       if (this.points.length) {
         for (var i = 0; i < this.points.length; i++) {
           if (this.points[i].getExtData().guid == eqid) {
-            console.log(this.totalView);
+            let param = this.windowInfoHandle(this.points[i].getExtData());
+            infoWindow.setContent(
+              this.createInfoWindow(param.title, param.content.join(""))
+            );
+            infoWindow.open(this.map, this.points[i].getPosition());
             this.map.setZoomAndCenter(16, this.marks[i].position);
             targetM = this.points[i];
             this.drowLine(eqid);
@@ -384,7 +388,6 @@ export default {
               // 以 icon 的 [center bottom] 为原点
               offset: new AMap.Pixel(-24, -30)
             });
-            console.log(this.points[i]);
             this.map.add(marker);
             break;
           }
@@ -584,7 +587,6 @@ export default {
           //循环现有marks
           let pos = null;
           pos = [data.longitude, data.latitude];
-          // console.log("pos", pos);
           if (that.marks.length) {
             for (var i = 0; i < that.marks.length; i++) {
               if (this.marks[i].guid == data.guid) {
@@ -595,13 +597,6 @@ export default {
                 for (var k = 0; k < this.path.length; k++) {
                   if (this.path[k].guid == data.guid) {
                     this.path[k].path.push(pos);
-                    // this.path[k].path.push({
-                    //   x: data.longitude,
-                    //   y: data.latitude,
-                    //   sp: data.speed,
-                    //   ag: data.direction,
-                    //   tm: data.gpstime
-                    // });
                     this.path[k].gpstime = data.gpstime;
                     this.path[k].speed = data.speed;
                     this.path[k].direction = data.direction;
@@ -667,15 +662,6 @@ export default {
             let markPath = {
               guid: data.guid,
               path: [],
-              // path: [
-              //   {
-              //     x: data.longitude,
-              //     y: data.latitude,
-              //     sp: data.speed,
-              //     ag: data.direction,
-              //     tm: data.gpstime
-              //   }
-              // ],
               gpstime: data.gpstime,
               speed: data.speed,
               direction: data.direction
@@ -683,8 +669,6 @@ export default {
             markPath.path.push(pos);
             this.path.push(markPath);
           }
-          // console.log(this.marks);
-          // console.log(this.path);
           this.map.remove(this.points);
           this.points = [];
           for (var j = 0; j < this.marks.length; j++) {
@@ -698,6 +682,8 @@ export default {
             let content = [];
             let direction = "";
             let t = parseInt(that.marks[j].extData.direction);
+
+            // 车辆方向
             if (t > 27 && t <= 72) {
               direction = "东北";
             } else if (t > 72 && t <= 117) {
@@ -715,6 +701,8 @@ export default {
             } else {
               direction = "北";
             }
+
+            // 车辆类型
             if (that.marks[j].extData.classtype == "SUV") {
               content.push(
                 `<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201816499.png'></div>`
@@ -729,60 +717,71 @@ export default {
               );
             }
 
+            // 行驶方向
             content.push(
               "<div style='padding:5px 10px'>行驶方向：" + direction + "</div>"
             );
+
+            // 当前速度：
             content.push(
               "<div style='padding:5px 10px'>当前速度：" +
                 parseFloat(that.marks[j].extData.speed).toFixed(2) +
                 "km/h" +
                 "</div>"
             );
-            // content.push(
-            //   "<div style='padding:5px 10px'>瞬时油耗：" +
-            //     parseFloat(that.marks[j].extData.curoilconsume).toFixed(2) +
-            //     "L" +
-            //     "</div>"
-            // );
+
+            // 当前油位：
             content.push(
               "<div style='padding:5px 10px'>当前油位：" +
                 parseFloat(that.marks[j].extData.curoilpos).toFixed(2) +
                 "cm" +
                 "</div>"
             );
+
+            //今日里程：
             content.push(
               "<div style='padding:5px 10px'>今日里程：" +
                 parseFloat(that.marks[j].extData.curmiles).toFixed(2) +
                 "km" +
                 "</div>"
             );
+
+            // 总里程：
             content.push(
               "<div style='padding:5px 10px'>总里程：" +
                 parseFloat(that.marks[j].extData.totalmiles).toFixed(2) +
                 "km" +
                 "</div>"
             );
-            // content.push(
-            //   "<div style='padding:5px 10px'>海拔高度：" +
-            //     that.marks[j].extData.altitude +
-            //     "m" +
-            //     "</div>"
-            // );
+
+            //gps 时间
             content.push(
               "<div style='padding:5px 10px'>gps 时间：" +
                 that.marks[j].extData.gpstime +
                 "</div>"
             );
+
+            // 服务器时间：
             content.push(
               "<div style='padding:5px 10px'>服务器时间：" +
                 that.marks[j].extData.servertime +
                 "</div>"
             );
+
+            // 位置：
             content.push(
               "<div style='padding:5px 10px'>位置：" +
                 that.marks[j].extData.location +
                 "</div>"
             );
+
+            // 瞬时油耗：
+            // content.push(
+            //   "<div style='padding:5px 10px'>瞬时油耗：" +
+            //     parseFloat(that.marks[j].extData.curoilconsume).toFixed(2) +
+            //     "L" +
+            //     "</div>"
+            // );
             point.on("click", function(e) {
               infoWindow.setContent(
                 that.createInfoWindow(title, content.join(""))
@@ -831,6 +830,105 @@ export default {
     websocketclose(e) {
       //关闭
       console.log("断开连接", e);
+    },
+    windowInfoHandle(extData) {
+      let that = this;
+      let title = extData.name + " &nbsp;&nbsp; " + extData.platenum;
+      let content = [];
+      let direction = "";
+      let t = parseInt(extData.direction);
+
+      // 车辆方向
+      if (t > 27 && t <= 72) {
+        direction = "东北";
+      } else if (t > 72 && t <= 117) {
+        direction = "东";
+      } else if (t > 117 && t <= 162) {
+        direction = "东南";
+      } else if (t > 162 && t <= 207) {
+        direction = "南";
+      } else if (t > 207 && t <= 252) {
+        direction = "西南";
+      } else if (t > 252 && t <= 297) {
+        direction = "西";
+      } else if (t > 297 && t <= 342) {
+        direction = "西北";
+      } else {
+        direction = "北";
+      }
+
+      // 车辆类型
+      if (extData.classtype == "SUV") {
+        content.push(
+          `<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201816499.png'></div>`
+        );
+      } else if (extData.classtype == "轨道车") {
+        content.push(
+          "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201716290.png'></div>"
+        );
+      } else if (extData.classtype == "东风机车") {
+        content.push(
+          "<div style='text-align:center'><img style='display:inline-block;margin-right: 6px;' src='https://img-blog.csdnimg.cn/20200511201800164.png'></div>"
+        );
+      }
+
+      // 行驶方向
+      content.push(
+        "<div style='padding:5px 10px'>行驶方向：" + direction + "</div>"
+      );
+
+      // 当前速度：
+      content.push(
+        "<div style='padding:5px 10px'>当前速度：" +
+          parseFloat(extData.speed).toFixed(2) +
+          "km/h" +
+          "</div>"
+      );
+
+      // 当前油位：
+      content.push(
+        "<div style='padding:5px 10px'>当前油位：" +
+          parseFloat(extData.curoilpos).toFixed(2) +
+          "cm" +
+          "</div>"
+      );
+
+      //今日里程：
+      content.push(
+        "<div style='padding:5px 10px'>今日里程：" +
+          parseFloat(extData.curmiles).toFixed(2) +
+          "km" +
+          "</div>"
+      );
+
+      // 总里程：
+      content.push(
+        "<div style='padding:5px 10px'>总里程：" +
+          parseFloat(extData.totalmiles).toFixed(2) +
+          "km" +
+          "</div>"
+      );
+
+      //gps 时间
+      content.push(
+        "<div style='padding:5px 10px'>gps 时间：" + extData.gpstime + "</div>"
+      );
+
+      // 服务器时间：
+      content.push(
+        "<div style='padding:5px 10px'>服务器时间：" +
+          extData.servertime +
+          "</div>"
+      );
+
+      // 位置：
+      content.push(
+        "<div style='padding:5px 10px'>位置：" + extData.location + "</div>"
+      );
+      return {
+        title,
+        content
+      };
     }
   },
   updated() {}
