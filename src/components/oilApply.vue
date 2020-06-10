@@ -4,6 +4,7 @@
     <el-card class="content_width" shadow="never">
       <div slot="header" class="clearfix">
         <span>加油申请</span>
+        <span style="margin-left:20px; color:rgb(164, 164, 165);">单号：{{this.form.code}}</span>
       </div>
       <el-form
         :model="form"
@@ -15,7 +16,7 @@
       >
         <el-row gutter="20">
           <el-col :span="12">
-            <el-form-item label="加油数量" prop="quantity">
+            <el-form-item label="加油总量" prop="quantity">
               <el-input
                 placeholder="请输入数字"
                 type="number"
@@ -561,7 +562,6 @@ export default {
           });
         });
       }
-      console.log(this.form.vehicle);
     },
 
     /*

@@ -72,54 +72,6 @@
               <el-input v-model="form.name"></el-input>
             </el-form-item>
 
-            <el-form-item label="车牌号码" prop="plateno">
-              <el-input v-model="form.plateno"></el-input>
-            </el-form-item>
-
-            <el-form-item label="车辆颜色" prop="color">
-              <el-select v-model="form.color" placeholder="请选择" style="width:100%">
-                <el-option label="白色" value="白色"></el-option>
-                <el-option label="黑色" value="黑色"></el-option>
-                <el-option label="银色" value="银色"></el-option>
-                <el-option label="红色" value="红色"></el-option>
-                <el-option label="黄色" value="黄色"></el-option>
-                <el-option label="棕色" value="棕色"></el-option>
-                <el-option label="绿色" value="绿色"></el-option>
-                <el-option label="蓝色" value="蓝色"></el-option>
-                <el-option label="紫色" value="紫色"></el-option>
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="车辆类型" prop="clstype">
-              <el-select v-model="form.clstype" placeholder="请选择" style="width:100%">
-                <el-option label="轨道车" value="轨道车"></el-option>
-                <el-option label="东风机车" value="东风机车"></el-option>
-                <el-option label="SUV" value="SUV"></el-option>
-              </el-select>
-              <!-- <el-input v-model="form.clstype" placeholder="请输入"></el-input> -->
-            </el-form-item>
-
-            <el-form-item label="车辆状态" prop="status">
-              <el-select v-model="form.status" placeholder="请选择" style="width:100%">
-                <el-option label="正常" value="正常"></el-option>
-                <el-option label="停用" value="停用"></el-option>
-                <el-option label="封存" value="封存"></el-option>
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="来源类型" prop="source_type">
-              <el-select v-model="form.source_type" placeholder="请选择" style="width:100%">
-                <el-option label="自购" value="自购"></el-option>
-                <el-option label="租赁" value="租赁"></el-option>
-                <el-option label="借调" value="借调"></el-option>
-                <el-option label="其他" value="其他"></el-option>
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="车辆用途" prop="vehicle_use">
-              <el-input v-model="form.vehicle_use"></el-input>
-            </el-form-item>
-
             <el-form-item label="所属公司" prop="corpguid">
               <el-select
                 v-model="form.corpguid"
@@ -136,15 +88,11 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item label="上级部门" prop="deptguid">
-              <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="item in deptData"
-                  track-by="item.guid"
-                  :key="item.guid"
-                  :label="item.name"
-                  :value="item.guid"
-                ></el-option>
+            <el-form-item label="车辆状态" prop="status">
+              <el-select v-model="form.status" placeholder="请选择" style="width:100%">
+                <el-option label="正常" value="正常"></el-option>
+                <el-option label="停用" value="停用"></el-option>
+                <el-option label="封存" value="封存"></el-option>
               </el-select>
             </el-form-item>
 
@@ -157,86 +105,19 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item label="生产厂家" prop="producer">
-              <el-input v-model="form.producer"></el-input>
-            </el-form-item>
-
-            <el-form-item label="生产日期" prop="proddate">
-              <el-date-picker
-                v-model="form.proddate"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy 年 MM 月 dd 日"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="邮箱类型" prop="tank_guid">
-              <el-select v-model="form.tank_guid" placeholder="请选择" style="width:75%">
-                <el-option
-                  v-for="item in tankData"
-                  :key="item.guid"
-                  :label="item.category"
-                  :value="item.guid"
-                ></el-option>
-              </el-select>
-              <el-button style="width:25%" @click="dialogVisible = true">新增</el-button>
-            </el-form-item>
-
-            <el-form-item label="终端id" prop="terminalid">
-              <el-input v-model="form.terminalid"></el-input>
-            </el-form-item>
-
-            <el-form-item label="手机号" prop="simnumber">
-              <el-input v-model="form.simnumber"></el-input>
-            </el-form-item>
-
-            <!-- <el-form-item label="保养日期" prop="repair_date">
-              <el-date-picker
-                v-model="form.repair_date"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy 年 MM 月 dd 日"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-              ></el-date-picker>
-            </el-form-item>-->
-
-            <el-form-item label="监控等级" prop="monitor">
-              <el-select v-model="form.monitor" placeholder="请选择" style="width:100%">
-                <el-option label="一级" value="一级"></el-option>
-                <el-option label="二级" value="二级"></el-option>
-                <el-option label="三级" value="三级"></el-option>
+            <el-form-item label="车辆颜色" prop="color">
+              <el-select v-model="form.color" placeholder="请选择" style="width:100%">
+                <el-option label="白色" value="白色"></el-option>
+                <el-option label="黑色" value="黑色"></el-option>
+                <el-option label="银色" value="银色"></el-option>
+                <el-option label="红色" value="红色"></el-option>
+                <el-option label="黄色" value="黄色"></el-option>
+                <el-option label="棕色" value="棕色"></el-option>
+                <el-option label="绿色" value="绿色"></el-option>
+                <el-option label="蓝色" value="蓝色"></el-option>
+                <el-option label="紫色" value="紫色"></el-option>
               </el-select>
             </el-form-item>
-
-            <el-form-item label="初始里程" prop="init_mileage">
-              <el-input
-                v-model.number="form.init_mileage"
-                type="number"
-                :step="10"
-                :min="1"
-                :max="300"
-              >
-                <el-button slot="append">升/百公里</el-button>
-              </el-input>
-            </el-form-item>
-
-            <el-form-item label="速度阀值" prop="max_speed">
-              <el-input-number
-                :min="1"
-                :max="200"
-                controls-position="right"
-                v-model.number="form.max_speed"
-                :step="5"
-                step-strictly
-                placeholder="超速报警阀值"
-                style="width:100%"
-              ></el-input-number>
-            </el-form-item>
-
             <el-form-item label="油耗阀值" prop="max_oil_wear">
               <el-input-number
                 :min="1"
@@ -262,6 +143,86 @@
               </el-input>
             </el-form-item>
 
+            <el-form-item label="邮箱类型" prop="tank_guid">
+              <el-select v-model="form.tank_guid" placeholder="请选择" style="width:75%">
+                <el-option
+                  v-for="item in tankData"
+                  :key="item.guid"
+                  :label="item.category"
+                  :value="item.guid"
+                ></el-option>
+              </el-select>
+              <el-button style="width:25%" @click="dialogVisible = true">新增</el-button>
+            </el-form-item>
+
+            <el-form-item label="生产厂家" prop="producer">
+              <el-input v-model="form.producer"></el-input>
+            </el-form-item>
+
+            <el-form-item label="手机号" prop="simnumber">
+              <el-input v-model="form.simnumber"></el-input>
+            </el-form-item>
+
+            <el-form-item label="车辆类型" prop="clstype">
+              <el-select v-model="form.clstype" placeholder="请选择" style="width:100%">
+                <el-option label="轨道车" value="轨道车"></el-option>
+                <el-option label="东风机车" value="东风机车"></el-option>
+                <el-option label="SUV" value="SUV"></el-option>
+              </el-select>
+              <!-- <el-input v-model="form.clstype" placeholder="请输入"></el-input> -->
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="车牌号码" prop="plateno">
+              <el-input v-model="form.plateno"></el-input>
+            </el-form-item>
+
+            <el-form-item label="上级部门" prop="deptguid">
+              <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in deptData"
+                  track-by="item.guid"
+                  :key="item.guid"
+                  :label="item.name"
+                  :value="item.guid"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="来源类型" prop="source_type">
+              <el-select v-model="form.source_type" placeholder="请选择" style="width:100%">
+                <el-option label="自购" value="自购"></el-option>
+                <el-option label="租赁" value="租赁"></el-option>
+                <el-option label="借调" value="借调"></el-option>
+                <el-option label="其他" value="其他"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="车辆用途" prop="vehicle_use">
+              <el-input v-model="form.vehicle_use"></el-input>
+            </el-form-item>
+
+            <el-form-item label="监控等级" prop="monitor">
+              <el-select v-model="form.monitor" placeholder="请选择" style="width:100%">
+                <el-option label="一级" value="一级"></el-option>
+                <el-option label="二级" value="二级"></el-option>
+                <el-option label="三级" value="三级"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="速度阀值" prop="max_speed">
+              <el-input-number
+                :min="1"
+                :max="200"
+                controls-position="right"
+                v-model.number="form.max_speed"
+                :step="5"
+                step-strictly
+                placeholder="超速报警阀值"
+                style="width:100%"
+              ></el-input-number>
+            </el-form-item>
+
             <el-form-item label="小时/油耗" prop="hr_oil_wear">
               <el-input
                 v-model.number="form.hr_oil_wear"
@@ -274,8 +235,35 @@
               </el-input>
             </el-form-item>
 
+            <el-form-item label="生产日期" prop="proddate">
+              <el-date-picker
+                v-model="form.proddate"
+                type="date"
+                placeholder="选择日期"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd"
+                style="width:100%"
+              ></el-date-picker>
+            </el-form-item>
+
+            <el-form-item label="初始里程" prop="init_mileage">
+              <el-input
+                v-model.number="form.init_mileage"
+                type="number"
+                :step="10"
+                :min="1"
+                :max="300"
+              >
+                <el-button slot="append">升/百公里</el-button>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item label="终端id" prop="terminalid">
+              <el-input v-model="form.terminalid"></el-input>
+            </el-form-item>
+
             <el-form-item label="描述信息" prop="description">
-              <el-input v-model="form.description" type="textarea" :rows="5"></el-input>
+              <el-input v-model="form.description" type="textarea"></el-input>
             </el-form-item>
           </el-col>
         </el-row>

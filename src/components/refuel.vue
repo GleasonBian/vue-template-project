@@ -12,7 +12,7 @@
       <el-button
         type="success"
         size="medium"
-        style="margin-left:1%; margin-bottom:12px"
+        style="margin-left:12px;; margin-bottom:12px"
         @click="BatchDeleteUser"
       >导出</el-button>
 

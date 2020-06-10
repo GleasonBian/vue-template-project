@@ -115,7 +115,7 @@ export default {
           label: "手机号码"
         },
         {
-          id: "regdate",
+          id: "CreatedAt",
           label: "注册时间"
         }
       ],
@@ -158,6 +158,12 @@ export default {
     async getData(param = {}) {
       this.queryParam = param;
       const res = await staffPage({ param: this.queryParam });
+      res.data.list.map(item => {
+        item.CreatedAt = new Date(+new Date(item.CreatedAt) + 8 * 3600 * 1000)
+          .toISOString()
+          .replace(/T/g, " ")
+          .replace(/\.[\d]{3}Z/, "");
+      });
       this.tableData = res.data.list;
       this.queryParam.pagesize = res.data.pagesize;
       this.queryParam.pageno = res.data.pageno;

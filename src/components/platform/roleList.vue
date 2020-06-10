@@ -34,19 +34,13 @@
         style="margin-top:12px"
       ></el-pagination>
     </el-card>
-
-    <!-- 内部用户列表 -->
-    <el-col align="middle">
-      
-    </el-col>
   </div>
 </template>
 <script>
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-// import selArea from "@/common/gtArea";
 import { corpSelect, rolePage, delRole } from "@/getData";
-import { Regular } from "@/config/verification";
+
 export default {
   name: "createCorperation",
   data() {
@@ -113,7 +107,7 @@ export default {
           label: "角色状态"
         },
         {
-          id: "regdate",
+          id: "CreatedAt",
           label: "创建时间"
         }
       ],
@@ -155,8 +149,13 @@ export default {
      */
     async getData(param = {}) {
       this.queryParam = param;
-      console.log(this.queryParam)
       const res = await rolePage({ param: this.queryParam });
+      res.data.list.map(item => {
+        item.CreatedAt = new Date(+new Date(item.CreatedAt) + 8 * 3600 * 1000)
+          .toISOString()
+          .replace(/T/g, " ")
+          .replace(/\.[\d]{3}Z/, "");
+      });
       this.tableData = res.data.list;
       this.queryParam.pagesize = res.data.pagesize;
       this.queryParam.pageno = res.data.pageno;

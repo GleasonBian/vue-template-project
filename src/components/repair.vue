@@ -7,7 +7,7 @@
     </el-card>
 
     <el-card style="margin-top:12px">
-      <el-col align="left" style="margin-bottom:1%">
+      <el-col align="left" style="margin-bottom:12px;">
         <el-select v-model="select" placeholder="请选择新建项" size="medium">
           <el-option label="日常检查保养记录表" value="1"></el-option>
           <el-option label="周检查保养记录表" value="2"></el-option>
@@ -86,7 +86,7 @@ export default {
         },
         {
           id: "plateno",
-          label: "保养记录编号"
+          label: "车牌号码"
         },
         {
           id: "type",

@@ -6,11 +6,16 @@
     </el-card>
 
     <el-card style="margin-top:12px;">
-      <el-col align="left" style="margin-bottom:1%;margin-top:1%">
+      <el-col align="left" style="margin-bottom:12px;;margin-top:1%">
         <router-link to="/plan/oilApply">
-          <el-button type="primary" size="medium" style="margin-left:1%">新增</el-button>
+          <el-button type="primary" size="medium" style="margin-left:12px;">新增</el-button>
         </router-link>
-        <el-button type="success" size="medium" style="margin-left:1%" @click="BatchDeleteUser">导出</el-button>
+        <el-button
+          type="success"
+          size="medium"
+          style="margin-left:12px;"
+          @click="BatchDeleteUser"
+        >导出</el-button>
       </el-col>
       <gt-table
         :tableData="tableData"
