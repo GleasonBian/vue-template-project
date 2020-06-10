@@ -136,13 +136,15 @@ export default {
   watch: {},
   methods: {
     searchHandle() {
-      if ("date" in this.search) delete this.search.date;
+      // if ("date" in this.search) this.search.date = [];
       this.$emit("handle", this.search);
     },
     reset() {
       this.$props.data.map(item => {
-        delete this.search.date;
+        // delete this.search.date;
         if (item.key === "date") {
+          this.search.date = [];
+          // delete this.search.date;
           this.$set(this.search, "start", "");
           this.$set(this.search, "end", "");
         } else this.$set(this.search, item.key, "");
