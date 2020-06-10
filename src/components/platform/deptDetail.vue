@@ -1,122 +1,112 @@
 <template>
-  <div>
+  <div class="page_container">
     <!-- 面包屑 -->
     <headTop></headTop>
-    <div style="margin:15px">
-      <el-card>
-        <el-form
-          :model="form"
-          status-icon
-          :rules="rules"
-          ref="form"
-          label-width="80px"
-          style="width:100%"
-        >
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="部门名称" prop="name">
-                <el-input maxlength="100" clearable v-model="form.name"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="部门简称" prop="shortname">
-                <el-input maxlength="100" v-model="form.shortname"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="所属公司" prop="corp_guid">
-                <el-select
-                  v-model="form.corp_guid"
-                  @change="changeDepts"
-                  placeholder="请选择所属公司"
-                  style="width:100%"
-                >
-                  <el-option
-                    v-for="item in compList"
-                    :key="item.guid"
-                    :label="item.name"
-                    :value="item.guid"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="上级部门" prop="superior">
-                <el-select
-                  v-model="form.superior"
-                  placeholder="请选择上级部门，为空则为公司直属"
-                  style="width:100%"
-                >
-                  <el-option
-                    v-for="item in deptList"
-                    :key="item.guid"
-                    :label="item.name"
-                    :value="item.guid"
-                  ></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="注册日期" prop="regdate">
-                <el-date-picker
-                  v-model="form.regdate"
-                  type="date"
-                  placeholder="选择日期"
-                  format="yyyy 年 MM 月 dd 日"
-                  value-format="yyyy-MM-dd hh:mm:ss"
-                  style="width:100%"
-                ></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="部门状态" prop="status">
-                <el-select v-model="form.status" placeholder="请选择" style="width:100%">
-                  <el-option label="正常" value="正常"></el-option>
-                  <el-option label="停用" value="停用"></el-option>
-                  <el-option label="封存" value="封存"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="所在区域" prop="regioncodeArr">
-                <sel-area
-                  v-model="form.regioncodeArr"
-                  :modelArr="form.regioncodeArr"
-                  :isAll="false"
-                  :isClear="false"
-                  @region="recRegion"
-                  @regionCode="recRegionCode"
-                ></sel-area>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="详细地址" prop="location">
-                <el-input v-model="form.location"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="部门简介" prop="briefabout">
-                <el-input type="textarea" maxlength="100" show-word-limit v-model="form.briefabout"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="备注" prop="description">
-                <el-input
-                  type="textarea"
-                  maxlength="100"
-                  show-word-limit
-                  v-model="form.description"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24" style="text-align:center">
-              <el-button type="primary" @click="submitForm('form')">保存</el-button>
-              <el-button @click="goback">返回</el-button>
-            </el-col>
-          </el-row>
-        </el-form>
-      </el-card>
-    </div>
+
+    <el-card class="content_width">
+      <el-form
+        :model="form"
+        status-icon
+        :rules="rules"
+        ref="form"
+        label-width="80px"
+        style="width:100%"
+      >
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="部门名称" prop="name">
+              <el-input maxlength="100" clearable v-model="form.name"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="部门简称" prop="shortname">
+              <el-input maxlength="100" v-model="form.shortname"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="所属公司" prop="corp_guid">
+              <el-select
+                v-model="form.corp_guid"
+                @change="changeDepts"
+                placeholder="请选择所属公司"
+                style="width:100%"
+              >
+                <el-option
+                  v-for="item in compList"
+                  :key="item.guid"
+                  :label="item.name"
+                  :value="item.guid"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="上级部门" prop="superior">
+              <el-select v-model="form.superior" placeholder="请选择上级部门，为空则为公司直属" style="width:100%">
+                <el-option
+                  v-for="item in deptList"
+                  :key="item.guid"
+                  :label="item.name"
+                  :value="item.guid"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="注册日期" prop="regdate">
+              <el-date-picker
+                v-model="form.regdate"
+                type="date"
+                placeholder="选择日期"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd hh:mm:ss"
+                style="width:100%"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="部门状态" prop="status">
+              <el-select v-model="form.status" placeholder="请选择" style="width:100%">
+                <el-option label="正常" value="正常"></el-option>
+                <el-option label="停用" value="停用"></el-option>
+                <el-option label="封存" value="封存"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="所在区域" prop="regioncodeArr">
+              <sel-area
+                v-model="form.regioncodeArr"
+                :modelArr="form.regioncodeArr"
+                :isAll="false"
+                :isClear="false"
+                @region="recRegion"
+                @regionCode="recRegionCode"
+              ></sel-area>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="详细地址" prop="location">
+              <el-input v-model="form.location"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="部门简介" prop="briefabout">
+              <el-input type="textarea" maxlength="100" show-word-limit v-model="form.briefabout"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="备注" prop="description">
+              <el-input type="textarea" maxlength="100" show-word-limit v-model="form.description"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-col :span="24" align="center" style="margin-top:12px">
+      <el-button type="primary" @click="submitForm('form')">保存</el-button>
+      <el-button @click="goback">返回</el-button>
+    </el-col>
   </div>
 </template>
 <script>
