@@ -67,7 +67,7 @@
         <span style="margin-left:20px; color:rgb(164, 164, 165);">单号：{{this.form.code}}</span>
       </div>
       <el-form ref="form" :model="form" label-width="100px" :rules="rules">
-        <el-row gutter="20">
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="车辆名称" prop="name">
               <el-input v-model="form.name"></el-input>
@@ -802,7 +802,10 @@ export default {
     async getVehicleDetail() {
       if (!this.$route.query.id) return;
       const res = await equiSelect({ id: this.$route.query.id });
-      this.form = res.data;
+      if (res.status === 200) {
+        this.deptList(res.data.corpguid);
+        this.form = res.data;
+      }
     }
   }
 };
