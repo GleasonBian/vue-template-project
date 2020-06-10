@@ -207,7 +207,7 @@ export default {
      ** 列表 批量删除 用户
      */
     BatchDeleteUser() {
-      window.open(process.env.VUE_APP_URL + "download");
+      window.open(process.env.VUE_APP_URL + "download/10");
     },
 
     /**
