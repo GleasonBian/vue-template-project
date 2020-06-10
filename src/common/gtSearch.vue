@@ -30,6 +30,7 @@
           style="width:100%; margin-right:15px"
           @change="dateChange(search[item.key])"
         ></el-date-picker>
+
         <el-input
           v-else
           v-model="search[item.key]"
@@ -47,7 +48,7 @@
           :size="size"
           style="width:32%; margin-right:15px"
         >搜 索</el-button>
-        <el-button type="info" @click="reset" :size="size" style="width:32%">重 置</el-button>
+        <el-button @click="reset" :size="size" style="width:32%">重 置</el-button>
       </div>
     </div>
     <div class="search_box_multi" v-else-if="data.length > 3">
@@ -97,7 +98,7 @@
           :size="size"
           style="width:32%; margin-right:15px"
         >搜 索</el-button>
-        <el-button type="info" @click="reset" :size="size" style="width:32%">重 置</el-button>
+        <el-button @click="reset" :size="size" style="width:32%">重 置</el-button>
       </div>
     </div>
   </div>

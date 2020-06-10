@@ -275,7 +275,4 @@ export default {
 };
 </script>
 <style>
-.searchBox {
-  padding: 15px 20px;
-}
 </style>

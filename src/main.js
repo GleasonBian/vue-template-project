@@ -42,7 +42,6 @@ Vue.component("gt-header", headTop);
 /*
  ** 全局加载动画 开关
  */
-
 let loading = null;
 
 /*

@@ -1,10 +1,7 @@
 <template>
-  <div>
-    <!-- 面包屑 -->
-    <!-- <headTop></headTop> -->
-
+  <div style="padding:12px">
     <!-- 搜索框 -->
-    <el-row :gutter="20" class="searchBox">
+    <el-card>
       <el-form
         :model="queryParam"
         status-icon
@@ -13,55 +10,54 @@
         style="width:100%"
         lable-width="120px"
       >
-        <el-col :span="8">
-          <el-form-item label="部门名称" prop="name">
-            <el-input clearable v-model="queryParam.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="所属公司" prop="corpguid">
-            <el-select clearable v-model="queryParam.corpguid" placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in compList"
-                :key="item.guid"
-                :value="item.guid"
-                :label="item.name"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="注册时间" prop="date">
-            <el-date-picker
-              clearable
-              v-model="queryParam.date"
-              type="datetimerange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              style="width:100%; margin-right:15px"
-              @change="dateChange(queryParam.date)"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
+        <el-row :gutter="20" class="searchBox">
+          <el-col :span="6" align="center">
+            <el-form-item label="部门名称" prop="name">
+              <el-input clearable v-model="queryParam.name"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" align="center">
+            <el-form-item label="所属公司" prop="corpguid">
+              <el-select
+                clearable
+                v-model="queryParam.corpguid"
+                placeholder="请选择"
+                style="width:100%"
+              >
+                <el-option
+                  v-for="item in compList"
+                  :key="item.guid"
+                  :value="item.guid"
+                  :label="item.name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" align="center">
+            <el-form-item label="注册时间" prop="date">
+              <el-date-picker
+                clearable
+                v-model="queryParam.date"
+                type="datetimerange"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                range-separator="至"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                style="width:100%; margin-right:15px"
+                @change="dateChange(queryParam.date)"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" align="center">
+            <el-button type="primary" size="medium" @click="getData" style="width:36%">查询</el-button>
+            <el-button style="width:36%" @click="resetHandle">重置</el-button>
+          </el-col>
+        </el-row>
       </el-form>
-    </el-row>
-
-    <!-- 列表操作按钮 -->
-    <el-col align="left" style="margin-bottom:1%;">
-      <el-button type="primary" style="margin-left:1%" size="medium" @click="newComp">新增</el-button>
+    </el-card>
+    <el-card style="margin-top:12px">
+      <el-button type="primary" style="margin-bottom:12px" size="medium" @click="newComp">新增</el-button>
       <el-button type="success" size="medium" @click="exportForm">导出</el-button>
-      <el-button
-        type="primary"
-        style="float:right;margin-right:1%"
-        size="medium"
-        @click="getData"
-      >查询</el-button>
-    </el-col>
-
-    <!-- 内部用户列表 -->
-    <el-col align="middle">
       <gt-table
         :tableData="tableData"
         style="width: 100%"
@@ -73,8 +69,9 @@
         :handle="handle"
         size="mini"
       ></gt-table>
-      <!-- v-on:selection-change="handleSelectionChange" -->
+
       <el-pagination
+        style="margin-top:12px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="queryParam.pageno"
@@ -83,7 +80,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="queryParam.total"
       ></el-pagination>
-    </el-col>
+    </el-card>
   </div>
 </template>
 <script>
@@ -273,6 +270,22 @@ export default {
       let arr = [];
       for (var item of val) arr.push(item.id);
       this.multipleSelection = arr;
+    },
+
+    /*
+     ** 重置
+     */
+    resetHandle(val) {
+      this.queryParam = {
+        name: "",
+        start: "",
+        end: "",
+        date: "",
+        pageno: 1,
+        pagesize: 10,
+        total: null
+      };
+      this.getData();
     }
   },
   components: {
@@ -281,7 +294,7 @@ export default {
 };
 </script>
 <style>
-.searchBox {
-  padding: 15px 20px;
+.el-form-item {
+  margin-bottom: 0px;
 }
 </style>

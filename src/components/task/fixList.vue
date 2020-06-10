@@ -239,7 +239,4 @@ export default {
 };
 </script>
 <style scoped>
-.searchBox {
-  padding: 15px 20px;
-}
 </style>

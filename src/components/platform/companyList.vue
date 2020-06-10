@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-row :gutter="20" class="searchBox">
+  <div style="padding:12px">
+    <el-card>
       <el-form
         :model="queryParam"
         status-icon
@@ -9,55 +9,51 @@
         style="width:100%"
         lable-width="120px"
       >
-        <el-col :span="8">
-          <el-form-item label="公司名称" prop="name">
-            <el-input clearable v-model="queryParam.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="所在区域" prop="regioncodeArr">
-            <sel-area
-              v-model="queryParam.regioncodeArr"
-              :modelArr="queryParam.regioncodeArr"
-              :isAll="false"
-              :isClear="true"
-              @region="recRegion"
-              @regionCode="recRegionCode"
-            ></sel-area>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="创建时间" prop="date">
-            <el-date-picker
-              clearable
-              v-model="queryParam.date"
-              type="datetimerange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              style="width:100%; margin-right:15px"
-              @change="dateChange(queryParam.date)"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
+        <el-row :gutter="20">
+          <el-col :span="6" align="center">
+            <el-form-item label="公司名称" prop="name">
+              <el-input clearable v-model="queryParam.name"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" align="center">
+            <el-form-item label="所在区域" prop="regioncodeArr">
+              <sel-area
+                v-model="queryParam.regioncodeArr"
+                :modelArr="queryParam.regioncodeArr"
+                :isAll="false"
+                :isClear="true"
+                @region="recRegion"
+                @regionCode="recRegionCode"
+              ></sel-area>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" align="center">
+            <el-form-item label="创建时间" prop="date">
+              <el-date-picker
+                clearable
+                v-model="queryParam.date"
+                type="datetimerange"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                range-separator="至"
+                start-placeholder="开始时间"
+                end-placeholder="结束时间"
+                style="width:100%; margin-right:15px"
+                @change="dateChange(queryParam.date)"
+              ></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6" align="center">
+            <el-button type="primary" size="medium" @click="getData" style="width:36%">查询</el-button>
+            <el-button style="width:36%" @click="resetHandle">重置</el-button>
+          </el-col>
+        </el-row>
       </el-form>
-    </el-row>
-
-    <!-- 列表操作按钮 -->
-    <el-col align="left" style="margin-bottom:1%">
-      <el-button type="primary" style="margin-left:1%" size="medium" @click="newComp">新增</el-button>
-      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
-      <el-button
-        type="primary"
-        style="float:right;margin-right:1%"
-        size="medium"
-        @click="getData"
-      >查询</el-button>
-    </el-col>
+    </el-card>
 
     <!-- 内部用户列表 -->
-    <el-col align="middle">
+    <el-card style="margin-top:12px">
+      <el-button type="primary" size="medium" @click="newComp" style="margin-bottom:12px">新增</el-button>
+      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
       <gt-table
         :tableData="tableData"
         style="width: 100%"
@@ -69,8 +65,9 @@
         :handle="handle"
         size="mini"
       ></gt-table>
-      <!-- v-on:selection-change="handleSelectionChange" -->
+
       <el-pagination
+        style="margin-top:12px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="queryParam.pageno"
@@ -79,7 +76,7 @@
         layout="total, sizes, prev, pager, next, jumper"
         :total="queryParam.total"
       ></el-pagination>
-    </el-col>
+    </el-card>
   </div>
 </template>
 <script>
@@ -168,19 +165,24 @@ export default {
         ? (this.queryParam.region = region)
         : (this.queryParam.region = "");
     },
+
     recRegionCode(code) {
       this.queryParam.regioncodeArr = code || [];
     },
+
     async exportForm() {
       window.open(process.env.VUE_APP_URL + "download/5");
     },
+
     dateChange(val) {
       this.queryParam.start = val[0];
       this.queryParam.end = val[1];
     },
+
     newComp() {
       this.$router.push({ path: "companyDetail" });
     },
+
     /**
      ** 公司查询
      */
@@ -232,6 +234,7 @@ export default {
         })
         .catch(err => {});
     },
+
     /*
      ** 列表 分页
      */
@@ -239,6 +242,7 @@ export default {
       this.queryParam.pagesize = val;
       this.getData();
     },
+
     /*
      ** 列表 分页
      */
@@ -271,6 +275,24 @@ export default {
       let arr = [];
       for (var item of val) arr.push(item.id);
       this.multipleSelection = arr;
+    },
+
+    /*
+     ** 重置
+     */
+    resetHandle(val) {
+      this.queryParam = {
+        regioncodeArr: [],
+        name: "",
+        region: "",
+        start: "",
+        end: "",
+        date: "",
+        pageno: 1,
+        pagesize: 10,
+        total: null
+      };
+      this.getData();
     }
   },
   components: {
@@ -280,7 +302,7 @@ export default {
 };
 </script>
 <style>
-.searchBox {
-  padding: 15px 20px;
+.el-form-item {
+  margin-bottom: 0px;
 }
 </style>

@@ -89,17 +89,13 @@
 import searchBox from "@/common/gtSearch";
 import headTop from "@/common/headTop";
 // import selArea from "@/common/gtArea";
-import {
-  corpSelect,
-  rolePage,
-  delStaff
-} from "@/getData";
+import { corpSelect, rolePage, delStaff } from "@/getData";
 import { Regular } from "@/config/verification";
 export default {
   name: "createCorperation",
   data() {
     return {
-      compList:[],
+      compList: [],
       queryParam: {
         name: "",
         corpguid: "",
@@ -160,8 +156,7 @@ export default {
     this.getCompList();
   },
   methods: {
-    
-    async getCompList(){
+    async getCompList() {
       const res = await corpSelect();
       if (res.data) {
         this.compList = res.data;
@@ -275,7 +270,4 @@ export default {
 };
 </script>
 <style>
-.searchBox {
-  padding: 15px 20px;
-}
 </style>
