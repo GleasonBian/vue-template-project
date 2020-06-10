@@ -48,7 +48,7 @@
                 <div class="card_void"></div>
               </div>
               <div>
-                <span class="card_main">{{ viewData.totalequips }}</span>
+                <span class="card_main">{{ viewData.totalequips||0 }}</span>
                 <span class="card_minor">台</span>
               </div>
             </el-card>
@@ -61,20 +61,20 @@
                 <div>
                   <span class="card_minor">今日</span>
                   <!-- <span class="card_main">2</span> -->
-                  <span class="card_main">{{parseInt(viewData.maintain.CurNum)}}</span>
+                  <span class="card_main">{{parseInt(viewData.maintain.CurNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <!-- <span class="card_col_main">23</span> -->
-                    <span class="card_col_main">{{parseInt(viewData.maintain.MonthNum)+" "+" "}}</span>
+                    <span class="card_col_main">{{parseInt(viewData.maintain.MonthNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <!-- <span class="card_col_main">255</span> -->
-                    <span class="card_col_main">{{parseInt(viewData.maintain.YearNum)}}</span>
+                    <span class="card_col_main">{{parseInt(viewData.maintain.YearNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -89,20 +89,20 @@
                 <div>
                   <span class="card_minor">今日</span>
                   <!-- <span class="card_main">1</span> -->
-                  <span class="card_main">{{parseInt(viewData.fix.CurNum)}}</span>
+                  <span class="card_main">{{parseInt(viewData.fix.CurNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <!-- <span class="card_col_main">2</span> -->
-                    <span class="card_col_main">{{parseInt(viewData.fix.MonthNum)}}</span>
+                    <span class="card_col_main">{{parseInt(viewData.fix.MonthNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <!-- <span class="card_col_main">12</span> -->
-                    <span class="card_col_main">{{parseInt(viewData.fix.YearNum)}}</span>
+                    <span class="card_col_main">{{parseInt(viewData.fix.YearNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -117,20 +117,20 @@
                 <div>
                   <span class="card_minor">今日</span>
                   <!-- <span class="card_main" style="color:red">0</span> -->
-                  <span class="card_main" style="color:red">{{parseInt(viewData.alarm.CurNum)}}</span>
+                  <span class="card_main" style="color:red">{{parseInt(viewData.alarm.CurNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <!-- <span class="card_col_main">5</span> -->
-                    <span class="card_col_main">{{parseInt(viewData.alarm.MonthNum)}}</span>
+                    <span class="card_col_main">{{parseInt(viewData.alarm.MonthNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <!-- <span class="card_col_main">100</span> -->
-                    <span class="card_col_main">{{parseInt(viewData.alarm.YearNum)}}</span>
+                    <span class="card_col_main">{{parseInt(viewData.alarm.YearNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                 </div>
@@ -147,20 +147,24 @@
                 <div>
                   <span class="card_minor">今日</span>
                   <!-- <span class="card_main">113</span> -->
-                  <span class="card_main">{{parseFloat(viewData.travel.CurNum).toFixed(2)}}</span>
+                  <span class="card_main">{{parseFloat(viewData.travel.CurNum).toFixed(2)||0}}</span>
                   <span class="card_minor">公里</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <!-- <span class="card_col_main">1230</span> -->
-                    <span class="card_col_main">{{parseFloat(viewData.travel.MonthNum).toFixed(2)}}</span>
+                    <span
+                      class="card_col_main"
+                    >{{parseFloat(viewData.travel.MonthNum).toFixed(2)||0}}</span>
                     <span class="card_minor">公里</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <!-- <span class="card_col_main">14256</span> -->
-                    <span class="card_col_main">{{parseFloat(viewData.travel.YearNum).toFixed(2)}}</span>
+                    <span
+                      class="card_col_main"
+                    >{{parseFloat(viewData.travel.YearNum).toFixed(2)||0}}</span>
                     <span class="card_minor">公里</span>
                   </div>
                 </div>
@@ -177,20 +181,20 @@
                   <span
                     class="card_main"
                     style="color:#f0c70b"
-                  >{{parseFloat(viewData.oil.CurNum).toFixed(2)}}</span>
+                  >{{parseFloat(viewData.oil.CurNum).toFixed(2)||0}}</span>
                   <span class="card_minor">升</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <!-- <span class="card_col_main">3521</span> -->
-                    <span class="card_col_main">{{parseFloat(viewData.oil.MonthNum).toFixed(2)}}</span>
+                    <span class="card_col_main">{{parseFloat(viewData.oil.MonthNum).toFixed(2)||0}}</span>
                     <span class="card_minor">升</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <!-- <span class="card_col_main">53412</span> -->
-                    <span class="card_col_main">{{parseFloat(viewData.oil.YearNum).toFixed(2)}}</span>
+                    <span class="card_col_main">{{parseFloat(viewData.oil.YearNum).toFixed(2)||0}}</span>
                     <span class="card_minor">升</span>
                   </div>
                 </div>
@@ -205,7 +209,7 @@
                 <div>
                   <span class="card_minor">今日</span>
                   <!-- <span class="card_main">17</span> -->
-                  <span class="card_main">{{parseFloat(viewData.assignment.CurNum).toFixed(2)}}</span>
+                  <span class="card_main">{{parseFloat(viewData.assignment.CurNum).toFixed(1)||0}}</span>
                   <span class="card_minor">小时</span>
                 </div>
                 <div>
@@ -213,14 +217,14 @@
                     <span class="card_minor">本月</span>
                     <span
                       class="card_col_main"
-                    >{{parseFloat(viewData.assignment.MonthNum).toFixed(2)}}</span>
+                    >{{parseFloat(viewData.assignment.MonthNum).toFixed(1)||0}}</span>
                     <span class="card_minor">小时</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
                     <span
                       class="card_col_main"
-                    >{{parseFloat(viewData.assignment.YearNum).toFixed(2)}}</span>
+                    >{{parseFloat(viewData.assignment.YearNum).toFixed(1)||0}}</span>
                     <span class="card_minor">小时</span>
                   </div>
                 </div>
@@ -964,7 +968,7 @@ export default {
     transition: all 0.2s;
     .bottom_card {
       float: left;
-      width: 24%;
+      width: 24.5%;
       margin-right: 15px;
     }
   }
