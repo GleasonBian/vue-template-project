@@ -1,17 +1,17 @@
 <template>
   <div>
     <!-- 面包屑 -->
-   <headTop ></headTop>
+    <headTop></headTop>
     <el-form
       :model="form"
       status-icon
       ref="form"
+      :rules="rules"
       label-width="auto"
       style="width:100%"
       lable-width="120px"
     >
       <div class="page_container">
-         
         <!-- 基本信息 -->
         <el-card class="content_width" shadow="naver">
           <div slot="header" class="clearfix">基本信息</div>
@@ -290,12 +290,11 @@
             </el-col>
           </div>
         </el-card>
-  
-          <el-col :span="24" align="center" class="content_width">
-            <el-button type="primary" @click="submitForm('form')">保存</el-button>
-            <el-button @click="goback">返回</el-button>
-          </el-col>
 
+        <el-col :span="24" align="center" class="content_width">
+          <el-button type="primary" @click="submitForm('form')">保存</el-button>
+          <el-button @click="goback">返回</el-button>
+        </el-col>
       </div>
     </el-form>
   </div>
@@ -329,6 +328,47 @@ export default {
       worksTable: [], //工作表格
       checkTable: [], //检查表格
       selectlistRow: [], //表格选中的行
+
+      rules: {
+        dispatchtime: [
+          {
+            required: true,
+            message: "必填 "
+          }
+        ],
+        equip_guid: [
+          {
+            required: true,
+            message: "必填  "
+          }
+        ],
+        dept_guid: [
+          {
+            required: true,
+            message: "必填  "
+          }
+        ],
+        deliver_corp_guid: [
+          {
+            required: true,
+            message: "必填 "
+          }
+        ],
+        oncoming_corp_guid: [
+          {
+            required: true,
+            message: "必填  ",
+            trigger: ["blur", "change"]
+          }
+        ],
+        driver_name: [
+          {
+            required: true,
+            message: "必填 ",
+            trigger: ["blur", "change"]
+          }
+        ]
+      },
       form: {
         code: null, //调度编号
         dispatchtime: null, //调度时间
@@ -499,21 +539,20 @@ export default {
      ** 新增 用户 form 表单 验证
      */
     submitForm(formName) {
-      // this.$refs[formName].validate(valid => {
-      //   if (valid) {
-
-      //   } else {
-      //     this.$message.error("请正确填写红框内容");
-      //     return false;
-      //   }
-      // });
-      if (this.form.code) {
-        //编辑
-        this.editAssign();
-      } else {
-        //新增
-        this.submitAddUser();
-      }
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.form.code) {
+            //编辑
+            this.editAssign();
+          } else {
+            //新增
+            this.submitAddUser();
+          }
+        } else {
+          this.$message.error("请正确填写红框内容");
+          return false;
+        }
+      });
     },
     /*
      ** 更新公司
