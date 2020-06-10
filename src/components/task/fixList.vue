@@ -5,7 +5,7 @@
     </el-card>
     <el-card>
       <!-- 列表操作按钮 -->
-      <el-col align="left" style="margin-bottom:1%;">
+      <el-col align="left" style="margin-bottom:12px;">
         <el-button type="primary" size="medium" @click="newFix">新增</el-button>
         <el-button type="success" size="medium" @click="exportForm">导出</el-button>
       </el-col>

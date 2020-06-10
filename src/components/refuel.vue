@@ -43,7 +43,7 @@
 <script>
 import {
   oilUpdate,
-  getDeptList, // 部门列表
+  corpRank, // 部门列表
   refuelList, // 加油申请列表
   refuelDelete // 加油申请删除
 } from "@/getData";
@@ -118,7 +118,7 @@ export default {
         },
         {
           key: "date",
-          label: "搜索框2",
+          label: "申请时间",
           placeholder: "",
           default: ""
         }
@@ -214,7 +214,7 @@ export default {
      ** 部门列表
      */
     async getDeptList() {
-      const res = await getDeptList();
+      const res = await corpRank({id:3});
       res.data.map(item => {
         console.log(item);
         item.value = item.guid;

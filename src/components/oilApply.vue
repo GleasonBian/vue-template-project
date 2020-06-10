@@ -21,7 +21,7 @@
                 type="number"
                 v-model.number="form.quantity"
                 :step="0.01"
-                :readonly="true"
+                disabled
               >
                 <el-button slot="append">升</el-button>
               </el-input>
@@ -68,7 +68,7 @@
             <el-form-item label="项目部" prop="project_dept">
               <el-select v-model="form.project_dept" placeholder="请选择" style="width:100%">
                 <el-option
-                  v-for="item in deptList"
+                  v-for="item in projList"
                   :key="item.guid"
                   :label="item.name"
                   :value="item.guid"
@@ -297,6 +297,7 @@
 import {
   getCompList,
   getDeptList,
+  corpRank,
   equiSelect,
   refuelCreate, // 加油申请创建
   refuelDetail, // 加油申请查看
@@ -316,6 +317,7 @@ export default {
       compList: [], // 公司列表
       deptList: [], // 部门列表
       equiList: [],
+      projList: [],//项目部
       form: {
         corpguid: "", // 所属公司
         quantity: 0, // 加油数量
@@ -430,6 +432,7 @@ export default {
   created() {
     this.getCompList();
     this.getDeptList();
+    this.getProjList();
     this.getEquiList();
   },
   mounted() {
@@ -450,6 +453,13 @@ export default {
     async getDeptList() {
       const res = await getDeptList();
       this.deptList = res.data;
+    },
+    /**
+     ** 项目部列表
+     */
+    async getProjList() {
+      const res = await corpRank({id:3});
+      this.projList = res.data;
     },
 
     /*

@@ -87,7 +87,7 @@
                 style="width:100%"
               >
                 <el-option
-                  v-for="item in deptList"
+                  v-for="item in projList"
                   :key="item.guid"
                   :label="item.name"
                   :value="item.guid"
@@ -167,6 +167,7 @@
 import {
   getCompList,
   getDeptList,
+  corpRank,
   equiSelect,
   repairCreat, // 保养创建
   repairDetail, // 根据 code 查询 详情
@@ -177,6 +178,7 @@ export default {
   data() {
     return {
       compList: [], // 公司列表
+      projList: [], // 项目部列表
       deptList: [], // 部门列表
       equiList: [], // 设备列表
       form: {
@@ -589,6 +591,7 @@ export default {
   created() {
     this.getCompList();
     this.getDeptList();
+    this.getProjList();
     this.getEquiList();
   },
   mounted() {
@@ -609,6 +612,14 @@ export default {
     async getDeptList() {
       const res = await getDeptList();
       this.deptList = res.data;
+    },
+
+    /**
+     ** 项目部列表
+     */
+    async getProjList() {
+      const res = await corpRank({id:3});
+      this.projList = res.data;
     },
 
     /*

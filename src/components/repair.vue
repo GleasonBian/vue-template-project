@@ -46,7 +46,7 @@
 <script>
 import {
   corpSelect, // 公司
-  getDeptList, // 部门
+  corpRank, // 部门
   getStaffList, // 人员
   equiSelect, // 设备列表
   oilSelect, // 加油计划列表
@@ -247,7 +247,7 @@ export default {
      ** 部门列表
      */
     async getDeptList() {
-      const res = await getDeptList();
+      const res = await corpRank({id:3});
       res.data.map(item => {
         console.log(item);
         item.value = item.guid;

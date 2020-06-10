@@ -44,7 +44,7 @@
         </el-card>
         <el-card style="margin-top:12px">
           <gt-table
-            :tableData="tableData"
+            :tableData="tableData.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
             style="width: 100%"
             :optionWidth="optionWidth"
             :columns="columns"
@@ -58,9 +58,10 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="offset"
+            :current-page="currentPage"
             :page-sizes="[10, 20, 30, 40]"
-            :page-size="10"
+            :page-size="pagesize"
+            background
             layout="total, sizes, prev, pager, next, jumper"
             :total="total"
             style="margin:20px"
@@ -140,8 +141,8 @@ export default {
       ],
       tableData: [], // 表格数据
       total: 0,
-      limit: 10,
-      offset: 1,
+      currentPage:1,
+      pagesize:10,
       multipleSelection: [], // 用于批量 删除
       searchData: [
         // 搜索框 数据
@@ -189,7 +190,9 @@ export default {
   created() {
     this.equiList();
   },
-  mounted() {},
+  mounted() {
+    this.initCharts();
+  },
   methods: {
     /*
      ** 获取当天日期
@@ -312,9 +315,7 @@ export default {
       }
 
       const alermRes = await oilView({ id: canshu2 });
-
-      console.log(alermRes);
-      console.log(startDay);
+      this.total = alermRes.data.length;
 
       if (alermRes.status === 200) {
         let alarmSpeedNum = [];
@@ -526,16 +527,14 @@ export default {
      ** 分页处理
      */
     handleSizeChange(val) {
-      console.log("handleSizeChange:", val);
-      let arr = [];
+      this.pagesize = val;
     },
 
     /*
      ** 分页处理2
      */
     handleCurrentChange(val) {
-      console.log(val);
-      let arr = [];
+      this.currentPage = val;
     }
   },
   components: {}
