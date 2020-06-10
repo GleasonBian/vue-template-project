@@ -74,9 +74,9 @@
               <el-form-item label="所属公司" prop="corp_guid">
                 <el-select disabled v-model="form.dept_guid" placeholder="请选择" style="width:100%">
                   <el-option
-                    v-for="item in deptList"
+                    v-for="item in projList"
                     :key="item.guid"
-                    :label="item.superior"
+                    :label="item.superiorname"
                     :value="item.guid"
                   ></el-option>
                 </el-select>

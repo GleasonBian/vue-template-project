@@ -75,7 +75,7 @@ export default {
         },
         {
           key: "date",
-          label: "交接班时间",
+          label: "接班时间",
           placeholder: "请选择",
           type: "datetimerange"
         }
