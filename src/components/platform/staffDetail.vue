@@ -150,13 +150,15 @@
                 <el-input type="textarea" maxlength="100" show-word-limit v-model="form.remark"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="24" style="text-align:center">
-              <el-button type="primary" @click="submitForm('form')">保存</el-button>
-              <el-button @click="goback">返回</el-button>
-            </el-col>
           </el-row>
         </el-form>
       </el-card>
+      <el-row style="margin-top:12px">
+        <el-col :span="24" style="text-align:center">
+          <el-button type="primary" @click="submitForm('form')">保存</el-button>
+          <el-button @click="goback">返回</el-button>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -371,10 +373,10 @@ export default {
       });
       if (response.status === 200) {
         this.form = response.data;
-        
-      this.getCompList();
-      this.getDeptList(this.form.corpguid);
-      this.getStuffList();
+
+        this.getCompList();
+        this.getDeptList(this.form.corpguid);
+        this.getStuffList();
       } else this.$message.warning("请稍后再尝试");
     }
   }
