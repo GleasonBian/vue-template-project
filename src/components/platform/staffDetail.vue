@@ -2,8 +2,8 @@
   <div>
     <!-- 面包屑 -->
     <headTop></headTop>
-    <div style="margin:15px">
-      <el-card>
+    <div class="page_container">
+      <el-card class="content_width" shadow="naver">
         <el-form
           :model="form"
           status-icon

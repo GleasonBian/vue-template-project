@@ -2,16 +2,19 @@
   <div>
     <!-- 面包屑 -->
     <headTop></headTop>
-    <div style="margin:15px">
-      <el-form
-        :model="form"
-        status-icon
-        :rules="rules"
-        ref="form"
-        label-width="80px"
-        style="width:100%"
-      >
-        <el-card>
+    <el-form
+      :model="form"
+      status-icon
+      :rules="rules"
+      ref="form"
+      label-width="80px"
+      style="width:100%"
+    >
+      <div class="page_container">
+        <el-card class="content_width" shadow="naver">
+          <div slot="header" class="clearfix">
+            基本信息
+          </div>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="角色名称" prop="name">
@@ -79,70 +82,68 @@
             </el-col>
           </el-row>
         </el-card>
-        <el-col :span="24">
-          <el-card style="margin-top:12px">
-            <div slot="header" class="clearfix">
-              <span>添加人员</span>
-              <el-button type="text" style="margin-left:12px" @click="addRow">添加员工</el-button>
-              <el-button type="text" style="margin-left:12px" @click="delData">移除员工</el-button>
-            </div>
-            <el-table
-              :data="form.staffs"
-              ref="staffs"
-              highlight-current-row
-              style="width:100%;"
-              stripe
-              border
-              @selection-change="selectRowHandle"
-            >
-              <el-table-column type="selection" align="center"></el-table-column>
-              <el-table-column type="index" label="序号" align="center"></el-table-column>
-              <el-table-column prop="guid" label="员工姓名" align="center">
-                <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.guid"
-                    placeholder="请选择"
-                    style="width:100%"
-                    @change="selectHandle(scope.$index,scope.row.guid)"
-                  >
-                    <el-option
-                      v-for="item in staffList"
-                      :key="item.guid"
-                      :label="item.name"
-                      :value="item.guid"
-                    ></el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column prop="phonenum" label="手机号码" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.phonenum" :readonly="true"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column prop="corpname" label="所属公司" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.corpname" :readonly="true"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column prop="deptname" label="所属部门" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.deptname" :readonly="true"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column prop="postname" label="岗位名称" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.postname" :readonly="true"></el-input>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-card>
-        </el-col>
+        <el-card class="content_width" shadow="naver" style="margin-top:12px">
+          <div slot="header" class="clearfix">
+            <span>添加人员</span>
+            <el-button type="text" style="margin-left:12px" @click="addRow">添加员工</el-button>
+            <el-button type="text" style="margin-left:12px" @click="delData">移除员工</el-button>
+          </div>
+          <el-table
+            :data="form.staffs"
+            ref="staffs"
+            highlight-current-row
+            style="width:100%;"
+            stripe
+            border
+            @selection-change="selectRowHandle"
+          >
+            <el-table-column type="selection" align="center"></el-table-column>
+            <el-table-column type="index" label="序号" align="center"></el-table-column>
+            <el-table-column prop="guid" label="员工姓名" align="center">
+              <template slot-scope="scope">
+                <el-select
+                  v-model="scope.row.guid"
+                  placeholder="请选择"
+                  style="width:100%"
+                  @change="selectHandle(scope.$index,scope.row.guid)"
+                >
+                  <el-option
+                    v-for="item in staffList"
+                    :key="item.guid"
+                    :label="item.name"
+                    :value="item.guid"
+                  ></el-option>
+                </el-select>
+              </template>
+            </el-table-column>
+            <el-table-column prop="phonenum" label="手机号码" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.phonenum" :readonly="true"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="corpname" label="所属公司" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.corpname" :readonly="true"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="deptname" label="所属部门" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.deptname" :readonly="true"></el-input>
+              </template>
+            </el-table-column>
+            <el-table-column prop="postname" label="岗位名称" align="center">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.postname" :readonly="true"></el-input>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
         <el-col :span="24" style="text-align:center;margin:20px">
           <el-button type="primary" @click="submitForm('form')">保存</el-button>
           <el-button @click="goback">返回</el-button>
         </el-col>
-      </el-form>
-    </div>
+      </div>
+    </el-form>
   </div>
 </template>
 <script>

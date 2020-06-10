@@ -1,67 +1,18 @@
 <template>
-  <div>
+  <div style="padding:12px">
     <!-- 面包屑 -->
     <!-- <headTop></headTop> -->
 
     <!-- 搜索框 -->
-    <el-row :gutter="20" class="searchBox">
-      <el-form
-        :model="queryParam"
-        status-icon
-        ref="form"
-        label-width="auto"
-        style="width:100%"
-        lable-width="120px"
-      >
-        <el-col :span="8">
-          <el-form-item label="人员名称" prop="name">
-            <el-input clearable v-model="queryParam.name"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="所属公司" prop="corpguid">
-            <el-select clearable v-model="queryParam.corpguid" placeholder="请选择" style="width:100%">
-              <el-option
-                v-for="item in compList"
-                :key="item.guid"
-                :value="item.guid"
-                :label="item.name"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="注册时间" prop="date">
-            <el-date-picker
-              clearable
-              v-model="queryParam.date"
-              type="datetimerange"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              style="width:100%; margin-right:15px"
-              @change="dateChange(queryParam.date)"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-form>
-    </el-row>
-
-    <!-- 列表操作按钮 -->
-    <el-col align="left" style="margin-bottom:1%;">
-      <el-button type="primary" style="margin-left:1%" size="medium" @click="newComp">新增</el-button>
+    <el-card style="margin-bottom:12px">
+      <gt-search :data="searchData" @handle="getData" ref="staffSearch"></gt-search>
+    </el-card>
+    <el-card>
+      <!-- 列表操作按钮 -->
+      <el-button type="primary" size="medium" style="margin-bottom:12px" @click="newComp">新增</el-button>
       <el-button type="success" size="medium" @click="exportForm">导出</el-button>
-      <el-button
-        type="primary"
-        style="float:right;margin-right:1%"
-        size="medium"
-        @click="getData"
-      >查询</el-button>
-    </el-col>
 
-    <!-- 内部用户列表 -->
-    <el-col align="middle">
+      <!-- 内部用户列表 -->
       <gt-table
         :tableData="tableData"
         style="width: 100%"
@@ -81,9 +32,10 @@
         :page-sizes="[10, 20, 30, 40]"
         :page-size="queryParam.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
+        style="margin-top:12px"
         :total="queryParam.total"
       ></el-pagination>
-    </el-col>
+    </el-card>
   </div>
 </template>
 <script>
@@ -96,6 +48,25 @@ export default {
   name: "createCorperation",
   data() {
     return {
+      searchData: [
+        {
+          key: "name", // 与后端交互时的字段 必填
+          label: "人员名称", // 搜索框名称 必填
+          placeholder: "请输入" // 占位符 选填
+        },
+        {
+          key: "corpguid",
+          label: "所属公司",
+          placeholder: "请选择", // 占位符 选填
+          options: []
+        },
+        {
+          key: "date",
+          label: "注册时间",
+          placeholder: "请选择",
+          type: "datetimerange"
+        }
+      ],
       compList: [],
       queryParam: {
         name: "",
@@ -164,7 +135,11 @@ export default {
     async getCompList() {
       const res = await corpSelect();
       if (res.data) {
-        this.compList = res.data;
+        res.data.map(item => {
+          item.label = item.name;
+          item.value = item.guid;
+        });
+        this.searchData[1].options = res.data;
       } else this.$message.warning(res.message);
     },
     async exportForm() {
@@ -180,7 +155,8 @@ export default {
     /**
      ** 公司查询
      */
-    async getData() {
+    async getData(param = {}) {
+      this.queryParam = param;
       const res = await staffPage({ param: this.queryParam });
       this.tableData = res.data.list;
       this.queryParam.pagesize = res.data.pagesize;
@@ -233,14 +209,14 @@ export default {
      */
     handleSizeChange(val) {
       this.queryParam.pagesize = val;
-      this.getData();
+      this.$refs.staffSearch.searchHandle();
     },
     /*
      ** 列表 分页
      */
     handleCurrentChange(val) {
       this.queryParam.pageno = val;
-      this.getData();
+      this.$refs.staffSearch.searchHandle();
     },
 
     /*

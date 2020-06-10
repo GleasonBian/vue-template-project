@@ -35,6 +35,8 @@ export const delStaff = data => fetch("staff", data, "delete");
 
 //获取角色列表 getRoleList
 export const getRoleList = data => fetch("role", data, "get");
+//获取角色列表 分页
+export const rolePage = data => fetch("roles", data, "get");
 //获取角色详情
 export const getRoleDetail = data => fetch("role", data, "get");
 //新增角色

@@ -2,64 +2,61 @@
   <div>
     <!-- 面包屑 -->
     <headTop></headTop>
-    <div class="page_container">
-      <el-form
-        :model="form"
-        status-icon
-        ref="form"
-        label-width="auto"
-        style="width:100%"
-        lable-width="120px"
-      >
-        <el-row :gutter="20">
-          <!-- 维修记录 -->
-          <el-col style="margin-top:20px;" :span="24">
-            <el-card>
-              <div slot="header" class="clearfix">维修记录</div>
-              <el-col :span="12">
-                <el-form-item label="经办人" prop="handler">
-                  <el-input v-model="form.handler"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="维修人" prop="fixer">
-                  <el-input v-model="form.fixer"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="实际维修时间" prop="real_start">
-                  <el-date-picker
-                    v-model="form.real_start"
-                    type="datetime"
-                    placeholder="选择日期"
-                    format="yyyy-MM-dd HH:mm:ss"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    default-time="12:00:00"
-                    style="width:100%"
-                  ></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="实际维修金额" prop="real_amount">
-                  <el-input v-model.number="form.real_amount"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24" style="margin-top:20px">
-                  <el-form-item label="维修备注" prop="remark">
-                    <el-input type="textarea" v-model="form.remark"></el-input>
-                  </el-form-item>
-                </el-col>
-            </el-card>
-          </el-col>
-        </el-row>
+    <el-form
+      :model="form"
+      status-icon
+      ref="form"
+      label-width="auto"
+      style="width:100%"
+      lable-width="120px"
+    >
+      <div class="page_container">
+        <el-card class="content_width" shadow="never">
+          <div slot="header" class="clearfix">维修记录</div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item label="经办人" prop="handler">
+                <el-input v-model="form.handler"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="维修人" prop="fixer">
+                <el-input v-model="form.fixer"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="实际维修时间" prop="real_start">
+                <el-date-picker
+                  v-model="form.real_start"
+                  type="datetime"
+                  placeholder="选择日期"
+                  format="yyyy-MM-dd HH:mm:ss"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  default-time="12:00:00"
+                  style="width:100%"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="实际维修金额" prop="real_amount">
+                <el-input v-model.number="form.real_amount"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" style="margin-top:20px">
+              <el-form-item label="维修备注" prop="remark">
+                <el-input type="textarea" v-model="form.remark"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-card>
         <el-row>
           <el-col :span="24" style="text-align:center;margin-top:20px">
             <el-button type="primary" @click="submitForm('form')">保存</el-button>
             <el-button @click="goback">返回</el-button>
           </el-col>
         </el-row>
-      </el-form>
-    </div>
+      </div>
+    </el-form>
   </div>
 </template>
 <script>
@@ -75,16 +72,14 @@ export default {
   data() {
     return {
       form: {
-        code: null, //调度编号
-        
+        code: null //调度编号
       }
     };
   },
   created() {
     this.form.code = this.$route.query.id;
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     goback() {
       this.$router.go(-1);
@@ -102,11 +97,11 @@ export default {
       //     return false;
       //   }
       // });
-      
-        //新增
-        this.submitAddUser();
+
+      //新增
+      this.submitAddUser();
     },
-    
+
     /*
      ** 创建公司
      */
@@ -116,9 +111,7 @@ export default {
         this.$message.success("维修任务创建成功");
         this.$router.replace({ path: "fixList" });
       } else this.$message.warning("维修任务创建失败");
-    },
-
- 
+    }
   }
 };
 </script>

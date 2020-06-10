@@ -1,44 +1,38 @@
 <template>
-  <div>
-    <el-row class="searchBox">
-      <el-card style="margin-bottom:12px">
-        <gt-search :data="searchData" @handle="getData" ref="fixSearch"></gt-search>
-      </el-card>
-    </el-row>
-    <el-row class="pd15_20">
-      <el-card>
-        <!-- 列表操作按钮 -->
-        <el-col align="left" style="margin-bottom:1%;">
-          <el-button type="primary" size="medium" @click="newFix">新增</el-button>
-          <el-button type="success" size="medium" @click="exportForm">导出</el-button>
-        </el-col>
-
-        <!-- 内部用户列表 -->
-        <el-col align="middle">
-          <gt-table
-            :tableData="tableData"
-            style="width: 100%"
-            :optionWidth="optionWidth"
-            :columns="columns"
-            :selection="false"
-            v-on:viewAssign="viewAssign"
-            v-on:newFixTask="newFixTask"
-            :handle="handle"
-            size="mini"
-          ></gt-table>
-          <!-- v-on:selection-change="handleSelectionChange" -->
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="queryParam.pageno"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="queryParam.pagesize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="queryParam.total"
-          ></el-pagination>
-        </el-col>
-      </el-card>
-    </el-row>
+  <div style="padding:12px">
+    <el-card style="margin-bottom:12px">
+      <gt-search :data="searchData" @handle="getData" ref="fixSearch"></gt-search>
+    </el-card>
+    <el-card>
+      <!-- 列表操作按钮 -->
+      <el-col align="left" style="margin-bottom:1%;">
+        <el-button type="primary" size="medium" @click="newFix">新增</el-button>
+        <el-button type="success" size="medium" @click="exportForm">导出</el-button>
+      </el-col>
+      <!-- 内部用户列表 -->
+      <gt-table
+        :tableData="tableData"
+        style="width: 100%"
+        :optionWidth="optionWidth"
+        :columns="columns"
+        :selection="false"
+        v-on:viewAssign="viewAssign"
+        v-on:newFixTask="newFixTask"
+        :handle="handle"
+        size="mini"
+      ></gt-table>
+      <!-- v-on:selection-change="handleSelectionChange" -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="queryParam.pageno"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="queryParam.pagesize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="queryParam.total"
+        style="margin-top:12px"
+      ></el-pagination>
+    </el-card>
   </div>
 </template>
 <script>

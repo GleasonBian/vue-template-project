@@ -350,16 +350,7 @@ const router = new Router({
             menu: "090302"
           }
         },
-        {
-          path: "assignRep",
-          component: resolve => require(["@/components/assignRep"], resolve),
-          meta: {
-            crumbs: ["统计", "调度报表"],
-            title: "调度报表",
-            index: 11,
-            menu: "090302"
-          }
-        }
+        
       ]
     },
     {
