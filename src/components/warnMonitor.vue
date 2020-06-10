@@ -141,8 +141,8 @@ export default {
       ],
       tableData: [], // 表格数据
       total: 0,
-      currentPage:1,
-      pagesize:10,
+      currentPage: 1,
+      pagesize: 10,
       multipleSelection: [], // 用于批量 删除
       searchData: [
         // 搜索框 数据
@@ -283,7 +283,6 @@ export default {
         this.$message.warning("请选择设备");
         return;
       }
-      // equip/ff5a5bee-b1d1-4fde-93d5-59a7a6eba9b6/oilcs?start=2020-05-14 00:00&end=2020-05-14 00:00
       let canshu2 = "";
       let xdays = [];
       let startDay = this.getDays();
@@ -356,37 +355,46 @@ export default {
       let myChart = this.$echarts.init(this.$refs.chart);
       let option = {
         title: {
-          right: "50%",
-          text: "告警类型"
+          left: "center",
+          text: "告警统计"
         },
         tooltip: {
-          trigger: "axis"
+          trigger: "axis",
+          textStyle: {
+            align: "left"
+          }
         },
         legend: {
-          left: "20",
-          data: ["超速告警", "油耗告警"]
+          align: "left",
+          data: ["超速告警", "油耗告警"],
+          verticalAlign: "top", //垂直方向位置
+          x: 100, //距离x轴的距离
+          y: 0 //距离Y轴的距离
         },
         toolbox: {
           show: true,
-          orient: "horizontal",
-          right: "50",
+          // orient: "horizontal",
+          // right: "50",
           feature: {
-            mark: { show: true },
-            dataZoom: {
-              yAxisIndex: "none"
-            }, //区域缩放，区域缩放还原
-            dataView: {
-              show: true,
-              readOnly: false
-            }, //数据视图
             magicType: {
-              show: true,
-              type: ["line", "bar"]
-            }, //切换为折线图，切换为柱状图
-            restore: { show: true }, //还原
-            saveAsImage: {} //保存为图片
+              type: ["line", "bar"],
+              show: true
+            },
+            dataZoom: {
+              show: true
+            },
+            dataView: {
+              show: true
+            },
+            restore: {
+              show: true
+            },
+            saveAsImage: {
+              show: true
+            }
           }
         },
+        calculable: true,
         grid: {
           left: "3%",
           right: "4%",
@@ -395,12 +403,13 @@ export default {
         },
         dataZoom: [
           {
-            type: "",
+            type: "slider",
             show: true,
             xAxisIndex: [0],
             top: 30,
             start: 10,
-            end: 90 //初始化滚动条
+            end: 90,
+            height: 20 //初始化滚动条
           }
         ],
         xAxis: {

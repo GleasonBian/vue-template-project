@@ -64,9 +64,10 @@
     <el-card class="content_width" shadow="never">
       <div slot="header" class="clearfix">
         <span>车辆基本信息</span>
+        <span style="margin-left:20px; color:rgb(164, 164, 165);">单号：{{this.form.code}}</span>
       </div>
-      <el-form ref="form" :model="form" label-width="86px" :rules="rules">
-        <el-row :gutter="20">
+      <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+        <el-row gutter="20">
           <el-col :span="12">
             <el-form-item label="车辆名称" prop="name">
               <el-input v-model="form.name"></el-input>
@@ -118,6 +119,7 @@
                 <el-option label="紫色" value="紫色"></el-option>
               </el-select>
             </el-form-item>
+
             <el-form-item label="油耗阀值" prop="max_oil_wear">
               <el-input-number
                 :min="1"
@@ -605,7 +607,7 @@ export default {
      ** 部门列表
      */
     async deptList(val) {
-      const res = await getDeptList({ deptguid: val || null });
+      const res = await getDeptList({ param: { corpguid: val } });
       this.deptData = res.data;
     },
 
@@ -621,6 +623,7 @@ export default {
      ** 更换公司清空部门, 重新获取部门列表
      */
     async resetDept(cid) {
+      console.log("公司id：", cid);
       this.deptData = [];
       this.form.deptguid = null;
       this.$forceUpdate();

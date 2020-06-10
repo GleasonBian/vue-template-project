@@ -18,7 +18,7 @@
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item label="调度编号" prop="code">
-                <el-input readonly v-model="form.code"></el-input>
+                <el-input :disabled="true" v-model="form.code"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">

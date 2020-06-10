@@ -38,9 +38,13 @@
       <el-col style="position:relative;overflow:hidden;" :span="18">
         <div class="grid-content bg-purple">
           <div class="map" id="track-map"></div>
-          <el-button @click="getOverWatch()" class="viewTotal" type="primary">总览</el-button>
-          <el-button @click="closeLine" class="viewline" type="info">清空轨迹</el-button>
-          <el-button @click="showBox" class="viewbtn" :type="showView?'primary':'info'">{{viewBtn}}</el-button>
+          <el-button @click="getOverWatch()" class="viewbtn" type="primary">总览</el-button>
+          <el-button @click="closeLine" class="viewline">清空轨迹</el-button>
+          <el-button
+            @click="showBox"
+            class="viewTotal"
+            :type="showView?'primary':'info'"
+          >{{viewBtn}}</el-button>
           <div class="card" :class="{'active':showView}">
             <el-card v-if="totalView" class="box-card">
               <div class="clearfix">
@@ -1078,12 +1082,12 @@ export default {
 .viewline {
   position: absolute;
   top: 15px;
-  left: 200px;
+  left: 170px;
 }
 .viewTotal {
   position: absolute;
   top: 15px;
-  left: 320px;
+  left: 290px;
 }
 .clearfix:before,
 .clearfix:after {

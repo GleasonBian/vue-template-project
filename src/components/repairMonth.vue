@@ -358,6 +358,7 @@ export default {
     this.getCompList();
     this.getDeptList();
     this.getEquiList();
+    this.getProjList();
   },
   mounted() {
     this.getRepairDetail();

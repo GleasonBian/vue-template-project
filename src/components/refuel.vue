@@ -154,7 +154,7 @@ export default {
     },
 
     /*
-     ** 下载
+     ** 更新
      */
     async UpdateHandle(index, row) {
       this.ExamineHandle(index, row);
@@ -214,7 +214,7 @@ export default {
      ** 部门列表
      */
     async getDeptList() {
-      const res = await corpRank({id:3});
+      const res = await corpRank({ id: 3 });
       res.data.map(item => {
         console.log(item);
         item.value = item.guid;

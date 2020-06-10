@@ -619,7 +619,7 @@ export default {
      ** 项目部列表
      */
     async getProjList() {
-      const res = await corpRank({id:3});
+      const res = await corpRank({ id: 3 });
       this.projList = res.data;
     },
 

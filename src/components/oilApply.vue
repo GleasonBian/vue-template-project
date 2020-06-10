@@ -14,7 +14,7 @@
         label-width="80px"
         style="width:100%"
       >
-        <el-row gutter="20">
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="加油总量" prop="quantity">
               <el-input
@@ -101,8 +101,8 @@
         </el-row>
       </el-form>
     </el-card>
-
-    <el-card class="content_width" shadow="never">
+    <!-- class="content_width" -->
+    <el-card shadow="never" style="width:80%;margin-top:12px">
       <div slot="header" class="clearfix">
         <span>车辆添加</span>
         <el-button type="text" style="margin-left:12px" @click="addRow">添加车辆</el-button>
@@ -318,7 +318,7 @@ export default {
       compList: [], // 公司列表
       deptList: [], // 部门列表
       equiList: [],
-      projList: [],//项目部
+      projList: [], //项目部
       form: {
         corpguid: "", // 所属公司
         quantity: 0, // 加油数量
@@ -459,7 +459,7 @@ export default {
      ** 项目部列表
      */
     async getProjList() {
-      const res = await corpRank({id:3});
+      const res = await corpRank({ id: 3 });
       this.projList = res.data;
     },
 
