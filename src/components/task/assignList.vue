@@ -69,7 +69,7 @@ export default {
         },
         {
           key: "corpguid",
-          label: "所属公司",
+          label: "项目名称",
           placeholder: "请选择", // 占位符 选填
           options: []
         },
@@ -204,7 +204,7 @@ export default {
     /*
      ** 删除公司
      */
-    async deleteAssign(index, row) {
+    deleteAssign(index, row) {
       console.log(row);
       let that = this;
       this.$confirm("删除调令?", "提示", {
@@ -212,10 +212,12 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          let res = assignDelete({ id: row.code });
-          this.$message.success("删除成功");
-          that.getData();
+        .then(async () => {
+          let res = await assignDelete({ id: row.code });
+          if (res.status == 200) {
+            this.$message.success("删除成功");
+            that.getData();
+          }
         })
         .catch(err => {});
     },

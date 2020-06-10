@@ -125,13 +125,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="公司电话" prop="tel">
-              <el-input v-model="form.tel"></el-input>
+            <el-form-item label="详细地址" prop="location">
+              <el-input v-model="form.location"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="详细地址" prop="location">
-              <el-input v-model="form.location"></el-input>
+            <el-form-item label="公司电话" prop="tel">
+              <el-input v-model="form.tel"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">

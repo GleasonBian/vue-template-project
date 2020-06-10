@@ -219,21 +219,21 @@ export default {
     /*
      ** 删除公司
      */
-    async deleteCorp(index, row) {
+    deleteCorp(index, row) {
       console.log(row);
       let that = this;
-      this.$confirm("删除公司?", "提示", {
+      this.$confirm("删除部门?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(() => {
-          let res = delDept({ id: row.guid });
+        .then(async () => {
+          let res = await delDept({ id: row.guid });
           console.log(res);
           if (res.status === 200) {
             this.$message.success("删除成功");
+            that.getData();
           }
-          that.getData();
         })
         .catch(err => {});
     },
