@@ -1,5 +1,25 @@
 <template>
   <div style="padding:12px">
+    <el-dialog
+      title="油箱标记"
+      :visible.sync="dialogVisible"
+      width="20%"
+      :modal-append-to-body="false"
+      :before-close="handleClose"
+      center
+    >
+      <el-form ref="tank" :model="tank" label-width="86px" :rules="tankRules">
+        <el-form-item label="实际加油" prop="theory_volume">
+          <el-input v-model.number="tank.custom_value" type="number" :step="10" :min="1">
+            <el-button slot="append">升</el-button>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="tankHandle" type="primary">确定</el-button>
+      </span>
+    </el-dialog>
     <el-card style="margin-bottom:12px">
       <gt-search :data="searchData" @handle="equiList" ref="equiSearch"></gt-search>
     </el-card>
@@ -22,6 +42,7 @@
         :selection="false"
         v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
+        v-on:ComeOnTag="ComeOnTag"
         :handle="handle"
         size="mini"
       ></gt-table>
@@ -41,7 +62,7 @@
   </div>
 </template>
 <script>
-import { equiDelete, equiSelectAll, corpSelect } from "@/getData";
+import { equiDelete, equiSelectAll, corpSelect, ComeOnTag } from "@/getData";
 export default {
   name: "createCorperation",
   data() {
@@ -57,6 +78,12 @@ export default {
         {
           function: "DeleteHandle",
           text: "删除",
+          type: "text",
+          show: true
+        },
+        {
+          function: "ComeOnTag",
+          text: "加油标记",
           type: "text",
           show: true
         }
@@ -132,7 +159,14 @@ export default {
           placeholder: "请选择", // 占位符 选填
           options: []
         }
-      ]
+      ],
+      dialogVisible: false,
+      tank: {
+        custom_value: 0,
+        equip_guid: "",
+        platform_value: 0
+      },
+      tankRules: {}
     };
   },
   beforeCreate() {},
@@ -216,6 +250,32 @@ export default {
     handleCurrentChange(val) {
       this.pageno = val;
       this.$refs.equiSearch.searchHandle();
+    },
+
+    /*
+     ** 加油标记
+     */
+    ComeOnTag(index, row) {
+      this.dialogVisible = true;
+      this.tank.equip_guid = row.guid;
+    },
+    /*
+     ** 加油标记
+     */
+    handleClose(index, row) {
+      // this.dialogVisible = true;
+      // this.tank.equip_guid = row.guid;
+    },
+
+    /*
+     ** 加油标记
+     */
+    async tankHandle() {
+      const res = await ComeOnTag(this.tank);
+      if (res.status === 200) {
+        this.$message.success("标记完成");
+        this.dialogVisible = false;
+      }
     },
     exportHandle() {
       window.open(

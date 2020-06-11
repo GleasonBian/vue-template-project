@@ -150,7 +150,6 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <!-- <span class="card_main">113</span> -->
                   <span class="card_main">{{parseFloat(viewData.travel.CurNum).toFixed(2)||0}}</span>
                   <span class="card_minor">公里</span>
                 </div>
@@ -335,6 +334,7 @@ export default {
       let res = null;
       if (id) {
         res = await overview({ param: { id: id } });
+        console.log(res.data);
         this.totalView = false; //展示单台车辆信息
       } else {
         this.totalView = true; //显示总览车辆台数

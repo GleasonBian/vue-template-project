@@ -4,7 +4,7 @@
     <el-card class="content_width" shadow="never">
       <div slot="header" class="clearfix">
         <span>加油申请</span>
-        <span style="margin-left:20px; color:rgb(164, 164, 165);">单号：{{this.form.code}}</span>
+        <span style="float: right; padding: 3px 0; color:rgb(164, 164, 165);">单号：{{this.form.code}}</span>
       </div>
       <el-form
         :model="form"

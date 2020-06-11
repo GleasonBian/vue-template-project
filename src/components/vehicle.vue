@@ -3,10 +3,11 @@
     <el-dialog
       title="油箱添加"
       :visible.sync="dialogVisible"
-      width="45%"
+      width="30%"
       :modal-append-to-body="false"
       :before-close="handleClose"
       center
+      top="5vh"
     >
       <el-form ref="tank" :model="tank" label-width="86px" :rules="tankRules">
         <el-form-item label="车辆名称" prop="category">
@@ -26,13 +27,13 @@
         </el-form-item>
 
         <el-form-item label="油箱容积" prop="theory_volume">
-          <el-input v-model.number="form.theory_volume" type="number" :step="10" :min="1">
+          <el-input v-model.number="tank.theory_volume" type="number" :step="10" :min="1">
             <el-button slot="append">升</el-button>
           </el-input>
         </el-form-item>
 
         <el-form-item label="油箱高度" prop="height">
-          <el-input v-model.number="form.height" type="number" :step="10" :min="1" :max="3000">
+          <el-input v-model.number="tank.height" type="number" :step="10" :min="1" :max="3000">
             <el-button slot="append">厘米</el-button>
           </el-input>
         </el-form-item>
@@ -57,14 +58,16 @@
         <el-form-item></el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button @click="tankHandle" type="primary">确定</el-button>
       </span>
     </el-dialog>
     <el-card class="content_width" shadow="never">
       <div slot="header" class="clearfix">
         <span>车辆基本信息</span>
-        <span style="margin-left:20px; color:rgb(164, 164, 165);">单号：{{this.form.code}}</span>
+        <span
+          style="float: right; padding: 3px 0; color:rgb(164, 164, 165);"
+        >车辆编号：{{this.form.equip_no}}</span>
       </div>
       <el-form ref="form" :model="form" label-width="100px" :rules="rules">
         <el-row :gutter="20">
@@ -145,7 +148,7 @@
               </el-input>
             </el-form-item>
 
-            <el-form-item label="邮箱类型" prop="tank_guid">
+            <el-form-item label="油箱类型" prop="tank_guid">
               <el-select v-model="form.tank_guid" placeholder="请选择" style="width:75%">
                 <el-option
                   v-for="item in tankData"

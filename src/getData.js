@@ -414,3 +414,8 @@ export const tankCreate = data => fetch("tanks", data, "post");
  * 车辆管理 / 邮箱 / 列表
  */
 export const tankList = data => fetch("tanks", data, "get");
+
+/**
+ * 车辆管理 / 邮箱 / 列表
+ */
+export const ComeOnTag = data => fetch("oiladjusting", data, "put");
