@@ -150,12 +150,8 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-<<<<<<< HEAD
-                  <span class="card_main">{{parseFloat(viewData.travel.CurNum).toFixed(2)||0}}</span>
-=======
                   <!-- <span class="card_main">113</span> -->
                   <span class="card_main">{{(parseFloat(viewData.travel.CurNum)||0).toFixed(2)}}</span>
->>>>>>> 3acad2c6de2253bb7ef5cd66c1c053b854e41d6a
                   <span class="card_minor">公里</span>
                 </div>
                 <div>
@@ -196,7 +192,9 @@
                   <div class="card_row">
                     <span class="card_minor">本月</span>
                     <!-- <span class="card_col_main">3521</span> -->
-                    <span class="card_col_main">{{(parseFloat(viewData.oil.MonthNum)||0).toFixed(2)}}</span>
+                    <span
+                      class="card_col_main"
+                    >{{(parseFloat(viewData.oil.MonthNum)||0).toFixed(2)}}</span>
                     <span class="card_minor">升</span>
                   </div>
                   <div class="card_row">
