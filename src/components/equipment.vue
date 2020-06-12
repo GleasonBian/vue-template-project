@@ -263,8 +263,7 @@ export default {
      ** 加油标记
      */
     handleClose(index, row) {
-      // this.dialogVisible = true;
-      // this.tank.equip_guid = row.guid;
+      this.dialogVisible = false;
     },
 
     /*

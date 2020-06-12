@@ -122,10 +122,7 @@
                 <el-option label="紫色" value="紫色"></el-option>
               </el-select>
             </el-form-item>
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
             <el-form-item label="油耗阀值" prop="max_oil_wear">
               <el-input-number
                 :min="1"
@@ -151,11 +148,7 @@
               </el-input>
             </el-form-item>
 
-<<<<<<< Updated upstream
             <el-form-item label="油箱类型" prop="tank_guid">
-=======
-            <el-form-item label="邮箱类型" prop="tank_guid">
->>>>>>> Stashed changes
               <el-select v-model="form.tank_guid" placeholder="请选择" style="width:75%">
                 <el-option
                   v-for="item in tankData"
