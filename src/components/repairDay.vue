@@ -4,7 +4,11 @@
     <el-card style="margin-top:12px;margin-right:12px;width:100%">
       <div slot="header" class="clearfix">
         <span>机车日常检查保养记录表</span>
+<<<<<<< Updated upstream
         <span style="float: right; padding: 3px 0; color:rgb(164, 164, 165);">单号：{{this.form.code}}</span>
+=======
+        <span style="margin-left:20px; color:rgb(164, 164, 165);">单号：{{this.form.code}}</span>
+>>>>>>> Stashed changes
       </div>
       <el-form
         :model="form"
