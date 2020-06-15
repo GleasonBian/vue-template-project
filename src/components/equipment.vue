@@ -1,11 +1,10 @@
 <template>
   <div style="padding:12px">
     <el-dialog
-      title="油箱标记"
-      :visible.sync="dialogVisible"
+      title="油箱标的"
+      :visible.sync="dialogVisible1"
       width="20%"
       :modal-append-to-body="false"
-      :before-close="handleClose"
       center
     >
       <el-form ref="tank" :model="tank" label-width="86px" :rules="tankRules">
@@ -16,9 +15,42 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="dialogVisible1 = false">取 消</el-button>
         <el-button @click="tankHandle" type="primary">确定</el-button>
       </span>
+    </el-dialog>
+    <el-dialog
+      title="油箱标的"
+      :visible.sync="dialogVisible2"
+      width="85%"
+      :modal-append-to-body="false"
+      center
+    >
+      <el-table :data="oilMarkData" highlight-current-row ref="singleTable" border>
+        <el-table-column width="50" type="index" label="序号" align="center"></el-table-column>
+        <el-table-column prop="updatetime" label="标的时间" align="center"></el-table-column>
+        <el-table-column prop="platform_value" label="平台加油量" align="center"></el-table-column>
+        <el-table-column prop="custom_value" label="实际加油" align="center"></el-table-column>
+        <el-table-column label="状态" align="center">
+          <template slot-scope="scope">{{scope.row.flag===0?'未标的':'已标的'}}</template>
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button :disabled="scope.row.flag!==0" type="text" @click="markOil(scope.row)">标的</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- <el-form ref="tank" :model="tank" label-width="86px" :rules="tankRules">
+        <el-form-item label="实际加油" prop="theory_volume">
+          <el-input v-model.number="tank.custom_value" type="number" :step="10" :min="1">
+            <el-button slot="append">升</el-button>
+          </el-input>
+        </el-form-item>
+      </el-form>-->
+      <!-- <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button @click="tankHandle" type="primary">确定</el-button>
+      </span>-->
     </el-dialog>
     <el-card style="margin-bottom:12px">
       <gt-search :data="searchData" @handle="equiList" ref="equiSearch"></gt-search>
@@ -62,12 +94,20 @@
   </div>
 </template>
 <script>
-import { equiDelete, equiSelectAll, corpSelect, ComeOnTag } from "@/getData";
+import {
+  equiDelete,
+  equiSelectAll,
+  getOilMark,
+  corpSelect,
+  ComeOnTag
+} from "@/getData";
 export default {
   name: "createCorperation",
   data() {
     return {
       show: true,
+      oilMarkData: [],
+      oilMarkParam: {},
       handle: [
         {
           function: "ExamineHandle",
@@ -83,7 +123,7 @@ export default {
         },
         {
           function: "ComeOnTag",
-          text: "加油标记",
+          text: "加油标的",
           type: "text",
           show: true
         }
@@ -160,7 +200,8 @@ export default {
           options: []
         }
       ],
-      dialogVisible: false,
+      dialogVisible1: false,
+      dialogVisible2: false,
       tank: {
         custom_value: 0,
         equip_guid: "",
@@ -255,9 +296,20 @@ export default {
     /*
      ** 加油标记
      */
-    ComeOnTag(index, row) {
-      this.dialogVisible = true;
-      this.tank.equip_guid = row.guid;
+    async ComeOnTag(index, row) {
+      // oilMarkData
+      const res = await getOilMark({ id: row.guid });
+      this.dialogVisible2 = true;
+      this.oilMarkData = res.data;
+      // this.tank.equip_guid = row.guid;
+    },
+
+    /*
+     ** 加油标记
+     */
+    markOil(row) {
+      this.tank = row;
+      this.dialogVisible1 = true;
     },
     /*
      ** 加油标记
@@ -273,8 +325,9 @@ export default {
     async tankHandle() {
       const res = await ComeOnTag(this.tank);
       if (res.status === 200) {
-        this.$message.success("标记完成");
-        this.dialogVisible = false;
+        this.$message.success("标的完成");
+        this.dialogVisible1 = false;
+        this.ComeOnTag(this.tank.equip_guid);
       }
     },
     exportHandle() {

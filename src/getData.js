@@ -418,4 +418,9 @@ export const tankList = data => fetch("tanks", data, "get");
 /**
  * 车辆管理 / 邮箱 / 列表
  */
-export const ComeOnTag = data => fetch("oiladjusting", data, "put");
+export const ComeOnTag = data => fetch("adjusthistory", data, "put");
+
+/**
+ * 车辆管理 / 邮箱 / 加油标的列表
+ */
+export const getOilMark = data => fetch("adjusthistory", data, "get");
