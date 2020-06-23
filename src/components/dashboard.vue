@@ -206,7 +206,7 @@
                 </div>
               </div>
             </el-card>
-            <el-card class="bottom_card">
+            <!-- <el-card class="bottom_card">
               <div class="clearfix">
                 <span class="card_title">作业时长</span>
                 <div class="card_void"></div>
@@ -214,7 +214,7 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <!-- <span class="card_main">17</span> -->
+                  <span class="card_main">17</span>
                   <span class="card_main">{{(parseFloat(viewData.assignment.CurNum)||0).toFixed(1)}}</span>
                   <span class="card_minor">小时</span>
                 </div>
@@ -235,7 +235,7 @@
                   </div>
                 </div>
               </div>
-            </el-card>
+            </el-card>-->
           </div>
         </div>
       </el-col>
@@ -749,6 +749,14 @@ export default {
                 "</div>"
             );
 
+            // 剩余油量：
+            content.push(
+              "<div style='padding:5px 10px'>剩余油量：" +
+                parseFloat(that.marks[j].extData.oilleft).toFixed(2) +
+                "升" +
+                "</div>"
+            );
+
             //今日里程：
             content.push(
               "<div style='padding:5px 10px'>今日里程：" +
@@ -904,6 +912,13 @@ export default {
           "</div>"
       );
 
+      // 剩余油量：
+      content.push(
+        "<div style='padding:5px 10px'>剩余油量：" +
+          parseFloat(extData.oilleft).toFixed(2) +
+          "升" +
+          "</div>"
+      );
       //今日里程：
       content.push(
         "<div style='padding:5px 10px'>今日里程：" +

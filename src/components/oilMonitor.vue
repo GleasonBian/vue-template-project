@@ -42,6 +42,11 @@
           <div style="width:100%; height:350px;" ref="chart"></div>
         </el-card>
         <el-card style="margin-top:12px">
+          <el-row>
+            <el-col align="right" style="margin-bottom:12px">
+              <el-button type="success" @click="exportForm">导出</el-button>
+            </el-col>
+          </el-row>
           <gt-table
             :tableData="
           tableData.slice((currentPage - 1) * pagesize, currentPage * pagesize)
@@ -197,6 +202,10 @@ export default {
     this.initCharts();
   },
   methods: {
+    //导出表格
+    exportForm() {
+      window.open(process.env.VUE_APP_URL + "download/10");
+    },
     /*
      ** 搜索处理
      */
@@ -260,6 +269,7 @@ export default {
       if (res.status === 200) {
         let gpstime = [], // 时间
           curmiles = [], // 里程
+          oilleft = [], // 剩余油量
           curoilconsume = [], // 油耗
           speed = [], //速度
           totaloilconsume = []; // 总油耗
@@ -271,6 +281,7 @@ export default {
           res.data[i].curmiles = res.data[i].curmiles.toFixed(2);
           res.data[i].speed = res.data[i].speed.toFixed(2);
           gpstime.push(res.data[i].gpstime);
+          oilleft.push(res.data[i].oilleft);
           curmiles.push(res.data[i].curmiles);
           curoilconsume.push(res.data[i].curoilconsume);
           speed.push(res.data[i].speed);
@@ -280,6 +291,7 @@ export default {
         this.tableData = res.data;
         this.initCharts(
           gpstime,
+          oilleft,
           curmiles,
           curoilconsume,
           speed,
@@ -302,6 +314,7 @@ export default {
      */
     initCharts(
       gpstime = [],
+      oilleft = [],
       curmiles = [],
       curoilconsume = [],
       speed = [],
@@ -321,7 +334,7 @@ export default {
           }
         },
         legend: {
-          data: ["总油耗", "油耗", "里程", "速度"],
+          data: ["总油耗", "油耗", "剩余油量", "里程", "速度"],
           align: "left", //水平方向位置
           verticalAlign: "top", //垂直方向位置
           x: 100, //距离x轴的距离
@@ -386,6 +399,12 @@ export default {
             type: "line",
             stack: "总量",
             data: curoilconsume
+          },
+          {
+            name: "剩余油量",
+            type: "line",
+            stack: "总量",
+            data: oilleft
           },
           {
             name: "里程",
