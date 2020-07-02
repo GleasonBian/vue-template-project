@@ -12,9 +12,21 @@
             ref="singleTable"
             border
           >
-            <el-table-column type="index" label="序号" align="center"></el-table-column>
-            <el-table-column prop="name" label="名称" align="center"></el-table-column>
-            <el-table-column prop="plateno" label="号码" align="center"></el-table-column>
+            <el-table-column
+              type="index"
+              label="序号"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="name"
+              label="名称"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="plateno"
+              label="号码"
+              align="center"
+            ></el-table-column>
             <!-- <el-table-column label="状态">
               <template slot-scope="scope">
                 <div class="carStatus">
@@ -35,7 +47,11 @@
       <el-col align="middle" :span="19">
         <!-- 搜索框 -->
         <el-card>
-          <gt-search :data="searchData" @handle="searchHandle" dateType="datetimerange"></gt-search>
+          <gt-search
+            :data="searchData"
+            @handle="searchHandle"
+            dateType="datetimerange"
+          ></gt-search>
         </el-card>
         <!-- 列表 -->
         <el-card style="margin-top:12px">
@@ -49,8 +65,11 @@
           </el-row>
           <gt-table
             :tableData="
-          tableData.slice((currentPage - 1) * pagesize, currentPage * pagesize)
-        "
+              tableData.slice(
+                (currentPage - 1) * pagesize,
+                currentPage * pagesize
+              )
+            "
             style="width: 100%"
             :optionWidth="optionWidth"
             :columns="columns"
@@ -101,44 +120,44 @@ export default {
       columns: [
         {
           id: "plateno",
-          label: "车牌号码"
+          label: "车牌号码",
         },
         {
           id: "gpstime",
-          label: "gps时间"
+          label: "gps时间",
         },
         {
           id: "curmiles",
-          label: "当前里程"
+          label: "当前里程",
         },
         {
           id: "totalmiles",
-          label: "总里程"
+          label: "总里程",
         },
         {
           id: "curoilconsume",
-          label: "当前油耗"
+          label: "当前油耗",
         },
         {
           id: "totaloilconsume",
-          label: "总油耗"
+          label: "总油耗",
         },
         {
           id: "oiladded",
-          label: "加油油量"
+          label: "加油油量",
         },
         {
           id: "oilleft",
-          label: "剩余油量"
+          label: "剩余油量",
         },
         {
           id: "speed",
-          label: "速度"
+          label: "速度",
         },
         {
           id: "location",
-          label: "位置"
-        }
+          label: "位置",
+        },
       ],
       tableData: [], // 表格数据
       pagesize: 10,
@@ -155,9 +174,9 @@ export default {
           options: [
             {
               value: "项目1", // 下拉选项 绑定 值
-              label: "项目1" // 下拉选项 绑定 名称
-            }
-          ]
+              label: "项目1", // 下拉选项 绑定 名称
+            },
+          ],
         },
         {
           key: "time",
@@ -168,31 +187,31 @@ export default {
             {
               // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
               value: "今天", // 下拉选项 绑定 值
-              label: "今天" // 下拉选项 绑定 名称
+              label: "今天", // 下拉选项 绑定 名称
             },
             {
               value: "昨天",
-              label: "昨天"
+              label: "昨天",
             },
             {
               value: "近3天",
-              label: "近3天"
+              label: "近3天",
             },
             {
               value: "近7天",
-              label: "近7天"
-            }
-          ]
+              label: "近7天",
+            },
+          ],
         },
         {
           key: "date",
           label: "选择时间",
           placeholder: "请选择",
-          default: ""
-        }
+          default: "",
+        },
       ],
       optionWidth: 250,
-      vehicleData: []
+      vehicleData: [],
     };
   },
   created() {
@@ -239,7 +258,7 @@ export default {
      */
     async equiList() {
       const res = await equiSelect();
-      res.data.map(item => {
+      res.data.map((item) => {
         item.value = item.guid;
         item.label = item.plateno;
       });
@@ -325,48 +344,48 @@ export default {
       let option = {
         title: {
           text: "油耗统计",
-          left: "center"
+          left: "center",
         },
         tooltip: {
           trigger: "axis",
           textStyle: {
-            align: "left"
-          }
+            align: "left",
+          },
         },
         legend: {
           data: ["总油耗", "油耗", "剩余油量", "里程", "速度"],
           align: "left", //水平方向位置
           verticalAlign: "top", //垂直方向位置
           x: 100, //距离x轴的距离
-          y: 0 //距离Y轴的距离
+          y: 0, //距离Y轴的距离
         },
         toolbox: {
           show: true,
           feature: {
             magicType: {
               type: ["line", "bar"],
-              show: true
+              show: true,
             },
             dataZoom: {
-              show: true
+              show: true,
             },
             dataView: {
-              show: true
+              show: true,
             },
             restore: {
-              show: true
+              show: true,
             },
             saveAsImage: {
-              show: true
-            }
-          }
+              show: true,
+            },
+          },
         },
         calculable: true,
         grid: {
           left: "3%",
           right: "3%",
           bottom: "3%",
-          containLabel: true
+          containLabel: true,
         },
         dataZoom: [
           {
@@ -376,49 +395,49 @@ export default {
             top: 30,
             start: 10,
             end: 90,
-            height: 20 //初始化滚动条
-          }
+            height: 20, //初始化滚动条
+          },
         ],
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: gpstime
+          data: gpstime,
         },
         yAxis: {
-          type: "value"
+          type: "value",
         },
         series: [
           {
             name: "总油耗",
             type: "line",
             stack: "总量",
-            data: totaloilconsume
+            data: totaloilconsume,
           },
           {
             name: "油耗",
             type: "line",
             stack: "总量",
-            data: curoilconsume
+            data: curoilconsume,
           },
           {
             name: "剩余油量",
             type: "line",
             stack: "总量",
-            data: oilleft
+            data: oilleft,
           },
           {
             name: "里程",
             type: "line",
             stack: "总量",
-            data: curmiles
+            data: curmiles,
           },
           {
             name: "速度",
             type: "line",
             stack: "总量",
-            data: speed
-          }
-        ]
+            data: speed,
+          },
+        ],
       };
       myChart.setOption(option);
       window.onresize = function() {
@@ -467,7 +486,7 @@ export default {
           ? time1.getMonth() + 1
           : "0" + (time1.getMonth() + 1);
       const D1 = time1.getDate() > 9 ? time1.getDate() : "0" + time1.getDate();
-      const timer1 = Y1 + "-" + M1 + "-" + D1 + "23:59:59"; // 当前时间
+      const timer1 = Y1 + "-" + M1 + "-" + D1 + " 23:59:59"; // 当前时间
 
       time2.setTime(time2.getTime() - 24 * 60 * 60 * 1000 * count);
       const Y2 = time2.getFullYear();
@@ -476,10 +495,10 @@ export default {
           ? time2.getMonth() + 1
           : "0" + (time2.getMonth() + 1);
       const D2 = time2.getDate() > 9 ? time2.getDate() : "0" + time2.getDate();
-      const timer2 = Y2 + "-" + M2 + "-" + D2 + "00:00:00"; // 之前的7天或者30天
+      const timer2 = Y2 + "-" + M2 + "-" + D2 + " 00:00:00"; // 之前的7天或者30天
       return [timer2, timer1];
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
