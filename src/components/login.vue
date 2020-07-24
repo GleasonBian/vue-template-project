@@ -90,7 +90,6 @@ export default {
       };
       const res = await login(data);
       if (res.data.Data) {
-        this.$message.success("登录成功");
         sessionStorage.setItem("Authorization", res.data.Data);
         sessionStorage.setItem("username", this.userid);
         this.$router.push("/dashboard");

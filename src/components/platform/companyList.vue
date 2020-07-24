@@ -8,6 +8,7 @@
         label-width="auto"
         style="width:100%"
         lable-width="120px"
+        size="mini"
       >
         <el-row :gutter="20">
           <el-col :span="6" align="center">
@@ -18,6 +19,7 @@
           <el-col :span="6" align="center">
             <el-form-item label="所在区域" prop="regioncodeArr">
               <sel-area
+                size="mini"
                 v-model="queryParam.regioncodeArr"
                 :modelArr="queryParam.regioncodeArr"
                 :isAll="false"
@@ -43,8 +45,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6" align="center">
-            <el-button type="primary" size="medium" @click="getData" style="width:36%">查询</el-button>
-            <el-button style="width:36%" @click="resetHandle">重置</el-button>
+            <el-button type="primary" size="mini" @click="getData" style="width:36%">查询</el-button>
+            <el-button style="width:36%" @click="resetHandle"  size="mini">重置</el-button>
           </el-col>
         </el-row>
       </el-form>

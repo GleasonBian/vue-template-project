@@ -10,6 +10,7 @@
             item.placeholder ? item.placeholder : '请选择'
           "
           style="width:100%; margin-right:15px"
+          :size="size"
         >
           <el-option
             v-for="(opt, optIdx) in item.options"
@@ -19,6 +20,7 @@
           ></el-option>
         </el-select>
         <el-date-picker
+          :size="size"
           v-else-if="item.key === 'date'"
           v-model="search[item.key]"
           :type="item.type ? item.type : 'daterange'"
@@ -61,6 +63,7 @@
             item.placeholder ? item.placeholder : '请选择'
           "
           style="width:100%; margin-right:15px"
+          :size="size"
         >
           <el-option
             v-for="(opt, optIdx) in item.options"
@@ -80,6 +83,7 @@
           end-placeholder="结束日期"
           style="width:100%; margin-right:15px"
           @change="dateChange(search[item.key])"
+          :size="size"
         ></el-date-picker>
         <el-input
           v-else
@@ -127,7 +131,7 @@ export default {
     size: {
       type: String,
       default: function() {
-        return "";
+        return "mini";
       },
       require: false
     }

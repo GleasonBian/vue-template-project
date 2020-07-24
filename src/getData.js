@@ -301,6 +301,16 @@ export const oilView = data => fetch("equip", data, "get");
 export const equip = data => fetch("equip", data, "get");
 
 /**
+ * 单车油耗
+ */
+export const EquipmentSummary = data => fetch("equipsummary", data, "get");
+
+/**
+ * 单车油耗
+ */
+export const equipsummaryAll = data => fetch("equipsummary/all", data, "get");
+
+/**
  * 报警监测 id 传 报警id
  */
 export const alarm = data => fetch("alarm", data, "get");

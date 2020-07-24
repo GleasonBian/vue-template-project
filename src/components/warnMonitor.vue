@@ -3,7 +3,6 @@
     <el-row :gutter="10">
       <el-col :span="5" align="center">
         <el-card>
-          <!--             style="min-width:300px"     -->
           <el-table
             :data="vehicleData"
             @row-click="clickRow"
@@ -16,20 +15,6 @@
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column prop="plateno" label="号码"></el-table-column>
             <el-table-column prop="name" label="名称"></el-table-column>
-            <!-- <el-table-column label="状态" align="left">
-              <template slot-scope="scope">
-                <div class="carStatus">
-                  <div
-                    class="active"
-                    :class="{
-                  active: scope.row.status == 1,
-                  fix: scope.row.status == 2,
-                  stop: scope.row.status == 3
-                }"
-                  ></div>
-                </div>
-              </template>
-            </el-table-column>-->
           </el-table>
         </el-card>
       </el-col>

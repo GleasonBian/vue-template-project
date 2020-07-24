@@ -31,6 +31,7 @@
           </template>
           <el-menu-item index="/monitor/oil" class="myClass" style="text-align: center;">油耗监测</el-menu-item>
           <el-menu-item index="/monitor/warn" style="text-align: center;">告警监测</el-menu-item>
+          <el-menu-item index="/monitor/statistics" style="text-align: center;">油耗统计</el-menu-item>
         </el-submenu>
 
         <el-submenu index="3" popper-class="submenu-userManger" style="text-align: center;">

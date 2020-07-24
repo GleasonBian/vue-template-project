@@ -32,25 +32,6 @@ const router = new Router({
       path: "/platform",
       component: resolve => require(["@/common/platform"], resolve),
       children: [
-        // {
-        //   path: '',
-        //   component: resolve => require(['@/components/middleground/Zhongtai'], resolve),
-        //   meta: {
-        //     crumbs: ['欢迎访问中台'],
-        //     title: '欢迎访问中台',
-        //     index: 0,
-        //   },
-        // },
-        // {
-        //   path: 'home',
-        //   component: resolve => require(['@/components/middleground/home'], resolve),
-        //   meta: {
-        //     crumbs: ['数据统计图'],
-        //     title: '数据统计图',
-        //     index: 0,
-        //     menu: '090101'
-        //   },
-        // },
         {
           path: "/dashboard",
           name: "dashboard",
@@ -70,16 +51,6 @@ const router = new Router({
             menu: "090302"
           }
         },
-        // {
-        //   path: "companyList",
-        //   component: resolve => require(["@/components/companyList"], resolve),
-        //   meta: {
-        //     crumbs: ["平台", "公司管理"],
-        //     title: "公司管理",
-        //     index: 11,
-        //     menu: "090302"
-        //   }
-        // },
         {
           path: "companyList",
           component: resolve => require(["@/components/platform/companyList"], resolve),
@@ -374,6 +345,16 @@ const router = new Router({
             crumbs: ["实时监测", "告警监测"],
             title: "油耗监测",
             index: 10,
+            menu: "090302"
+          }
+        },
+        {
+          path: "statistics",
+          component: resolve => require(["@/components/statistics"], resolve),
+          meta: {
+            crumbs: ["实时监测", "油耗统计"],
+            title: "油耗监测",
+            index: 28,
             menu: "090302"
           }
         }

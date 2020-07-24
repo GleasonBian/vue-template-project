@@ -2,11 +2,10 @@
   <div class="address-select">
     <el-cascader
       style="width:100%"
-      size="large"
+      size="mini"
       :options="options"
       :clearable="isClear"
       v-model="regionCode"
-      
       @change="addressChange"
     ></el-cascader>
   </div>
