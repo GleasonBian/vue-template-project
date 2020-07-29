@@ -21,10 +21,16 @@
           <i class="iconfont i-menu-one"></i>监控平台
         </el-menu-item>
 
-        <el-menu-item index="/platform/equipment" style>
+        <!-- <el-menu-item index="/platform/equipment" style>
           <i class="iconfont i-menu-one"></i>车辆台账
-        </el-menu-item>
-
+        </el-menu-item> -->
+        <el-submenu index="6" popper-class="submenu-userManger" style="text-align: center;">
+          <template slot="title">
+           <i class="iconfont i-menu-one"></i>车辆管理
+          </template>
+          <el-menu-item index="/platform/equipment" class="myClass" style="text-align: center;">车辆台账</el-menu-item>
+          <el-menu-item index="/platform/fence" style="text-align: center;">电子围栏</el-menu-item>
+        </el-submenu>
         <el-submenu index="5" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
             <i class="iconfont i-menu-six"></i>实时监测
@@ -201,34 +207,34 @@ export default {
           // console.log("解析->", data);
           const h = this.$createElement;
           let guid = data.guid;
-          this.$notify({
-            title: data.class_type,
-            type: "warning",
-            position: "top-left",
-            dangerouslyUseHTMLString: true,
-            message: h("div", { class: "message" }, [
-              h("div", { class: "btnList" }, [
-                h("span", null, data.alarm_name),
-                h(
-                  "a",
-                  {
-                    class: "later",
-                    on: {
-                      click: () => {
-                        this.$router.push({
-                          path: "/platform/Alarm",
-                          query: {
-                            id: data.ID
-                          }
-                        });
-                      }
-                    }
-                  },
-                  "处理"
-                )
-              ])
-            ])
-          });
+          // this.$notify({
+          //   title: data.class_type,
+          //   type: "warning",
+          //   position: "top-left",
+          //   dangerouslyUseHTMLString: true,
+          //   message: h("div", { class: "message" }, [
+          //     h("div", { class: "btnList" }, [
+          //       h("span", null, data.alarm_name),
+          //       h(
+          //         "a",
+          //         {
+          //           class: "later",
+          //           on: {
+          //             click: () => {
+          //               this.$router.push({
+          //                 path: "/platform/Alarm",
+          //                 query: {
+          //                   id: data.ID
+          //                 }
+          //               });
+          //             }
+          //           }
+          //         },
+          //         "处理"
+          //       )
+          //     ])
+          //   ])
+          // });
         };
       } else {
         console.log("Result2: " + event.data);

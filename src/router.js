@@ -163,6 +163,16 @@ const router = new Router({
             menu: "090302"
           }
         },
+        {
+          path: "fence",
+          component: resolve => require(["@/components/fence"], resolve),
+          meta: {
+            crumbs: ["告警", "告警信息"],
+            title: "告警信息",
+            index: 5,
+            menu: "090302"
+          }
+        },
       ]
     },
     {

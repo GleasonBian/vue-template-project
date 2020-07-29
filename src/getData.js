@@ -434,3 +434,26 @@ export const ComeOnTag = data => fetch("adjusthistory", data, "put");
  * 车辆管理 / 邮箱 / 加油标的列表
  */
 export const getOilMark = data => fetch("adjusthistory", data, "get");
+
+
+/* ----------------------- 电子围栏 -------------------------------*/
+
+/**
+ * 车辆管理 / 电子围栏 / 创建多边形围栏
+ */
+export const fencesPoly = data => fetch("fences/poly", data, "post");
+
+/**
+ * 车辆管理 / 电子围栏 / 创建圆形围栏
+ */
+export const fencesRound = data => fetch("fences/round", data, "post");
+
+/**
+ * 车辆管理 / 电子围栏 / 查询围栏
+ */
+export const fences = data => fetch("fences", data, "get");
+
+/**
+ * 车辆管理 / 电子围栏 / 删除围栏
+ */
+export const fencesDelete = data => fetch("fences", data, "delete");

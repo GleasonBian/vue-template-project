@@ -2,7 +2,7 @@
   <div style="padding:12px">
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
       <el-tab-pane label="汇总" name="first">
-        <div slot="label">
+        <div slot="label" class="tab_pane_slot">
           <el-date-picker
             v-model="date"
             type="daterange"
@@ -143,4 +143,5 @@ export default {
     padding: 0;
     height: 10px;
 }
+
 </style>

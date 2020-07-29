@@ -8,7 +8,7 @@ import "./style/common.less";
 import gtTable from "@/common/gtTable";
 import gtSearch from "@/common/gtSearch";
 import headTop from "@/common/headTop";
-import VueAMap from "vue-amap";
+// import VueAMap from "vue-amap";
 import echarts from "echarts";
 import axios from "axios";
 
@@ -16,23 +16,23 @@ Vue.prototype.$echarts = echarts;
 Vue.use(ElementUI);
 // import qs from 'qs'
 // Vue.use(qs);
-Vue.use(VueAMap);
+// Vue.use(VueAMap);
 
-VueAMap.initAMapApiLoader({
-  key: "26ca8b78bdedf59b713c591f99752df1",
-  plugin: [
-    "AMap.Autocomplete",
-    "AMap.PlaceSearch",
-    "AMap.Scale",
-    "AMap.OverView",
-    "AMap.ToolBar",
-    "AMap.MapType",
-    "AMap.PolyEditor",
-    "AMap.CircleEditor"
-  ],
-  // 默认高德 sdk 版本为 1.4.4
-  v: "1.4.4"
-});
+// VueAMap.initAMapApiLoader({
+//   key: "26ca8b78bdedf59b713c591f99752df1",
+//   plugin: [
+//     "AMap.Autocomplete",
+//     "AMap.PlaceSearch",
+//     "AMap.Scale",
+//     "AMap.OverView",
+//     "AMap.ToolBar",
+//     "AMap.MapType",
+//     "AMap.PolyEditor",
+//     "AMap.CircleEditor"
+//   ],
+//   // 默认高德 sdk 版本为 1.4.4
+//   v: "1.4.4"
+// });
 
 Vue.config.productionTip = false;
 Vue.component("gt-table", gtTable);
@@ -84,28 +84,28 @@ axios.interceptors.request.use(
  */
 axios.interceptors.response.use(
   function (response) {
-    if ("Authorization" in response.headers)
-      sessionStorage["Authorization"] = response.headers.Authorization;
-
+    // console.log(response);
+    // 检查请求 token
+    "Authorization" in response.headers ? sessionStorage["Authorization"] = response.headers.Authorization : '';
+    // 检查本地 token
+    sessionStorage.getItem("Authorization") === null ?   router.replace({path: "/login"}) : '';
+    // 响应 401 返回登录页
     if (response.data.errorCode === 401) {
       Vue.prototype.$message.error(response.data.message);
       router.replace({
         path: "/login"
       });
     }
-
-    if (sessionStorage.getItem("Authorization") === null) {
-      router.replace({
-        path: "/login"
-      });
-    }
-
+    // 关闭 loading
     loading.close();
-
+    // 返回 响应
     return response;
   },
   function (error) {
     loading.close();
+    console.log(error.response);
+    // 响应 400 提示 warning
+    error.response.status === 400 ? Vue.prototype.$message.warning(error.response.data.message) : '';
     if (error.response.status >= 500) {
       Vue.prototype.$message.error("服务异常,稍后重试 !");
     } else if (error.response.status === 401) {

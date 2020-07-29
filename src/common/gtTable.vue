@@ -20,6 +20,7 @@
       :label="col.label"
       align="center"
       header-align="center"
+      :width="col.width?col.width:''"
     >
       <template slot-scope="scope">
         <div class="product-img" v-if="col.type">

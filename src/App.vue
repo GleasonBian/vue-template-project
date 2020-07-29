@@ -9,17 +9,17 @@ export default {
   name: "App",
   provide() {
     return {
-      reload: this.reload
+      reload: this.reload,
     };
   },
   data() {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
     };
   },
   created() {
-    this.$root.TimeTranArrayObject = function(arrayObject) {
-      arrayObject.map(item => {
+    this.$root.TimeTranArrayObject = function (arrayObject) {
+      arrayObject.map((item) => {
         let orderTime = new Date(item.createTime);
         item.createTime =
           orderTime.toLocaleDateString().replace(/\//g, "-") +
@@ -28,7 +28,7 @@ export default {
       });
       return arrayObject;
     };
-    this.$root.createTime = function(createTime) {
+    this.$root.createTime = function (createTime) {
       let orderTime = new Date(createTime);
       createTime =
         orderTime.toLocaleDateString().replace(/\//g, "-") +
@@ -40,11 +40,11 @@ export default {
   methods: {
     reload() {
       this.isRouterAlive = false;
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         this.isRouterAlive = true;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -53,23 +53,25 @@ export default {
 
 @font-face {
   font-family: "iconfont"; /* project id 868569 */
-  src: url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.eot");
-  src: url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.eot?#iefix")
+  src: url("//at.alicdn.com/t/font_868569_dkdoxe0i5n.eot");
+  src: url("//at.alicdn.com/t/font_868569_dkdoxe0i5n.eot?#iefix")
       format("embedded-opentype"),
-    url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.woff2") format("woff2"),
-    url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.woff") format("woff"),
-    url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.ttf") format("truetype"),
-    url("//at.alicdn.com/t/font_868569_ecfmeehg6wq.svg#iconfont") format("svg");
+    url("//at.alicdn.com/t/font_868569_dkdoxe0i5n.woff2") format("woff2"),
+    url("//at.alicdn.com/t/font_868569_dkdoxe0i5n.woff") format("woff"),
+    url("//at.alicdn.com/t/font_868569_dkdoxe0i5n.ttf") format("truetype"),
+    url("//at.alicdn.com/t/font_868569_dkdoxe0i5n.svg#iconfont") format("svg");
 }
 
 .iconfont {
   font-family: "iconfont" !important;
   font-style: normal;
-  color: #cccccc;
+  font-weight: 400;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: baseline;
+  display: inline-block;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 18px;
-  margin-right: 8px;
 }
 
 /*本项目使用的图标 */
@@ -107,5 +109,13 @@ export default {
 }
 .i-menu-six:before {
   content: "\e660";
+}
+/* 多边形 */
+.i-duobianxing:before {
+  content: "\e61c";
+}
+/* 圆形 */
+.i-yuanxing:before {
+  content: "\e613";
 }
 </style>

@@ -318,6 +318,9 @@ export default {
   created() {},
   destroyed() {
     this.websock.close(); //离开路由之后断开websocket连接
+    if (!!this.map) {
+      this.map.destroy();
+    }
   },
   mounted() {
     this.initMap();
@@ -957,7 +960,7 @@ export default {
       };
     }
   },
-  updated() {}
+  updated() {},
 };
 </script>
 
