@@ -55,6 +55,16 @@
         ></gt-table>
       </el-tab-pane>
     </el-tabs>
+    <el-button-group class="btn_vehicle">
+      <el-button
+        type="primary"
+        @click="clickVehicle(index)"
+        v-for="(item,index) in websockVehicle"
+        :key="index"
+        v-show="vehicleShow"
+      >{{item.platenum}}</el-button>
+      <!-- <el-button>wrwrw</el-button> -->
+    </el-button-group>
     <!-- 新增 查看 更新 -->
     <el-dialog
       title="电子创建围栏"
@@ -253,9 +263,7 @@ export default {
           },
         ],
       },
-      /* ----------------- */
-      // 多边形 mark 标点事件
-      polygonMarkClickEvent: null,
+      /* --------多边形--------- */
       // 多边形 mark 点数组
       polygonMarks: [],
       // 多边形 点 数组
@@ -263,11 +271,8 @@ export default {
       // 当前构造的多边形
       polygon: {},
       polygonEditor: null,
-      resPolygon: [],
-      polygonCurrent: {},
-      resNum: 0,
       // 重复点击验证
-      repeatClickVerify: {},
+      noRepeatFence: {},
       polygonListenEvent: {}, //监听事件
       /* ------圆形标记------- */
       circleClickEvent: {}, // 圆形标点事件
@@ -277,6 +282,11 @@ export default {
       mulchType: "polygon", // circular(圆形) / polygon(多边形)
       /* ---------整合----------------- */
       signEvent: {}, // 多边形/圆形全局标点事件
+      /* --------------websock----------- */
+      websockVerify: {}, // 校验对象
+      websockVehicle: {}, // 车辆对象
+      vehicleShow: false,
+      marker: {},
     };
   },
   components: {},
@@ -285,10 +295,12 @@ export default {
     this.fencesHandle();
     this.getCompList();
     this.getEquiList();
+    this.initWebSocket();
   },
 
   mounted() {
     this.initMap();
+    this.vehicleShow = true;
   },
   methods: {
     /**
@@ -339,7 +351,7 @@ export default {
         .then(async () => {
           let res = await fencesDelete({ id: row.gid });
           if (res.status === 200) {
-            that.map.remove(that.repeatClickVerify[row.gid]);
+            that.map.remove(that.noRepeatFence[row.gid]);
             this.$message.success("删除成功");
             this.fencesHandle();
           }
@@ -364,6 +376,7 @@ export default {
       if (res.status !== 200) return;
       this.fencesCreateSuccess();
     },
+
     /**
      * 提交成功处理
      */
@@ -378,24 +391,26 @@ export default {
       "close" in this.circleEditor ? this.polygonEditor.close() : "";
 
       // 圆形 编辑关闭
-      "close" in this.circleEditor? this.circleEditor.close() : '';
+      "close" in this.circleEditor ? this.circleEditor.close() : "";
 
       // 移除监听事件
       AMap.event.removeListener(this.signEvent);
 
       // 清空 覆盖物
       this.map.clearMap();
+      this.noRepeatFence = {};
       // 删除 多余 提交对象
       delete this.form.center;
       delete this.form.radius;
       delete this.form.points;
       this.polygonMarks = [];
       this.polygonPoints = [];
-      this.repeatClickVerify = {};
+      this.noRepeatFence = {};
 
       // 重新 获取围栏列表
       this.fencesHandle();
     },
+
     /**
      * 切换公司 重新查询部门
      */
@@ -407,9 +422,13 @@ export default {
     /**
      * 切换选项清空
      */
-    selectHandle() {
+    selectHandle(val) {
+      
       this.form.belongguid = null;
       this.form.corpguid = null;
+      if (val === '车辆' && Object.keys(this.marker).length !==0 ) 
+        this.form.belongguid = this.marker.w.extData;
+      
     },
 
     /**
@@ -515,7 +534,11 @@ export default {
     signEventHandle() {
       // 清空地图 覆盖物
       this.map.clearMap();
-
+      this.noRepeatFence = {};
+      if (Object.keys(this.marker).length !== 0) {
+        this.marker.setMap(this.map);
+        this.map.setFitView([this.marker]);
+      }
       // 清空保存多边形标点数组
       this.polygonMarks = [];
       this.polygonPoints = [];
@@ -594,11 +617,7 @@ export default {
       );
 
       // 添加 单击右键 回调
-      AMap.event.addListener(
-        this.polygon,
-        "rightclick",
-        this.polygonRightclickCallback
-      );
+      this.RightclickMenu();
 
       // 保存多边形编辑对象
       this.polygonEditor = new AMap.PolyEditor(this.map, this.polygon);
@@ -623,16 +642,6 @@ export default {
       this.form.points = obj;
       // 打开 dialog 框
       this.dialogFormVisible = true;
-    },
-
-    /**
-     * 多边形单击右键回调
-     */
-    polygonRightclickCallback(e) {
-      this.polygonMarks = [];
-      this.polygonPoints = [];
-      this.map.remove(this.polygon);
-      this.polygonEditor.close();
     },
 
     /**
@@ -669,7 +678,7 @@ export default {
 
       // 设置合适大小
       this.map.setFitView([this.circle]);
-      this.circleRightclickMenu();
+      this.RightclickMenu();
       // 圆形编辑
       this.circleEditor = new AMap.CircleEditor(this.map, this.circle);
       this.circleEditor.open();
@@ -683,7 +692,7 @@ export default {
         "dblclick",
         this.circleDblclickHandle
       );
-      
+
       // 半径超范围提示
       this.circleEditor.on("adjust", function (event) {
         if (event.radius > 5000) {
@@ -693,28 +702,44 @@ export default {
     },
 
     /**
-     * 圆形右键菜单
+     * 右键菜单
      */
-    circleRightclickMenu() {
+    RightclickMenu() {
       let that = this;
       var contextMenu = new AMap.ContextMenu();
       contextMenu.addItem(
         "重新编辑",
         function () {
-          that.circleEditor.open();
+          that.mulchType === "polygon"
+            ? that.polygonEditor.open()
+            : that.circleEditor.open();
         },
         0
       );
       contextMenu.addItem(
         "删除",
         function () {
-          console.log("移除");
+          that.polygonMarks = [];
+          that.polygonPoints = [];
+          if (that.mulchType === "polygon") {
+            that.polygonEditor.close();
+            that.map.remove(that.polygon);
+          } else {
+            that.circleEditor.close();
+            that.map.remove(that.circle);
+          }
         },
         1
       );
-      that.circle.on("rightclick", function (e) {
-        contextMenu.open(that.map, e.lnglat);
-      });
+      if (that.mulchType === "polygon") {
+        that.polygon.on("rightclick", function (e) {
+          contextMenu.open(that.map, e.lnglat);
+        });
+      } else {
+        that.circle.on("rightclick", function (e) {
+          contextMenu.open(that.map, e.lnglat);
+        });
+      }
     },
 
     /**
@@ -734,7 +759,6 @@ export default {
      * 查看围栏
      */
     examineFence(index, row) {
-      console.log(row);
       let fence = {};
       if (row.fencetype === "圆形围栏") {
         fence = this.structureCircle(row.center, row.radius);
@@ -742,10 +766,10 @@ export default {
         fence = this.structurePolygon(row.points);
       }
       // 添加到地图上
-      if (row.gid in this.repeatClickVerify) {
+      if (row.gid in this.noRepeatFence) {
         this.map.setFitView([fence]);
       } else {
-        this.repeatClickVerify[row.gid] = fence;
+        this.noRepeatFence[row.gid] = fence;
         this.map.add(fence);
         this.map.setFitView([fence]);
       }
@@ -790,6 +814,79 @@ export default {
       });
       return polygon;
     },
+
+    /* ----------------------------websock--------------------------------------- */
+    initWebSocket() {
+      //初始化weosocket
+      const wsuri = process.env.VUE_APP_SOCKET;
+      // 建立连接
+      this.websock = new WebSocket(wsuri);
+      this.websock.onmessage = this.websocketonmessage;
+      this.websock.onopen = this.websocketonopen;
+      this.websock.onerror = this.websocketonerror;
+      this.websock.onclose = this.websocketclose;
+    },
+    websocketonmessage(event) {
+      //数据接收
+      if (event.data instanceof Blob) {
+        let reader = new FileReader();
+        reader.readAsText(event.data);
+        reader.onload = () => {
+          let data = reader.result;
+          data = eval("(" + data + ")");
+          // console.log("解析->", data);
+          this.websockVehicle[data.guid] = data;
+          this.vehicleShow = true;
+        };
+      } else {
+        console.log("Result2: " + event.data);
+      }
+    },
+    websocketonopen() {
+      //连接建立之后执行send方法发送数据
+      // this.websocketsend("ws/warning");
+    },
+    websocketsend(Data) {
+      console.log("Data:", Data);
+      //数据发送
+      this.websock.send(Data);
+    },
+    websocketonerror() {
+      //连接建立失败重连
+      this.initWebSocket();
+    },
+    websocketclose(e) {
+      //关闭
+      console.log("断开连接", e);
+    },
+
+    /* -----------------websock 车辆信息----------------------- */
+    vehicleHandle() {},
+    clickVehicle(val) {
+      this.map.clearMap();
+      this.noRepeatFence = {};
+      console.log(this.websockVehicle[val].guid);
+      this.form.belongguid = this.websockVehicle[val].guid;
+      this.marker = new AMap.Marker({
+        icon: "https://img-blog.csdnimg.cn/20200514172516537.png",
+        position: [
+          this.websockVehicle[val].longitude,
+          this.websockVehicle[val].latitude,
+        ],
+        offset: new AMap.Pixel(-10, -16),
+        // angle: this.websockVehicle[val].direction, 方向
+        label: {
+          content: `<span>${this.websockVehicle[val].platenum}</span>`, //设置文本标注内容
+          direction: "bottom", //设置文本标注方位
+        },
+        extData: this.websockVehicle[val].guid
+      });
+      this.marker.setMap(this.map);
+      this.map.setFitView([this.marker]);
+    },
+  },
+  updated() {
+    this.vehicleShow = true;
   },
   destroyed() {
     if (!!this.map) {
@@ -816,6 +913,12 @@ export default {
   z-index: 100;
   right: 10px;
   top: 10px;
+}
+.btn_vehicle {
+  position: absolute;
+  z-index: 100;
+  bottom: 10px;
+  left: 10px;
 }
 .fence_tabs {
   position: absolute;

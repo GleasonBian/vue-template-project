@@ -38,13 +38,17 @@
       <el-col style="position:relative;overflow:hidden;" :span="18">
         <div class="grid-content bg-purple">
           <div class="map" id="track-map"></div>
-          <el-button @click="getOverWatch()" class="viewbtn" type="primary">总览</el-button>
-          <el-button @click="closeLine" class="viewline">清空轨迹</el-button>
-          <el-button
-            @click="showBox"
-            class="viewTotal"
-            :type="showView?'primary':'info'"
-          >{{viewBtn}}</el-button>
+          <el-dropdown class="viewbtn" @command="handleCommand">
+            <el-button type="primary">
+              {{dropdownText}}
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item   command="总览">总览</el-dropdown-item>
+              <el-dropdown-item  :command="viewBtn">{{viewBtn}}</el-dropdown-item>
+              <el-dropdown-item  command="清空轨迹">清空轨迹</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
           <div class="card" :class="{'active':showView}">
             <el-card v-if="totalView" class="box-card">
               <div class="clearfix">
@@ -246,18 +250,19 @@
 <script>
 var infoWindow = new AMap.InfoWindow({
   isCustom: true, //使用自定义窗体
-  offset: new AMap.Pixel(0, -30)
+  offset: new AMap.Pixel(0, -30),
 });
 import {
   equiSelect, //设备列表
   allCollect, // 全部
   singleCollect, // 单个
-  overview //设备概览
+  overview, //设备概览
 } from "@/getData";
 export default {
   name: "dashboard",
   data() {
     return {
+      dropdownText: '总览',
       totalView: true,
       clickEdit: false,
       viewBtn: "隐藏信息",
@@ -267,33 +272,33 @@ export default {
         alarm: {
           CurNum: "",
           MonthNum: "",
-          YearNum: ""
+          YearNum: "",
         },
         oil: {
           CurNum: "",
           MonthNum: "",
-          YearNum: ""
+          YearNum: "",
         },
         assignment: {
           CurNum: "",
           MonthNum: "",
-          YearNum: ""
+          YearNum: "",
         },
         travel: {
           CurNum: "",
           MonthNum: "",
-          YearNum: ""
+          YearNum: "",
         },
         fix: {
           CurNum: "",
           MonthNum: "",
-          YearNum: ""
+          YearNum: "",
         },
         maintain: {
           CurNum: "",
           MonthNum: "",
-          YearNum: ""
-        }
+          YearNum: "",
+        },
       },
       showLine: false,
       lineId: "",
@@ -303,14 +308,14 @@ export default {
       tableData: [], //设备列表
       markers: [
         {
-          position: [112.868357, 36.860426]
-        }
+          position: [112.868357, 36.860426],
+        },
       ],
       zoom: 13,
       center: [112.860257, 36.860496],
       total: {},
       single: {},
-      websock: null
+      websock: null,
     };
   },
   components: {},
@@ -328,6 +333,14 @@ export default {
     this.getOverWatch();
   },
   methods: {
+    handleCommand (command) {
+      this.dropdownText = command;
+      switch (command) {
+        case '总览' : this.getOverWatch(); break;
+        case '清空轨迹' : this.closeLine(); break;
+        default : this.showBox();
+      }
+    },
     goHistory(id) {
       this.$router.push({ path: "/track/" + id });
     },
@@ -336,11 +349,12 @@ export default {
       this.showView ? (this.viewBtn = "隐藏信息") : (this.viewBtn = "详细信息");
     },
     async getOverWatch(id) {
+      this.showView = true;
       // console.log(id);
       let res = null;
       if (id) {
         res = await overview({ param: { id: id } });
-        console.log(res.data);
+        // console.log(res.data);
         this.totalView = false; //展示单台车辆信息
       } else {
         this.totalView = true; //显示总览车辆台数
@@ -359,7 +373,7 @@ export default {
           child.removeNode.push({
             parent: child[i].parentNode,
             inner: child[i].outerHTML,
-            next: child[i].nextSibling
+            next: child[i].nextSibling,
           });
         }
         for (var i = 0; i < len; i++) {
@@ -369,7 +383,7 @@ export default {
         child.removeNode.push({
           parent: child.parentNode,
           inner: child.outerHTML,
-          next: child.nextSibling
+          next: child.nextSibling,
         });
         child.parentNode.removeChild(child);
       }
@@ -400,7 +414,7 @@ export default {
               content:
                 '<img src="https://img-blog.csdnimg.cn/20200520160316104.png" style="width:20px" class="custom-content-marker">',
               // 以 icon 的 [center bottom] 为原点
-              offset: new AMap.Pixel(-24, -30)
+              offset: new AMap.Pixel(-24, -30),
             });
             this.map.add(marker);
             break;
@@ -421,15 +435,18 @@ export default {
       this.map = new AMap.Map("track-map", {
         zoom: 8, //级别
         center: [112.866504, 36.860657], //中心点坐标
-        resizeEnable: true
+        resizeEnable: true,
       });
 
       // 插件
-      AMap.plugin(["AMap.ToolBar", "AMap.Scale", "AMap.GraspRoad"], function() {
-        that.map.addControl(new AMap.ToolBar());
-        that.map.addControl(new AMap.Scale());
-        that.map.addControl(new AMap.GraspRoad());
-      });
+      AMap.plugin(
+        ["AMap.ToolBar", "AMap.Scale", "AMap.GraspRoad"],
+        function () {
+          that.map.addControl(new AMap.ToolBar());
+          that.map.addControl(new AMap.Scale());
+          that.map.addControl(new AMap.GraspRoad());
+        }
+      );
       this.initWebSocket();
       // console.log("map");
       // console.log(AMap);
@@ -509,64 +526,17 @@ export default {
       for (var j = 0; j < nPath123.length; j++) {
         n_path.push(new AMap.LngLat(nPath123[j][0], nPath123[j][1]));
       }
-      // console.log(nPath123.length);
-      // console.log(n_path);
-      // let pathParam = {
-      //   x: data.longitude,
-      //   y: data.latitude,
-      //   sp: data.speed,
-      //   ag: data.direction,
-      //   tm: Date.parse(data.gpstime)
-      // };
-      // newPath123.push(pathParam);
-      // let graspRoad = new AMap.GraspRoad(); //行驶轨迹
-      // console.log("graspRoad", graspRoad);
-      // graspRoad.driving(nPath123, function(error, result) {
-      //   //行驶轨迹
-      //   console.log("result", result);
-      //   console.log("err", error);
-      //   if (!error) {
-      //     var path2 = [];
-      //     var newPath = result.data.points;
 
-      //     for (var i = 0; i < newPath.length; i += 1) {
-      //       path2.push([newPath[i].x, newPath[i].y]);
-      //     }
-      //     var newLine = new AMap.Polyline({
-      //       path: path2,
-      //       strokeWeight: 8,
-      //       strokeOpacity: 0.8,
-      //       strokeColor: "#0091ea",
-      //       showDir: true
-      //     });
-      //     that.map.add(newLine);
-      //     that.map.setFitView();
-      //   }
-      // });
       this.map.remove(this.map.getAllOverlays("polyline"));
 
       var polyline = new AMap.Polyline({
-        // path: nPath123,
-        // isOutline: true,
-        // outlineColor: '#ffeeff',
-        // borderWeight: 3,
-        // strokeColor: "#3366FF",
-        // strokeOpacity: 1,
-        // strokeWeight: 6,
-        // // // 折线样式还支持 'dashed'
-        // strokeStyle: "solid",
-        // strokeStyle是dashed时有效
-        // strokeDasharray: [10, 5],
-        // lineJoin: "round",
-        // lineCap: "round",
-        // zIndex: 50,
         path: n_path, //设置线覆盖物路径
         strokeColor: "#34a034", //线颜色
         strokeOpacity: 1, //线透明度
         strokeWeight: 8, //线宽
         strokeStyle: "solid", //线样式
         showDir: true,
-        strokeDasharray: [10, 5] //补充线样式
+        strokeDasharray: [10, 5], //补充线样式
       });
       polyline.setMap(this.map);
     },
@@ -636,7 +606,7 @@ export default {
                   icon: "https://img-blog.csdnimg.cn/20200514172516537.png",
                   offset: new AMap.Pixel(-10, -16),
                   angle: data.direction,
-                  extData: data
+                  extData: data,
                 };
                 this.marks.push(mark);
 
@@ -644,18 +614,9 @@ export default {
                 let markPath = {
                   guid: data.guid,
                   path: [],
-                  // path: [
-                  //   {
-                  //     x: data.longitude,
-                  //     y: data.latitude,
-                  //     sp: data.speed,
-                  //     ag: data.direction,
-                  //     tm: data.gpstime
-                  //   }
-                  // ],
                   gpstime: data.gpstime,
                   speed: data.speed,
-                  direction: data.direction
+                  direction: data.direction,
                 };
                 markPath.path.push(pos);
                 this.path.push(markPath);
@@ -668,7 +629,7 @@ export default {
               icon: "https://img-blog.csdnimg.cn/20200514172516537.png",
               offset: new AMap.Pixel(-10, -16),
               angle: data.direction,
-              extData: data
+              extData: data,
             };
 
             this.marks.push(mark);
@@ -678,7 +639,7 @@ export default {
               path: [],
               gpstime: data.gpstime,
               speed: data.speed,
-              direction: data.direction
+              direction: data.direction,
             };
             markPath.path.push(pos);
             this.path.push(markPath);
@@ -688,7 +649,6 @@ export default {
           for (var j = 0; j < this.marks.length; j++) {
             //实例化所有点标记
             let point = new AMap.Marker(this.marks[j]);
-            // point.content = "guid : " + this.marks[j].guid;
             let title =
               that.marks[j].extData.name +
               " &nbsp;&nbsp; " +
@@ -804,7 +764,7 @@ export default {
             //     "L" +
             //     "</div>"
             // );
-            point.on("click", function(e) {
+            point.on("click", function (e) {
               infoWindow.setContent(
                 that.createInfoWindow(title, content.join(""))
               );
@@ -956,9 +916,9 @@ export default {
       );
       return {
         title,
-        content
+        content,
       };
-    }
+    },
   },
   updated() {},
 };
