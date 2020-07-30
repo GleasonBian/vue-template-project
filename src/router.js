@@ -52,6 +52,17 @@ const router = new Router({
           }
         },
         {
+          path: "/vehicleDetails",
+          name: "vehicleDetails",
+          component: resolve => require(["@/components/vehicleDetails"], resolve),
+          meta: {
+            crumbs: ["车辆", "车辆详情"],
+            title: "车辆详情",
+            index: 144,
+            menu: "090302"
+          }
+        },
+        {
           path: "companyList",
           component: resolve => require(["@/components/platform/companyList"], resolve),
           meta: {

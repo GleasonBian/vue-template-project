@@ -4,57 +4,28 @@
       <span class="xxx" @click="closedialog($event)">×</span>
       <div style="width:80vw; height:500px" ref="chart"></div>
     </div>
+    <div style="position: absolute; z-index:100; left:20px">
+      <el-date-picker v-model="date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" @change="currentHandle"></el-date-picker>
+      <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle">统计</el-button>
+    </div>
 
-    <el-col :span="5" align="center">
-      <el-select
-        v-model="eqid"
-        @change="historyTrackHandle()"
-        placeholder="请选择设备"
-        style="width:90%;margin-top:20px"
-      >
-        <el-option
-          v-for="item in vehicleData"
-          :key="item.guid"
-          :label=" item.plateno"
-          :value="item.guid"
-        ></el-option>
-      </el-select>
-      <el-calendar v-model="date">
-        <template slot="dateCell" slot-scope="{date, data}">
-          <div
-            @click="currentHandle(data)"
-            style="text-align:center;"
-            class="calendar_style"
-            :class="data.isSelected ? 'is-selected' : ''"
-          >{{ data.day.split('-').slice(2).join('-')}} {{ data.isSelected ? '✔️' : ''}}</div>
-        </template>
-      </el-calendar>
-    </el-col>
-    <el-col :span="19" align="center">
-      <div style="position: absolute; z-index:100">
-        <!-- <el-button-group> -->
-        <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle">统计</el-button>
-        <!-- <el-button type="primary" icon="el-icon-s-platform"></el-button> -->
-        <!-- </el-button-group> -->
+    <div class="map" id="hismap"></div>
+    <div class="input-card">
+      <h4>轨迹回放控制</h4>
+      <div class="input-item">
+        <input type="button" class="btn" value="开始动画" id="start" @click="startAnimation()" />
+        <input type="button" class="btn" value="显示信息" id=" speed" @click="showInfo()" />
       </div>
-
-      <div class="map" id="hismap"></div>
-      <div class="input-card">
-        <h4>轨迹回放控制</h4>
-        <div class="input-item">
-          <input type="button" class="btn" value="开始动画" id="start" @click="startAnimation()" />
-          <input type="button" class="btn" value="显示信息" id=" speed" @click="showInfo()" />
-        </div>
-        <div class="input-item">
-          <input type="button" class="btn" value="暂停动画" id="pause" @click="pauseAnimation()" />
-          <input type="button" class="btn" value="继续动画" id="resume" @click="resumeAnimation()" />
-        </div>
-        <div class="input-item">
-          <input type="button" class="btn" value="加速" id="start" @click="startAdd()" />
-          <input type="button" class="btn" value="减速" id=" speed" @click="startRed()" />
-        </div>
+      <div class="input-item">
+        <input type="button" class="btn" value="暂停动画" id="pause" @click="pauseAnimation()" />
+        <input type="button" class="btn" value="继续动画" id="resume" @click="resumeAnimation()" />
       </div>
-    </el-col>
+      <div class="input-item">
+        <input type="button" class="btn" value="加速" id="start" @click="startAdd()" />
+        <input type="button" class="btn" value="减速" id=" speed" @click="startRed()" />
+      </div>
+    </div>
+    <!-- </el-col> -->
   </el-row>
 </template>
 
@@ -88,11 +59,11 @@ export default {
       curmiles: [], // 里程
       curoilconsume: [], // 油耗
       speed: [], //速度
-      totaloilconsume: [] // 总油耗
+      totaloilconsume: [], // 总油耗
     };
   },
   created() {
-    this.eqid = this.$route.params.id;
+    this.eqid = this.$route.query.id;
     this.equiList();
     this.historyTrackHandle();
   },
@@ -106,12 +77,12 @@ export default {
       this.map = new AMap.Map("hismap", {
         zoom: 8, //级别
         center: [112.866504, 36.860657], //中心点坐标
-        resizeEnable: true
+        resizeEnable: true,
       });
       // 创建信息展示框
       this.carWindow = new AMap.InfoWindow({
         offset: new AMap.Pixel(6, -25),
-        content: ""
+        content: "",
       });
       // 插件
       // AMap.plugin(["AMap.ToolBar", "AMap.Scale", "AMap.GraspRoad"], function() {
@@ -131,7 +102,7 @@ export default {
         showDir: true,
         strokeColor: "#28F", //线颜色
         // strokeOpacity: 1,     //线透明度
-        strokeWeight: 6 //线宽
+        strokeWeight: 6, //线宽
         // strokeStyle: "solid"  //线样式
       });
       //绘制路过了的轨迹
@@ -140,10 +111,10 @@ export default {
         strokeColor: "#AF5", //线颜色
         //path: this.lineArr,
         // strokeOpacity: 1,     //线透明度
-        strokeWeight: 6 //线宽
+        strokeWeight: 6, //线宽
         // strokeStyle: "solid"  //线样式
       });
-      this.marker.on("moving", e => {
+      this.marker.on("moving", (e) => {
         //获取已经经过点的长度
         this.passedLineLength = e.passedPath.length;
         //已经经过的点
@@ -151,7 +122,7 @@ export default {
         passedPolyline.setPath(e.passedPath);
       });
       // 信息框随车辆移动
-      AMap.event.addListener(this.marker, "moving", function(e) {
+      AMap.event.addListener(this.marker, "moving", function (e) {
         var lastLocation = e.passedPath[e.passedPath.length - 1];
         that.carWindow.setPosition(lastLocation);
         that.setInfoContent(lastLocation);
@@ -171,7 +142,7 @@ export default {
       this.passLineArr = [];
       this.map.clearMap();
 
-      this.hisData.map(val => {
+      this.hisData.map((val) => {
         this.lineArr.push(new AMap.LngLat(val.longitude, val.latitude));
       });
       this.map.setZoomAndCenter(18, this.lineArr[0]); //设置地图中心
@@ -185,7 +156,7 @@ export default {
       //终点
       new AMap.Marker({
         map: this.map,
-        position: this.lineArr[this.lineArr.length-1],
+        position: this.lineArr[this.lineArr.length - 1],
         icon: "https://img-blog.csdnimg.cn/20200529153800221.png",
         autoRotation: true,
       });
@@ -195,7 +166,7 @@ export default {
         icon: "https://webapi.amap.com/images/car.png",
         offset: new AMap.Pixel(-26, -13),
         autoRotation: true,
-        angle: -90
+        angle: -90,
       });
 
       this.map.add(this.marker);
@@ -242,7 +213,7 @@ export default {
 
       if (this.lineArr.length < this.hisData.length) {
         this.lineArr = [];
-        this.hisData.map(val => {
+        this.hisData.map((val) => {
           this.lineArr.push(new AMap.LngLat(val.longitude, val.latitude));
         }); //搞一个和之前数组一样的代码
         this.initroad();
@@ -260,7 +231,7 @@ export default {
         showDir: true,
         strokeColor: "#AF5", //线颜色--绿色的线
         // strokeOpacity: 1,     //线透明度
-        strokeWeight: 6 //线宽
+        strokeWeight: 6, //线宽
         // strokeStyle: "solid"  //线样式
       });
       //截取未运动的点
@@ -277,7 +248,7 @@ export default {
         strokeColor: "#28F", //线颜色--蓝色的线
         strokeOpacity: 1, //线透明度
         strokeWeight: 6, //线宽
-        strokeStyle: "solid" //线样式
+        strokeStyle: "solid", //线样式
       });
       //绘制运动过了的轨迹
       var newPassedPolyline = new AMap.Polyline({
@@ -286,9 +257,9 @@ export default {
         // path: this.lineArr,
         strokeOpacity: 1, //线透明度
         strokeWeight: 6, //线宽
-        strokeStyle: "solid" //线样式
+        strokeStyle: "solid", //线样式
       });
-      this.marker.on("moving", e => {
+      this.marker.on("moving", (e) => {
         this.passedLineLength = e.passedPath.length;
         this.havePassedLine = e.passedPath;
         newPassedPolyline.setPath(e.passedPath);
@@ -313,7 +284,7 @@ export default {
         showDir: true,
         strokeColor: "#AF5", //线颜色--绿色的线
         // strokeOpacity: 1,     //线透明度
-        strokeWeight: 6 //线宽
+        strokeWeight: 6, //线宽
         // strokeStyle: "solid"  //线样式
       });
       //截取未运动的点
@@ -330,7 +301,7 @@ export default {
         strokeColor: "#28F", //线颜色--蓝色的线
         strokeOpacity: 1, //线透明度
         strokeWeight: 6, //线宽
-        strokeStyle: "solid" //线样式
+        strokeStyle: "solid", //线样式
       });
       //绘制运动过了的轨迹
       var newPassedPolyline = new AMap.Polyline({
@@ -339,9 +310,9 @@ export default {
         // path: this.lineArr,
         strokeOpacity: 1, //线透明度
         strokeWeight: 6, //线宽
-        strokeStyle: "solid" //线样式
+        strokeStyle: "solid", //线样式
       });
-      this.marker.on("moving", e => {
+      this.marker.on("moving", (e) => {
         this.passedLineLength = e.passedPath.length;
         this.havePassedLine = e.passedPath;
         newPassedPolyline.setPath(e.passedPath);
@@ -376,8 +347,8 @@ export default {
     /*
      ** 点击日历 获取选中时间
      */
-    currentHandle(data) {
-      this.formDate = data.day;
+    currentHandle(date) {
+      this.formDate = date;
       this.historyTrackHandle();
     },
     /*
@@ -387,7 +358,7 @@ export default {
       let res = null;
       if (this.formDate) {
         res = await history({
-          param: { id: this.eqid, start: this.formDate + " 00:00:00" }
+          param: { id: this.eqid, start: this.formDate + " 00:00:00" },
         });
       } else {
         res = await history({ param: { id: this.eqid } });
@@ -416,48 +387,48 @@ export default {
       let option = {
         title: {
           text: "油耗统计",
-          left: "center"
+          left: "center",
         },
         tooltip: {
           trigger: "axis",
           textStyle: {
-            align: "left"
-          }
+            align: "left",
+          },
         },
         legend: {
           data: ["总油耗", "油耗", "里程", "速度"],
           align: "left", //水平方向位置
           verticalAlign: "top", //垂直方向位置
           x: 100, //距离x轴的距离
-          y: 0 //距离Y轴的距离
+          y: 0, //距离Y轴的距离
         },
         toolbox: {
           show: true,
           feature: {
             magicType: {
               type: ["line", "bar"],
-              show: true
+              show: true,
             },
             dataZoom: {
-              show: true
+              show: true,
             },
             dataView: {
-              show: true
+              show: true,
             },
             restore: {
-              show: true
+              show: true,
             },
             saveAsImage: {
-              show: true
-            }
-          }
+              show: true,
+            },
+          },
         },
         calculable: true,
         grid: {
           left: "3%",
           right: "3%",
           bottom: "3%",
-          containLabel: true
+          containLabel: true,
         },
         dataZoom: [
           {
@@ -467,53 +438,53 @@ export default {
             top: 30,
             start: 10,
             end: 90,
-            height: 20 //初始化滚动条
-          }
+            height: 20, //初始化滚动条
+          },
         ],
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: this.gpstime
+          data: this.gpstime,
         },
         yAxis: {
-          type: "value"
+          type: "value",
         },
         series: [
           {
             name: "总油耗",
             type: "line",
             stack: "总量",
-            data: this.totaloilconsume
+            data: this.totaloilconsume,
           },
           {
             name: "油耗",
             type: "line",
             stack: "总量",
-            data: this.curoilconsume
+            data: this.curoilconsume,
           },
           {
             name: "里程",
             type: "line",
             stack: "总量",
-            data: this.curmiles
+            data: this.curmiles,
           },
           {
             name: "速度",
             type: "line",
             stack: "总量",
-            data: this.speed
-          }
-        ]
+            data: this.speed,
+          },
+        ],
       };
       myChart.setOption(option);
-      window.onresize = function() {
+      window.onresize = function () {
         myChart.resize();
       };
     },
     closedialog(e) {
       this.dialogTableVisible = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -527,11 +498,11 @@ export default {
   cursor: pointer;
 }
 .echarts_style {
-  width: 80vw;
+  width: 79vw;
   height: 500px;
   position: absolute;
   z-index: 100;
-  top: 0;
+  top: 50px;
   right: 0;
   left: 0;
   bottom: 0;
@@ -544,7 +515,7 @@ export default {
   text-align: right;
 }
 #hismap {
-  height: 93vh;
+  height: 79vh;
 }
 .input-card {
   display: flex;

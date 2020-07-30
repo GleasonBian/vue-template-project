@@ -27,7 +27,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="历史轨迹" align="center">
+            <el-table-column label="车辆详情" align="center">
               <template slot-scope="scope">
                 <el-link type="primary" @click="goHistory(scope.row.guid)">查看</el-link>
               </template>
@@ -438,7 +438,13 @@ export default {
       }
     },
     goHistory(id) {
-      this.$router.push({ path: "/track/" + id });
+      // this.$router.push({ path: "/track/" + id });
+      this.$router.push({
+        path: "vehicleDetails",
+        query: {
+          id: id,
+        },
+      });
     },
     showBox() {
       this.showView = !this.showView;
