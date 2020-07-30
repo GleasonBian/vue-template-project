@@ -16,7 +16,7 @@
             style="padding: 0px"
           ></el-date-picker>
         </div>
-
+        <el-button @click="exportHandle" type="success" style="margin-bottom:12px">导出</el-button>
         <el-table size="mini" :data="equipsummaryAllData" :header-row-style="iHeaderRowStyle">
           <el-table-column align="center" header-align="center" type="index" label="序号" width="50"></el-table-column>
           <el-table-column prop="plateno" label="车牌" align="center" header-align="center"></el-table-column>
@@ -31,8 +31,18 @@
             <el-table-column prop="auxoilcost" label="附属油(元)" align="center" header-align="center"></el-table-column>
           </el-table-column>
           <el-table-column prop="leasecost" label="零星台班" align="center" header-align="center"></el-table-column>
-          <el-table-column prop="specificoilcon" label="单位油耗(L/趟)" align="center" header-align="center"></el-table-column>
-          <el-table-column prop="specificothercon" label="单位轮胎(号)" align="center" header-align="center"></el-table-column>
+          <el-table-column
+            prop="specificoilcon"
+            label="单位油耗(L/趟)"
+            align="center"
+            header-align="center"
+          ></el-table-column>
+          <el-table-column
+            prop="specificothercon"
+            label="单位轮胎(号)"
+            align="center"
+            header-align="center"
+          ></el-table-column>
 
           <el-table-column prop="remark" label="备注" align="center" header-align="center"></el-table-column>
         </el-table>
@@ -91,9 +101,11 @@ export default {
   },
   methods: {
     handleClick(tab, event) {
-        console.log(tab.index);
-        if (tab.index != 0)
-            this.EquipmentSummaryList({ equipid: this.equiData[tab.index - 1].guid });
+      console.log(tab.index);
+      if (tab.index != 0)
+        this.EquipmentSummaryList({
+          equipid: this.equiData[tab.index - 1].guid,
+        });
     },
     /*
      ** 设备列表
@@ -114,34 +126,35 @@ export default {
       this.equipsummaryAllData = res.data;
     },
     dateChange(val) {
-        console.log('111')
-        val[1] = val[1].replace("00:00:00", "23:59:59");
-        let search = {};
-        search.start = val[0];
-        search.end = val[1];
-        this.equipsummaryAllHandle(search);
+      console.log("111");
+      val[1] = val[1].replace("00:00:00", "23:59:59");
+      let search = {};
+      search.start = val[0];
+      search.end = val[1];
+      this.equipsummaryAllHandle(search);
     },
     iHeaderRowStyle: function ({ row, rowIndex }) {
       return "height:10px";
     },
+    exportHandle() {
+      window.open(process.env.VUE_APP_URL + `equipsummary/export`);
+    },
   },
   watch: {
     date: {
-　　　　deep: true,//深度监听
-　　　　handler: function() {
-　　　　　　this.dateChange(this.date);
-　　　　}
-　　}
-},
+      deep: true, //深度监听
+      handler: function () {
+        this.dateChange(this.date);
+      },
+    },
+  },
 };
 </script>
 
 <style>
-
 .el-table__header tr,
-  .el-table__header th {
-    padding: 0;
-    height: 10px;
+.el-table__header th {
+  padding: 0;
+  height: 10px;
 }
-
 </style>

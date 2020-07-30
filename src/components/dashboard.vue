@@ -44,9 +44,10 @@
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item   command="总览">总览</el-dropdown-item>
-              <el-dropdown-item  :command="viewBtn">{{viewBtn}}</el-dropdown-item>
-              <el-dropdown-item  command="清空轨迹">清空轨迹</el-dropdown-item>
+              <el-dropdown-item command="总览信息">总览信息</el-dropdown-item>
+              <el-dropdown-item :command="viewBtn">{{viewBtn}}</el-dropdown-item>
+              <el-dropdown-item :command="fenceBtnText">{{fenceBtnText}}</el-dropdown-item>
+              <el-dropdown-item command="清空轨迹">清空轨迹</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <div class="card" :class="{'active':showView}">
@@ -68,20 +69,17 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <!-- <span class="card_main">2</span> -->
                   <span class="card_main">{{parseInt(viewData.maintain.CurNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <!-- <span class="card_col_main">23</span> -->
                     <span class="card_col_main">{{parseInt(viewData.maintain.MonthNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <!-- <span class="card_col_main">255</span> -->
                     <span class="card_col_main">{{parseInt(viewData.maintain.YearNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
@@ -96,20 +94,17 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <!-- <span class="card_main">1</span> -->
                   <span class="card_main">{{parseInt(viewData.fix.CurNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <!-- <span class="card_col_main">2</span> -->
                     <span class="card_col_main">{{parseInt(viewData.fix.MonthNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <!-- <span class="card_col_main">12</span> -->
                     <span class="card_col_main">{{parseInt(viewData.fix.YearNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
@@ -124,20 +119,17 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <!-- <span class="card_main" style="color:red">0</span> -->
                   <span class="card_main" style="color:red">{{parseInt(viewData.alarm.CurNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <!-- <span class="card_col_main">5</span> -->
                     <span class="card_col_main">{{parseInt(viewData.alarm.MonthNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <!-- <span class="card_col_main">100</span> -->
                     <span class="card_col_main">{{parseInt(viewData.alarm.YearNum)||0}}</span>
                     <span class="card_minor">次</span>
                   </div>
@@ -154,14 +146,12 @@
               <div class="card_content">
                 <div>
                   <span class="card_minor">今日</span>
-                  <!-- <span class="card_main">113</span> -->
                   <span class="card_main">{{(parseFloat(viewData.travel.CurNum)||0).toFixed(2)}}</span>
                   <span class="card_minor">公里</span>
                 </div>
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <!-- <span class="card_col_main">1230</span> -->
                     <span
                       class="card_col_main"
                     >{{(parseFloat(viewData.travel.MonthNum)||0).toFixed(2)}}</span>
@@ -169,7 +159,6 @@
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <!-- <span class="card_col_main">14256</span> -->
                     <span
                       class="card_col_main"
                     >{{(parseFloat(viewData.travel.YearNum)||0).toFixed(2)}}</span>
@@ -195,7 +184,6 @@
                 <div>
                   <div class="card_row">
                     <span class="card_minor">本月</span>
-                    <!-- <span class="card_col_main">3521</span> -->
                     <span
                       class="card_col_main"
                     >{{(parseFloat(viewData.oil.MonthNum)||0).toFixed(2)}}</span>
@@ -203,14 +191,18 @@
                   </div>
                   <div class="card_row">
                     <span class="card_minor">年度</span>
-                    <!-- <span class="card_col_main">53412</span> -->
                     <span class="card_col_main">{{(parseFloat(viewData.oil.YearNum)||0).toFixed(2)}}</span>
                     <span class="card_minor">升</span>
                   </div>
                 </div>
               </div>
             </el-card>
-            <!-- <el-card class="bottom_card">
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <!-- 
+              <el-card class="bottom_card">
               <div class="clearfix">
                 <span class="card_title">作业时长</span>
                 <div class="card_void"></div>
@@ -239,11 +231,8 @@
                   </div>
                 </div>
               </div>
-            </el-card>-->
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+            </el-card>
+    -->
   </div>
 </template>
 
@@ -257,17 +246,21 @@ import {
   allCollect, // 全部
   singleCollect, // 单个
   overview, //设备概览
+  fences,
 } from "@/getData";
 export default {
   name: "dashboard",
   data() {
     return {
-      dropdownText: '总览',
+      dropdownText: "总览信息",
       totalView: true,
       clickEdit: false,
-      viewBtn: "隐藏信息",
+      viewBtn: "隐藏监测",
+      fenceBtnText: "隐藏围栏",
       showView: true,
       map: null,
+      fenceData: [], // 围栏信息
+      noRepeatFence: {},
       viewData: {
         alarm: {
           CurNum: "",
@@ -320,7 +313,9 @@ export default {
   },
   components: {},
   computed: {},
-  created() {},
+  created() {
+    // this.fencesHandle();
+  },
   destroyed() {
     this.websock.close(); //离开路由之后断开websocket连接
     if (!!this.map) {
@@ -331,14 +326,115 @@ export default {
     this.initMap();
     // this.equiList();
     this.getOverWatch();
+    this.getFenceHandle();
   },
   methods: {
-    handleCommand (command) {
+    /**
+     * 围栏列表
+     */
+    async getFenceHandle() {
+      if (this.fenceData.length === 0) {
+        const res = await fences();
+        this.fenceData = res.data;
+      }
+      this.fenceData.map((item, index) => {
+        this.fencesHandle(index, item);
+      });
+    },
+
+    /**
+     * 查看围栏
+     */
+    fencesHandle(index, row) {
+      let fence = {};
+      if (row.fencetype === "圆形围栏") {
+        fence = this.structureCircle(row.center, row.radius);
+      } else {
+        fence = this.structurePolygon(row.points);
+      }
+      // 添加到地图上
+      if (row.gid in this.noRepeatFence) {
+        this.map.setFitView([fence]);
+      } else {
+        this.noRepeatFence[row.gid] = fence;
+        this.map.add(fence);
+        this.map.setFitView([fence]);
+      }
+    },
+
+    /**
+     * 圆形构造
+     */
+    structureCircle(center, radius) {
+      var circle = new AMap.Circle({
+        center: [center.lng, center.lat],
+        radius: Number(radius), //半径
+        borderWeight: 3,
+        strokeColor: "#FF33FF",
+        strokeWeight: 6,
+        strokeOpacity: 0.2,
+        fillOpacity: 0.4,
+        strokeStyle: "dashed",
+        strokeDasharray: [10, 10],
+        fillColor: "#1791fc",
+        zIndex: 50,
+      });
+      return circle;
+    },
+
+    /**
+     * 多边形构造
+     */
+    structurePolygon(param) {
+      let path = [];
+      // 构造路径
+      param.map((item) => path.push([item.lng, item.lat]));
+      // 构造多边形
+      var polygon = new AMap.Polygon({
+        path: path,
+        strokeColor: "#FF33FF",
+        strokeWeight: 6,
+        strokeOpacity: 0.2,
+        fillOpacity: 0.4,
+        fillColor: "#1791fc",
+        zIndex: 50,
+      });
+      return polygon;
+    },
+    /**
+     * 多边形构造
+     */
+    handleCommand(command) {
       this.dropdownText = command;
       switch (command) {
-        case '总览' : this.getOverWatch(); break;
-        case '清空轨迹' : this.closeLine(); break;
-        default : this.showBox();
+        case "总览信息":
+          this.getOverWatch();
+          break;
+        case "清空轨迹":
+          this.closeLine();
+          break;
+        case "查看围栏":
+          this.examineFenceHandle();
+          break;
+        case "隐藏围栏":
+          this.hiddenFenceHandle();
+          break;
+        default:
+          this.showBox();
+      }
+    },
+
+    hiddenFenceHandle() {
+      this.fenceBtnText = "查看围栏";
+      for (var i in this.noRepeatFence) {
+        this.noRepeatFence[i].hide();
+      }
+    },
+
+    examineFenceHandle() {
+      this.fenceBtnText = "隐藏围栏";
+      for (var i in this.noRepeatFence) {
+        this.noRepeatFence[i].show();
       }
     },
     goHistory(id) {
@@ -346,10 +442,11 @@ export default {
     },
     showBox() {
       this.showView = !this.showView;
-      this.showView ? (this.viewBtn = "隐藏信息") : (this.viewBtn = "详细信息");
+      this.showView ? (this.viewBtn = "隐藏监测") : (this.viewBtn = "查看监测");
     },
     async getOverWatch(id) {
       this.showView = true;
+      this.examineFenceHandle();
       // console.log(id);
       let res = null;
       if (id) {
@@ -357,7 +454,7 @@ export default {
         // console.log(res.data);
         this.totalView = false; //展示单台车辆信息
       } else {
-        this.totalView = true; //显示总览车辆台数
+        this.totalView = true; //显示总览信息车辆台数
         res = await overview();
       }
       //设备列表
