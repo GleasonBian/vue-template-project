@@ -1,32 +1,52 @@
 <template>
-  <el-row :gutter="10">
-    <div class="echarts_style" v-show="dialogTableVisible">
+  <el-container>
+    <el-aside>
+      <el-date-picker
+        v-model="date"
+        type="date"
+        placeholder="选择日期"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        @change="currentHandle"
+        style="width:100%"
+      ></el-date-picker>
+      <gt-table
+        :tableData="vehicleData"
+        style="width: 100%"
+         :optionWidth="60"
+        :columns="columns"
+        :selection="false"
+        v-on:historyTrackHandle="historyTrackHandle"
+        :handle="handle"
+        size="mini"
+      ></gt-table>
+    </el-aside>
+      <el-main>
+         <div class="echarts_style" v-show="dialogTableVisible">
       <span class="xxx" @click="closedialog($event)">×</span>
       <div style="width:80vw; height:500px" ref="chart"></div>
     </div>
-    <div style="position: absolute; z-index:100; left:5px">
-      <el-date-picker v-model="date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" @change="currentHandle"></el-date-picker>
-      <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle">统计</el-button>
-    </div>
+    <div style="position: absolute; z-index:100">
+        <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle">统计</el-button>
+      </div>
 
-    <div class="map" id="hismap"></div>
-    <div class="input-card">
-      <h4>轨迹回放控制</h4>
-      <div class="input-item">
-        <input type="button" class="btn" value="开始动画" id="start" @click="startAnimation()" />
-        <input type="button" class="btn" value="显示信息" id=" speed" @click="showInfo()" />
+      <div class="map" id="hismap"></div>
+      <div class="input-card">
+        <h4>轨迹回放控制</h4>
+        <div class="input-item">
+          <input type="button" class="btn" value="开始动画" id="start" @click="startAnimation()" />
+          <input type="button" class="btn" value="显示信息" id=" speed" @click="showInfo()" />
+        </div>
+        <div class="input-item">
+          <input type="button" class="btn" value="暂停动画" id="pause" @click="pauseAnimation()" />
+          <input type="button" class="btn" value="继续动画" id="resume" @click="resumeAnimation()" />
+        </div>
+        <div class="input-item">
+          <input type="button" class="btn" value="加速" id="start" @click="startAdd()" />
+          <input type="button" class="btn" value="减速" id=" speed" @click="startRed()" />
+        </div>
       </div>
-      <div class="input-item">
-        <input type="button" class="btn" value="暂停动画" id="pause" @click="pauseAnimation()" />
-        <input type="button" class="btn" value="继续动画" id="resume" @click="resumeAnimation()" />
-      </div>
-      <div class="input-item">
-        <input type="button" class="btn" value="加速" id="start" @click="startAdd()" />
-        <input type="button" class="btn" value="减速" id=" speed" @click="startRed()" />
-      </div>
-    </div>
-    <!-- </el-col> -->
-  </el-row>
+      </el-main>
+  </el-container>
 </template>
 
 
@@ -60,18 +80,39 @@ export default {
       curoilconsume: [], // 油耗
       speed: [], //速度
       totaloilconsume: [], // 总油耗
+      tableData: [], // 设备列表
+      columns: [
+          {
+          id: "name",
+          label: "车辆名称",
+          width: 110
+        },
+        {
+          id: "plateno",
+          label: "车牌号码",
+        },
+      
+      ],
+      handle: [
+        {
+          function: "historyTrackHandle",
+          text: "查看",
+          type: "text",
+          show: true,
+        },
+      ],
     };
   },
   created() {
-    this.eqid = this.$route.query.id;
     this.equiList();
-    this.historyTrackHandle();
   },
   mounted() {
     this.initMap();
   },
   methods: {
-    htimeHandle() {},
+    ExamineHandle(val) {
+      console.log(val);
+    },
     // 地图引入
     initMap() {
       this.map = new AMap.Map("hismap", {
@@ -354,11 +395,15 @@ export default {
     /*
      ** 历史轨迹处理
      */
-    async historyTrackHandle() {
+    async historyTrackHandle(index,row) {
+
+      row ?  this.eqid = row.guid : '';
+
       let res = null;
+
       if (this.formDate) {
         res = await history({
-          param: { id: this.eqid, start: this.formDate},
+          param: { id: this.eqid, start:  this.formDate },
         });
       } else {
         res = await history({ param: { id: this.eqid } });
@@ -498,11 +543,11 @@ export default {
   cursor: pointer;
 }
 .echarts_style {
-  width: 79vw;
+  width: 80vw;
   height: 500px;
   position: absolute;
   z-index: 100;
-  top: 50px;
+  top: 0;
   right: 0;
   left: 0;
   bottom: 0;
@@ -515,7 +560,7 @@ export default {
   text-align: right;
 }
 #hismap {
-  height: 79vh;
+  height: 89vh;
 }
 .input-card {
   display: flex;

@@ -122,8 +122,7 @@ export default {
     async getFenceHandle() {
       let val = { belongguid: this.$route.query.id };
       const res = await fences({ param: val });
-      console.log(res);
-      this.fenceData = res.data;
+           this.fenceData = res.data;
 
       this.fenceData.map((item, index) => {
         this.fencesHandle(index, item);
@@ -205,7 +204,7 @@ export default {
   height: 100%;
 }
 .a_car_map {
-  height: 93vh;
+  height: 79vh;
   width: 100%;
   position: relative;
   z-index: 10;

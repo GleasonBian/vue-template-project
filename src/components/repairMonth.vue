@@ -402,7 +402,7 @@ export default {
       if (!this.$route.query.id) return;
       const res = await repairDetail({ id: this.$route.query.id });
       this.form = res.data;
-      console.log(res);
+     
     },
 
     /*

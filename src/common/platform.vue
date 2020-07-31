@@ -30,6 +30,7 @@
           </template>
           <el-menu-item index="/platform/equipment" class="myClass" style="text-align: center;">车辆台账</el-menu-item>
           <el-menu-item index="/platform/fence" style="text-align: center;">电子围栏</el-menu-item>
+          <el-menu-item index="/historyroute" style="text-align: center;">历史轨迹</el-menu-item>
         </el-submenu>
         <el-submenu index="5" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
@@ -38,6 +39,7 @@
           <el-menu-item index="/monitor/oil" class="myClass" style="text-align: center;">油耗监测</el-menu-item>
           <el-menu-item index="/monitor/warn" style="text-align: center;">告警监测</el-menu-item>
           <el-menu-item index="/monitor/statistics" style="text-align: center;">油耗统计</el-menu-item>
+          
         </el-submenu>
 
         <el-submenu index="3" popper-class="submenu-userManger" style="text-align: center;">
@@ -210,7 +212,7 @@ export default {
           this.$notify({
             title: data.class_type,
             type: "warning",
-            position: "top-left",
+            position: "top-right",
             dangerouslyUseHTMLString: true,
             message: h("div", { class: "message" }, [
               h("div", { class: "btnList" }, [

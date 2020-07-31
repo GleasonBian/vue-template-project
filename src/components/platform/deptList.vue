@@ -229,7 +229,7 @@ export default {
       })
         .then(async () => {
           let res = await delDept({ id: row.guid });
-          console.log(res);
+         
           if (res.status === 200) {
             this.$message.success("删除成功");
             that.getData();

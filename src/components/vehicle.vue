@@ -773,7 +773,7 @@ export default {
      */
     async tankHandle() {
       const res = await tankCreate(this.tank);
-      console.log(res);
+     
       if (res.status === 200) {
         this.tankListHandle();
         this.tank = {
@@ -806,6 +806,7 @@ export default {
       if (!this.$route.query.id) return;
       const res = await equiSelect({ id: this.$route.query.id });
       if (res.status === 200) {
+        this.$emit('deviceInfo', res.data);
         this.deptList(res.data.corpguid);
         this.form = res.data;
       }

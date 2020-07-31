@@ -633,6 +633,8 @@ export default {
      * 多边形双击回调
      */
     polygonDblclickCallback(e) {
+      // console.log('面积:',e.target.getArea());
+      this.form.radius = e.target.getArea();// 获取面积
       let obj = JSON.parse(JSON.stringify(e.target.getPath()));
       obj.map((item) => {
         delete item.Q;

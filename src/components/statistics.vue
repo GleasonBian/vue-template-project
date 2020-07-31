@@ -75,11 +75,6 @@
     </el-tabs>
   </div>
 </template>
-    // "attendance": "string",
-    // "leasecost": 0,
-
-    // "specificoilcon": 0,
-    // "specificothercon": 0
 <script>
 import { equiSelectAll, EquipmentSummary, equipsummaryAll } from "@/getData";
 export default {

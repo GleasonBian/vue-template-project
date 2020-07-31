@@ -595,7 +595,7 @@ export default {
       })
         .then(() => {
           let res = chargeDelete({ id: row.guid });
-          console.log(res);
+  
           if (res.status === 200) {
             this.$message.success("删除成功");
           }

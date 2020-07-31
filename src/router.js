@@ -52,6 +52,17 @@ const router = new Router({
           }
         },
         {
+          path: "/historyroute",
+          name: "historyroute",
+          component: resolve => require(["@/components/historyroute"], resolve),
+          meta: {
+            crumbs: ["车辆管理", "历史轨迹"],
+            title: "历史轨迹",
+            index: 46,
+            menu: "090302"
+          }
+        },
+        {
           path: "/vehicleDetails",
           name: "vehicleDetails",
           component: resolve => require(["@/components/vehicleDetails"], resolve),
@@ -342,7 +353,7 @@ const router = new Router({
             menu: "090302"
           }
         },
-        
+
       ]
     },
     {
@@ -378,7 +389,7 @@ const router = new Router({
             index: 28,
             menu: "090302"
           }
-        }
+        },
       ]
     },
 
