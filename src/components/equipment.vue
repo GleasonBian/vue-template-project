@@ -154,7 +154,7 @@ export default {
           label: "车辆状态"
         },
         {
-          id: "manage_type",
+          id: "deviceClassify",
           label: "管理类型"
         }
       ],
@@ -171,7 +171,7 @@ export default {
           // options: []
         },
         {
-          key: "manage_type", // 与后端交互时的字段 必填
+          key: "deviceClassify", // 与后端交互时的字段 必填
           label: "管理类型", // 搜索框名称 必填
           placeholder: "请选择", // 占位符 选填
           options: [
