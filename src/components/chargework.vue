@@ -54,7 +54,6 @@
       :close-on-click-modal="false"
       top="0vh"
       center
-      
     >
       <div style="text-align:center">
         <gt-table

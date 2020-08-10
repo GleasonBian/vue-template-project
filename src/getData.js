@@ -457,3 +457,12 @@ export const fences = data => fetch("fences", data, "get");
  * 车辆管理 / 电子围栏 / 删除围栏
  */
 export const fencesDelete = data => fetch("fences", data, "delete");
+
+
+/* ------------------------图片上传-------------------------------- */
+
+export const uploadImages = data => fetch("upload/images", data, "form");
+
+/* ------------------------车辆分类-------------------------------- */
+export const classify = data => fetch("classify", data, "get");
+export const classifyId = data => fetch("classify", data, "get");

@@ -63,7 +63,7 @@
       </span>
     </el-dialog>
 
-    <el-form ref="form" :model="form" label-width="100px" :rules="rules">
+    <el-form ref="form" :model="form" label-width="100px" :rules="rules" :disabled="false">
       <el-card class="content_width" shadow="never">
         <div slot="header" class="clearfix">
           <span>基本信息</span>
@@ -92,14 +92,18 @@
 
             <el-form-item label="折旧年限" prop="depreciationYear">
               <el-select v-model="form.depreciationYear" placeholder="请选择" style="width:100%">
-                <el-option v-for="n in 20" :label="(n) + ' 年'" :value="(n)" :key="n"></el-option>
+                <el-option v-for="n in 20" :label="(n) + ' 年'" :value="(n+'年')" :key="n"></el-option>
               </el-select>
             </el-form-item>
 
             <el-form-item label="设备分类" prop="deviceClassify">
-              <el-select v-model="form.deviceClassify" placeholder="请选择" style="width:100%">
-                <el-option label="管理用车" value="管理用车"></el-option>
-                <el-option label="作业用车" value="作业用车"></el-option>
+              <el-select v-model="form.deviceClassify" placeholder="请选择" style="width:100%" @change="resetClassifyId(form.deviceClassify)">
+               <el-option
+                  v-for="item in classifyData"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                ></el-option>
               </el-select>
             </el-form-item>
 
@@ -139,7 +143,6 @@
             <el-form-item label="管理号码" prop="manageNumber">
               <el-input v-model.number="form.manageNumber"></el-input>
             </el-form-item>
-
           </el-col>
           <el-col :span="12">
             <el-form-item label="车牌号码" prop="plateno">
@@ -149,6 +152,7 @@
             <el-form-item label="产权单位" prop="propertyUnit">
               <el-input v-model="form.propertyUnit"></el-input>
             </el-form-item>
+
             <el-form-item label="设备原值" prop="originalValue">
               <el-input v-model.number="form.originalValue" type="number" :step="100" :min="1">
                 <el-button slot="append">元</el-button>
@@ -169,12 +173,12 @@
 
             <el-form-item label="设备类型" prop="clstype">
               <el-select v-model="form.clstype" placeholder="请选择" style="width:100%">
-                <el-option label="轨道车" value="轨道车"></el-option>
-                <el-option label="东风机车" value="东风机车"></el-option>
-                <el-option label="挖掘机" value="挖掘机"></el-option>
-                <el-option label="装载机" value="装载机"></el-option>
-                <el-option label="运渣车" value="运渣车"></el-option>
-                <el-option label="SUV" value="SUV"></el-option>
+                 <el-option
+                  v-for="item in classifyIdData"
+                  :key="item"
+                  :label="item"
+                  :value="item"
+                ></el-option>
               </el-select>
             </el-form-item>
 
@@ -194,7 +198,6 @@
               <el-input v-model="form.investmentSource"></el-input>
             </el-form-item>
 
-
             <el-form-item label="合同签订" prop="signedDate">
               <el-date-picker
                 v-model="form.signedDate"
@@ -205,10 +208,6 @@
                 style="width:100%"
               ></el-date-picker>
             </el-form-item>
-
-            <!-- <el-form-item label="车辆用途" prop="vehicle_use">
-              <el-input v-model="form.vehicle_use"></el-input>
-            </el-form-item>-->
 
             <el-form-item label="描述信息" prop="description">
               <el-input v-model="form.description" type="textarea"></el-input>
@@ -236,8 +235,8 @@
                 value-format="yyyy-MM-dd"
                 style="width:100%"
               ></el-date-picker>
-
             </el-form-item>
+
             <el-form-item label="油耗阀值" prop="max_oil_wear">
               <el-input-number
                 :min="1"
@@ -350,7 +349,7 @@
             </el-form-item>
 
             <el-form-item label="出厂编号" prop="FactoryNumber">
-              <el-input v-model="FactoryNumber" placeholder="请输入"></el-input>
+              <el-input v-model="form.FactoryNumber" placeholder="请输入"></el-input>
             </el-form-item>
 
             <el-form-item label="设备品牌" prop="brand">
@@ -364,7 +363,7 @@
             </el-form-item>
 
             <el-form-item label="装机重量" prop="InstalledWeight">
-              <el-input v-model.number="form.installedPower" type="number" :step="100" :min="1">
+              <el-input v-model.number="form.InstalledWeight" type="number" :step="100" :min="1">
                 <el-button slot="append">KG</el-button>
               </el-input>
             </el-form-item>
@@ -444,7 +443,7 @@
             </el-form-item>
 
             <el-form-item label="出厂编号" prop="engineNumber">
-              <el-input v-model="engineNumber" placeholder="请输入"></el-input>
+              <el-input v-model="form.engineNumber" placeholder="请输入"></el-input>
             </el-form-item>
 
             <el-form-item label="燃料类型" prop="FuelType">
@@ -468,9 +467,7 @@
             </el-form-item>
 
             <el-form-item label="底盘编号" prop="underpanNumber">
-              <el-input v-model.number="form.underpanNumber" type="number" :step="100" :min="1">
-                <el-button slot="append">KW</el-button>
-              </el-input>
+              <el-input v-model="form.underpanNumber" placeholder="请输入"></el-input>
             </el-form-item>
 
             <el-form-item label="工作机厂商" prop="workingMachineManufacturer">
@@ -512,7 +509,9 @@
             </el-form-item>
 
             <el-form-item label="设备净值" prop="deviceNetWorth">
-              <el-input v-model="form.deviceNetWorth" placeholder="请输入"></el-input>
+              <el-input v-model.number="form.deviceNetWorth" type="number" :step="100" :min="1">
+                <el-button slot="append">元</el-button>
+              </el-input>
             </el-form-item>
 
             <el-form-item label="车辆状态" prop="status">
@@ -572,6 +571,19 @@
           </el-col>
         </el-row>
       </el-card>
+
+      <el-card class="content_width" shadow="never">
+        <div slot="header" class="clearfix">
+          <span>车辆图片</span>
+        </div>
+        <el-row >
+          <gt-single-img @SingleImageUpload="SingleImageUpload" :imageUrl="form.mainImage" title="车辆主图"></gt-single-img>
+        </el-row>
+        <el-row >
+          <!--  -->
+          <gt-multiple-img @multipleImageUpload="multipleImageUpload"  title="车辆辅图" :propsImage="form.image"></gt-multiple-img>
+        </el-row>
+      </el-card>
     </el-form>
 
     <el-col align="center" class="content_width">
@@ -592,6 +604,9 @@ import {
   tankCreate, // 邮箱创建
   tankList, // 邮箱列表
   equiSelect, // 获取详情
+  uploadImages, // 上传图片
+  classify,// 车辆分类一级
+  classifyId // 车辆分类二级
 } from "@/getData";
 export default {
   data() {
@@ -682,13 +697,14 @@ export default {
         monitor: "", //监控等级 String
 
         /* 图片 */
-        image : [], // list / Array 
-        
+        image: [], // list / Array
+        // 图片主图
+        mainImage: '',
         /* 弃用字段 */
-        proddate: "", //生产日期
-        vehicle_use: "", //车辆用途
-        driver: [], // 司机
-        deviceUse: "", // 设备用途
+        // proddate: "", //生产日期
+        // vehicle_use: "", //车辆用途
+        // driver: [], // 司机
+        // deviceUse: "", // 设备用途
       },
 
       // 表单校验规则
@@ -698,272 +714,487 @@ export default {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "设备名称",
           },
-        ],
+        ], // 车辆名称
+        name: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], //车辆名称 String
+        unit: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 计量单位 String
         originalValue: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "设备原值",
           },
-        ],
+        ], // 设备原值 Number
         deviceSource: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "设备来源",
           },
-        ],
+        ], //设备来源 String
         deviceClassify: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "设备分类",
           },
-        ],
+        ], //设备分类 String
         corpguid: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "所属公司",
           },
-        ],
+        ], //所属公司 String
         contractPrice: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "合同价格",
           },
-        ],
+        ], // 合同价格 Number
         deliveryDate: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "设备交付",
           },
-        ],
+        ], // 设备交付 String
         manageNumber: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "管理号码",
           },
-        ],
-        /* 第二列 */
+        ], // 管理号码 String
+
+        /* -------基本信息2-------- */
         plateno: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "车牌号码",
           },
-        ],
+        ], //车牌号码 String
         propertyUnit: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "产权单位",
           },
-        ],
+        ], // 产权单位 String
         depreciationYear: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "折旧年限",
           },
-        ],
+        ], // 折旧年限 Number
         depreciationRate: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "年折旧率",
           },
-        ],
+        ], // 年折旧率 Number
         clstype: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "设备类型",
           },
-        ],
+        ], //设备类型 String
         investmentSource: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "投资来源",
           },
-        ],
+        ], // 投资来源 String
         deptguid: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "所属部门",
           },
-        ],
+        ], //所属部门  String
         signedDate: [
           {
             required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "合同签订",
           },
-        ],
-
+        ], // 签订时间 String
         description: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "描述信息",
           },
-        ],
-        // 设备规格
+        ], //描述信息 String
+
+        /* -----设备规格1---------- */
         spec: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "设备规格",
           },
-        ],
-        // 设备型号
-        model: [
+        ], // 设备规格 String
+        leaveFactoryDate: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
-            flg: "设备型号",
           },
-        ],
+        ], // 出厂日期 String
+        FactoryNumber: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], //出厂编号 String
+        brand: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 设备品牌 String
+        installedPower: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 装机功率 Number
+        InstalledWeight: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 装机重量 Number
 
+        /* 设备规格2 */
+        deviceModel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 设备型号 String
+        domestic: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 进口/国产 String
+        manufacturer: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 生产厂家 String
+        productionPlace: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 设备产地 String
+        deviceSize: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 设备尺寸 String
         color: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
+        ], //车辆颜色  String
 
-        class: [
+        /* 发动机 */
+        engineManufacturer: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
+        ], // 引擎厂商 String
+        enginePower: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 引擎功率 Number
+        engineDate: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 引擎出厂日期 String
+        engineModel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 引擎型号 String
+        engineNumber: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 引擎编号 String
+        FuelType: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 燃油类型 String
 
+        /* 底盘 */
+        underpanManufacturer: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 底盘厂商 String
+        underpanNumber: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 底盘编号 String
+        workingMachineManufacturer: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 工作机厂商 String
+        underpanModel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 底盘型号 String
+        underpanFactoryDate: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 底盘出厂日期 String
+        workingMachineModel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 工作机型号 String
+
+        /* 项目信息 */
+        useProject: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 使用项目 String
+        deviceNetWorth: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 设备净值 Number
         status: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
-        proddate: [
+        ], // 设备状态 String
+        manager: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
+        ], // 管理人员 String
+        usePersonnel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 使用人员 String
+        inventoryManager: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 清查负责人 String
+        checkPersonnel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], //清查人 String
+        engineeringIndustry: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 工程行业 String
+        technical: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 技术状况 String
+        address: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 地址 String
+        managerTel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 管理人员电话 String
+        useTel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 使用人员电话 String
+        checkManagerTel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 清查负责人电话 String
+        checkTel: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 清查人电话  String
+
+        /* 监控信息 */
         terminalid: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
-        simnumber: [
-          {
-            required: false,
-            message: "必填",
-            trigger: ["blur", "change"],
-          },
-        ],
-        vehicle_use: [
-          {
-            required: false,
-            message: "必填",
-            trigger: ["blur", "change"],
-          },
-        ],
+        ], //终端ID String
         repair_date: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
-        monitor: [
-          {
-            required: false,
-            message: "必填",
-            trigger: ["blur", "change"],
-          },
-        ],
-        init_mileage: [
-          {
-            required: false,
-            message: "必填",
-            trigger: ["blur", "change"],
-          },
-        ],
-        oilboxheight: [
-          {
-            required: false,
-            message: "必填",
-            trigger: ["blur", "change"],
-          },
-        ],
+        ], //保养日期 String
         max_oil_wear: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
-        max_speed: [
-          {
-            required: false,
-            message: "必填",
-            trigger: ["blur", "change"],
-          },
-        ],
-        km_oil_wear: [
-          {
-            required: false,
-            message: "必填",
-            trigger: ["blur", "change"],
-          },
-        ],
+        ], //油耗报警阀值 Number
         hr_oil_wear: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
+        ], //小时/油耗 Number
         tank_guid: [
           {
-            required: false,
+            required: true,
             message: "必填",
             trigger: ["blur", "change"],
           },
-        ],
+        ], // 油箱 String
+        simnumber: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], //手机号  String
+        init_mileage: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], //初始里程 Number
+        max_speed: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], // 速度报警阀值  Number
+        km_oil_wear: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], //公里/油耗 Number
+        monitor: [
+          {
+            required: true,
+            message: "必填",
+            trigger: ["blur", "change"],
+          },
+        ], //监控等级 String
+
+        /* 图片 */
+        image: [], // list / Array
       },
 
       // 创建 更新 删除 表单
@@ -988,6 +1219,10 @@ export default {
       staffData: [],
       // 邮箱
       tankData: [],
+      // 分类一级列表
+      classifyData:[],
+      // 二级分类列表
+      classifyIdData: [],
     };
   },
   created() {
@@ -995,6 +1230,7 @@ export default {
     this.corpList();
     this.deptList();
     this.tankListHandle();
+    this.classifyList();
   },
   mounted() {
     this.getVehicleDetail();
@@ -1039,6 +1275,37 @@ export default {
       this.deptList(cid);
     },
 
+    /**
+     * 分类一级列表
+     */
+    async classifyList() {
+      const res = await classify();
+      this.classifyData = res.data;
+    },
+
+    /**
+     * 获取分类二级列表
+     */
+    async classifyIdList(id) {
+      const res = await classifyId({id: id});
+      this.classifyIdData = res.data;
+    },
+
+    
+    /**
+     *  更换一级分类,重新获取二级分类
+     */
+    async resetClassifyId(id) {
+      // 二级分类id 重置
+      this.form.clstype = null;
+
+      // 清空二级分类
+      this.classifyIdData = [];
+      
+      this.$forceUpdate();
+      // 重新获取二级分类
+      this.classifyIdList(id);
+    },
     /*
      ** 更新处理
      */
@@ -1058,7 +1325,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$route.query.id ? this.UpdateHandle() : this.CreateHandle();
+          // this.CreateHandle()
+          this.UpdateHandle()
+          // this.$route.query.id ? this.UpdateHandle() : this.CreateHandle();
         } else {
           this.$message.error("请正确填写红框内容");
           return false;
@@ -1205,17 +1474,39 @@ export default {
       this.tankData = res.data.list;
     },
 
-    /*
-     ** 获取详情
+    /**
+     * 获取详情
      */
     async getVehicleDetail() {
       if (!this.$route.query.id) return;
       const res = await equiSelect({ id: this.$route.query.id });
       if (res.status === 200) {
         this.deptList(res.data.corpguid);
+        this.classifyIdList(res.data.deviceClassify)
+        // let  baseurl = 
+        // process.env.VUE_APP_TITLE === "local"
+        //   ? process.env.VUE_APP_PROXY
+        //   : process.env.VUE_APP_URL,
+        // imgArray = [];
+        // res.data.image.map(item =>{
+        //   imgArray.push({ name: (Date.parse(new Date())),url:(baseurl + item) });
+        // })
+        // res.data.image = imgArray;
         this.form = res.data;
       }
     },
+    /**
+     * 单图上传
+     */
+    SingleImageUpload(image){
+      this.form.mainImage = image;
+    },
+    /**
+     * 多图上传
+     */
+    multipleImageUpload(image) {
+      this.form.image = image;
+    }
   },
 };
 </script>

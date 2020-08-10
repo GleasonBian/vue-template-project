@@ -8,6 +8,8 @@ import "./style/common.less";
 import gtTable from "@/common/gtTable";
 import gtSearch from "@/common/gtSearch";
 import headTop from "@/common/headTop";
+import SingleImageUpload from "@/common/SingleImageUpload";
+import multipleImageUpload from "@/common/multipleImageUpload";
 // import VueAMap from "vue-amap";
 import echarts from "echarts";
 import axios from "axios";
@@ -38,6 +40,8 @@ Vue.config.productionTip = false;
 Vue.component("gt-table", gtTable);
 Vue.component("gt-search", gtSearch);
 Vue.component("gt-header", headTop);
+Vue.component("gt-single-img", SingleImageUpload);
+Vue.component("gt-multiple-img", multipleImageUpload);
 
 /*
  ** 全局加载动画 开关
