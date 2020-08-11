@@ -8,11 +8,11 @@
     <el-card style="margin-top:12px;">
       <el-col align="left" style="margin-bottom:12px;;margin-top:1%">
         <router-link to="/plan/oilApply">
-          <el-button type="primary" size="medium" style="margin-left:12px;">新增</el-button>
+          <el-button type="primary" size="mini" style="margin-left:12px;">新增</el-button>
         </router-link>
         <el-button
           type="success"
-          size="medium"
+          size="mini"
           style="margin-left:12px;"
           @click="BatchDeleteUser"
         >导出</el-button>

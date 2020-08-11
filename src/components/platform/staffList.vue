@@ -9,8 +9,8 @@
     </el-card>
     <el-card>
       <!-- 列表操作按钮 -->
-      <el-button type="primary" size="medium" style="margin-bottom:12px" @click="newComp">新增</el-button>
-      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
+      <el-button type="primary" size="mini" style="margin-bottom:12px" @click="newComp">新增</el-button>
+      <el-button type="success" size="mini" @click="exportForm">导出</el-button>
 
       <!-- 内部用户列表 -->
       <gt-table

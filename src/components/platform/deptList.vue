@@ -49,15 +49,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="6" align="center">
-            <el-button type="primary" size="medium" @click="getData" style="width:36%">查询</el-button>
+            <el-button type="primary" size="mini" @click="getData" style="width:36%">查询</el-button>
             <el-button style="width:36%" @click="resetHandle">重置</el-button>
           </el-col>
         </el-row>
       </el-form>
     </el-card>
     <el-card style="margin-top:12px">
-      <el-button type="primary" style="margin-bottom:12px" size="medium" @click="newComp">新增</el-button>
-      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
+      <el-button type="primary" style="margin-bottom:12px" size="mini" @click="newComp">新增</el-button>
+      <el-button type="success" size="mini" @click="exportForm">导出</el-button>
       <gt-table
         :tableData="tableData"
         style="width: 100%"

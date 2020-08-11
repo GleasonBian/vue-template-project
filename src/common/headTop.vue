@@ -73,7 +73,7 @@ export default {
 }
 
 .dddddd {
-  margin-right: 50px;
+  // margin-right: 50px;
 }
 
 @media screen and (min-width: 1367px) {

@@ -16,7 +16,7 @@
             style="padding: 0px"
           ></el-date-picker>
         </div>
-        <el-button @click="exportHandle" type="success" style="margin-bottom:12px">导出</el-button>
+        <el-button @click="exportHandle" type="success" style="margin-bottom:12px" size="mini">导出</el-button>
         <el-table size="mini" :data="equipsummaryAllData" :header-row-style="iHeaderRowStyle">
           <el-table-column align="center" header-align="center" type="index" label="序号" width="50"></el-table-column>
           <el-table-column prop="plateno" label="车牌" align="center" header-align="center"></el-table-column>

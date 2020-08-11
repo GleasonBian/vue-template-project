@@ -1,6 +1,6 @@
 <template>
-  <div class="manage_page fillcontain">
-    <el-row class="menu-row-style">
+  <el-container class="mar_pad">
+    <el-header class="mar_pad" style="height: 40px;">
       <el-menu
         :default-active="defaultActive"
         background-color="#272B2E"
@@ -21,25 +21,22 @@
           <i class="iconfont i-menu-one"></i>监控平台
         </el-menu-item>
 
-        <!-- <el-menu-item index="/platform/equipment" style>
-          <i class="iconfont i-menu-one"></i>车辆台账
-        </el-menu-item> -->
-        <el-submenu index="6" popper-class="submenu-userManger" style="text-align: center;">
+        <el-submenu index="1" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
-           <i class="iconfont i-menu-one"></i>车辆管理
+            <i class="iconfont i-menu-one"></i>车辆管理
           </template>
           <el-menu-item index="/platform/equipment" class="myClass" style="text-align: center;">车辆台账</el-menu-item>
           <el-menu-item index="/platform/fence" style="text-align: center;">电子围栏</el-menu-item>
           <el-menu-item index="/historyroute" style="text-align: center;">历史轨迹</el-menu-item>
         </el-submenu>
-        <el-submenu index="5" popper-class="submenu-userManger" style="text-align: center;">
+
+        <el-submenu index="2" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
             <i class="iconfont i-menu-six"></i>实时监测
           </template>
           <el-menu-item index="/monitor/oil" class="myClass" style="text-align: center;">油耗监测</el-menu-item>
           <el-menu-item index="/monitor/warn" style="text-align: center;">告警监测</el-menu-item>
           <el-menu-item index="/monitor/statistics" style="text-align: center;">油耗统计</el-menu-item>
-          
         </el-submenu>
 
         <el-submenu index="3" popper-class="submenu-userManger" style="text-align: center;">
@@ -52,7 +49,7 @@
           <el-menu-item index="/plan/fixList" style="text-align: center;">车辆维修</el-menu-item>
         </el-submenu>
 
-        <el-submenu index="2" popper-class="submenu-userManger" style="text-align: center;">
+        <el-submenu index="4" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
             <i class="iconfont i-menu-two" style="font-size:20px"></i>平台
           </template>
@@ -66,7 +63,7 @@
           <el-menu-item index="/platform/roleList" style="text-align: center;">角色管理</el-menu-item>
         </el-submenu>
 
-        <el-menu-item style="float:right">
+        <el-menu-item style="float:right;padding: 0 20px 0 0">
           <i class="el-icon-user"></i>
           <el-dropdown class="dddddd">
             <div class="avator" style="color:#fff">
@@ -78,25 +75,19 @@
               <el-dropdown-item
                 command="singout"
                 icon="el-icon-circle-plus"
-                @command="handleCommand"
+                @click.native="handleCommand"
               >退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-menu-item>
-        <!-- <el-submenu index="5" popper-class="submenu-userManger">
-		        <template slot="title">
-		          <i class="iconfont i-user-manger"></i>交接班
-		        </template>
-		        <el-menu-item index="/charge/chargework">交接班</el-menu-item>
-        </el-submenu>-->
       </el-menu>
-      <el-row>
-        <transition>
-          <router-view></router-view>
-        </transition>
-      </el-row>
-    </el-row>
-  </div>
+    </el-header>
+    <el-main class="mar_pad">
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -105,8 +96,8 @@ export default {
   components: {},
   data() {
     return {
+      transitionName: "transitionLeft",
       circleUrl: "$img/22.png",
-      transitionName: "",
       mtemListA: [],
       /*************************************************** */
       active: "0-0",
@@ -137,22 +128,35 @@ export default {
         handle_time: "",
         handle_result: "",
         remark: "",
-        websock: null
-      }
+        websock: null,
+      },
     };
   },
-  watch: {},
+  watch: {
+    $route(to, from) {
+      const toDepth = to.path.split("/").length;
+      const fromDepth = from.path.split("/").length;
+      this.transitionName = toDepth < fromDepth ? "slide-right" : "slide-left";
+      //如果to索引大于from索引,判断为前进状态,反之
+      // if (to.meta.index > from.meta.index) {
+      //   this.transitionName = 'transitionLeft';
+      // } else {
+      //   this.transitionName = 'transitionRight';
+      // }
+    },
+  },
   created() {},
   mounted() {
     this.initWebSocket();
   },
   methods: {
     async handleCommand(command) {
+      console.log(command);
       this.$router.replace({
-        path: "/login"
+        path: "/login",
       });
       history.pushState(null, null, document.URL);
-      window.addEventListener("popstate", function() {
+      window.addEventListener("popstate", function () {
         history.pushState(null, null, document.URL);
       });
       if (command == "singout") {
@@ -173,17 +177,17 @@ export default {
     // }
     handleClose(done) {
       this.$confirm("确认关闭？")
-        .then(_ => {
+        .then((_) => {
           this.dialogVisible = false;
         })
-        .catch(_ => {});
+        .catch((_) => {});
     },
     handleAlarmInfo(id) {
       this.$router.push({
         path: "/platform/Alarm",
         query: {
-          id: id
-        }
+          id: id,
+        },
       });
       this.dialogVisible = false;
     },
@@ -226,16 +230,16 @@ export default {
                         this.$router.push({
                           path: "/platform/Alarm",
                           query: {
-                            id: data.ID
-                          }
+                            id: data.ID,
+                          },
                         });
-                      }
-                    }
+                      },
+                    },
                   },
                   "处理"
-                )
-              ])
-            ])
+                ),
+              ]),
+            ]),
           });
         };
       } else {
@@ -258,21 +262,33 @@ export default {
     websocketclose(e) {
       //关闭
       console.log("断开连接", e);
-    }
+    },
   },
   computed: {
-    defaultActive: function() {
+    defaultActive: function () {
       return this.$route.path;
-    }
+    },
   },
   destroyed() {
     this.websock.close(); //离开路由之后断开websocket连接
-  }
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="less" scoped>
+<style  scoped>
+>>> .el-menu--horizontal > .el-menu-item {
+  height: 40px;
+  line-height: 40px;
+}
+>>> .el-menu--horizontal > .el-submenu .el-submenu__title {
+  height: 40px;
+  line-height: 40px;
+}
+.mar_pad {
+  padding: 0px;
+  margin: 0px;
+}
 .elmenu {
   background: #324057;
 }
@@ -314,16 +330,7 @@ export default {
   font-size: 21px;
   margin-left: 5px;
 }
-
-// .el-submenu {
-//   width: 100%;
-// }
-
-// .el-submenu .el-menu-item {
-//   min-width: 100%;
-// }
-
-// 激活 子菜单 背景色
+/* 激活 子菜单 背景色 */
 .el-menu-item.is-active {
   background-color: rgb(0, 0, 0) !important;
 }
@@ -341,6 +348,20 @@ export default {
   color: red;
   margin-left: 5px;
   cursor: pointer;
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-leave {
+  opacity: 1;
+}
+.fade-enter-active {
+  transition: opacity 0.5s;
+}
+.fade-leave-active {
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 </style>
 <style>

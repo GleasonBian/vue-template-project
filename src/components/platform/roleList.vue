@@ -10,8 +10,8 @@
     </el-card>
     <!-- 列表操作按钮 -->
     <el-card>
-      <el-button type="primary" style="margin-bottom:12px" size="medium" @click="newComp">新增</el-button>
-      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
+      <el-button type="primary" style="margin-bottom:12px" size="mini" @click="newComp">新增</el-button>
+      <el-button type="success" size="mini" @click="exportForm">导出</el-button>
       <gt-table
         :tableData="tableData"
         style="width: 98%"

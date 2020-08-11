@@ -58,11 +58,11 @@
 
     <el-card>
       <router-link to="/platform/vehicle">
-        <el-button type="primary" size="medium" style="margin-bottom:12px">新增</el-button>
+        <el-button type="primary" size="mini" style="margin-bottom:12px" >新增</el-button>
       </router-link>
       <el-button
         type="success"
-        size="medium"
+        size="mini"
         style="margin-bottom:12px; margin-left:12px"
         @click="exportHandle"
       >导出</el-button>

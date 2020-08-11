@@ -1,19 +1,23 @@
 <template>
   <div class="map_containr">
+    <!-- 地图 -->
     <div class="map" id="fence-map"></div>
-    <div>
-      <el-button-group size="mini" class="btn_group">
-        <el-button type="primary" icon="iconfont i-duobianxing" @click="polygonMarksHandle"></el-button>
-        <el-button type="primary" icon="iconfont i-yuanxing" @click="circleMarkHandle"></el-button>
-        <el-button type="primary" icon="el-icon-view" @click="tabsShow = !tabsShow"></el-button>
-      </el-button-group>
-    </div>
+
+    <!-- 创建围栏按钮 -->
+    <el-button-group size="mini" class="btn_group">
+      <el-button type="primary" icon="iconfont i-duobianxing" @click="polygonMarksHandle"></el-button>
+      <el-button type="primary" icon="iconfont i-yuanxing" @click="circleMarkHandle"></el-button>
+      <el-button type="primary" icon="el-icon-view" @click="tabsShow = !tabsShow"></el-button>
+    </el-button-group>
+
+    <!-- 围栏表格 -->
     <el-tabs
       v-model="activeName"
       type="border-card"
       class="fence_tabs"
       @tab-click="showCloneRuleslView"
       v-show="tabsShow"
+      size="mini"
     >
       <el-tab-pane label="全部" name="first">
         <gt-table
@@ -55,6 +59,8 @@
         ></gt-table>
       </el-tab-pane>
     </el-tabs>
+
+    <!-- 车辆按钮 -->
     <el-button-group class="btn_vehicle">
       <el-button
         type="primary"
@@ -63,9 +69,8 @@
         :key="index"
         v-show="vehicleShow"
       >{{item.platenum}}</el-button>
-      <!-- <el-button>wrwrw</el-button> -->
     </el-button-group>
-    <!-- 新增 查看 更新 -->
+
     <el-dialog
       title="电子创建围栏"
       :visible.sync="dialogFormVisible"
@@ -423,12 +428,10 @@ export default {
      * 切换选项清空
      */
     selectHandle(val) {
-      
       this.form.belongguid = null;
       this.form.corpguid = null;
-      if (val === '车辆' && Object.keys(this.marker).length !==0 ) 
+      if (val === "车辆" && Object.keys(this.marker).length !== 0)
         this.form.belongguid = this.marker.w.extData;
-      
     },
 
     /**
@@ -634,7 +637,7 @@ export default {
      */
     polygonDblclickCallback(e) {
       // console.log('面积:',e.target.getArea());
-      this.form.radius = e.target.getArea();// 获取面积
+      this.form.radius = e.target.getArea(); // 获取面积
       let obj = JSON.parse(JSON.stringify(e.target.getPath()));
       obj.map((item) => {
         delete item.Q;
@@ -881,7 +884,7 @@ export default {
           content: `<span>${this.websockVehicle[val].platenum}</span>`, //设置文本标注内容
           direction: "bottom", //设置文本标注方位
         },
-        extData: this.websockVehicle[val].guid
+        extData: this.websockVehicle[val].guid,
       });
       this.marker.setMap(this.map);
       this.map.setFitView([this.marker]);
@@ -901,11 +904,13 @@ export default {
 <style lang="less" scoped>
 .map_containr {
   width: 100%;
-  height: 100%;
-}
-.map {
-  height: 93vh;
+  height: 95vh;
   position: relative;
+}
+div.map {
+  height: 100%;
+  width: 100%;
+  position: absolute;
   z-index: 10;
   top: 0px;
   left: 0px;

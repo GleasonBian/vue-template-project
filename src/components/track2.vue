@@ -515,7 +515,7 @@ export default {
   text-align: right;
 }
 #hismap {
-  height: 79vh;
+  height: 81.4vh;
 }
 .input-card {
   display: flex;

@@ -8,14 +8,14 @@
 
     <el-card style="margin-top:12px">
       <el-col align="left" style="margin-bottom:12px;">
-        <el-select v-model="select" placeholder="请选择新建项" size="medium">
+        <el-select v-model="select" placeholder="请选择新建项" size="mini">
           <el-option label="日常检查保养记录表" value="1"></el-option>
           <el-option label="周检查保养记录表" value="2"></el-option>
           <el-option label="月检查保养记录表" value="3"></el-option>
         </el-select>
-        <el-button type="primary" size="medium" @click="CreateHandle" plain>创建</el-button>
+        <el-button type="primary" size="mini" @click="CreateHandle" plain>创建</el-button>
 
-        <el-button type="primary" size="medium" @click="BatchDeleteUser">导出</el-button>
+        <el-button type="primary" size="mini" @click="BatchDeleteUser">导出</el-button>
       </el-col>
       <el-col align="middle">
         <gt-table

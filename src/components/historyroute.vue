@@ -29,7 +29,7 @@
         <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle">统计</el-button>
       </div>
 
-      <div class="map" id="hismap"></div>
+      <div class="map" id="historymap"></div>
       <div class="input-card">
         <h4>轨迹回放控制</h4>
         <div class="input-item">
@@ -115,7 +115,7 @@ export default {
     },
     // 地图引入
     initMap() {
-      this.map = new AMap.Map("hismap", {
+      this.map = new AMap.Map("historymap", {
         zoom: 8, //级别
         center: [112.866504, 36.860657], //中心点坐标
         resizeEnable: true,
@@ -559,8 +559,8 @@ export default {
   border-radius: 5px;
   text-align: right;
 }
-#hismap {
-  height: 89vh;
+#historymap {
+  height: 95vh;
 }
 .input-card {
   display: flex;
@@ -636,5 +636,10 @@ export default {
 .calendar_style {
   width: 100%;
   height: 100%;
+}
+</style>
+<style scoped>
+>>> .el-main{
+  padding: 0px;
 }
 </style>

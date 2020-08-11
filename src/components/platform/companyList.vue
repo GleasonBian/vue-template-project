@@ -54,8 +54,8 @@
 
     <!-- 内部用户列表 -->
     <el-card style="margin-top:12px">
-      <el-button type="primary" size="medium" @click="newComp" style="margin-bottom:12px">新增</el-button>
-      <el-button type="success" size="medium" @click="exportForm">导出</el-button>
+      <el-button type="primary" size="mini" @click="newComp" style="margin-bottom:12px">新增</el-button>
+      <el-button type="success" size="mini" @click="exportForm">导出</el-button>
       <gt-table
         :tableData="tableData"
         style="width: 100%"

@@ -8,8 +8,8 @@
         style="border-right:3px solid #E4E7ED; margin-right:5px; padding:0px 12px"
         id="aside_vehicle"
       >
-        <el-card :body-style="{ padding: '0px' }">
-          <el-image style="width:100%; height:200px" :src="form.mainImage" fit="cover"></el-image>
+        <el-card :body-style="{ padding: '0px' }" >
+          <el-image style="width:100%; height:200px" :src="baseurl + form.mainImage" fit="cover"></el-image>
           <div style="padding: 14px;">
             <span>{{ form.name }}</span>
             <div class="bottom clearfix">
@@ -23,13 +23,13 @@
         <el-main style="padding-top:0px">
           <el-tabs v-model="activeName" @tab-click="handleClick" style="width:100%">
             <el-tab-pane label="基本信息" name="first">
-              <vehicle ref="vehicle" @deviceInfo="deviceInfo" :disable="true"></vehicle>
+              <Vehicle ref="Vehicle" @deviceInfo="deviceInfo" :disable="true"></Vehicle>
             </el-tab-pane>
             <el-tab-pane label="油耗统计" name="fourth">
               <Amachine></Amachine>
             </el-tab-pane>
             <el-tab-pane label="历史轨迹" name="second">
-              <historyTrack></historyTrack>
+              <HistoryTrack></HistoryTrack>
             </el-tab-pane>
             <el-tab-pane label="电子围栏" name="third">
               <ACarFence></ACarFence>
@@ -41,8 +41,8 @@
   </el-container>
 </template>
 <script>
-import vehicle from "@/components/vehicle";
-import historyTrack from "@/components/track2";
+import Vehicle from "@/components/vehicle";
+import HistoryTrack from "@/components/track2";
 import ACarFence from "@/components/ACarFence";
 import Amachine from "@/components/Amachine";
 export default {
@@ -50,11 +50,11 @@ export default {
   data() {
     return {
       activeName: "first",
-      form: {
-        name: "",
-        plateno: "",
-        equip_no: "",
-      },
+      form: {},
+      baseurl:
+        process.env.VUE_APP_TITLE === "local"
+          ? process.env.VUE_APP_PROXY
+          : process.env.VUE_APP_URL,
     };
   },
   created() {},
@@ -70,20 +70,19 @@ export default {
     handleClick(tab, event) {
       // console.log(tab, event);
     },
-    deviceInfo(data){
-      console.log(data);
+    deviceInfo(data) {
       this.form = data;
-    }
+    },
   },
   watch: {},
   components: {
-    vehicle,
-    historyTrack,
+    Vehicle,
+    HistoryTrack,
     ACarFence,
     Amachine,
   },
   updated() {
-    this.form = this.$refs.vehicle.form;
+    this.form = this.$refs.Vehicle.form;
   },
 };
 </script>
@@ -116,5 +115,6 @@ export default {
 
 .clearfix:after {
   clear: both;
+  
 }
 </style>

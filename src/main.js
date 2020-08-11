@@ -56,9 +56,10 @@ axios.interceptors.request.use(
     // 在发送请求之前做些什么
     loading = Vue.prototype.$loading({
       lock: true,
+      body: true,
       text: "客官请稍后....",
       spinner: "el-icon-loading",
-      background: "rgba(0, 0, 0, 0.7)"
+      background: "rgba(0, 0, 0, 0)"
     });
 
     if (sessionStorage.getItem("Authorization") === null) {

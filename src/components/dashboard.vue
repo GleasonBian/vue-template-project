@@ -1,207 +1,208 @@
 <template>
-  <div class="amap-page-container">
-    <el-row :gutter="20">
-      <el-col :span="6">
-        <div class="grid-content bg-purple">
-          <el-table
-            :data="tableData"
-            @row-click="clickMarker"
-            ref="singleATable"
-            highlight-current-row
-            style="width:100%;"
-            size="mini"
-          >
-            <el-table-column type="index" label="序号" align="center" width="50"></el-table-column>
-            <el-table-column prop="name" label="车辆名称" align="center" width="95"></el-table-column>
-            <el-table-column prop="platenum" label="车牌号码" align="center"></el-table-column>
-            <el-table-column label="状态" align="center" width="50">
-              <template slot-scope="scope">
-                <div class="carStatus">
-                  <div
-                    :class="{
+  <el-container>
+    <el-aside width="300px">
+      <el-table
+        :data="tableData"
+        @row-click="clickMarker"
+        ref="singleATable"
+        highlight-current-row
+        style="width:100%;"
+        size="mini"
+      >
+        <el-table-column prop="name" label="名称" align="center" width="110"></el-table-column>
+        <el-table-column prop="platenum" label="牌号" align="center"></el-table-column>
+        <el-table-column label="状态" align="center" width="50">
+          <template slot-scope="scope">
+            <div class="carStatus">
+              <div
+                :class="{
                       active: scope.row.status == 1,
                       fix: scope.row.status == 2,
                       stop: scope.row.status == 3
                     }"
-                  ></div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="车辆详情" align="center">
-              <template slot-scope="scope">
-                <el-link type="primary" @click="goHistory(scope.row.guid)">查看</el-link>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-col>
-      <el-col style="position:relative;overflow:hidden;" :span="18">
-        <div class="grid-content bg-purple">
-          <div class="map" id="track-map"></div>
-          <el-dropdown class="viewbtn" @command="handleCommand">
-            <el-button type="primary">
-              {{dropdownText}}
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="总览信息">总览信息</el-dropdown-item>
-              <el-dropdown-item :command="viewBtn">{{viewBtn}}</el-dropdown-item>
-              <el-dropdown-item :command="fenceBtnText">{{fenceBtnText}}</el-dropdown-item>
-              <el-dropdown-item command="清空轨迹">清空轨迹</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <div class="card" :class="{'active':showView}">
-            <el-card v-if="totalView" class="box-card">
-              <div class="clearfix">
-                <span class="card_title">车辆监测</span>
-                <div class="card_void"></div>
+              ></div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="详情" align="center" width="50">
+          <template slot-scope="scope">
+            <el-link type="primary" @click="goHistory(scope.row.guid)">查看</el-link>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-aside>
+    <el-main style="padding:0px; position:relative;">
+      <!-- <div class="grid-content bg-purple"> -->
+        <div class="map" id="track-map"></div>
+        <el-dropdown class="viewbtn" @command="handleCommand">
+          <el-button type="primary">
+            {{dropdownText}}
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item :command="allViewBtn">{{allViewBtn}}</el-dropdown-item>
+            <el-dropdown-item :command="viewBtn">{{viewBtn}}</el-dropdown-item>
+            <el-dropdown-item :command="fenceBtnText">{{fenceBtnText}}</el-dropdown-item>
+            <el-dropdown-item command="清空轨迹">清空轨迹</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <div class="card" :class="{'active':showView}">
+          <!-- 车辆监测 -->
+          <el-card v-if="totalView" class="box-card">
+            <div class="clearfix">
+              <span class="card_title">车辆监测</span>
+              <div class="card_void"></div>
+            </div>
+            <div>
+              <span class="card_main">{{ viewData.totalequips||0 }}</span>
+              <span class="card_minor">台</span>
+            </div>
+          </el-card>
+          <!-- 保养监测 -->
+          <el-card class="box-card">
+            <div class="clearfix">
+              <span class="card_title">保养监测</span>
+              <div class="card_void"></div>
+            </div>
+            <div class="card_content">
+              <div>
+                <span class="card_minor">今日</span>
+                <span class="card_main">{{parseInt(viewData.maintain.CurNum)||0}}</span>
+                <span class="card_minor">次</span>
               </div>
               <div>
-                <span class="card_main">{{ viewData.totalequips||0 }}</span>
-                <span class="card_minor">台</span>
-              </div>
-            </el-card>
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span class="card_title">保养监测</span>
-                <div class="card_void"></div>
-              </div>
-              <div class="card_content">
-                <div>
-                  <span class="card_minor">今日</span>
-                  <span class="card_main">{{parseInt(viewData.maintain.CurNum)||0}}</span>
+                <div class="card_row">
+                  <span class="card_minor">本月</span>
+                  <span class="card_col_main">{{parseInt(viewData.maintain.MonthNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
-                <div>
-                  <div class="card_row">
-                    <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{parseInt(viewData.maintain.MonthNum)||0}}</span>
-                    <span class="card_minor">次</span>
-                  </div>
-                  <div class="card_row">
-                    <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{parseInt(viewData.maintain.YearNum)||0}}</span>
-                    <span class="card_minor">次</span>
-                  </div>
-                </div>
-              </div>
-            </el-card>
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span class="card_title">维修监测</span>
-                <div class="card_void"></div>
-              </div>
-              <div class="card_content">
-                <div>
-                  <span class="card_minor">今日</span>
-                  <span class="card_main">{{parseInt(viewData.fix.CurNum)||0}}</span>
+                <div class="card_row">
+                  <span class="card_minor">年度</span>
+                  <span class="card_col_main">{{parseInt(viewData.maintain.YearNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
-                <div>
-                  <div class="card_row">
-                    <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{parseInt(viewData.fix.MonthNum)||0}}</span>
-                    <span class="card_minor">次</span>
-                  </div>
-                  <div class="card_row">
-                    <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{parseInt(viewData.fix.YearNum)||0}}</span>
-                    <span class="card_minor">次</span>
-                  </div>
-                </div>
               </div>
-            </el-card>
-            <el-card class="box-card">
-              <div class="clearfix">
-                <span class="card_title">告警监测</span>
-                <div class="card_void"></div>
+            </div>
+          </el-card>
+          <!-- 维修监测 -->
+          <el-card class="box-card">
+            <div class="clearfix">
+              <span class="card_title">维修监测</span>
+              <div class="card_void"></div>
+            </div>
+            <div class="card_content">
+              <div>
+                <span class="card_minor">今日</span>
+                <span class="card_main">{{parseInt(viewData.fix.CurNum)||0}}</span>
+                <span class="card_minor">次</span>
               </div>
-              <div class="card_content">
-                <div>
-                  <span class="card_minor">今日</span>
-                  <span class="card_main" style="color:red">{{parseInt(viewData.alarm.CurNum)||0}}</span>
+              <div>
+                <div class="card_row">
+                  <span class="card_minor">本月</span>
+                  <span class="card_col_main">{{parseInt(viewData.fix.MonthNum)||0}}</span>
                   <span class="card_minor">次</span>
                 </div>
-                <div>
-                  <div class="card_row">
-                    <span class="card_minor">本月</span>
-                    <span class="card_col_main">{{parseInt(viewData.alarm.MonthNum)||0}}</span>
-                    <span class="card_minor">次</span>
-                  </div>
-                  <div class="card_row">
-                    <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{parseInt(viewData.alarm.YearNum)||0}}</span>
-                    <span class="card_minor">次</span>
-                  </div>
+                <div class="card_row">
+                  <span class="card_minor">年度</span>
+                  <span class="card_col_main">{{parseInt(viewData.fix.YearNum)||0}}</span>
+                  <span class="card_minor">次</span>
                 </div>
               </div>
-            </el-card>
-          </div>
-          <div class="card_bottom clear" :class="{ active: showView }">
-            <el-card class="bottom_card">
-              <div class="clearfix">
-                <span class="card_title">里程监测</span>
-                <div class="card_void"></div>
+            </div>
+          </el-card>
+          <!-- 告警监测 -->
+          <el-card class="box-card">
+            <div class="clearfix">
+              <span class="card_title">告警监测</span>
+              <div class="card_void"></div>
+            </div>
+            <div class="card_content">
+              <div>
+                <span class="card_minor">今日</span>
+                <span class="card_main" style="color:red">{{parseInt(viewData.alarm.CurNum)||0}}</span>
+                <span class="card_minor">次</span>
               </div>
-              <div class="card_content">
-                <div>
-                  <span class="card_minor">今日</span>
-                  <span class="card_main">{{(parseFloat(viewData.travel.CurNum)||0).toFixed(2)}}</span>
+              <div>
+                <div class="card_row">
+                  <span class="card_minor">本月</span>
+                  <span class="card_col_main">{{parseInt(viewData.alarm.MonthNum)||0}}</span>
+                  <span class="card_minor">次</span>
+                </div>
+                <div class="card_row">
+                  <span class="card_minor">年度</span>
+                  <span class="card_col_main">{{parseInt(viewData.alarm.YearNum)||0}}</span>
+                  <span class="card_minor">次</span>
+                </div>
+              </div>
+            </div>
+          </el-card>
+        </div>
+        <div class="card_bottom clear" :class="{ active: showView }">
+          <!-- 里程监测 -->
+          <el-card class="bottom_card">
+            <div class="clearfix">
+              <span class="card_title">里程监测</span>
+              <div class="card_void"></div>
+            </div>
+            <div class="card_content">
+              <div>
+                <span class="card_minor">今日</span>
+                <span class="card_main">{{(parseFloat(viewData.travel.CurNum)||0).toFixed(2)}}</span>
+                <span class="card_minor">公里</span>
+              </div>
+              <div>
+                <div class="card_row">
+                  <span class="card_minor">本月</span>
+                  <span
+                    class="card_col_main"
+                  >{{(parseFloat(viewData.travel.MonthNum)||0).toFixed(2)}}</span>
                   <span class="card_minor">公里</span>
                 </div>
-                <div>
-                  <div class="card_row">
-                    <span class="card_minor">本月</span>
-                    <span
-                      class="card_col_main"
-                    >{{(parseFloat(viewData.travel.MonthNum)||0).toFixed(2)}}</span>
-                    <span class="card_minor">公里</span>
-                  </div>
-                  <div class="card_row">
-                    <span class="card_minor">年度</span>
-                    <span
-                      class="card_col_main"
-                    >{{(parseFloat(viewData.travel.YearNum)||0).toFixed(2)}}</span>
-                    <span class="card_minor">公里</span>
-                  </div>
+                <div class="card_row">
+                  <span class="card_minor">年度</span>
+                  <span
+                    class="card_col_main"
+                  >{{(parseFloat(viewData.travel.YearNum)||0).toFixed(2)}}</span>
+                  <span class="card_minor">公里</span>
                 </div>
               </div>
-            </el-card>
-            <el-card class="bottom_card">
-              <div class="clearfix">
-                <span class="card_title">油耗监测</span>
-                <div class="card_void"></div>
+            </div>
+          </el-card>
+          <!-- 油耗监测 -->
+          <el-card class="bottom_card">
+            <div class="clearfix">
+              <span class="card_title">油耗监测</span>
+              <div class="card_void"></div>
+            </div>
+            <div class="card_content">
+              <div>
+                <span class="card_minor">今日</span>
+                <span
+                  class="card_main"
+                  style="color:#f0c70b"
+                >{{(parseFloat(viewData.oil.CurNum)||0).toFixed(2)}}</span>
+                <span class="card_minor">升</span>
               </div>
-              <div class="card_content">
-                <div>
-                  <span class="card_minor">今日</span>
-                  <span
-                    class="card_main"
-                    style="color:#f0c70b"
-                  >{{(parseFloat(viewData.oil.CurNum)||0).toFixed(2)}}</span>
+              <div>
+                <div class="card_row">
+                  <span class="card_minor">本月</span>
+                  <span class="card_col_main">{{(parseFloat(viewData.oil.MonthNum)||0).toFixed(2)}}</span>
                   <span class="card_minor">升</span>
                 </div>
-                <div>
-                  <div class="card_row">
-                    <span class="card_minor">本月</span>
-                    <span
-                      class="card_col_main"
-                    >{{(parseFloat(viewData.oil.MonthNum)||0).toFixed(2)}}</span>
-                    <span class="card_minor">升</span>
-                  </div>
-                  <div class="card_row">
-                    <span class="card_minor">年度</span>
-                    <span class="card_col_main">{{(parseFloat(viewData.oil.YearNum)||0).toFixed(2)}}</span>
-                    <span class="card_minor">升</span>
-                  </div>
+                <div class="card_row">
+                  <span class="card_minor">年度</span>
+                  <span class="card_col_main">{{(parseFloat(viewData.oil.YearNum)||0).toFixed(2)}}</span>
+                  <span class="card_minor">升</span>
                 </div>
               </div>
-            </el-card>
-          </div>
+            </div>
+          </el-card>
         </div>
-      </el-col>
-    </el-row>
-    <!-- 
+      <!-- </div> -->
+    </el-main>
+  </el-container>
+
+  <!-- 
               <el-card class="bottom_card">
               <div class="clearfix">
                 <span class="card_title">作业时长</span>
@@ -232,8 +233,7 @@
                 </div>
               </div>
             </el-card>
-    -->
-  </div>
+  -->
 </template>
 
 <script>
@@ -252,11 +252,12 @@ export default {
   name: "dashboard",
   data() {
     return {
-      dropdownText: "总览信息",
+      dropdownText: "显示全部",
       totalView: true,
       clickEdit: false,
       viewBtn: "隐藏监测",
       fenceBtnText: "隐藏围栏",
+      allViewBtn: "显示全部",
       showView: true,
       map: null,
       fenceData: [], // 围栏信息
@@ -343,7 +344,7 @@ export default {
     },
 
     /**
-     * 查看围栏
+     * 隐藏围栏
      */
     fencesHandle(index, row) {
       let fence = {};
@@ -407,13 +408,16 @@ export default {
     handleCommand(command) {
       this.dropdownText = command;
       switch (command) {
-        case "总览信息":
+        case "显示全部":
           this.getOverWatch();
+          break;
+        case "隐藏全部":
+          this.allViewHandle();
           break;
         case "清空轨迹":
           this.closeLine();
           break;
-        case "查看围栏":
+        case "显示围栏":
           this.examineFenceHandle();
           break;
         case "隐藏围栏":
@@ -424,19 +428,35 @@ export default {
       }
     },
 
+    /**
+     * 隐藏围栏
+     */
     hiddenFenceHandle() {
-      this.fenceBtnText = "查看围栏";
+      this.fenceBtnText = "显示围栏";
       for (var i in this.noRepeatFence) {
         this.noRepeatFence[i].hide();
       }
     },
 
+    /**
+     * 显示围栏
+     */
     examineFenceHandle() {
       this.fenceBtnText = "隐藏围栏";
       for (var i in this.noRepeatFence) {
         this.noRepeatFence[i].show();
       }
     },
+
+    /**
+     * 隐藏全部
+     */
+    allViewHandle() {
+      this.allViewBtn = "显示全部";
+      this.hiddenFenceHandle();
+      this.showBox();
+    },
+
     goHistory(id) {
       // this.$router.push({ path: "/track/" + id });
       this.$router.push({
@@ -446,21 +466,23 @@ export default {
         },
       });
     },
+
     showBox() {
       this.showView = !this.showView;
-      this.showView ? (this.viewBtn = "隐藏监测") : (this.viewBtn = "查看监测");
+      this.showView ? (this.viewBtn = "查看监测") : (this.viewBtn = "隐藏监测");
     },
     async getOverWatch(id) {
+      this.allViewBtn = "隐藏全部";
+
       this.showView = true;
       this.examineFenceHandle();
-      // console.log(id);
       let res = null;
       if (id) {
         res = await overview({ param: { id: id } });
         // console.log(res.data);
         this.totalView = false; //展示单台车辆信息
       } else {
-        this.totalView = true; //显示总览信息车辆台数
+        this.totalView = true; //显示显示全部车辆台数
         res = await overview();
       }
       //设备列表
@@ -1137,8 +1159,8 @@ export default {
   width: 100%;
   height: 100%;
 }
-.map {
-  height: 93vh;
+div.map {
+  height: 95.4vh;
 }
 .amap-demo {
   height: 93vh;
@@ -1159,9 +1181,10 @@ export default {
   bottom: 20px;
 }
 .viewbtn {
-  position: absolute;
+  position:absolute;
   top: 15px;
   left: 90px;
+  z-index: 20;
 }
 .viewline {
   position: absolute;

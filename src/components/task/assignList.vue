@@ -12,9 +12,9 @@
 
     <!-- 列表操作按钮 -->
     <el-card>
-      <el-button type="primary" size="medium" @click="newAssign" style="margin-bottom:12px">新增</el-button>
-      <el-button type="primary" size="medium" @click="singleOil">单机油耗核算</el-button>
-      <el-button type="success" size="medium" @click="downAss">导出</el-button>
+      <el-button type="primary" size="mini" @click="newAssign" style="margin-bottom:12px">新增</el-button>
+      <el-button type="primary" size="mini" @click="singleOil">单机油耗核算</el-button>
+      <el-button type="success" size="mini" @click="downAss">导出</el-button>
 
       <!-- 内部用户列表 -->
 

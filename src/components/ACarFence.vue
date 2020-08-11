@@ -204,7 +204,7 @@ export default {
   height: 100%;
 }
 .a_car_map {
-  height: 79vh;
+  height: 81.4vh;
   width: 100%;
   position: relative;
   z-index: 10;

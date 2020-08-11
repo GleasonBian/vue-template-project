@@ -1496,15 +1496,7 @@ export default {
       if (res.status === 200) {
         this.deptList(res.data.corpguid);
         this.classifyIdList(res.data.deviceClassify);
-        // let  baseurl =
-        // process.env.VUE_APP_TITLE === "local"
-        //   ? process.env.VUE_APP_PROXY
-        //   : process.env.VUE_APP_URL,
-        // imgArray = [];
-        // res.data.image.map(item =>{
-        //   imgArray.push({ name: (Date.parse(new Date())),url:(baseurl + item) });
-        // })
-        // res.data.image = imgArray;
+        this.$emit('deviceInfo',res.data);
         this.form = res.data;
       }
     },
