@@ -94,6 +94,7 @@
   </div>
 </template>
 <script>
+
 import {
   equiDelete,
   equiSelectAll,
@@ -132,6 +133,11 @@ export default {
         {
           id: "equip_no",
           label: "车辆编号"
+        },
+        {
+          img: true,
+          id: "mainImage",
+          label: "车辆图片"
         },
         {
           id: "plateno",

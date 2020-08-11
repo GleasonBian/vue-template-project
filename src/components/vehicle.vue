@@ -63,7 +63,13 @@
       </span>
     </el-dialog>
 
-    <el-form ref="form" :model="form" label-width="100px" :rules="rules" :disabled="false">
+    <el-form
+      ref="form"
+      :model="form"
+      label-width="100px"
+      :rules="rules"
+      :disabled="disable"
+    >
       <el-card class="content_width" shadow="never">
         <div slot="header" class="clearfix">
           <span>基本信息</span>
@@ -97,13 +103,13 @@
             </el-form-item>
 
             <el-form-item label="设备分类" prop="deviceClassify">
-              <el-select v-model="form.deviceClassify" placeholder="请选择" style="width:100%" @change="resetClassifyId(form.deviceClassify)">
-               <el-option
-                  v-for="item in classifyData"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                ></el-option>
+              <el-select
+                v-model="form.deviceClassify"
+                placeholder="请选择"
+                style="width:100%"
+                @change="resetClassifyId(form.deviceClassify)"
+              >
+                <el-option v-for="item in classifyData" :key="item" :label="item" :value="item"></el-option>
               </el-select>
             </el-form-item>
 
@@ -173,12 +179,7 @@
 
             <el-form-item label="设备类型" prop="clstype">
               <el-select v-model="form.clstype" placeholder="请选择" style="width:100%">
-                 <el-option
-                  v-for="item in classifyIdData"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-                ></el-option>
+                <el-option v-for="item in classifyIdData" :key="item" :label="item" :value="item"></el-option>
               </el-select>
             </el-form-item>
 
@@ -576,17 +577,24 @@
         <div slot="header" class="clearfix">
           <span>车辆图片</span>
         </div>
-        <el-row >
-          <gt-single-img @SingleImageUpload="SingleImageUpload" :imageUrl="form.mainImage" title="车辆主图"></gt-single-img>
-        </el-row>
-        <el-row >
-          <!--  -->
-          <gt-multiple-img @multipleImageUpload="multipleImageUpload"  title="车辆辅图" :propsImage="form.image"></gt-multiple-img>
-        </el-row>
+        <el-form-item prop="mainImage" label-width="0px">
+          <gt-single-img
+            @SingleImageUpload="SingleImageUpload"
+            :imageUrl="form.mainImage"
+            title="车辆主图"
+          ></gt-single-img>
+        </el-form-item>
+        <el-form-item prop="image" label-width="0px">
+          <gt-multiple-img
+            @multipleImageUpload="multipleImageUpload"
+            title="车辆辅图"
+            :propsImage="form.image"
+          ></gt-multiple-img>
+        </el-form-item>
       </el-card>
     </el-form>
 
-    <el-col align="center" class="content_width">
+    <el-col align="center" class="content_width" v-show="!disable">
       <el-button type="primary" @click="submitForm('form')">保存</el-button>
       <el-button @click="$router.go(-1)">返回</el-button>
     </el-col>
@@ -605,8 +613,8 @@ import {
   tankList, // 邮箱列表
   equiSelect, // 获取详情
   uploadImages, // 上传图片
-  classify,// 车辆分类一级
-  classifyId // 车辆分类二级
+  classify, // 车辆分类一级
+  classifyId, // 车辆分类二级
 } from "@/getData";
 export default {
   data() {
@@ -699,7 +707,7 @@ export default {
         /* 图片 */
         image: [], // list / Array
         // 图片主图
-        mainImage: '',
+        mainImage: "",
         /* 弃用字段 */
         // proddate: "", //生产日期
         // vehicle_use: "", //车辆用途
@@ -1220,10 +1228,16 @@ export default {
       // 邮箱
       tankData: [],
       // 分类一级列表
-      classifyData:[],
+      classifyData: [],
       // 二级分类列表
       classifyIdData: [],
     };
+  },
+  props: {
+    disable: {
+      type: Boolean,
+      default: false,
+    },
   },
   created() {
     this.staffList();
@@ -1287,11 +1301,10 @@ export default {
      * 获取分类二级列表
      */
     async classifyIdList(id) {
-      const res = await classifyId({id: id});
+      const res = await classifyId({ id: id });
       this.classifyIdData = res.data;
     },
 
-    
     /**
      *  更换一级分类,重新获取二级分类
      */
@@ -1301,7 +1314,7 @@ export default {
 
       // 清空二级分类
       this.classifyIdData = [];
-      
+
       this.$forceUpdate();
       // 重新获取二级分类
       this.classifyIdList(id);
@@ -1326,7 +1339,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // this.CreateHandle()
-          this.UpdateHandle()
+          this.UpdateHandle();
           // this.$route.query.id ? this.UpdateHandle() : this.CreateHandle();
         } else {
           this.$message.error("请正确填写红框内容");
@@ -1482,8 +1495,8 @@ export default {
       const res = await equiSelect({ id: this.$route.query.id });
       if (res.status === 200) {
         this.deptList(res.data.corpguid);
-        this.classifyIdList(res.data.deviceClassify)
-        // let  baseurl = 
+        this.classifyIdList(res.data.deviceClassify);
+        // let  baseurl =
         // process.env.VUE_APP_TITLE === "local"
         //   ? process.env.VUE_APP_PROXY
         //   : process.env.VUE_APP_URL,
@@ -1498,7 +1511,7 @@ export default {
     /**
      * 单图上传
      */
-    SingleImageUpload(image){
+    SingleImageUpload(image) {
       this.form.mainImage = image;
     },
     /**
@@ -1506,7 +1519,7 @@ export default {
      */
     multipleImageUpload(image) {
       this.form.image = image;
-    }
+    },
   },
 };
 </script>

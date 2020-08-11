@@ -131,7 +131,6 @@ export default {
       });
       this.fileList = fileList;
       this.imageList = PathArray;
-      console.log(PathArray);
       this.$emit("multipleImageUpload", PathArray);
     },
     propsHandle() {

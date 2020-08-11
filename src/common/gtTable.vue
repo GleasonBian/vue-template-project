@@ -23,8 +23,9 @@
       :width="col.width?col.width:''"
     >
       <template slot-scope="scope">
-        <div class="product-img" v-if="col.type">
-          <img
+        <div class="product-img" v-show="col.img">
+         <div v-if="(scope.row[col.id] instanceof  Array)">
+            <img
             v-for="(picture, index) in scope.row[col.id]"
             :src="
               picture.imagePath == null
@@ -34,11 +35,15 @@
             alt="图片"
             :key="index"
             style="margin-right:5px; width:38px; height:38px"
-            v-show="index <= 2"
+            
           />
+         </div>
+         <div v-else>
+            <img :src="scope.row[col.id] == null ? '' : baseurl + scope.row[col.id]" alt="图片" style="margin-right:5px; width:38px; height:38px"/>
+         </div>
         </div>
         <!-- <div v-else-if="typeof(col.type) === string"></div> -->
-        <div v-else>{{ scope.row[col.id] }}</div>
+        <div v-show="!col.img">{{ scope.row[col.id] }}</div>
       </template>
     </el-table-column>
     <el-table-column
@@ -74,7 +79,12 @@ export default {
   name: "gt-table",
   components: {},
   data() {
-    return {};
+    return {
+            baseurl:
+        process.env.VUE_APP_TITLE === "local"
+          ? process.env.VUE_APP_PROXY
+          : process.env.VUE_APP_URL,
+    };
   },
   props: {
     columns: Array,
