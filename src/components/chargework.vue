@@ -198,7 +198,7 @@ export default {
       ],
       columns: [
         {
-          id: "chargername",
+          id: "chargername",
           label: "交接人"
         },
         {

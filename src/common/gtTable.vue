@@ -9,6 +9,7 @@
     @selection-change="handleSelectionChange"
     :header-cell-style="tableHeaderColor"
     :size="size"
+    :height="height"
   >
     <el-table-column type="selection" align="center" header-align="center" v-if="selection"></el-table-column>
     <el-table-column align="center" header-align="center" type="index" label="序号" width="50"></el-table-column>
@@ -113,6 +114,11 @@ export default {
       type: String,
       default: "mini",
       required: false
+    },
+    height: {
+      type: String,
+      default: '',
+      required: false,
     }
   },
   computed: {},

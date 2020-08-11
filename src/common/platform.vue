@@ -11,19 +11,13 @@
         router
         mode="horizontal"
       >
-        <!-- <el-menu-item>
-          <div style="width:280px; text-align:center">
-            <img src="https://img-blog.csdnimg.cn/20200520140729270.png" alt style="width:90%" />
-          </div>
-        </el-menu-item>-->
-
         <el-menu-item index="/dashboard" style>
           <i class="iconfont i-menu-one"></i>监控平台
         </el-menu-item>
 
         <el-submenu index="1" popper-class="submenu-userManger" style="text-align: center;">
           <template slot="title">
-            <i class="iconfont i-menu-one"></i>车辆管理
+            <i class="iconfont i-menu-two"></i>车辆管理
           </template>
           <el-menu-item index="/platform/equipment" class="myClass" style="text-align: center;">车辆台账</el-menu-item>
           <el-menu-item index="/platform/fence" style="text-align: center;">电子围栏</el-menu-item>
@@ -71,10 +65,10 @@
               <i class="el-icon-caret-bottom"></i>
             </div>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="singout" icon="el-icon-plus">消息</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-message-solid" @click.native="messageHandle">消息</el-dropdown-item>
               <el-dropdown-item
                 command="singout"
-                icon="el-icon-circle-plus"
+                icon="el-icon-warning"
                 @click.native="handleCommand"
               >退出</el-dropdown-item>
             </el-dropdown-menu>
@@ -263,6 +257,9 @@ export default {
       //关闭
       console.log("断开连接", e);
     },
+    messageHandle() {
+      this.$router.push('/platform/message')
+    },
   },
   computed: {
     defaultActive: function () {
@@ -275,16 +272,24 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style  scoped>
+
 >>> .el-menu--horizontal > .el-menu-item {
   height: 40px;
   line-height: 40px;
 }
+
 >>> .el-menu--horizontal > .el-submenu .el-submenu__title {
   height: 40px;
   line-height: 40px;
 }
+
+>>> .el-menu--horizontal > .el-submenu > .el-menu--horizontal > .el-menu--popup {
+  min-width: 130px;
+  width: 130px;
+}
+
 .mar_pad {
   padding: 0px;
   margin: 0px;
@@ -351,16 +356,16 @@ export default {
 }
 
 .fade-enter {
-  opacity: 0;
+  opacity: 0.2;
 }
 .fade-leave {
-  opacity: 1;
+  opacity: 0.8;
 }
 .fade-enter-active {
   transition: opacity 0.5s;
 }
 .fade-leave-active {
-  opacity: 0;
+  opacity: 0.1;
   transition: opacity 0.5s;
 }
 </style>

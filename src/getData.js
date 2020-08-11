@@ -464,5 +464,25 @@ export const fencesDelete = data => fetch("fences", data, "delete");
 export const uploadImages = data => fetch("upload/images", data, "form");
 
 /* ------------------------车辆分类-------------------------------- */
+
+/**
+ * 车辆管理 / 车辆创建 / 车辆分类
+ */
 export const classify = data => fetch("classify", data, "get");
+
+/**
+ * 车辆管理 / 车辆创建 / 车辆类型
+ */
 export const classifyId = data => fetch("classify", data, "get");
+
+/* ------------------------告警-------------------------------- */
+
+/**
+ * 消息 / 设备消息
+ */
+export const equipAlarm = data => fetch("equip", data, "get");
+
+/**
+ * 消息 / 历史消息
+ */
+export const alarms = data => fetch("alarms", data, "get");

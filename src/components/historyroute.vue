@@ -11,8 +11,8 @@
       ></el-date-picker>
       <gt-table
         :tableData="vehicleData"
-        style="width: 100%"
-         :optionWidth="60"
+        style="width: 100%;"
+        :optionWidth="60"
         :columns="columns"
         :selection="false"
         v-on:historyTrackHandle="historyTrackHandle"
@@ -20,14 +20,15 @@
         size="mini"
       ></gt-table>
     </el-aside>
-      <el-main>
-         <div class="echarts_style" v-show="dialogTableVisible">
-      <span class="xxx" @click="closedialog($event)">×</span>
-      <div style="width:80vw; height:500px" ref="chart"></div>
-    </div>
-    <div style="position: absolute; z-index:100">
-        <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle">统计</el-button>
+    <el-main>
+      <div class="echarts_style" v-show="dialogTableVisible">
+        <span class="xxx" @click="closedialog($event)">×</span>
+        <div style="width:80vw; height:500px" ref="chart"></div>
       </div>
+
+
+        <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle" style="position: absolute; z-index:100">统计</el-button>
+
 
       <div class="map" id="historymap"></div>
       <div class="input-card">
@@ -45,7 +46,7 @@
           <input type="button" class="btn" value="减速" id=" speed" @click="startRed()" />
         </div>
       </div>
-      </el-main>
+    </el-main>
   </el-container>
 </template>
 
@@ -82,16 +83,15 @@ export default {
       totaloilconsume: [], // 总油耗
       tableData: [], // 设备列表
       columns: [
-          {
+        {
           id: "name",
           label: "车辆名称",
-          width: 110
+          width: 110,
         },
         {
           id: "plateno",
           label: "车牌号码",
         },
-      
       ],
       handle: [
         {
@@ -395,15 +395,14 @@ export default {
     /*
      ** 历史轨迹处理
      */
-    async historyTrackHandle(index,row) {
-
-      row ?  this.eqid = row.guid : '';
+    async historyTrackHandle(index, row) {
+      row ? (this.eqid = row.guid) : "";
 
       let res = null;
 
       if (this.formDate) {
         res = await history({
-          param: { id: this.eqid, start:  this.formDate },
+          param: { id: this.eqid, start: this.formDate },
         });
       } else {
         res = await history({ param: { id: this.eqid } });
@@ -639,7 +638,7 @@ export default {
 }
 </style>
 <style scoped>
->>> .el-main{
+>>> .el-main {
   padding: 0px;
 }
 </style>

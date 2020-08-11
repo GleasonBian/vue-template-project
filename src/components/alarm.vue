@@ -22,7 +22,7 @@
         </el-form>
         <el-form label-position="right" label-width="80px" :model="alarm">
           <el-form-item label="告警位置">
-            <el-input v-model="alarm.address " :readonly="true"></el-input>
+            <el-input v-model="alarm.location " :readonly="true"></el-input>
           </el-form-item>
           <el-form-item label="告警描述">
             <el-input type="textarea" :rows="4" v-model="alarm.remark" :readonly="true"></el-input>
@@ -194,9 +194,7 @@ export default {
       const res = await alarmHandle(data);
       if (res.data instanceof Object) {
         this.$message.success("处理成功");
-        this.$router.replace({
-          path: "/dashboard"
-        });
+        this.$router.replace("/platform/message");
       }
     }
   },
