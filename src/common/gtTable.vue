@@ -24,7 +24,7 @@
       :width="col.width?col.width:''"
     >
       <template slot-scope="scope">
-        <div class="product-img" v-show="col.img">
+        <div class="product-img" v-if="col.img">
          <div v-if="(scope.row[col.id] instanceof  Array)">
             <img
             v-for="(picture, index) in scope.row[col.id]"
@@ -44,7 +44,7 @@
          </div>
         </div>
         <!-- <div v-else-if="typeof(col.type) === string"></div> -->
-        <div v-show="!col.img">{{ scope.row[col.id] }}</div>
+        <div v-else>{{ scope.row[col.id] }}</div>
       </template>
     </el-table-column>
     <el-table-column

@@ -14,7 +14,7 @@
       <el-button type="success" size="mini" @click="exportForm">导出</el-button>
       <gt-table
         :tableData="tableData"
-        style="width: 98%"
+        style="width: 100%"
         :optionWidth="optionWidth"
         :columns="columns"
         :selection="false"

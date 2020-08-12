@@ -104,7 +104,7 @@ export default {
         {
           id: "location",
           label: "地理位置",
-          width: 350
+          width: 480
         },
       ],
       handle: [
