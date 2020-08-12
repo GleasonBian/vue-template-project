@@ -66,6 +66,7 @@
         v-on:deleteCorp="deleteCorp"
         :handle="handle"
         size="mini"
+        height="70vh"
       ></gt-table>
 
       <el-pagination

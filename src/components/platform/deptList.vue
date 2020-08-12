@@ -9,6 +9,7 @@
         label-width="auto"
         style="width:100%"
         lable-width="120px"
+        size="mini"
       >
         <el-row :gutter="20" class="searchBox">
           <el-col :span="6" align="center">
@@ -50,7 +51,7 @@
           </el-col>
           <el-col :span="6" align="center">
             <el-button type="primary" size="mini" @click="getData" style="width:36%">查询</el-button>
-            <el-button style="width:36%" @click="resetHandle">重置</el-button>
+            <el-button style="width:36%" @click="resetHandle" size="mini">重置</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -68,6 +69,7 @@
         v-on:deleteCorp="deleteCorp"
         :handle="handle"
         size="mini"
+        height="70vh"
       ></gt-table>
 
       <el-pagination

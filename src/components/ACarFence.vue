@@ -11,6 +11,7 @@
       v-on:fencesHandle="fencesHandle"
       :handle="handle"
       size="mini"
+      height="30%"
     ></gt-table>
   </div>
 </template>

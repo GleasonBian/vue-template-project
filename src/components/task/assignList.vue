@@ -28,6 +28,7 @@
         v-on:deleteAssign="deleteAssign"
         :handle="handle"
         size="mini"
+         height="70vh"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination

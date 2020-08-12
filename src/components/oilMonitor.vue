@@ -1,95 +1,59 @@
 <template>
-  <div style="padding:12px">
-    <el-row :gutter="10">
-      <el-col :span="5" align="center">
-        <!--  style="min-width:300px" -->
-        <el-card>
-          <el-table
-            :data="vehicleData"
-            @row-click="clickRow"
-            highlight-current-row
-            size="mini"
-            ref="singleTable"
-            border
-          >
-            <el-table-column
-              type="index"
-              label="序号"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="name"
-              label="名称"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="plateno"
-              label="号码"
-              align="center"
-            ></el-table-column>
-            <!-- <el-table-column label="状态">
-              <template slot-scope="scope">
-                <div class="carStatus">
-                  <div
-                    class="active"
-                    :class="{
-                  active: scope.row.status == 1,
-                  fix: scope.row.status == 2,
-                  stop: scope.row.status == 3
-                }"
-                  ></div>
-                </div>
-              </template>
-            </el-table-column>-->
-          </el-table>
-        </el-card>
-      </el-col>
-      <el-col align="middle" :span="19">
-        <!-- 搜索框 -->
-        <el-card>
-          <gt-search
-            :data="searchData"
-            @handle="searchHandle"
-            dateType="datetimerange"
-          ></gt-search>
-        </el-card>
-        <!-- 列表 -->
-        <el-card style="margin-top:12px">
-          <div style="width:100%; height:350px;" ref="chart"></div>
-        </el-card>
-        <el-card style="margin-top:12px">
-          <el-row>
-            <el-col align="right" style="margin-bottom:12px">
-              <el-button type="success" @click="exportForm">导出</el-button>
-            </el-col>
-          </el-row>
-          <gt-table
-            :tableData="
+  <el-container style="padding:12px 0px">
+    <el-aside width="324px" style="padding:0px 12px;">
+      <el-card style=" height:110vh">
+        <el-table
+          :data="vehicleData"
+          @row-click="clickRow"
+          highlight-current-row
+          size="mini"
+          ref="singleTable"
+          border
+        >
+          <el-table-column type="index" label="序号" align="center"></el-table-column>
+          <el-table-column prop="name" label="名称" align="center"></el-table-column>
+          <el-table-column prop="plateno" label="号码" align="center"></el-table-column>
+        </el-table>
+      </el-card>
+    </el-aside>
+    <el-main style="padding:0px 12px 0px 0px">
+      <!-- 搜索框 -->
+      <el-card>
+        <gt-search :data="searchData" @handle="searchHandle" dateType="datetimerange"></gt-search>
+      </el-card>
+      <!-- 列表 -->
+      <el-card style="margin-top:12px">
+        <div style="width:100%; height:350px;" ref="chart"></div>
+      </el-card>
+      <el-card style="margin-top:12px">
+        <el-button type="success" @click="exportForm" size="mini">导出</el-button>
+        <gt-table
+          :tableData="
               tableData.slice(
                 (currentPage - 1) * pagesize,
                 currentPage * pagesize
               )
             "
-            style="width: 100%"
-            :optionWidth="optionWidth"
-            :columns="columns"
-            :selection="false"
-          ></gt-table>
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="10"
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            style="margin:20px"
-          ></el-pagination>
-        </el-card>
-      </el-col>
-    </el-row>
-  </div>
+          style="width: 100%"
+          :optionWidth="optionWidth"
+          :columns="columns"
+          :selection="false"
+          height="45vh"
+        ></gt-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="10"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          style="margin-top:20px"
+        ></el-pagination>
+      </el-card>
+    </el-main>
+  </el-container>
 </template>
 <script>
 import { equiSelect, oilView } from "@/getData";
@@ -125,6 +89,7 @@ export default {
         {
           id: "gpstime",
           label: "gps时间",
+          width:150
         },
         {
           id: "curmiles",
@@ -157,6 +122,7 @@ export default {
         {
           id: "location",
           label: "位置",
+          width:350,
         },
       ],
       tableData: [], // 表格数据
@@ -440,7 +406,7 @@ export default {
         ],
       };
       myChart.setOption(option);
-      window.onresize = function() {
+      window.onresize = function () {
         myChart.resize();
       };
     },

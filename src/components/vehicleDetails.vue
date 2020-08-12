@@ -8,7 +8,7 @@
         style="border-right:3px solid #E4E7ED; margin-right:5px; padding:0px 12px"
         id="aside_vehicle"
       >
-        <el-card :body-style="{ padding: '0px' }" >
+        <el-card :body-style="{ padding: '0px' }">
           <el-image style="width:100%; height:200px" :src="baseurl + form.mainImage" fit="cover"></el-image>
           <div style="padding: 14px;">
             <span>{{ form.name }}</span>
@@ -23,7 +23,9 @@
         <el-main style="padding-top:0px">
           <el-tabs v-model="activeName" @tab-click="handleClick" style="width:100%">
             <el-tab-pane label="基本信息" name="first">
-              <Vehicle ref="Vehicle" @deviceInfo="deviceInfo" :disable="true"></Vehicle>
+              <div class="Vehicle">
+                <Vehicle ref="Vehicle" @deviceInfo="deviceInfo" :disable="true"></Vehicle>
+              </div>
             </el-tab-pane>
             <el-tab-pane label="油耗统计" name="fourth">
               <Amachine></Amachine>
@@ -115,6 +117,9 @@ export default {
 
 .clearfix:after {
   clear: both;
-  
+}
+.Vehicle {
+  /* overflow-y: auto;
+  height: 80vh; */
 }
 </style>

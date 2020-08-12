@@ -77,6 +77,7 @@
         v-on:ComeOnTag="ComeOnTag"
         :handle="handle"
         size="mini"
+        height="70vh"
       ></gt-table>
       <el-pagination
         style="margin-top:12px"

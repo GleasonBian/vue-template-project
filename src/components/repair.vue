@@ -28,10 +28,11 @@
         v-on:DeleteHandle="DeleteHandle"
         v-on:downloadHandle="downloadHandle"
         :handle="handle"
+        height="70vh"
         size="mini"
       ></gt-table>
       <el-pagination
-        style="margin:12px"
+        style="margin-top:12px"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="pageno"
@@ -82,7 +83,8 @@ export default {
       columns: [
         {
           id: "code",
-          label: "保养记录编号"
+          label: "保养记录编号",
+          width: 200,
         },
         {
           id: "plateno",

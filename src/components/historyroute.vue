@@ -9,29 +9,21 @@
         @change="currentHandle"
         style="width:100%"
       ></el-date-picker>
-      <gt-table
-        :tableData="vehicleData"
-        style="width: 100%;"
-        :optionWidth="60"
-        :columns="columns"
-        :selection="false"
-        v-on:historyTrackHandle="historyTrackHandle"
-        :handle="handle"
-        size="mini"
-      ></gt-table>
-    </el-aside>
-    <el-main>
-      <div class="echarts_style" v-show="dialogTableVisible">
-        <span class="xxx" @click="closedialog($event)">×</span>
-        <div style="width:80vw; height:500px" ref="chart"></div>
+      <div style="height: 55%">
+        <gt-table
+          :tableData="vehicleData"
+          style="width: 100%;"
+          :optionWidth="60"
+          :columns="columns"
+          :selection="false"
+          v-on:historyTrackHandle="historyTrackHandle"
+          :handle="handle"
+          size="mini"
+          :index="false"
+        ></gt-table>
       </div>
-
-
-        <el-button type="primary" icon="el-icon-s-order" @click="dialogOpenHandle" style="position: absolute; z-index:100">统计</el-button>
-
-
-      <div class="map" id="historymap"></div>
-      <div class="input-card">
+      <div class="ctrl_box">
+        <div class="input-card">
         <h4>轨迹回放控制</h4>
         <div class="input-item">
           <input type="button" class="btn" value="开始动画" id="start" @click="startAnimation()" />
@@ -46,6 +38,23 @@
           <input type="button" class="btn" value="减速" id=" speed" @click="startRed()" />
         </div>
       </div>
+      </div>
+      
+    </el-aside>
+    <el-main>
+      <div class="echarts_style" v-show="dialogTableVisible">
+        <span class="xxx" @click="closedialog($event)">×</span>
+        <div style="width:80vw; height:500px" ref="chart"></div>
+      </div>
+
+      <el-button
+        type="primary"
+        icon="el-icon-s-order"
+        @click="dialogOpenHandle"
+        style="position: absolute; z-index:100"
+      >统计</el-button>
+
+      <div class="map" id="historymap"></div>
     </el-main>
   </el-container>
 </template>
@@ -57,6 +66,7 @@ export default {
   name: "historyTrack2",
   data() {
     return {
+      asideHeight: document.documentElement.clientHeight - 60,
       marker: {},
       hisData: [], //回放位置数组
       map: {},
@@ -108,6 +118,8 @@ export default {
   },
   mounted() {
     this.initMap();
+
+    console.log(document.getElementById("historymap").clientHeight);
   },
   methods: {
     ExamineHandle(val) {
@@ -561,24 +573,28 @@ export default {
 #historymap {
   height: 95vh;
 }
+.ctrl_box{
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .input-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
   min-width: 0;
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
   border-radius: 0.25rem;
-  width: 22rem;
+  width: 14rem;
   border-width: 0;
   border-radius: 0.4rem;
   box-shadow: 0 2px 6px 0 rgba(114, 124, 245, 0.5);
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
   padding: 0.75rem 1.25rem;
+  z-index: 10;
   h4 {
     font-family: inherit;
     line-height: 1.8;
@@ -592,6 +608,7 @@ export default {
     position: relative;
     display: -ms-flexbox;
     display: flex;
+    justify-content: center;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     -ms-flex-align: center;
@@ -601,7 +618,7 @@ export default {
   }
   .btn {
     margin-right: 1.2rem;
-    width: 9rem;
+    width: 100px;
     display: inline-block;
     font-weight: 400;
     text-align: center;

@@ -1,60 +1,59 @@
 <template>
-  <div style="padding:12px">
-    <el-row :gutter="10">
-      <el-col :span="5" align="center">
-        <el-card>
-          <el-table
-            :data="vehicleData"
-            @row-click="clickRow"
-            highlight-current-row
-            size="mini"
-            ref="singleTable"
-            style="width:100%"
-            border
-          >
-            <el-table-column type="index" label="序号"></el-table-column>
-            <el-table-column prop="plateno" label="号码"></el-table-column>
-            <el-table-column prop="name" label="名称"></el-table-column>
-          </el-table>
-        </el-card>
-      </el-col>
-      <el-col align="middle" :span="19">
-        <!-- 搜索框 -->
-        <el-card>
-          <gt-search :data="searchData" @handle="oilViewHandle"></gt-search>
-        </el-card>
-        <!-- 列表 -->
-        <el-card style="margin-top:12px">
-          <div style="width:100%; height:350px;float:left" ref="chart"></div>
-        </el-card>
-        <el-card style="margin-top:12px">
-          <gt-table
-            :tableData="tableData.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
-            style="width: 100%"
-            :optionWidth="optionWidth"
-            :columns="columns"
-            :selection="false"
-            v-on:checkTasks="checkTasks"
-            v-on:DeleteHandle="DeleteHandle"
-            v-on:UpdatePreprocessing="UpdatePreprocessing"
-            :handle="handle"
-            size="mini"
-          ></gt-table>
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="pagesize"
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            style="margin:20px"
-          ></el-pagination>
-        </el-card>
-      </el-col>
-    </el-row>
-  </div>
+  <el-container style="padding:12px 0px">
+    <el-aside width="324px" style="padding:0px 12px;">
+      <el-card style=" height:105vh">
+        <el-table
+          :data="vehicleData"
+          @row-click="clickRow"
+          highlight-current-row
+          size="mini"
+          ref="singleTable"
+          style="width:100%"
+          border
+        >
+          <el-table-column type="index" label="序号" align="center"></el-table-column>
+          <el-table-column prop="plateno" label="车牌" align="center"></el-table-column>
+          <el-table-column prop="name" label="名称" align="center"></el-table-column>
+        </el-table>
+      </el-card>
+    </el-aside>
+    <el-main style="padding:0px 12px 0px 0px">
+      <!-- 搜索框 -->
+      <el-card>
+        <gt-search :data="searchData" @handle="oilViewHandle"></gt-search>
+      </el-card>
+      <!-- 列表 -->
+      <el-card style="margin-top:12px">
+        <div style="width:100%; height:350px;float:left" ref="chart"></div>
+      </el-card>
+      <el-card style="margin-top:12px">
+        <gt-table
+          :tableData="tableData.slice((currentPage - 1) * pagesize, currentPage * pagesize)"
+          style="width: 100%"
+          :optionWidth="optionWidth"
+          :columns="columns"
+          :selection="false"
+          v-on:checkTasks="checkTasks"
+          v-on:DeleteHandle="DeleteHandle"
+          v-on:UpdatePreprocessing="UpdatePreprocessing"
+          :handle="handle"
+          size="mini"
+          height="45vh"
+        ></gt-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="pagesize"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          style="margin-top:20px"
+        ></el-pagination>
+      </el-card>
+    </el-main>
+  </el-container>
 </template>
 <script>
 import { equiSelect, oilView, alarm } from "@/getData";
@@ -85,44 +84,47 @@ export default {
       columns: [
         {
           id: "name",
-          label: "车辆名称"
+          label: "车辆名称",
         },
         {
           id: "duty_name",
-          label: "责任人"
+          label: "责任人",
+          width:100
         },
         {
           id: "class_type",
-          label: "告警类型"
+          label: "告警类型",
         },
         {
           id: "alarm_name",
-          label: "告警内容"
+          label: "告警内容",
+          width: 200
         },
         {
           id: "class_rank",
-          label: "告警等级"
+          label: "告警等级",
+          width: 100
         },
         {
           id: "occur_time",
-          label: "告警时间"
+          label: "告警时间",
         },
         {
           id: "handle_time",
-          label: "处理时间"
+          label: "处理时间",
         },
         {
           id: "handle_name",
-          label: "处理人"
+          label: "处理人",
         },
         {
           id: "handle_result",
-          label: "处理结果"
+          label: "处理结果",
         },
         {
           id: "remark",
-          label: "处理说明"
-        }
+          label: "处理说明",
+        },
       ],
       tableData: [], // 表格数据
       total: 0,
@@ -139,9 +141,9 @@ export default {
           options: [
             {
               value: "项目1", // 下拉选项 绑定 值
-              label: "项目1" // 下拉选项 绑定 名称
-            }
-          ]
+              label: "项目1", // 下拉选项 绑定 名称
+            },
+          ],
         },
         {
           key: "type",
@@ -152,23 +154,23 @@ export default {
             {
               // 选填 如果 存在 options 选项 搜索框将由 input 变为 select框
               value: "1", // 下拉选项 绑定 值
-              label: "超速告警" // 下拉选项 绑定 名称
+              label: "超速告警", // 下拉选项 绑定 名称
             },
             {
               value: "2",
-              label: "油耗告警"
-            }
-          ]
+              label: "油耗告警",
+            },
+          ],
         },
         {
           key: "date",
           label: "选择时间",
           placeholder: "请选择",
-          default: ""
-        }
+          default: "",
+        },
       ],
       optionWidth: 250,
-      vehicleData: []
+      vehicleData: [],
     };
   },
   beforeCreate() {},
@@ -195,7 +197,7 @@ export default {
      ** 获取两个时间之间的天数数组
      */
     getAllDate(day1, day2) {
-      var getDate = function(str) {
+      var getDate = function (str) {
         var tempDate = new Date();
         var list = str.split("-");
         tempDate.setFullYear(list[0]);
@@ -251,7 +253,7 @@ export default {
      */
     async equiList() {
       const res = await equiSelect();
-      res.data.map(item => {
+      res.data.map((item) => {
         item.value = item.guid;
         item.label = item.plateno;
       });
@@ -341,20 +343,20 @@ export default {
       let option = {
         title: {
           left: "center",
-          text: "告警统计"
+          text: "告警统计",
         },
         tooltip: {
           trigger: "axis",
           textStyle: {
-            align: "left"
-          }
+            align: "left",
+          },
         },
         legend: {
           align: "left",
           data: ["超速告警", "油耗告警"],
           verticalAlign: "top", //垂直方向位置
           x: 100, //距离x轴的距离
-          y: 0 //距离Y轴的距离
+          y: 0, //距离Y轴的距离
         },
         toolbox: {
           show: true,
@@ -363,28 +365,28 @@ export default {
           feature: {
             magicType: {
               type: ["line", "bar"],
-              show: true
+              show: true,
             },
             dataZoom: {
-              show: true
+              show: true,
             },
             dataView: {
-              show: true
+              show: true,
             },
             restore: {
-              show: true
+              show: true,
             },
             saveAsImage: {
-              show: true
-            }
-          }
+              show: true,
+            },
+          },
         },
         calculable: true,
         grid: {
           left: "3%",
           right: "4%",
           bottom: "3%",
-          containLabel: true
+          containLabel: true,
         },
         dataZoom: [
           {
@@ -394,17 +396,17 @@ export default {
             top: 30,
             start: 10,
             end: 90,
-            height: 20 //初始化滚动条
-          }
+            height: 20, //初始化滚动条
+          },
         ],
         xAxis: {
           type: "category",
           axisTick: { show: false },
           boundaryGap: false,
-          data: xdays
+          data: xdays,
         },
         yAxis: {
-          type: "value"
+          type: "value",
         },
         series: [
           {
@@ -421,9 +423,9 @@ export default {
               textStyle: {
                 // 数值样式
                 color: "black",
-                fontSize: 16
-              }
-            }
+                fontSize: 16,
+              },
+            },
           },
           {
             name: "油耗告警",
@@ -439,14 +441,14 @@ export default {
               textStyle: {
                 // 数值样式
                 color: "black",
-                fontSize: 16
-              }
-            }
-          }
-        ]
+                fontSize: 16,
+              },
+            },
+          },
+        ],
       };
       myChart.setOption(option);
-      window.onresize = function() {
+      window.onresize = function () {
         myChart.resize();
       };
     },
@@ -478,17 +480,17 @@ export default {
       this.$confirm("删除计划?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           let res = assignDelete({ id: row.guid });
-         
+
           if (res.status === 200) {
             this.$message.success("删除成功");
           }
           this.searchHandle();
         })
-        .catch(err => {});
+        .catch((err) => {});
     },
 
     /*
@@ -500,7 +502,7 @@ export default {
         return;
       }
       let data = {
-        ids: JSON.stringify(this.multipleSelection)
+        ids: JSON.stringify(this.multipleSelection),
       };
       let res = await deleteUserByIds(data);
       if (res.result) this.$message.success(res.message);
@@ -529,9 +531,9 @@ export default {
      */
     handleCurrentChange(val) {
       this.currentPage = val;
-    }
+    },
   },
-  components: {}
+  components: {},
 };
 </script>
 <style lang="less" scoped>

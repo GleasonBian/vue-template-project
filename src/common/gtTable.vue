@@ -12,7 +12,7 @@
     :height="height"
   >
     <el-table-column type="selection" align="center" header-align="center" v-if="selection"></el-table-column>
-    <el-table-column align="center" header-align="center" type="index" label="序号" width="50"></el-table-column>
+    <el-table-column align="center" header-align="center" type="index" label="序号" width="50" v-if="index"></el-table-column>
     <el-table-column
       v-for="col in columns"
       :prop="col.id"
@@ -116,8 +116,13 @@ export default {
       required: false
     },
     height: {
-      type: String,
-      default: '',
+      type: [Number,String],
+      default: '100%',
+      required: false,
+    },
+    index:{
+      type: Boolean,
+      default: true,
       required: false,
     }
   },

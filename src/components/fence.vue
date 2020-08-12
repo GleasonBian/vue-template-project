@@ -30,6 +30,7 @@
           v-on:deleteHandle="deleteHandle"
           :handle="handle"
           size="mini"
+          height="50vh"
         ></gt-table>
       </el-tab-pane>
       <el-tab-pane label="多边形围栏" name="second">
@@ -43,6 +44,7 @@
           v-on:deleteHandle="deleteHandle"
           :handle="handle"
           size="mini"
+          height="50vh"
         ></gt-table>
       </el-tab-pane>
       <el-tab-pane label="圆形围栏" name="third">
@@ -56,6 +58,7 @@
           v-on:deleteHandle="deleteHandle"
           :handle="handle"
           size="mini"
+          height="50vh"
         ></gt-table>
       </el-tab-pane>
     </el-tabs>
@@ -193,7 +196,7 @@ export default {
         {
           id: "name",
           label: "围栏名称",
-          width: 100,
+          width: 150,
         },
         {
           id: "belongto",
@@ -208,6 +211,7 @@ export default {
         {
           id: "purpose",
           label: "围栏用途",
+          width: 100
         },
         {
           id: "radius",

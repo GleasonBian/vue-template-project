@@ -1,5 +1,5 @@
 <template>
-  <el-table size="mini" :data="EquipmentSummaryData">
+  <el-table size="mini" :data="EquipmentSummaryData" height="81.5vh">
     <el-table-column align="center" header-align="center" type="index" label="序号" width="50"></el-table-column>
     <el-table-column prop="recordtime" label="日期" align="center" header-align="center"></el-table-column>
     <el-table-column prop="miles" label="里程" align="center" header-align="center"></el-table-column>

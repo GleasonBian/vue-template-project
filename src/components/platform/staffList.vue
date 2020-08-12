@@ -23,6 +23,7 @@
         v-on:deleteCorp="deleteCorp"
         :handle="handle"
         size="mini"
+        height="70vh"
       ></gt-table>
       <!-- v-on:selection-change="handleSelectionChange" -->
       <el-pagination

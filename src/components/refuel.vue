@@ -26,6 +26,7 @@
         v-on:ExamineHandle="ExamineHandle"
         v-on:DeleteHandle="DeleteHandle"
         :handle="handle"
+        height="70vh"
       ></gt-table>
       <el-pagination
         @size-change="handleSizeChange"
@@ -69,7 +70,8 @@ export default {
       columns: [
         {
           id: "code",
-          label: "加油申请单号"
+          label: "加油申请单号",
+          width: 300,
         },
         {
           id: "urgent",
