@@ -63,535 +63,557 @@
       </span>
     </el-dialog>
 
-    <el-form
-      ref="form"
-      :model="form"
-      label-width="100px"
-      :rules="rules"
-      :disabled="disable"
-    >
-      <el-card class="content_width" shadow="never">
-        <div slot="header" class="clearfix">
+    <el-form ref="form" :model="form" label-width="100px" :rules="rules" :disabled="disable">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        
+        <el-tab-pane label="基本信息" name="first">
+          <el-card class="content_width" shadow="never">
+            <!-- <div slot="header" class="clearfix">
           <span>基本信息</span>
           <span
             style="float: right; padding: 3px 0; color:rgb(164, 164, 165);"
           >车辆编号：{{this.form.equip_no}}</span>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="设备名称" prop="name">
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
+            </div>-->
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="设备名称" prop="name">
+                  <el-input v-model="form.name"></el-input>
+                </el-form-item>
 
-            <el-form-item label="计量单位" prop="unit">
-              <el-input v-model="form.unit"></el-input>
-            </el-form-item>
+                <el-form-item label="计量单位" prop="unit">
+                  <el-input v-model="form.unit"></el-input>
+                </el-form-item>
 
-            <el-form-item label="设备来源" prop="deviceSource">
-              <el-select v-model="form.deviceSource" placeholder="请选择" style="width:100%">
-                <el-option label="自购" value="自购"></el-option>
-                <el-option label="租赁" value="租赁"></el-option>
-                <el-option label="借调" value="借调"></el-option>
-                <el-option label="其他" value="其他"></el-option>
-              </el-select>
-            </el-form-item>
+                <el-form-item label="设备来源" prop="deviceSource">
+                  <el-select v-model="form.deviceSource" placeholder="请选择" style="width:100%">
+                    <el-option label="自购" value="自购"></el-option>
+                    <el-option label="租赁" value="租赁"></el-option>
+                    <el-option label="借调" value="借调"></el-option>
+                    <el-option label="其他" value="其他"></el-option>
+                  </el-select>
+                </el-form-item>
 
-            <el-form-item label="折旧年限" prop="depreciationYear">
-              <el-select v-model="form.depreciationYear" placeholder="请选择" style="width:100%">
-                <el-option v-for="n in 20" :label="(n) + ' 年'" :value="(n+'年')" :key="n"></el-option>
-              </el-select>
-            </el-form-item>
+                <el-form-item label="折旧年限" prop="depreciationYear">
+                  <el-select v-model="form.depreciationYear" placeholder="请选择" style="width:100%">
+                    <el-option v-for="n in 20" :label="(n) + ' 年'" :value="(n+'年')" :key="n"></el-option>
+                  </el-select>
+                </el-form-item>
 
-            <el-form-item label="设备分类" prop="deviceClassify">
-              <el-select
-                v-model="form.deviceClassify"
-                placeholder="请选择"
-                style="width:100%"
-                @change="resetClassifyId(form.deviceClassify)"
-              >
-                <el-option v-for="item in classifyData" :key="item" :label="item" :value="item"></el-option>
-              </el-select>
-            </el-form-item>
+                <el-form-item label="设备分类" prop="deviceClassify">
+                  <el-select
+                    v-model="form.deviceClassify"
+                    placeholder="请选择"
+                    style="width:100%"
+                    @change="resetClassifyId(form.deviceClassify)"
+                  >
+                    <el-option v-for="item in classifyData" :key="item" :label="item" :value="item"></el-option>
+                  </el-select>
+                </el-form-item>
 
-            <el-form-item label="所属公司" prop="corpguid">
-              <el-select
-                v-model="form.corpguid"
-                placeholder="请选择"
-                @change="resetDept(form.corpguid)"
-                style="width:100%"
-              >
-                <el-option
-                  v-for="item in corpData"
-                  :key="item.guid"
-                  :label="item.name"
-                  :value="item.guid"
-                ></el-option>
-              </el-select>
-            </el-form-item>
+                <el-form-item label="所属公司" prop="corpguid">
+                  <el-select
+                    v-model="form.corpguid"
+                    placeholder="请选择"
+                    @change="resetDept(form.corpguid)"
+                    style="width:100%"
+                  >
+                    <el-option
+                      v-for="item in corpData"
+                      :key="item.guid"
+                      :label="item.name"
+                      :value="item.guid"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
 
-            <el-form-item label="合同价格" prop="contractPrice">
-              <el-input v-model.number="form.contractPrice" type="number" :step="100" :min="1">
-                <el-button slot="append">元</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="合同价格" prop="contractPrice">
+                  <el-input v-model.number="form.contractPrice" type="number" :step="100" :min="1">
+                    <el-button slot="append">元</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="设备交付" prop="deliveryDate">
-              <el-date-picker
-                v-model="form.deliveryDate"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy/MM/dd"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-              ></el-date-picker>
-            </el-form-item>
+                <el-form-item label="设备交付" prop="deliveryDate">
+                  <el-date-picker
+                    v-model="form.deliveryDate"
+                    type="date"
+                    placeholder="选择日期"
+                    format="yyyy/MM/dd"
+                    value-format="yyyy-MM-dd"
+                    style="width:100%"
+                  ></el-date-picker>
+                </el-form-item>
 
-            <el-form-item label="管理号码" prop="manageNumber">
-              <el-input v-model.number="form.manageNumber"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="车牌号码" prop="plateno">
-              <el-input v-model="form.plateno"></el-input>
-            </el-form-item>
+                <el-form-item label="管理号码" prop="manageNumber">
+                  <el-input v-model.number="form.manageNumber"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="车牌号码" prop="plateno">
+                  <el-input v-model="form.plateno"></el-input>
+                </el-form-item>
 
-            <el-form-item label="产权单位" prop="propertyUnit">
-              <el-input v-model="form.propertyUnit"></el-input>
-            </el-form-item>
+                <el-form-item label="产权单位" prop="propertyUnit">
+                  <el-input v-model="form.propertyUnit"></el-input>
+                </el-form-item>
 
-            <el-form-item label="设备原值" prop="originalValue">
-              <el-input v-model.number="form.originalValue" type="number" :step="100" :min="1">
-                <el-button slot="append">元</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="设备原值" prop="originalValue">
+                  <el-input v-model.number="form.originalValue" type="number" :step="100" :min="1">
+                    <el-button slot="append">元</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="年折旧率" prop="depreciationRate">
-              <el-input
-                v-model.number="form.depreciationRate"
-                type="number"
-                :step="10"
-                :min="1"
-                :max="100"
-              >
-                <el-button slot="append">%</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="年折旧率" prop="depreciationRate">
+                  <el-input
+                    v-model.number="form.depreciationRate"
+                    type="number"
+                    :step="10"
+                    :min="1"
+                    :max="100"
+                  >
+                    <el-button slot="append">%</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="设备类型" prop="clstype">
-              <el-select v-model="form.clstype" placeholder="请选择" style="width:100%">
-                <el-option v-for="item in classifyIdData" :key="item" :label="item" :value="item"></el-option>
-              </el-select>
-            </el-form-item>
+                <el-form-item label="设备类型" prop="clstype">
+                  <el-select v-model="form.clstype" placeholder="请选择" style="width:100%">
+                    <el-option
+                      v-for="item in classifyIdData"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
 
-            <el-form-item label="所属部门" prop="deptguid">
-              <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="item in deptData"
-                  track-by="item.guid"
-                  :key="item.guid"
-                  :label="item.name"
-                  :value="item.guid"
-                ></el-option>
-              </el-select>
-            </el-form-item>
+                <el-form-item label="所属部门" prop="deptguid">
+                  <el-select v-model="form.deptguid" placeholder="请选择" style="width:100%">
+                    <el-option
+                      v-for="item in deptData"
+                      track-by="item.guid"
+                      :key="item.guid"
+                      :label="item.name"
+                      :value="item.guid"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
 
-            <el-form-item label="投资来源" prop="investmentSource">
-              <el-input v-model="form.investmentSource"></el-input>
-            </el-form-item>
+                <el-form-item label="投资来源" prop="investmentSource">
+                  <el-input v-model="form.investmentSource"></el-input>
+                </el-form-item>
 
-            <el-form-item label="合同签订" prop="signedDate">
-              <el-date-picker
-                v-model="form.signedDate"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy/MM/dd"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-              ></el-date-picker>
-            </el-form-item>
+                <el-form-item label="合同签订" prop="signedDate">
+                  <el-date-picker
+                    v-model="form.signedDate"
+                    type="date"
+                    placeholder="选择日期"
+                    format="yyyy/MM/dd"
+                    value-format="yyyy-MM-dd"
+                    style="width:100%"
+                  ></el-date-picker>
+                </el-form-item>
 
-            <el-form-item label="描述信息" prop="description">
-              <el-input v-model="form.description" type="textarea"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-card>
+                <el-form-item label="描述信息" prop="description">
+                  <el-input v-model="form.description" type="textarea"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-tab-pane>
 
-      <el-card class="content_width" shadow="never">
-        <div slot="header" class="clearfix">
-          <span>监控信息</span>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="终端ID" prop="terminalid">
-              <el-input v-model="form.terminalid"></el-input>
-            </el-form-item>
+        <el-tab-pane label="监控信息" name="second">
+          <el-card class="content_width" shadow="never">
+            <!-- <div slot="header" class="clearfix">
+              <span>监控信息</span>
+            </div>-->
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="终端ID" prop="terminalid">
+                  <el-input v-model="form.terminalid"></el-input>
+                </el-form-item>
 
-            <el-form-item label="保养日期" prop="repair_date">
-              <el-date-picker
-                v-model="form.repair_date"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy/MM/dd"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-              ></el-date-picker>
-            </el-form-item>
+                <el-form-item label="保养日期" prop="repair_date">
+                  <el-date-picker
+                    v-model="form.repair_date"
+                    type="date"
+                    placeholder="选择日期"
+                    format="yyyy/MM/dd"
+                    value-format="yyyy-MM-dd"
+                    style="width:100%"
+                  ></el-date-picker>
+                </el-form-item>
 
-            <el-form-item label="油耗阀值" prop="max_oil_wear">
-              <el-input-number
-                :min="1"
-                :max="200"
-                controls-position="right"
-                v-model.number="form.max_oil_wear"
-                :step="5"
-                step-strictly
-                placeholder="油耗报警阀值"
-                style="width:100%"
-              ></el-input-number>
-            </el-form-item>
+                <el-form-item label="油耗阀值" prop="max_oil_wear">
+                  <el-input-number
+                    :min="1"
+                    :max="200"
+                    controls-position="right"
+                    v-model.number="form.max_oil_wear"
+                    :step="5"
+                    step-strictly
+                    placeholder="油耗报警阀值"
+                    style="width:100%"
+                  ></el-input-number>
+                </el-form-item>
 
-            <el-form-item label="小时/油耗" prop="hr_oil_wear">
-              <el-input
-                v-model.number="form.hr_oil_wear"
-                type="number"
-                :step="10"
-                :min="1"
-                :max="300"
-              >
-                <el-button slot="append">升/小时</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="小时/油耗" prop="hr_oil_wear">
+                  <el-input
+                    v-model.number="form.hr_oil_wear"
+                    type="number"
+                    :step="10"
+                    :min="1"
+                    :max="300"
+                  >
+                    <el-button slot="append">升/小时</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="油箱类型" prop="tank_guid">
-              <el-select v-model="form.tank_guid" placeholder="请选择" style="width:75%">
-                <el-option
-                  v-for="item in tankData"
-                  :key="item.guid"
-                  :label="item.category"
-                  :value="item.guid"
-                ></el-option>
-              </el-select>
-              <el-button style="width:25%" @click="dialogVisible = true">新增</el-button>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="SIM卡号" prop="simnumber">
-              <el-input v-model="form.simnumber"></el-input>
-            </el-form-item>
+                <el-form-item label="油箱类型" prop="tank_guid">
+                  <el-select v-model="form.tank_guid" placeholder="请选择" style="width:75%">
+                    <el-option
+                      v-for="item in tankData"
+                      :key="item.guid"
+                      :label="item.category"
+                      :value="item.guid"
+                    ></el-option>
+                  </el-select>
+                  <el-button style="width:25%" @click="dialogVisible = true">新增</el-button>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="SIM卡号" prop="simnumber">
+                  <el-input v-model="form.simnumber"></el-input>
+                </el-form-item>
 
-            <el-form-item label="初始里程" prop="init_mileage">
-              <el-input
-                v-model.number="form.init_mileage"
-                type="number"
-                :step="10"
-                :min="1"
-                :max="300"
-              >
-                <el-button slot="append">公里</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="初始里程" prop="init_mileage">
+                  <el-input
+                    v-model.number="form.init_mileage"
+                    type="number"
+                    :step="10"
+                    :min="1"
+                    :max="300"
+                  >
+                    <el-button slot="append">公里</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="速度阀值" prop="max_speed">
-              <el-input-number
-                :min="1"
-                :max="200"
-                controls-position="right"
-                v-model.number="form.max_speed"
-                :step="5"
-                step-strictly
-                placeholder="超速报警阀值"
-                style="width:100%"
-              ></el-input-number>
-            </el-form-item>
+                <el-form-item label="速度阀值" prop="max_speed">
+                  <el-input-number
+                    :min="1"
+                    :max="200"
+                    controls-position="right"
+                    v-model.number="form.max_speed"
+                    :step="5"
+                    step-strictly
+                    placeholder="超速报警阀值"
+                    style="width:100%"
+                  ></el-input-number>
+                </el-form-item>
 
-            <el-form-item label="公里/油耗" prop="km_oil_wear">
-              <el-input
-                v-model.number="form.km_oil_wear"
-                type="number"
-                :step="10"
-                :min="1"
-                :max="300"
-              >
-                <el-button slot="append">升/百公里</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="公里/油耗" prop="km_oil_wear">
+                  <el-input
+                    v-model.number="form.km_oil_wear"
+                    type="number"
+                    :step="10"
+                    :min="1"
+                    :max="300"
+                  >
+                    <el-button slot="append">升/百公里</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="监控等级" prop="monitor">
-              <el-select v-model="form.monitor" placeholder="请选择" style="width:100%">
-                <el-option label="一级" value="一级"></el-option>
-                <el-option label="二级" value="二级"></el-option>
-                <el-option label="三级" value="三级"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-card>
+                <el-form-item label="监控等级" prop="monitor">
+                  <el-select v-model="form.monitor" placeholder="请选择" style="width:100%">
+                    <el-option label="一级" value="一级"></el-option>
+                    <el-option label="二级" value="二级"></el-option>
+                    <el-option label="三级" value="三级"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-tab-pane>
 
-      <el-card class="content_width" shadow="never">
-        <div slot="header" class="clearfix">
-          <span>规格型号</span>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="设备规格" prop="spec">
-              <el-input v-model="form.spec"></el-input>
-            </el-form-item>
+        <el-tab-pane label="规格型号" name="third">
+          <el-card class="content_width" shadow="never">
+            <!-- <div slot="header" class="clearfix">
+              <span>规格型号</span>
+            </div>-->
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="设备规格" prop="spec">
+                  <el-input v-model="form.spec"></el-input>
+                </el-form-item>
 
-            <el-form-item label="出厂日期" prop="leaveFactoryDate">
-              <el-date-picker
-                v-model="form.leaveFactoryDate"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy/MM/dd"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-              ></el-date-picker>
-            </el-form-item>
+                <el-form-item label="出厂日期" prop="leaveFactoryDate">
+                  <el-date-picker
+                    v-model="form.leaveFactoryDate"
+                    type="date"
+                    placeholder="选择日期"
+                    format="yyyy/MM/dd"
+                    value-format="yyyy-MM-dd"
+                    style="width:100%"
+                  ></el-date-picker>
+                </el-form-item>
 
-            <el-form-item label="出厂编号" prop="FactoryNumber">
-              <el-input v-model="form.FactoryNumber" placeholder="请输入"></el-input>
-            </el-form-item>
+                <el-form-item label="出厂编号" prop="FactoryNumber">
+                  <el-input v-model="form.FactoryNumber" placeholder="请输入"></el-input>
+                </el-form-item>
 
-            <el-form-item label="设备品牌" prop="brand">
-              <el-input v-model.number="form.brand" placeholder="请输入"></el-input>
-            </el-form-item>
+                <el-form-item label="设备品牌" prop="brand">
+                  <el-input v-model.number="form.brand" placeholder="请输入"></el-input>
+                </el-form-item>
 
-            <el-form-item label="装机功率" prop="installedPower">
-              <el-input v-model.number="form.installedPower" type="number" :step="100" :min="1">
-                <el-button slot="append">KW</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="装机功率" prop="installedPower">
+                  <el-input v-model.number="form.installedPower" type="number" :step="100" :min="1">
+                    <el-button slot="append">KW</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="装机重量" prop="InstalledWeight">
-              <el-input v-model.number="form.InstalledWeight" type="number" :step="100" :min="1">
-                <el-button slot="append">KG</el-button>
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="设备型号" prop="deviceModel">
-              <el-input v-model="form.deviceModel"></el-input>
-            </el-form-item>
+                <el-form-item label="装机重量" prop="InstalledWeight">
+                  <el-input
+                    v-model.number="form.InstalledWeight"
+                    type="number"
+                    :step="100"
+                    :min="1"
+                  >
+                    <el-button slot="append">KG</el-button>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="设备型号" prop="deviceModel">
+                  <el-input v-model="form.deviceModel"></el-input>
+                </el-form-item>
 
-            <el-form-item label="进口国产" prop="domestic">
-              <el-select v-model="form.domestic" placeholder="请选择" style="width:100%">
-                <el-option label="进口" value="进口"></el-option>
-                <el-option label="国产" value="国产"></el-option>
-              </el-select>
-            </el-form-item>
+                <el-form-item label="进口国产" prop="domestic">
+                  <el-select v-model="form.domestic" placeholder="请选择" style="width:100%">
+                    <el-option label="进口" value="进口"></el-option>
+                    <el-option label="国产" value="国产"></el-option>
+                  </el-select>
+                </el-form-item>
 
-            <el-form-item label="生产厂家" prop="manufacturer">
-              <el-input v-model="form.manufacturer"></el-input>
-            </el-form-item>
+                <el-form-item label="生产厂家" prop="manufacturer">
+                  <el-input v-model="form.manufacturer"></el-input>
+                </el-form-item>
 
-            <el-form-item label="设备产地" prop="productionPlace">
-              <el-input v-model.number="form.productionPlace"></el-input>
-            </el-form-item>
+                <el-form-item label="设备产地" prop="productionPlace">
+                  <el-input v-model.number="form.productionPlace"></el-input>
+                </el-form-item>
 
-            <el-form-item label="整机尺寸" prop="deviceSize">
-              <el-input v-model="form.deviceSize" placeholder="请输入"></el-input>
-            </el-form-item>
+                <el-form-item label="整机尺寸" prop="deviceSize">
+                  <el-input v-model="form.deviceSize" placeholder="请输入"></el-input>
+                </el-form-item>
 
-            <el-form-item label="整机颜色" prop="color">
-              <el-select v-model="form.color" placeholder="请选择" style="width:100%">
-                <el-option label="白色" value="白色"></el-option>
-                <el-option label="黑色" value="黑色"></el-option>
-                <el-option label="银色" value="银色"></el-option>
-                <el-option label="红色" value="红色"></el-option>
-                <el-option label="黄色" value="黄色"></el-option>
-                <el-option label="棕色" value="棕色"></el-option>
-                <el-option label="绿色" value="绿色"></el-option>
-                <el-option label="蓝色" value="蓝色"></el-option>
-                <el-option label="紫色" value="紫色"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-card>
+                <el-form-item label="整机颜色" prop="color">
+                  <el-select v-model="form.color" placeholder="请选择" style="width:100%">
+                    <el-option label="白色" value="白色"></el-option>
+                    <el-option label="黑色" value="黑色"></el-option>
+                    <el-option label="银色" value="银色"></el-option>
+                    <el-option label="红色" value="红色"></el-option>
+                    <el-option label="黄色" value="黄色"></el-option>
+                    <el-option label="棕色" value="棕色"></el-option>
+                    <el-option label="绿色" value="绿色"></el-option>
+                    <el-option label="蓝色" value="蓝色"></el-option>
+                    <el-option label="紫色" value="紫色"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-tab-pane>
 
-      <el-card class="content_width" shadow="never">
-        <div slot="header" class="clearfix">
-          <span>发动机</span>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="引擎厂商" prop="engineManufacturer">
-              <el-input v-model="form.engineManufacturer"></el-input>
-            </el-form-item>
+        <el-tab-pane label="发动机" name="fourth">
+          <el-card class="content_width" shadow="never">
+            <!-- <div slot="header" class="clearfix">
+              <span>发动机</span>
+            </div>-->
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="引擎厂商" prop="engineManufacturer">
+                  <el-input v-model="form.engineManufacturer"></el-input>
+                </el-form-item>
 
-            <el-form-item label="引擎功率" prop="enginePower">
-              <el-input v-model.number="form.enginePower" type="number" :step="100" :min="1">
-                <el-button slot="append">KW</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="引擎功率" prop="enginePower">
+                  <el-input v-model.number="form.enginePower" type="number" :step="100" :min="1">
+                    <el-button slot="append">KW</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="出厂日期" prop="engineDate">
-              <el-date-picker
-                v-model="form.engineDate"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy/MM/dd"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
+                <el-form-item label="出厂日期" prop="engineDate">
+                  <el-date-picker
+                    v-model="form.engineDate"
+                    type="date"
+                    placeholder="选择日期"
+                    format="yyyy/MM/dd"
+                    value-format="yyyy-MM-dd"
+                    style="width:100%"
+                  ></el-date-picker>
+                </el-form-item>
+              </el-col>
 
-          <el-col :span="12">
-            <el-form-item label="引擎型号" prop="engineModel">
-              <el-input v-model="form.engineModel"></el-input>
-            </el-form-item>
+              <el-col :span="12">
+                <el-form-item label="引擎型号" prop="engineModel">
+                  <el-input v-model="form.engineModel"></el-input>
+                </el-form-item>
 
-            <el-form-item label="出厂编号" prop="engineNumber">
-              <el-input v-model="form.engineNumber" placeholder="请输入"></el-input>
-            </el-form-item>
+                <el-form-item label="出厂编号" prop="engineNumber">
+                  <el-input v-model="form.engineNumber" placeholder="请输入"></el-input>
+                </el-form-item>
 
-            <el-form-item label="燃料类型" prop="FuelType">
-              <el-select v-model="form.FuelType" placeholder="请选择" style="width:100%">
-                <el-option label="汽油" value="汽油"></el-option>
-                <el-option label="柴油" value="柴油"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-card>
+                <el-form-item label="燃料类型" prop="FuelType">
+                  <el-select v-model="form.FuelType" placeholder="请选择" style="width:100%">
+                    <el-option label="汽油" value="汽油"></el-option>
+                    <el-option label="柴油" value="柴油"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-tab-pane>
 
-      <el-card class="content_width" shadow="never">
-        <div slot="header" class="clearfix">
+        <el-tab-pane label="底盘" name="fifth">
+          <el-card class="content_width" shadow="never">
+            <!-- <div slot="header" class="clearfix">
           <span>底盘</span>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="底盘厂商" prop="underpanManufacturer">
-              <el-input v-model="form.underpanManufacturer"></el-input>
-            </el-form-item>
+            </div>-->
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="底盘厂商" prop="underpanManufacturer">
+                  <el-input v-model="form.underpanManufacturer"></el-input>
+                </el-form-item>
 
-            <el-form-item label="底盘编号" prop="underpanNumber">
-              <el-input v-model="form.underpanNumber" placeholder="请输入"></el-input>
-            </el-form-item>
+                <el-form-item label="底盘编号" prop="underpanNumber">
+                  <el-input v-model="form.underpanNumber" placeholder="请输入"></el-input>
+                </el-form-item>
 
-            <el-form-item label="工作机厂商" prop="workingMachineManufacturer">
-              <el-input v-model="form.workingMachineManufacturer" placeholder="请输入"></el-input>
-            </el-form-item>
-          </el-col>
+                <el-form-item label="工作机厂商" prop="workingMachineManufacturer">
+                  <el-input v-model="form.workingMachineManufacturer" placeholder="请输入"></el-input>
+                </el-form-item>
+              </el-col>
 
-          <el-col :span="12">
-            <el-form-item label="底盘型号" prop="underpanModel">
-              <el-input v-model="form.underpanModel"></el-input>
-            </el-form-item>
+              <el-col :span="12">
+                <el-form-item label="底盘型号" prop="underpanModel">
+                  <el-input v-model="form.underpanModel"></el-input>
+                </el-form-item>
 
-            <el-form-item label="出厂日期" prop="underpanFactoryDate">
-              <el-date-picker
-                v-model="form.underpanFactoryDate"
-                type="date"
-                placeholder="选择日期"
-                format="yyyy/MM/dd"
-                value-format="yyyy-MM-dd"
-                style="width:100%"
-              ></el-date-picker>
-            </el-form-item>
+                <el-form-item label="出厂日期" prop="underpanFactoryDate">
+                  <el-date-picker
+                    v-model="form.underpanFactoryDate"
+                    type="date"
+                    placeholder="选择日期"
+                    format="yyyy/MM/dd"
+                    value-format="yyyy-MM-dd"
+                    style="width:100%"
+                  ></el-date-picker>
+                </el-form-item>
 
-            <el-form-item label="工作机型号" prop="workingMachineModel">
-              <el-input v-model="form.workingMachineModel"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-card>
+                <el-form-item label="工作机型号" prop="workingMachineModel">
+                  <el-input v-model="form.workingMachineModel"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-tab-pane>
 
-      <el-card class="content_width" shadow="never">
-        <div slot="header" class="clearfix">
-          <span>项目信息</span>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="使用项目" prop="useProject">
-              <el-input v-model="form.useProject"></el-input>
-            </el-form-item>
+        <el-tab-pane label="项目信息" name="sixth">
+          <el-card class="content_width" shadow="never">
+            <!-- <div slot="header" class="clearfix">
+              <span>项目信息</span>
+            </div>-->
+            <el-row :gutter="20">
+              <el-col :span="12">
+                <el-form-item label="使用项目" prop="useProject">
+                  <el-input v-model="form.useProject"></el-input>
+                </el-form-item>
 
-            <el-form-item label="设备净值" prop="deviceNetWorth">
-              <el-input v-model.number="form.deviceNetWorth" type="number" :step="100" :min="1">
-                <el-button slot="append">元</el-button>
-              </el-input>
-            </el-form-item>
+                <el-form-item label="设备净值" prop="deviceNetWorth">
+                  <el-input v-model.number="form.deviceNetWorth" type="number" :step="100" :min="1">
+                    <el-button slot="append">元</el-button>
+                  </el-input>
+                </el-form-item>
 
-            <el-form-item label="车辆状态" prop="status">
-              <el-select v-model="form.status" placeholder="请选择" style="width:100%">
-                <el-option label="在用" value="在用"></el-option>
-                <el-option label="闲置" value="闲置"></el-option>
-                <el-option label="正常" value="正常"></el-option>
-                <el-option label="停用" value="停用"></el-option>
-                <el-option label="封存" value="封存"></el-option>
-              </el-select>
-            </el-form-item>
+                <el-form-item label="车辆状态" prop="status">
+                  <el-select v-model="form.status" placeholder="请选择" style="width:100%">
+                    <el-option label="在用" value="在用"></el-option>
+                    <el-option label="闲置" value="闲置"></el-option>
+                    <el-option label="正常" value="正常"></el-option>
+                    <el-option label="停用" value="停用"></el-option>
+                    <el-option label="封存" value="封存"></el-option>
+                  </el-select>
+                </el-form-item>
 
-            <el-form-item label="管理人员" prop="manager">
-              <el-input v-model="form.manager"></el-input>
-            </el-form-item>
+                <el-form-item label="管理人员" prop="manager">
+                  <el-input v-model="form.manager"></el-input>
+                </el-form-item>
 
-            <el-form-item label="使用人员" prop="usePersonnel">
-              <el-input v-model="form.usePersonnel"></el-input>
-            </el-form-item>
+                <el-form-item label="使用人员" prop="usePersonnel">
+                  <el-input v-model="form.usePersonnel"></el-input>
+                </el-form-item>
 
-            <el-form-item label="清查负责人" prop="inventoryManager">
-              <el-input v-model="form.inventoryManager"></el-input>
-            </el-form-item>
+                <el-form-item label="清查负责人" prop="inventoryManager">
+                  <el-input v-model="form.inventoryManager"></el-input>
+                </el-form-item>
 
-            <el-form-item label="清查人员" prop="checkPersonnel">
-              <el-input v-model="form.checkPersonnel"></el-input>
-            </el-form-item>
-          </el-col>
+                <el-form-item label="清查人员" prop="checkPersonnel">
+                  <el-input v-model="form.checkPersonnel"></el-input>
+                </el-form-item>
+              </el-col>
 
-          <el-col :span="12">
-            <el-form-item label="工程行业" prop="engineeringIndustry">
-              <el-input v-model="form.engineeringIndustry"></el-input>
-            </el-form-item>
+              <el-col :span="12">
+                <el-form-item label="工程行业" prop="engineeringIndustry">
+                  <el-input v-model="form.engineeringIndustry"></el-input>
+                </el-form-item>
 
-            <el-form-item label="技术状况" prop="technical">
-              <el-input v-model="form.technical"></el-input>
-            </el-form-item>
+                <el-form-item label="技术状况" prop="technical">
+                  <el-input v-model="form.technical"></el-input>
+                </el-form-item>
 
-            <el-form-item label="使用/存放地" prop="address">
-              <el-input v-model="form.address"></el-input>
-            </el-form-item>
+                <el-form-item label="使用/存放地" prop="address">
+                  <el-input v-model="form.address"></el-input>
+                </el-form-item>
 
-            <el-form-item label="电话" prop="managerTel">
-              <el-input v-model="form.managerTel"></el-input>
-            </el-form-item>
+                <el-form-item label="电话" prop="managerTel">
+                  <el-input v-model="form.managerTel"></el-input>
+                </el-form-item>
 
-            <el-form-item label="电话" prop="useTel">
-              <el-input v-model="form.useTel"></el-input>
-            </el-form-item>
+                <el-form-item label="电话" prop="useTel">
+                  <el-input v-model="form.useTel"></el-input>
+                </el-form-item>
 
-            <el-form-item label="电话" prop="checkManagerTel">
-              <el-input v-model="form.checkManagerTel"></el-input>
-            </el-form-item>
-            <el-form-item label="电话" prop="checkTel">
-              <el-input v-model="form.checkTel"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-card>
+                <el-form-item label="电话" prop="checkManagerTel">
+                  <el-input v-model="form.checkManagerTel"></el-input>
+                </el-form-item>
+                <el-form-item label="电话" prop="checkTel">
+                  <el-input v-model="form.checkTel"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-card>
+        </el-tab-pane>
 
-      <el-card class="content_width" shadow="never">
-        <div slot="header" class="clearfix">
-          <span>车辆图片</span>
-        </div>
-        <el-form-item prop="mainImage" label-width="0px">
-          <gt-single-img
-            @SingleImageUpload="SingleImageUpload"
-            :imageUrl="form.mainImage"
-            title="车辆主图"
-          ></gt-single-img>
-        </el-form-item>
-        <el-form-item prop="image" label-width="0px">
-          <gt-multiple-img
-            @multipleImageUpload="multipleImageUpload"
-            title="车辆辅图"
-            :propsImage="form.image"
-          ></gt-multiple-img>
-        </el-form-item>
-      </el-card>
+        <el-tab-pane label="车辆图片" name="seventh">
+          <el-card class="content_width" shadow="never">
+            <!-- <div slot="header" class="clearfix">
+              <span>车辆图片</span>
+            </div>-->
+            <el-form-item prop="mainImage" label-width="0px">
+              <gt-single-img
+                @SingleImageUpload="SingleImageUpload"
+                :imageUrl="form.mainImage"
+                title="车辆主图"
+              ></gt-single-img>
+            </el-form-item>
+            <el-form-item prop="image" label-width="0px">
+              <gt-multiple-img
+                @multipleImageUpload="multipleImageUpload"
+                title="车辆辅图"
+                :propsImage="form.image"
+              ></gt-multiple-img>
+            </el-form-item>
+          </el-card>
+        </el-tab-pane>
+
+      </el-tabs>
     </el-form>
 
     <el-col align="center" class="content_width" v-show="!disable">
@@ -621,6 +643,7 @@ export default {
     return {
       dialogVisible: false,
       tankRules: {},
+      activeName: "first",
       form: {
         /* -------基本信息1-------- */
         name: "", //车辆名称 String
@@ -1496,7 +1519,7 @@ export default {
       if (res.status === 200) {
         this.deptList(res.data.corpguid);
         this.classifyIdList(res.data.deviceClassify);
-        this.$emit('deviceInfo',res.data);
+        this.$emit("deviceInfo", res.data);
         this.form = res.data;
       }
     },

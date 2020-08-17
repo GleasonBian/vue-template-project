@@ -210,7 +210,7 @@
               </div>
               <div class="card_content">
                 <div>
-                  <span class="card_minor">今日</span>
+                  <span class="card_minor">今日</span>    
                   <span class="card_main">17</span>
                   <span class="card_main">{{(parseFloat(viewData.assignment.CurNum)||0).toFixed(1)}}</span>
                   <span class="card_minor">小时</span>
