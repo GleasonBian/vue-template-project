@@ -64,7 +64,7 @@
     </el-dialog>
 
     <el-form ref="form" :model="form" label-width="100px" :rules="rules" :disabled="disable">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         
         <el-tab-pane label="基本信息" name="first">
           <el-card class="content_width" shadow="never">

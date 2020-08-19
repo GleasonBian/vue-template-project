@@ -27,11 +27,11 @@
       </el-card>
       <el-card style="margin-top:12px">
         <el-button type="success" @click="exportForm" size="mini">导出</el-button>
-        <gt-table
+        <!-- <gt-table
           :tableData="
               tableData.slice(
-                (currentPage - 1) * pagesize,
-                currentPage * pagesize
+                (currentPage - 1) * page_size,
+                currentPage * page_size
               )
             "
           style="width: 100%"
@@ -39,8 +39,8 @@
           :columns="columns"
           :selection="false"
           height="45vh"
-        ></gt-table>
-        <el-pagination
+        ></gt-table>-->
+        <!-- <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
@@ -50,6 +50,25 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
           style="margin-top:20px"
+        ></el-pagination>-->
+        <gt-table
+          :tableData="tableData"
+          style="width: 100%"
+          :columns="columns"
+          :selection="false"
+          size="mini"
+          height="45vh"
+        ></gt-table>
+
+        <el-pagination
+          style="margin-top:12px"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="queryParam.page_index"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="queryParam.page_size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
         ></el-pagination>
       </el-card>
     </el-main>
@@ -81,6 +100,15 @@ export default {
         //   show: true
         // }
       ],
+      queryParam: {
+        end: "",
+        start: "",
+        guid: "",
+        time: "",
+        page_index: 1,
+        page_size: 10,
+      },
+      total: 0,
       columns: [
         {
           id: "plateno",
@@ -89,7 +117,7 @@ export default {
         {
           id: "gpstime",
           label: "gps时间",
-          width:150
+          width: 150,
         },
         {
           id: "curmiles",
@@ -122,11 +150,11 @@ export default {
         {
           id: "location",
           label: "位置",
-          width:350,
+          width: 350,
         },
       ],
       tableData: [], // 表格数据
-      pagesize: 10,
+      page_size: 10,
       total: 0,
       currentPage: 1,
       multipleSelection: [], // 用于批量 删除
@@ -194,29 +222,36 @@ export default {
     /*
      ** 搜索处理
      */
-    searchHandle(row) {
-      if (row.time !== "") {
-        row = JSON.parse(JSON.stringify(row));
-        switch (row.time) {
+    searchHandle(query) {
+      if (query.time !== "") {
+        query = JSON.parse(JSON.stringify(query));
+        switch (query.time) {
           case "今天":
-            row.start = this.timeForMat(0)[0];
-            row.end = this.timeForMat(0)[1];
+            query.start = this.timeForMat(0)[0];
+            query.end = this.timeForMat(0)[1];
             break;
           case "昨天":
-            row.start = this.timeForMat(1)[0];
-            row.end = this.timeForMat(1)[1];
+            query.start = this.timeForMat(1)[0];
+            query.end = this.timeForMat(1)[1];
             break;
           case "近3天":
-            row.start = this.timeForMat(3)[0];
-            row.end = this.timeForMat(3)[1];
+            query.start = this.timeForMat(3)[0];
+            query.end = this.timeForMat(3)[1];
             break;
           case "近7天":
-            row.start = this.timeForMat(7)[0];
-            row.end = this.timeForMat(7)[1];
+            query.start = this.timeForMat(7)[0];
+            query.end = this.timeForMat(7)[1];
             break;
         }
       }
-      this.oilViewHandle(row);
+      let param = JSON.parse(JSON.stringify(query));
+      delete param.date;
+      this.queryParam.page_index = 1;
+      this.queryParam.page_size = 10;
+      this.queryParam.end = param.end;
+      this.queryParam.start = param.start;
+      this.queryParam.guid = param.guid;
+      this.oilViewHandle();
     },
 
     /*
@@ -235,22 +270,34 @@ export default {
     /*
      ** 油耗监测数据
      */
-    async oilViewHandle(param) {
-      let lnglats = [];
+    async oilViewHandle() {
+      // 请求参数: equip/c9dc3f51-ab2d-42d8-b58c-b3b2dc6c5b8b/oilcs
+      let param = this.queryParam;
+
       if (param.guid === "") {
         this.$message.warning("请选择设备");
         return;
       }
+
+      // 参数拼接
       let canshu = "";
-      if (param instanceof Object) {
-        if ("start" in param && "end" in param) {
-          canshu =
-            param.guid + "/oilcs?start=" + param.start + "&end=" + param.end;
-        } else canshu = param.guid + "/oilcs";
-      } else {
-        canshu = param + "/oilcs";
-      }
+
+      if (param instanceof Object)
+        canshu =
+          param.guid +
+          "/oilcs?start=" +
+          param.start +
+          "&end=" +
+          param.end +
+          "&page_index=" +
+          param.page_index +
+          "&page_size=" +
+          param.page_size;
+      else canshu = param.guid + "/oilcs";
+
+      // 发送请求
       const res = await oilView({ id: canshu });
+
       if (res.status === 200) {
         let gpstime = [], // 时间
           curmiles = [], // 里程
@@ -258,22 +305,23 @@ export default {
           curoilconsume = [], // 油耗
           speed = [], //速度
           totaloilconsume = []; // 总油耗
-        this.total = res.data.length;
-        for (var i in res.data) {
-          res.data[i].oilleft = res.data[i].oilleft.toFixed(2);
-          res.data[i].curoilconsume = res.data[i].curoilconsume.toFixed(2);
-          res.data[i].totaloilconsume = res.data[i].totaloilconsume.toFixed(2);
-          res.data[i].curmiles = res.data[i].curmiles.toFixed(2);
-          res.data[i].speed = res.data[i].speed.toFixed(2);
-          gpstime.push(res.data[i].gpstime);
-          oilleft.push(res.data[i].oilleft);
-          curmiles.push(res.data[i].curmiles);
-          curoilconsume.push(res.data[i].curoilconsume);
-          speed.push(res.data[i].speed);
-          totaloilconsume.push(res.data[i].totaloilconsume);
+        this.total = res.data.count;
+        let response = res.data.data;
+        console.log(response);
+        for (var i in response) {
+          response[i].oilleft = response[i].oilleft.toFixed(2);
+          response[i].curoilconsume = response[i].curoilconsume.toFixed(2);
+          response[i].totaloilconsume = response[i].totaloilconsume.toFixed(2);
+          response[i].curmiles = response[i].curmiles.toFixed(2);
+          response[i].speed = response[i].speed.toFixed(2);
+          gpstime.push(response[i].gpstime);
+          oilleft.push(response[i].oilleft);
+          curmiles.push(response[i].curmiles);
+          curoilconsume.push(response[i].curoilconsume);
+          speed.push(response[i].speed);
+          totaloilconsume.push(response[i].totaloilconsume);
         }
-
-        this.tableData = res.data;
+        this.tableData = response;
         this.initCharts(
           gpstime,
           oilleft,
@@ -289,8 +337,10 @@ export default {
      ** 单机行处理
      */
     clickRow(row) {
+      console.log(row.guid);
       this.$refs.singleTable.setCurrentRow(row);
-      this.oilViewHandle(row.guid);
+      this.queryParam.guid = row.guid;
+      this.oilViewHandle();
       // this.searchData[0].options
     },
 
@@ -411,19 +461,34 @@ export default {
       };
     },
 
+    /*
+     ** 列表 分页
+     */
+    handleSizeChange(val) {
+      this.queryParam.page_size = val;
+      this.oilViewHandle();
+    },
+
+    /*
+     ** 列表 分页
+     */
+    handleCurrentChange(val) {
+      this.queryParam.page_index = val;
+      this.oilViewHandle();
+    },
     /**
      * 分页
      */
-    handleSizeChange(val) {
-      this.pagesize = val;
-    },
+    // handleSizeChange(val) {
+    //   this.page_size = val;
+    // },
 
     /**
      * 分页
      */
-    handleCurrentChange(val) {
-      this.currentPage = val;
-    },
+    // handleCurrentChange(val) {
+    //   this.currentPage = val;
+    // },
 
     /**
      * 日期处理
