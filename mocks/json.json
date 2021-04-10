@@ -1,0 +1,23 @@
+/**
+ * JS function file
+ *
+ * @url /json/data
+ *
+ * @describe 你可以在这里写详细的描述信息参数的
+ *
+ * @method GET
+ * @params 参数说明及其他说明
+ * uid: user ID
+ * name: username
+ * email: the email
+ */
+{
+  "code": 0,
+  "result|5": [
+    {
+      "uid|+1": 1,
+      "name": "@name",
+      "email": "@email"
+    }
+  ]
+}

@@ -56,5 +56,5 @@ export const Regular = {
   /**
    * 2-20个字符
    */
-  Taker: /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/
+  Taker: /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/,
 };

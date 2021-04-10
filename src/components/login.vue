@@ -89,6 +89,7 @@ export default {
         password: this.password
       };
       const res = await login(data);
+      console.log(res.data);
       if (res.data.Data) {
         sessionStorage.setItem("Authorization", res.data.Data);
         sessionStorage.setItem("username", this.userid);

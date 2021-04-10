@@ -5,45 +5,45 @@ import fetch from "../public/fetch.js";
  * 假设: 你的项目 有100个接口 我们需要把这 100个接口进行集中管理
  */
 
-//获取公司列表
+// 获取公司列表
 export const getCompList = data => fetch("corp", data, "get");
-//新增部门 saveAddDept
+// 新增部门 saveAddDept
 export const saveAddDept = data => fetch("dept", data, "post");
-//获取部门列表
+// 获取部门列表
 export const getDeptList = data => fetch("dept", data, "get");
-//获取部门详情
+// 获取部门详情
 export const getDeptDetail = data => fetch("dept", data, "get");
-//编辑部门详情
+// 编辑部门详情
 export const editDeptDetail = data => fetch("dept", data, "put");
-//删除部门 delDept
+// 删除部门 delDept
 export const delDept = data => fetch("dept", data, "delete");
-//删除部门 delDept
+// 删除部门 delDept
 export const deptPage = data => fetch("depts", data, "get");
 
-//获取人员列表
+// 获取人员列表
 export const getStaffList = data => fetch("staff", data, "get");
-//获取人员列表
+// 获取人员列表
 export const staffPage = data => fetch("staffs", data, "get");
-//获取人员详情
+// 获取人员详情
 export const getStaffDetail = data => fetch("staff", data, "get");
-//新增人员
+// 新增人员
 export const saveAddStaff = data => fetch("staff", data, "post");
-//编辑人员详情
+// 编辑人员详情
 export const editStaffDetail = data => fetch("staff", data, "put");
-//删除人员 delDept
+// 删除人员 delDept
 export const delStaff = data => fetch("staff", data, "delete");
 
-//获取角色列表 getRoleList
+// 获取角色列表 getRoleList
 export const getRoleList = data => fetch("role", data, "get");
-//获取角色列表 分页
+// 获取角色列表 分页
 export const rolePage = data => fetch("roles", data, "get");
-//获取角色详情
+// 获取角色详情
 export const getRoleDetail = data => fetch("role", data, "get");
-//新增角色
+// 新增角色
 export const saveAddRole = data => fetch("role", data, "post");
-//编辑角色详情
+// 编辑角色详情
 export const editRoleDetail = data => fetch("role", data, "put");
-//删除角色 delDept
+// 删除角色 delDept
 export const delRole = data => fetch("role", data, "delete");
 
 /**
@@ -136,7 +136,6 @@ export const oilCreate = data => fetch("oilplan", data, "post");
  */
 export const oilSelect = data => fetch("oilplan", data, "get");
 
-
 /**
  * 更新加油计划
  */
@@ -227,18 +226,15 @@ export const oilTaskStop = data => fetch("oildetail/stop", data, "put");
  */
 export const assignUpdate = data => fetch("assignment", data, "put");
 
-
 /**
  * 调度计划详情
  */
 export const assignDetails = data => fetch("assignment", data, "get");
 
-
 /**
  * 调度任务列表
  */
 export const assigndeSelect = data => fetch("assigndetail", data, "get");
-
 
 /**
  * 调度任务详情
@@ -348,7 +344,6 @@ export const fixList = data => fetch("fixdetail", data, "get");
  */
 export const fixTask = data => fetch("fixreport", data, "post");
 
-
 /* -----------------------加油申请 -------------------------------*/
 
 /**
@@ -376,7 +371,6 @@ export const refuelDelete = data => fetch("refuel", data, "delete");
  */
 export const refuelUpdate = data => fetch("refuel", data, "put");
 
-
 /* -----------------------车辆保养 -------------------------------*/
 
 /**
@@ -385,7 +379,7 @@ export const refuelUpdate = data => fetch("refuel", data, "put");
 export const repairCreat = data => fetch("repaircreat", data, "post");
 
 /**
- * 作业管理 / 车辆保养 / 列表 
+ * 作业管理 / 车辆保养 / 列表
  */
 export const repairList = data => fetch("repairlist", data, "get");
 
@@ -403,7 +397,6 @@ export const repairUpdate = data => fetch("repairupdate", data, "put");
  * 作业管理 / 车辆保养 / 删除 id
  */
 export const repairDelete = data => fetch("repairdel", data, "delete");
-
 
 /**
  * 公司分页查询
@@ -435,7 +428,6 @@ export const ComeOnTag = data => fetch("adjusthistory", data, "put");
  */
 export const getOilMark = data => fetch("adjusthistory", data, "get");
 
-
 /* ----------------------- 电子围栏 -------------------------------*/
 
 /**
@@ -457,7 +449,6 @@ export const fences = data => fetch("fences", data, "get");
  * 车辆管理 / 电子围栏 / 删除围栏
  */
 export const fencesDelete = data => fetch("fences", data, "delete");
-
 
 /* ------------------------图片上传-------------------------------- */
 

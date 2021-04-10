@@ -1,8 +1,9 @@
 const path = require("path");
+
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
-console.log("接口地址:", process.env.VUE_APP_URL)
+console.log("接口地址:", process.env.VUE_APP_URL);
 /**
  *  Date: 1562573921043
  *  author: \u535e \u5218 \u8457
@@ -11,7 +12,11 @@ console.log("接口地址:", process.env.VUE_APP_URL)
  *  小不点 你来 抓我啊~~~
  *  qi - si - ni
  */
-const CompressionPlugin = require("compression-webpack-plugin"); //Gzip
+const CompressionPlugin = require("compression-webpack-plugin");
+
+// mock 数据插件
+const MockjsWebpackPlugin = require("mockjs-webpack-plugin");
+// Gzip
 module.exports = {
   // 基本路径
   publicPath: "./",
@@ -43,17 +48,17 @@ module.exports = {
       .set("$img", resolve("src/assets"));
   },
 
-  //调整 webpack 配置 https://cli.vuejs.org/zh/guide/webpack.html#%E7%AE%80%E5%8D%95%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F
+  // 调整 webpack 配置 https://cli.vuejs.org/zh/guide/webpack.html#%E7%AE%80%E5%8D%95%E7%9A%84%E9%85%8D%E7%BD%AE%E6%96%B9%E5%BC%8F
   configureWebpack: config => {
     // 入口文件
     config.entry = "./src/main.js";
     // 生产 & 测试环境
-    let pluginsPro = [
+    const pluginsPro = [
       new CompressionPlugin({
-        //文件开启Gzip，也可以通过服务端(如：nginx)(https://github.com/webpack-contrib/compression-webpack-plugin)
+        // 文件开启Gzip，也可以通过服务端(如：nginx)(https://github.com/webpack-contrib/compression-webpack-plugin)
         filename: "[path].gz[query]",
         algorithm: "gzip",
-        test: new RegExp("\\.(" + ["js", "css"].join("|") + ")$"),
+        test: new RegExp(`\\.(${["js", "css"].join("|")})$`),
         threshold: 8192,
         minRatio: 0.8
       })
@@ -65,6 +70,14 @@ module.exports = {
     // 打包上线 清除 所有 console
     if (process.env.NODE_ENV === "production") {
       config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true;
+    }
+    if (process.env.NODE_ENV === "development") {
+      config.plugins.push(
+        new MockjsWebpackPlugin({
+          path: path.join(__dirname, "./mocks"),
+          port: 9007
+        })
+      );
     }
   },
 
@@ -92,23 +105,16 @@ module.exports = {
     port: 8080, // 端口
     https: false,
     hotOnly: false,
-
-    // 设置代理
-    // 这里设置了两个代理请求 为了匹配 不同环境的, 根据实际情况配置代理
-    // 比如 公司有 开发 连调 测试 演示 生产等环境, 除了生产环境以外其他环境都需要配置 代理请求
-    // 当启动 vue 项目的 时候 运行在 localhost:8080 上,假设公司的 开发环境 为 http://development.com 当发送请求时 就会发生跨域, 所以 采用代理方式 进行 同域,
-    // 当 项目上线 后 根据 环境变量 使用不同 的域名 就不会有跨域情况
-    // 读到这里 如果 还有 不理解 请往下进行
     proxy: {
       "/dev": {
-        target: process.env.VUE_APP_URL, // 代理请求的地址 => https://api.apiopen.top/
+        target: process.env.VUE_APP_URL,
         changeOrigin: true,
         pathRewrite: {
           "^/dev": ""
         }
       },
       "/api": {
-        target: process.env.VUE_APP_URL,
+        target: "http://localhost:9007/",
         changeOrigin: true,
         pathRewrite: {
           "^/api": ""
